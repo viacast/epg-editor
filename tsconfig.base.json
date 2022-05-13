@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "assets/*": [
+        "./assets/*"
+      ],
+      "components/*": [
+        "./components/*"
+      ],
+      "components": [
+        "./components"
+      ],
+      "config/*": [
+        "./config/*"
+      ],
+      "hooks/*": [
+        "./hooks/*"
+      ],
+      "hooks": [
+        "./hooks"
+      ],
+      "pages/*": [
+        "./pages/*"
+      ],
+      "routes/*": [
+        "./routes/*"
+      ],
+      "services/*": [
+        "./services/*"
+      ],
+      "styles/*": [
+        "./styles/*"
+      ],
+      "utils/*": [
+        "./utils/*"
+      ],
+      "utils": [
+        "./utils"
+      ],
+      "providers/*": [
+        "./providers/*"
+      ],
+      "providers": [
+        "./providers"
+      ]
+    }
+  }
+}
