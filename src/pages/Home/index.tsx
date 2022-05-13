@@ -1,10 +1,29 @@
-import React from 'react';
+import Import from 'components/Import';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Container } from './styles';
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
-  return <Container>{t('general:home')}</Container>;
+
+  const [newUserInfo, setNewUserInfo] = useState({
+    profileImages: [],
+  });
+
+  const updateUploadedFiles = f =>
+    setNewUserInfo({ ...newUserInfo, profileImages: f });
+
+  return (
+    <div>
+      <form>
+        <Import
+          accept=".jpg,.png,.jpeg"
+          label="Profile Image(s)"
+          multiple
+          updateFilesCb={updateUploadedFiles}
+        />
+      </form>
+    </div>
+  );
 };
 
 export default Home;
