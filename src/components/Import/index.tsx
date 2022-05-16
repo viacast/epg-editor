@@ -31,7 +31,7 @@ const Import = ({
   const [files, setFiles] = useState({});
 
   const handleUploadBtnClick = () => {
-    // fileInputField.current?.onClick();  #############
+    // fileInputField.current?.click();
   };
 
   const addNewFiles = newFiles => {
@@ -77,15 +77,16 @@ const Import = ({
           backgroundColor: '#2A2B31',
           color: '#85858A',
           border: 'none',
+          borderRadius: '2px',
           width: '270px',
-          height: '55px',
-          padding: '5px',
+          height: '44px',
+          padding: '15px',
           marginRight: '12px',
         }}
       />
       <UploadFileBtn type="button" onClick={handleUploadBtnClick}>
         <FontAwesomeIcon className="icon" icon={faDownload} />
-        <span> Import {otherProps.multiple ? 'files' : 'a file'}</span>
+        <span> Import </span>
       </UploadFileBtn>
       <FormField
         type="file"
@@ -93,8 +94,6 @@ const Import = ({
         onChange={handleNewFileUpload}
         title=""
         value=""
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...otherProps}
       />
       <FilePreviewContainer>
         <PreviewList>
