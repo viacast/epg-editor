@@ -4,34 +4,17 @@ import 'styles/global';
 export const FormField = styled.input`
   font-size: 18px;
   display: block;
-  width: 100%;
+  width: 270px;
+  height: 44px;
   border: none;
   text-transform: none;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 40px;
+  left: 25px;
   right: 0;
   bottom: 0;
   opacity: 0;
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-export const InputLabel = styled.label`
-  top: -21px;
-  font-size: 13px;
-  color: black;
-  left: 0;
-  position: absolute;
-`;
-
-export const DragDropText = styled.p`
-  font-weight: bold;
-  letter-spacing: 2.2px;
-  margin-top: 0;
-  text-align: center;
+  cursor: pointer;
 `;
 
 export const UploadFileBtn = styled.button`
@@ -44,59 +27,43 @@ export const UploadFileBtn = styled.button`
   line-height: 1;
   padding: 1.1em 2.8em;
   text-align: center;
-  text-transform: uppercase;
   font-weight: 700;
   border-radius: 2px;
   color: var(--color-neutral-3);
   position: relative;
   overflow: hidden;
   z-index: 1;
-  transition: color 250ms ease-in-out;
   font-family: 'Nunito', sans-serif;
-  width: 12%;
+  width: 139px;
+  height: 44px;
   display: flex;
   align-items: center;
   padding-right: 0;
   justify-content: center;
 
-  &:after {
-    content: '';
-    position: absolute;
-    display: block;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 100%;
-    background: var(--color-system-3);
-    z-index: -1;
-    transition: width 250ms ease-in-out;
-  }
-
   .icon,
   i {
-    font-size: 22px;
-    margin-top: 15px;
-    margin-right: 5px;
+    font-size: 20px;
+    padding-right: 13px;
     border-right: 2px solid;
-    position: absolute;
     vertical-align: middle;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    width: 20%;
+    width: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
 
-  @media only screen and (max-width: 500px) {
-    width: 70%;
-  }
-
-  @media only screen and (max-width: 350px) {
-    width: 100%;
+  span {
+    margin-left: 15px;
+    margin-right: 45px;
+    font-family: Nunito, sans-serif;
+    font-style: Regular;
+    font-weight: 400;
+    font-size: 16px;
   }
 
   &:hover {
@@ -104,21 +71,6 @@ export const UploadFileBtn = styled.button`
     border: 2px solid var(--color-neutral-2);
     outline: 0;
     background: transparent;
-
-    &:after {
-      width: 110%;
-    }
-  }
-
-  &:focus {
-    outline: 0;
-    background: transparent;
-  }
-
-  &:disabled {
-    opacity: 0.4;
-    filter: grayscale(100%);
-    pointer-events: none;
   }
 `;
 
@@ -171,7 +123,7 @@ export const RemoveFileIcon = styled.i`
 export const PreviewContainer = styled.section`
   padding: 0.25rem;
   width: 20%;
-  height: 44px;
+  height: 120px;
   border-radius: 2px;
   box-sizing: border-box;
 
