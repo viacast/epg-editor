@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileUpload, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import {
   FormField,
   UploadFileBtn,
@@ -69,9 +69,23 @@ const Import = ({
 
   return (
     <>
+      <input
+        spellCheck={false}
+        defaultValue="EPG.CSV"
+        style={{
+          float: 'left',
+          backgroundColor: '#2A2B31',
+          color: '#85858A',
+          border: 'none',
+          width: '270px',
+          height: '55px',
+          padding: '5px',
+          marginRight: '12px',
+        }}
+      />
       <UploadFileBtn type="button" onClick={handleUploadBtnClick}>
-        <FontAwesomeIcon className="icon" icon={faFileUpload} />
-        <span> Upload {otherProps.multiple ? 'files' : 'a file'}</span>
+        <FontAwesomeIcon className="icon" icon={faDownload} />
+        <span> Import {otherProps.multiple ? 'files' : 'a file'}</span>
       </UploadFileBtn>
       <FormField
         type="file"
