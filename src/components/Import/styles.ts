@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import 'styles/global';
 
 export const FormField = styled.input`
   font-size: 18px;
@@ -37,7 +38,7 @@ export const UploadFileBtn = styled.button`
   box-sizing: border-box;
   appearance: none;
   background-color: transparent;
-  border: 2px solid #3498db;
+  border: 2px solid var(--color-neutral-3);
   cursor: pointer;
   font-size: 1rem;
   line-height: 1;
@@ -45,14 +46,14 @@ export const UploadFileBtn = styled.button`
   text-align: center;
   text-transform: uppercase;
   font-weight: 700;
-  border-radius: 6px;
-  color: #3498db;
+  border-radius: 2px;
+  color: var(--color-neutral-3);
   position: relative;
   overflow: hidden;
   z-index: 1;
   transition: color 250ms ease-in-out;
   font-family: 'Nunito', sans-serif;
-  width: 45%;
+  width: 12%;
   display: flex;
   align-items: center;
   padding-right: 0;
@@ -67,7 +68,7 @@ export const UploadFileBtn = styled.button`
     transform: translateX(-50%);
     width: 0;
     height: 100%;
-    background: #3498db;
+    background: var(--color-system-3);
     z-index: -1;
     transition: width 250ms ease-in-out;
   }
@@ -99,7 +100,8 @@ export const UploadFileBtn = styled.button`
   }
 
   &:hover {
-    color: #fff;
+    color: var(--color-neutral-2);
+    border: 2px solid var(--color-neutral-2);
     outline: 0;
     background: transparent;
 
@@ -146,7 +148,7 @@ export const FileMetaData = styled.div`
   right: 0;
   bottom: 0;
   padding: 10px;
-  border-radius: 6px;
+  border-radius: 2px;
   color: white;
   font-weight: bold;
   background-color: rgba(5, 5, 5, 0.55);
@@ -169,8 +171,8 @@ export const RemoveFileIcon = styled.i`
 export const PreviewContainer = styled.section`
   padding: 0.25rem;
   width: 20%;
-  height: 120px;
-  border-radius: 6px;
+  height: 44px;
+  border-radius: 2px;
   box-sizing: border-box;
 
   &:hover {
@@ -201,7 +203,7 @@ export const PreviewContainer = styled.section`
 `;
 
 export const ImagePreview = styled.img`
-  border-radius: 6px;
+  border-radius: 2px;
   width: 100%;
   height: 100%;
 `;
