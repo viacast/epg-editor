@@ -1,5 +1,6 @@
 import useLocalStorage, { LocalStorageKeys } from './useLocalStorage';
+import useMounted from './useMounted';
 
-export { useLocalStorage };
+export { useLocalStorage, useMounted };
 
 export { LocalStorageKeys };
