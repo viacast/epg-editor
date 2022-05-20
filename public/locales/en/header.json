@@ -1,0 +1,8 @@
+{
+    "buttonImportProgram" : "Import",
+    "buttonExportProgram" : "Export",
+    "buttonAddProgram" : "Add",
+    "labelProgram_zero" : "Programs: {{count}}",
+    "labelProgram_one" : "Program: {{count}}",
+    "labelProgram_other" : "Programs: {{count}}"
+}
