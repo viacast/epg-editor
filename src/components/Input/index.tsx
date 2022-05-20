@@ -6,6 +6,10 @@ import TextField from '@mui/material/TextField';
 import { InputProps } from '@mui/material/Input';
 import Box from '@mui/material/Box';
 
+export interface StyledInput {
+  value: string;
+}
+
 const Input = styled(TextField)<InputProps>(() => ({
   width: '270px',
   height: '44px',
@@ -20,15 +24,15 @@ const Input = styled(TextField)<InputProps>(() => ({
   fontFamily: 'Nunito, sans-serif',
 }));
 
-const MainInput: React.FC = () => {
+const MainInput: React.FC<StyledInput> = ({ value }) => {
   return (
     <Stack spacing={2} direction="row" width="270px" marginRight="1.337793%">
       <Box>
         <Input
           disabled
           fullWidth
+          value={value}
           inputProps={{
-            value: 'EPG.CSV',
             style: {
               height: '11px',
             },

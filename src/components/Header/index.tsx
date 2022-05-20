@@ -34,6 +34,7 @@ const Header: React.FC = ({ ...otherProps }) => {
           return { file };
         }
         files[file.name] = file;
+        localStorage.setItem('fileName', file.name);
       }
     }
     return { ...files };
@@ -52,7 +53,13 @@ const Header: React.FC = ({ ...otherProps }) => {
   return (
     <Container>
       <Form>
-        <MainInput />
+        <MainInput
+          value={
+            localStorage.getItem('fileName') !== null
+              ? localStorage.getItem('fileName')!
+              : 'EPG.CSV'
+          }
+        />
         <div
           style={{ width: 'auto', height: 'auto', paddingRight: '1.672241%' }}
         >
