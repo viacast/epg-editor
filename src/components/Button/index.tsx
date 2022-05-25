@@ -11,30 +11,29 @@ export interface StyledButton {
 }
 
 const IconButton = styled(Button)<ButtonProps>(() => ({
+  display: 'flex',
   width: '139px',
   height: '44px',
-  display: 'flex',
-  textAlign: 'center',
   border: '2px solid var(--color-neutral-3)',
+  padding: '0 0',
   cursor: 'pointer',
   textTransform: 'none',
   transition: 'none',
-  lineHeight: 1,
   borderRadius: '2px',
   color: 'var(--color-neutral-3)',
   backgroundColor: 'transparent',
+  justifyContent: 'normal',
   '.icon': {
-    paddingLeft: '8.6331%',
-    margin: 'auto 0',
+    width: '44px',
+    display: 'flex',
+    justifyContent: 'center',
   },
   '.text': {
-    marginRight: '14.3885%',
-    marginLeft: '14.3885%',
+    margin: 'auto',
   },
   '.line': {
     width: '2px',
-    height: '20px',
-    marginLeft: '9.3525%',
+    height: '50%',
     borderLeft: '2px solid var(--color-neutral-3)',
   },
   '&:hover': {
