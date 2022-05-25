@@ -1,4 +1,5 @@
 {
+    "placeholderInput": "Arquivo EPG",
     "buttonImportProgram" : "Importar",
     "buttonExportProgram" : "Exportar",
     "buttonAddProgram" : "Adicionar",
