@@ -2,31 +2,28 @@ import styled from 'styled-components';
 import 'styles/global';
 
 export const Container = styled.div`
+  user-select: none;
   padding-top: 40px;
   padding-left: 25px;
-  width: fit-content; //923px; //100%;
-  /* @media only screen and (max-width: 600px) {
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-  } */
+  width: fit-content;
 `;
 
 export const Form = styled.form`
   display: flex;
-  width: fit-content; //897px; //46.71875%;
+  width: fit-content;
   font-family: Nunito, sans-serif;
   color: var(--color-neutral-3);
 `;
 
 export const Text = styled.div`
-  width: fit-content;
+  width: 132px;
   height: 44px;
+  text-align: center;
   white-space: nowrap;
   font-size: 20px;
   user-select: none;
-  margin-left: 3.455964%;
-  margin-right: 3.455964%;
+  margin-left: 34px;
+  margin-right: 34px;
   position: relative;
   padding: 10px 0;
 `;
