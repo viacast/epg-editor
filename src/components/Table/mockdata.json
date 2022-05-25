@@ -1,0 +1,173 @@
+[
+    {
+      "position": "1",
+      "date": "12/05/2022",
+      "hour": "04:00:00",
+      "duration": "02:00:00",
+      "title": "1º Jornal",
+      "description": "As principais notícias do Brasil e do Mundo, com agilpositionade ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "2",
+      "date": "12/05/2022",
+      "hour": "06:00:00",
+      "duration": "01:30:00",
+      "title": "Bora SP",
+      "description": "Programa jornalístico leve interativo e com muita ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "3",
+      "date": "12/05/2022",
+      "hour": "07:30:00",
+      "duration": "01:30:00",
+      "title": "Bora Brasil ",
+      "description": "As principais informações do Brasil e do Mundo com ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "4",
+      "date": "12/05/2022",
+      "hour": "09:00:00",
+      "duration": "02:00:00",
+      "title": "The Chef",
+      "description": "Programa culinário com as maiores receitas de Edu Guedes.",
+      "rating": "Livre"
+    },
+    {
+      "position": "5",
+      "date": "12/05/2022",
+      "hour": "11:00:00",
+      "duration": "01:00:00",
+      "title": "Jogo Aberto ",
+      "description": "Notícia, debates diários e tudo o que você precisa saber ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "6",
+      "date": "12/05/2022",
+      "hour": "12:00:00",
+      "duration": "01:00:00",
+      "title": "Jogo Aberto - Debate ",
+      "description": "Depois do noticiário é hora de debater as novpositionades. ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "7",
+      "date": "12/05/2022",
+      "hour": "13:00:00",
+      "duration": "01:00:00",
+      "title": "Os Donos da Bola - SP ",
+      "description": "O programa de debate sobre o mundo do futebol mais ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "8",
+      "date": "12/05/2022",
+      "hour": "14:00:00",
+      "duration": "00:30:00",
+      "title": "Boa Tarde São Paulo ",
+      "description": "As principais notícias do estado e capital de São Paulo ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "9",
+      "date": "12/05/2022",
+      "hour": "14:30:00",
+      "duration": "01:30:00",
+      "title": "Melhor da Tarde ",
+      "description": "Dicas de bem-esta, culinária, fofoca, astrologia e ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "10",
+      "date": "12/05/2022",
+      "hour": "16:00:00",
+      "duration": "02:50:00",
+      "title": "Brasil Urgente ",
+      "description": "Os acontecimentos do dia, com foco na segurança no ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "11",
+      "date": "12/05/2022",
+      "hour": "18:50:00",
+      "duration": "01:30:00",
+      "title": "Brasil Urgente ",
+      "description": "Os acontecimentos do dia com foco na segurança, no ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "12",
+      "date": "12/05/2022",
+      "hour": "19:20:00",
+      "duration": "01:10:00",
+      "title": "Jornal da Band ",
+      "description": "Noticiário diário que apresenta os principais ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "13",
+      "date": "12/05/2022",
+      "hour": "20:30:00",
+      "duration": "02:00:00",
+      "title": "Faustão na Band ",
+      "description": "Com quadros consagrados e inédito Faustão traz o ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "14",
+      "date": "12/05/2022",
+      "hour": "22:30:00",
+      "duration": "01:15:00",
+      "title": "1001 Perguntas",
+      "description": "Jogo de perguntas e respostas que coloca à prova o ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "15",
+      "date": "12/05/2022",
+      "hour": "23:45:00",
+      "duration": "00:50:00",
+      "title": "Jornal da Noite ",
+      "description": "Análise, entrevista, matérias especiais e todos os ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "16",
+      "date": "13/05/2022",
+      "hour": "00:35:00",
+      "duration": "00:05:00",
+      "title": "Que Fim Levou? ",
+      "description": "A memoria do esporte brasileiro em destaque.",
+      "rating": "Livre"
+    },
+    {
+      "position": "17",
+      "date": "13/05/2022",
+      "hour": "00:40:00",
+      "duration": "01:00:00",
+      "title": "Esporte Total ",
+      "description": "Um resumo das últimas rodadas do futebol brasileiro e ...",
+      "rating": "Livre"
+    },
+    {
+      "position": "18",
+      "date": "13/05/2022",
+      "hour": "01:40:00",
+      "duration": "00:30:00",
+      "title": "Hatfields & McCoys ... ",
+      "description": "Acompanhe a história real de um conflito entre duas ...",
+      "rating": "Não recomendado ..."
+    },
+    {
+      "position": "19",
+      "date": "13/05/2022",
+      "hour": "02:10:00",
+      "duration": "01:50:00",
+      "title": "+ INFO",
+      "description": "Reportagens especiais sobre todos os assunto do ...",
+      "rating": "Livre"
+    }
+]
