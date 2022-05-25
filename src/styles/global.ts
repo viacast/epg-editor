@@ -47,11 +47,14 @@ export default createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     outline: 0;
+    font-family: 'Nunito', Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    /* color: var(--color-neutral-3); */
   }
 
   body {
     background: var(--color-neutral-1);
-    color: #fff;
+    /* color: #fff; */
     -webkit-font-smoothing: antialiased;
   }
 
@@ -63,8 +66,6 @@ export default createGlobalStyle`
   input,
   button,
   div {
-    font-family: 'Nunito', Arial, Helvetica, sans-serif;
-    font-size: 16px;
   }
 
   .no-user-select {
