@@ -1,17 +1,15 @@
 import BaseButton from 'components/Button';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import MainInput from 'components/Input';
-import { FormField } from 'components/Button/styles';
+import InputButton from 'components/InputButton';
 import { Container, Form, Select, Text } from './styles';
 
-const Header: React.FC = ({ ...otherProps }) => {
+const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
-  const [programCount, setProgramCount] = useState(0);
+  const [programCount, setProgramCount] = useState(19);
 
   const handleChange = evt => {
     const opt = evt.target.value;
@@ -19,62 +17,10 @@ const Header: React.FC = ({ ...otherProps }) => {
     i18n.changeLanguage(opt);
   };
 
-  // ################################################## //
-
-  const fileInputField = useRef(null);
-  const [files, setFiles] = useState({});
-
-  const maxFileSizeInBytes = 500000;
-
-  const addNewFiles = newFiles => {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const file of newFiles) {
-      if (file.size <= maxFileSizeInBytes) {
-        if (!otherProps) {
-          return { file };
-        }
-        files[file.name] = file;
-        localStorage.setItem('fileName', file.name);
-      }
-    }
-    return { ...files };
-  };
-
-  const handleNewFileUpload = e => {
-    const { files: newFiles } = e.target;
-    if (newFiles.length) {
-      const updatedFiles = addNewFiles(newFiles);
-      setFiles(updatedFiles);
-    }
-  };
-
-  // ################################################## //
-
   return (
     <Container>
       <Form>
-        <MainInput
-          value={
-            localStorage.getItem('fileName') !== null
-              ? localStorage.getItem('fileName')!
-              : 'EPG.CSV'
-          }
-        />
-        <div
-          style={{ width: 'auto', height: 'auto', paddingRight: '1.672241%' }}
-        >
-          <BaseButton
-            text={`${t('header:buttonImportProgram')}`}
-            icon={<FileDownloadIcon />}
-          />
-          <FormField
-            type="file"
-            ref={fileInputField}
-            onChange={handleNewFileUpload}
-            title=""
-            value=""
-          />
-        </div>
+        <InputButton />
         <BaseButton
           text={`${t('header:buttonExportProgram')}`}
           icon={<UploadFileIcon />}
