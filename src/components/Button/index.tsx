@@ -10,7 +10,7 @@ export interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({ text, icon, onClick }) => {
   return (
-    <Stack spacing={2} direction="row" width="139px">
+    <Stack className="epg-button" spacing={2} direction="row">
       <ButtonContainer onClick={onClick} variant="contained">
         <div className="icon">{icon}</div>
         <div className="line" />
