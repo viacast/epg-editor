@@ -11,8 +11,8 @@ export interface InputProps {
   disabled: boolean;
   value: string;
   placeholder: string;
-  // eslint-disable-next-line react/require-default-props
   setValue?: (value: string) => void;
+  type?: 'text' | 'file';
 }
 
 const Input: React.FC<InputProps> = ({
@@ -20,14 +20,16 @@ const Input: React.FC<InputProps> = ({
   value,
   placeholder,
   setValue,
+  type,
 }) => {
   return (
-    <StyledPaper>
+    <StyledPaper className="epg-input">
       <StyledInput
         disabled={disabled}
         fullWidth
         value={value}
         placeholder={placeholder}
+        type={type}
         inputProps={{
           style: {
             height: '11px',
@@ -40,6 +42,11 @@ const Input: React.FC<InputProps> = ({
       </StyledIconButton>
     </StyledPaper>
   );
+};
+
+Input.defaultProps = {
+  setValue: undefined,
+  type: 'text',
 };
 
 export default Input;
