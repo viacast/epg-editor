@@ -37,13 +37,13 @@ const InputButton: React.FC = () => {
     <Container>
       <Input
         disabled
-        placeholder={`${t('header:placeholderInput')}`}
+        placeholder={t('header:placeholderInput')}
         value={filename}
         setValue={setFilename}
       />
       <ButtonContainer>
         <BaseButton
-          text={`${t('header:buttonImportProgram')}`}
+          text={t('header:buttonImportProgram')}
           icon={<FaDownload />}
           onClick={() => {
             fileInputField.current?.click();
