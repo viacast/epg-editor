@@ -1,11 +1,11 @@
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import MainInput from 'components/Input';
+import { FaDownload } from 'react-icons/fa';
+import Input from 'components/Input';
 import BaseButton from 'components/Button';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Form, FormField } from './styles';
+import { Container, FormField, ButtonContainer } from './styles';
 
-const InputButton: React.FC = ({ ...otherProps }) => {
+const InputButton: React.FC = () => {
   const { t } = useTranslation();
   const [filename, setFilename] = useState('');
 
@@ -18,9 +18,6 @@ const InputButton: React.FC = ({ ...otherProps }) => {
     // eslint-disable-next-line no-restricted-syntax
     for (const file of newFiles) {
       if (file.size <= maxFileSizeInBytes) {
-        if (!otherProps) {
-          return { file };
-        }
         files[file.name] = file;
         setFilename(file.name);
       }
@@ -37,17 +34,17 @@ const InputButton: React.FC = ({ ...otherProps }) => {
   };
 
   return (
-    <Form>
-      <MainInput
+    <Container>
+      <Input
         disabled
         placeholder={`${t('header:placeholderInput')}`}
         value={filename}
         setValue={setFilename}
       />
-      <div style={{ width: 'auto', height: 'auto', paddingRight: '15px' }}>
+      <ButtonContainer>
         <BaseButton
           text={`${t('header:buttonImportProgram')}`}
-          icon={<FileDownloadIcon />}
+          icon={<FaDownload />}
           onClick={() => {
             fileInputField.current?.click();
           }}
@@ -59,8 +56,8 @@ const InputButton: React.FC = ({ ...otherProps }) => {
           title=""
           value=""
         />
-      </div>
-    </Form>
+      </ButtonContainer>
+    </Container>
   );
 };
 

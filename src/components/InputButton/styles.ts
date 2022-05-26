@@ -1,10 +1,22 @@
 import styled from 'styled-components';
 import 'styles/global';
 
-// eslint-disable-next-line import/prefer-default-export
+export const Container = styled.form`
+  display: flex;
+  width: fit-content; //897px; //46.71875%;
+  font-family: Nunito, sans-serif;
+  color: var(--color-neutral-3);
+`;
+
+export const ButtonContainer = styled.div`
+  width: auto;
+  height: auto;
+  padding-right: 15px;
+`;
+
 export const FormField = styled.input`
   font-size: 18px;
-  display: block;
+  display: none;
   width: 139px;
   height: 44px;
   border: none;
@@ -17,11 +29,4 @@ export const FormField = styled.input`
   opacity: 0;
   cursor: pointer;
   z-index: -1;
-`;
-
-export const Form = styled.form`
-  display: flex;
-  width: fit-content; //897px; //46.71875%;
-  font-family: Nunito, sans-serif;
-  color: var(--color-neutral-3);
 `;
