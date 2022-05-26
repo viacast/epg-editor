@@ -5,7 +5,7 @@ import { FaDownload, FaFileExport } from 'react-icons/fa';
 
 import Button from 'components/Button';
 import FileInput, { FileInputRefProps } from 'components/FileInput';
-import { Container as HeaderContainer, Select, Text } from './styles';
+import { HeaderContainer, Select, Text } from './styles';
 
 const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -45,16 +45,16 @@ const Header: React.FC = () => {
         onClick={() => fileInputRef?.current.click?.()}
       />
       <Button text={t('header:buttonExportProgram')} icon={<FaFileExport />} />
-      <Text>
-        {t('header:labelProgram', {
-          count: programCount,
-        })}
-      </Text>
       <Button
         text={t('header:buttonAddProgram')}
         icon={<RiMenuAddFill />}
         onClick={() => setProgramCount(c => c + 1)}
       />
+      <Text>
+        {t('header:labelProgram', {
+          count: programCount,
+        })}
+      </Text>
       <Select onChange={handleChange} value={currentLanguage}>
         <option value="pt">Portugues</option>
         <option value="en">English</option>

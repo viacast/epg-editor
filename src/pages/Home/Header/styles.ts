@@ -1,26 +1,27 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const HeaderContainer = styled.div`
   display: flex;
   width: fit-content;
   padding-top: 40px;
   padding-left: 25px;
   color: var(--color-neutral-3);
+
+  .epg-button {
+    margin-left: 15px;
+  }
 `;
 
 export const Text = styled.div`
-  text-align: center;
-  white-space: nowrap;
-  font-size: 20px;
-  margin-left: 34px;
-  margin-right: 34px;
   position: relative;
+  width: 188px;
   padding: 10px 0;
+  font-size: 20px;
+  text-align: center;
 `;
 
 export const Select = styled.select`
   padding: 5px 5px 5px 5px;
-  margin-left: 15px;
   border-radius: 2px;
   height: 100%;
   border: none;
