@@ -1,5 +1,4 @@
 import * as React from 'react';
-import 'styles/global';
 import { CgClose } from 'react-icons/cg';
 import {
   StyledDivider,
@@ -36,8 +35,8 @@ const Input: React.FC<InputProps> = ({
         }}
       />
       <StyledDivider orientation="vertical" />
-      <StyledIconButton aria-label="directions">
-        <CgClose onClick={() => setValue?.('')} />
+      <StyledIconButton onClick={() => setValue?.('')} aria-label="directions">
+        <CgClose />
       </StyledIconButton>
     </StyledPaper>
   );
