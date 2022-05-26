@@ -10,28 +10,27 @@ import {
   styled,
 } from '@mui/material';
 
-export const StyledInput = styled(TextField)<InputProps>(() => ({
-  width: '270px',
-  height: '44px',
-  display: 'flex',
-  textAlign: 'center',
-  verticalAlign: 'middle',
-  cursor: 'pointer',
-  userSelect: 'none',
-  textTransform: 'none',
-  fontSize: 20,
-  borderRadius: '2px',
-  backgroundColor: 'var(--color-neutral-6)',
-  fontFamily: 'Nunito, sans-serif',
-  '& .MuiInputBase-root.Mui-disabled': {
-    '& > fieldset': {
-      borderColor: 'var(--color-neutral-6)',
-    },
-  },
-  '& .MuiInputBase-input.Mui-disabled': {
-    WebkitTextFillColor: 'var(--color-neutral-3)',
-  },
-}));
+export const StyledInput = styled(TextField)<InputProps>`
+  width: 270px;
+  height: 44px;
+  display: flex;
+  text-align: center;
+  vertical-align: middle;
+  text-transform: none;
+  font-size: 20;
+  border-radius: 2px;
+  background-color: var(--color-neutral-6);
+
+  .css-md26zr-MuiInputBase-root-MuiOutlinedInput-root.Mui-disabled {
+    & > fieldset {
+      border-color: var(--color-neutral-6);
+    }
+  }
+
+  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
+    -webkit-text-fill-color: var(--color-neutral-3);
+  }
+`;
 
 export const StyledDivider = styled(Divider)<DividerProps>`
   height: 28px;
@@ -45,7 +44,6 @@ export const StyledPaper = styled(Paper)<PaperProps>`
   align-items: center;
   width: 270px;
   height: 44px;
-  margin-right: 12px;
   background-color: var(--color-neutral-6);
 `;
 
