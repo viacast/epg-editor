@@ -1,6 +1,5 @@
 import React from 'react';
 import Stack from '@mui/material/Stack';
-import 'styles/global';
 import { ButtonContainer } from './styles';
 
 export interface ButtonProps {
