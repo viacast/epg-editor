@@ -12,7 +12,6 @@ export interface InputProps {
   value: string;
   placeholder: string;
   setValue?: (value: string) => void;
-  type?: 'text' | 'file';
 }
 
 const Input: React.FC<InputProps> = ({
