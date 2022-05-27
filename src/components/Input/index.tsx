@@ -19,7 +19,6 @@ const Input: React.FC<InputProps> = ({
   value,
   placeholder,
   setValue,
-  type,
 }) => {
   return (
     <StyledPaper className="epg-input">
