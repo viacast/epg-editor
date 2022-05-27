@@ -29,19 +29,19 @@ const ProgramTable: React.FC = () => {
   const { t } = useTranslation();
 
   const columns: readonly Column[] = [
-    { id: 'position', label: '#', minWidth: 135 },
-    { id: 'date', label: `${t('table:date')}`, minWidth: 195 },
+    { id: 'position', label: '#', minWidth: 90 },
+    { id: 'date', label: `${t('table:date')}`, minWidth: 140 },
     {
       id: 'hour',
       label: `${t('table:hour')}`,
-      minWidth: 150,
+      minWidth: 140,
       align: 'left',
       format: (value: number) => value.toLocaleString('en-US'),
     },
     {
       id: 'duration',
       label: `${t('table:duration')}`,
-      minWidth: 170,
+      minWidth: 140,
       align: 'left',
       format: (value: number) => value.toLocaleString('en-US'),
     },

@@ -6,9 +6,11 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow, { tableRowClasses } from '@mui/material/TableRow';
 
 export const StyledPaper = styled(Paper)`
-  width: 100%;
+  width: 100vw;
   height: 100%;
-  overflow: hidden;
+  min-height: 300px;
+  min-width: 1047px;
+  white-space: nowrap;
   border-radius: 4px;
   background-color: var(--color-neutral-5);
 `;
@@ -23,11 +25,14 @@ export const StyledTable = styled(Table)`
     padding: 10px;
     border-radius: 4px;
     background-color: var(--color-neutral-5);
+    text-overflow: ellipsis;
   }
 `;
 
 export const StyledTableCell = styled(TableCell)`
   &.${tableCellClasses.root} {
+    max-width: 0px;
+    overflow: hidden;
     color: var(--color-neutral-2);
     border-bottom: none;
   }
@@ -45,6 +50,7 @@ export const StyledTableCell = styled(TableCell)`
     border-top: 6px solid var(--color-neutral-5);
     font-size: 16px;
     font-weight: 700;
+    text-overflow: ellipsis;
   }
 `;
 
