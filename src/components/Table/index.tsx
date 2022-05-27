@@ -1,75 +1,17 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Table, { tableClasses } from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TableRow, { tableRowClasses } from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import { useTranslation } from 'react-i18next';
 import data from './mockdata.json';
-
-const StyledTable = styled(Table)(() => ({
-  [`&.${tableClasses.root}`]: {
-    padding: '10px',
-    borderRadius: '4px',
-    backgroundColor: 'var(--color-neutral-5)',
-  },
-}));
-
-const StyledTableCell = styled(TableCell)(() => ({
-  [`&.${tableCellClasses.root}`]: {
-    color: 'var(--color-neutral-2)',
-    borderBottom: 'none',
-  },
-  '&:last-child td, &:last-child th': {
-    borderBottom: '6px solid var(--color-neutral-5)',
-  },
-  [`&.${tableCellClasses.head}`]: {
-    fontSize: 18,
-    fontWeight: '700',
-    backgroundColor: 'var(--color-neutral-5)',
-    borderBottom: '4px solid var(--color-neutral-1)',
-  },
-  [`&.${tableCellClasses.body}`]: {
-    borderTop: '6px solid var(--color-neutral-5)',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(() => ({
-  [`&.${tableRowClasses.root}`]: {
-    backgroundColor: 'var(--color-neutral-6)',
-    border: '4px solid white',
-  },
-}));
-
-interface Column {
-  id:
-    | 'position'
-    | 'date'
-    | 'hour'
-    | 'duration'
-    | 'title'
-    | 'description'
-    | 'rating';
-  label: string;
-  minWidth?: number;
-  align?: 'left';
-  format?: (value: number) => string;
-}
-
-interface Data {
-  position: string;
-  date: string;
-  hour: string;
-  duration: string;
-  title: string;
-  description: string;
-  rating: string;
-}
+import {
+  StyledPaper,
+  StyledTableContainer,
+  StyledTable,
+  StyledTableCell,
+  StyledTableRow,
+  Column,
+  Data,
+} from './styles';
 
 function createData(
   position: string,
@@ -87,8 +29,8 @@ const CustomizedTables: React.FC = () => {
   const { t } = useTranslation();
 
   const columns: readonly Column[] = [
-    { id: 'position', label: '#', minWidth: 100 },
-    { id: 'date', label: `${t('table:date')}`, minWidth: 150 },
+    { id: 'position', label: '#', minWidth: 135 },
+    { id: 'date', label: `${t('table:date')}`, minWidth: 195 },
     {
       id: 'hour',
       label: `${t('table:hour')}`,
@@ -99,28 +41,28 @@ const CustomizedTables: React.FC = () => {
     {
       id: 'duration',
       label: `${t('table:duration')}`,
-      minWidth: 150,
+      minWidth: 170,
       align: 'left',
       format: (value: number) => value.toLocaleString('en-US'),
     },
     {
       id: 'title',
       label: `${t('table:title')}`,
-      minWidth: 200,
+      minWidth: 250,
       align: 'left',
       format: (value: number) => value.toLocaleString('en-US'),
     },
     {
       id: 'description',
       label: `${t('table:description')}`,
-      minWidth: 500,
+      minWidth: 645,
       align: 'left',
       format: (value: number) => value.toLocaleString('en-US'),
     },
     {
       id: 'rating',
       label: `${t('table:rating')}`,
-      minWidth: 200,
+      minWidth: 250,
       align: 'left',
       format: (value: number) => value.toLocaleString('en-US'),
     },
@@ -141,17 +83,9 @@ const CustomizedTables: React.FC = () => {
   const rows = newData;
 
   return (
-    <Paper
-      sx={{
-        width: '1802px',
-        height: '660px',
-        overflow: 'hidden',
-        borderRadius: '4px',
-        backgroundColor: 'var(--color-neutral-5)',
-      }}
-    >
-      <TableContainer sx={{ height: '660px', borderRadius: '4px' }}>
-        <StyledTable stickyHeader aria-label="sticky caption table">
+    <StyledPaper>
+      <StyledTableContainer>
+        <StyledTable stickyHeader>
           <TableHead>
             <StyledTableRow>
               {columns.map(column => (
@@ -171,7 +105,7 @@ const CustomizedTables: React.FC = () => {
                 hover
                 role="checkbox"
                 tabIndex={-1}
-                key={row.date}
+                key={row.position}
               >
                 {columns.map(column => {
                   const value = row[column.id];
@@ -187,8 +121,8 @@ const CustomizedTables: React.FC = () => {
             ))}
           </TableBody>
         </StyledTable>
-      </TableContainer>
-    </Paper>
+      </StyledTableContainer>
+    </StyledPaper>
   );
 };
 
