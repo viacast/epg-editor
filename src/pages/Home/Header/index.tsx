@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { RiMenuAddFill } from 'react-icons/ri';
 import { FaDownload, FaFileExport } from 'react-icons/fa';
 
-import Button from 'components/Button';
-import FileInput, { FileInputRefProps } from 'components/FileInput';
+import { Button, FileInput, FileInputRefProps } from 'components';
 import { HeaderContainer, Select, Text } from './styles';
 
 const Header: React.FC = () => {

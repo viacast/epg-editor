@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-import Input, { InputProps } from 'components/Input';
+import { Input, InputProps } from 'components';
 
 export interface FileInputRefProps {
   click?: () => void;
