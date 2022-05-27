@@ -25,7 +25,7 @@ function createData(
   return { position, date, hour, duration, title, description, rating };
 }
 
-const CustomizedTables: React.FC = () => {
+const ProgramTable: React.FC = () => {
   const { t } = useTranslation();
 
   const columns: readonly Column[] = [
@@ -126,4 +126,4 @@ const CustomizedTables: React.FC = () => {
   );
 };
 
-export default CustomizedTables;
+export default ProgramTable;

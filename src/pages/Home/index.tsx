@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from 'components/Table';
+import { ProgramTable } from 'components';
 import { Container, HeaderContainer, TableContainer } from './styles';
 import Header from './Header';
 
@@ -10,7 +10,7 @@ const Home: React.FC = () => {
         <Header />
       </HeaderContainer>
       <TableContainer>
-        <Table />
+        <ProgramTable />
       </TableContainer>
     </Container>
   );
