@@ -1,11 +1,17 @@
-import Header from 'pages/Home/Header';
 import React from 'react';
-import { Container } from './styles';
+import Table from 'components/Table';
+import { Container, HeaderContainer, TableContainer } from './styles';
+import Header from './Header';
 
 const Home: React.FC = () => {
   return (
     <Container>
-      <Header />
+      <HeaderContainer>
+        <Header />
+      </HeaderContainer>
+      <TableContainer>
+        <Table />
+      </TableContainer>
     </Container>
   );
 };
