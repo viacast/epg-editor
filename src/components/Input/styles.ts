@@ -21,13 +21,16 @@ export const StyledInput = styled(TextField)<InputProps>`
   border-radius: 2px;
   background-color: var(--color-neutral-6);
 
-  .css-md26zr-MuiInputBase-root-MuiOutlinedInput-root.Mui-disabled {
+  .MuiOutlinedInput-root.Mui-disabled {
+    & > input {
+      height: 11px;
+    }
     & > fieldset {
       border-color: var(--color-neutral-6);
     }
   }
 
-  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
+  .MuiOutlinedInput-input.Mui-disabled {
     -webkit-text-fill-color: var(--color-neutral-3);
   }
 `;
