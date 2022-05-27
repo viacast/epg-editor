@@ -1,6 +1,6 @@
 import React from 'react';
 import Stack from '@mui/material/Stack';
-import { ButtonContainer } from './styles';
+import { ButtonContainer, Icon, Line, Text } from './styles';
 
 export interface ButtonProps {
   text: string;
@@ -12,9 +12,9 @@ const Button: React.FC<ButtonProps> = ({ text, icon, onClick }) => {
   return (
     <Stack className="epg-button" spacing={2} direction="row">
       <ButtonContainer onClick={onClick} variant="contained">
-        <div className="icon">{icon}</div>
-        <div className="line" />
-        <div className="text">{text}</div>
+        <Icon>{icon}</Icon>
+        <Line />
+        <Text>{text}</Text>
       </ButtonContainer>
     </Stack>
   );
