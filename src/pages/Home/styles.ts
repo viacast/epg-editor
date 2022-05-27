@@ -20,3 +20,9 @@ export const TableContainer = styled.div`
   font-family: Nunito, sans-serif;
   color: var(--color-neutral-3);
 `;
+
+export const Form = styled.form`
+  display: flex;
+  width: fit-content;
+  color: var(--color-neutral-3);
+`;

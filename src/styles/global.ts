@@ -66,6 +66,8 @@ export default createGlobalStyle`
   input,
   button,
   div {
+    font-family: 'Nunito', Arial, Helvetica, sans-serif;
+    font-size: 16px;
   }
 
   .no-user-select {

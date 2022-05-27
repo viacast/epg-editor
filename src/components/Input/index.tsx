@@ -12,7 +12,6 @@ export interface InputProps {
   value: string;
   placeholder: string;
   setValue?: (value: string) => void;
-  type?: 'text' | 'file';
 }
 
 const Input: React.FC<InputProps> = ({
@@ -20,7 +19,6 @@ const Input: React.FC<InputProps> = ({
   value,
   placeholder,
   setValue,
-  type,
 }) => {
   return (
     <StyledPaper className="epg-input">
@@ -29,7 +27,6 @@ const Input: React.FC<InputProps> = ({
         fullWidth
         value={value}
         placeholder={placeholder}
-        type={type}
       />
       <StyledDivider orientation="vertical" />
       <StyledIconButton onClick={() => setValue?.('')}>
@@ -41,7 +38,6 @@ const Input: React.FC<InputProps> = ({
 
 Input.defaultProps = {
   setValue: undefined,
-  type: 'text',
 };
 
 export default Input;
