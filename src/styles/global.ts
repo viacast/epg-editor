@@ -60,6 +60,10 @@ export default createGlobalStyle`
 
   html, body {
     height: 100%;
+    overflow-y: scroll;
+    @media only screen and (min-height: 455px) {
+      overflow-y: hidden;
+    }
   }
 
   body,
