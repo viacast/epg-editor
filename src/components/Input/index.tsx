@@ -38,7 +38,6 @@ const Input: React.FC<InputProps> = ({
 
 Input.defaultProps = {
   setValue: undefined,
-  type: 'text',
 };
 
 export default Input;
