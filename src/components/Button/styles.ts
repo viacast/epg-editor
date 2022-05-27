@@ -1,7 +1,22 @@
-import { Button, ButtonProps, styled } from '@mui/material';
+import styled from 'styled-components';
+import { Button, ButtonProps, styled as muistyled } from '@mui/material';
 
-// eslint-disable-next-line import/prefer-default-export
-export const ButtonContainer = styled(Button)<ButtonProps>`
+export const Icon = styled.div`
+  width: 44px;
+  justify-content: center;
+  display: flex;
+`;
+export const Line = styled.div`
+  width: 2px;
+  height: 50%;
+  border-left: 2px solid;
+`;
+
+export const Text = styled.div`
+  margin: auto;
+`;
+
+export const ButtonContainer = muistyled(Button)<ButtonProps>`
   display: flex;
   width: 139px;
   height: 44px;
@@ -13,26 +28,10 @@ export const ButtonContainer = styled(Button)<ButtonProps>`
   border-radius: 2px;
   color: var(--color-neutral-3);
   background-color: transparent;
-  justify-content: normal;
-  .icon {
-    width: 44px;
-    display: flex;
-    justify-content: center;
-  }
-  .text {
-    margin: auto;
-  }
-  .line {
-    width: 2px;
-    height: 50%;
-    border-left: 2px solid var(--color-neutral-3);
-  }
+
   &:hover {
     color: var(--color-neutral-2);
     border-color: var(--color-neutral-2);
     background-color: transparent;
-    .line {
-      border-color: var(--color-neutral-2);
-    }
   }
 `;
