@@ -1,0 +1,9 @@
+{
+  "columnLabel_position": "#",
+  "columnLabel_date": "Date",
+  "columnLabel_hour": "Hour",
+  "columnLabel_duration": "Duration",
+  "columnLabel_title": "Title",
+  "columnLabel_description": "Description",
+  "columnLabel_rating": "Parental Rating"
+}

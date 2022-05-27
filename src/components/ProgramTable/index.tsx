@@ -1,7 +1,7 @@
-import * as React from 'react';
-import TableBody from '@mui/material/TableBody';
-import TableHead from '@mui/material/TableHead';
+import React from 'react';
+import { TableBody, TableHead } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+
 import data from './mockdata.json';
 import {
   StyledPaper,
@@ -9,9 +9,9 @@ import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
-  Column,
   Data,
 } from './styles';
+import programTableColumns from './programTableColumns';
 
 function createData(
   position: string,
@@ -27,46 +27,6 @@ function createData(
 
 const ProgramTable: React.FC = () => {
   const { t } = useTranslation();
-
-  const columns: readonly Column[] = [
-    { id: 'position', label: '#', minWidth: 135 },
-    { id: 'date', label: `${t('table:date')}`, minWidth: 195 },
-    {
-      id: 'hour',
-      label: `${t('table:hour')}`,
-      minWidth: 150,
-      align: 'left',
-      format: (value: number) => value.toLocaleString('en-US'),
-    },
-    {
-      id: 'duration',
-      label: `${t('table:duration')}`,
-      minWidth: 170,
-      align: 'left',
-      format: (value: number) => value.toLocaleString('en-US'),
-    },
-    {
-      id: 'title',
-      label: `${t('table:title')}`,
-      minWidth: 250,
-      align: 'left',
-      format: (value: number) => value.toLocaleString('en-US'),
-    },
-    {
-      id: 'description',
-      label: `${t('table:description')}`,
-      minWidth: 645,
-      align: 'left',
-      format: (value: number) => value.toLocaleString('en-US'),
-    },
-    {
-      id: 'rating',
-      label: `${t('table:rating')}`,
-      minWidth: 250,
-      align: 'left',
-      format: (value: number) => value.toLocaleString('en-US'),
-    },
-  ];
 
   const newData = data.map(e => {
     return createData(
@@ -88,13 +48,9 @@ const ProgramTable: React.FC = () => {
         <StyledTable stickyHeader>
           <TableHead>
             <StyledTableRow>
-              {columns.map(column => (
-                <StyledTableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
+              {programTableColumns.map(({ id, align, minWidth }) => (
+                <StyledTableCell key={id} align={align} style={{ minWidth }}>
+                  {t(`program-table:columnLabel_${id}`)}
                 </StyledTableCell>
               ))}
             </StyledTableRow>
@@ -107,13 +63,15 @@ const ProgramTable: React.FC = () => {
                 tabIndex={-1}
                 key={row.position}
               >
-                {columns.map(column => {
-                  const value = row[column.id];
+                {programTableColumns.map(({ id, align, minWidth }) => {
+                  const value = row[id];
                   return (
-                    <StyledTableCell key={column.id} align={column.align}>
-                      {column.format && typeof value === 'number'
-                        ? column.format(value)
-                        : value}
+                    <StyledTableCell
+                      key={id}
+                      align={align}
+                      style={{ minWidth }}
+                    >
+                      {value}
                     </StyledTableCell>
                   );
                 })}
