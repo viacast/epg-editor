@@ -1,5 +1,5 @@
 import React from 'react';
-import Stack from '@mui/material/Stack';
+import { Stack } from '@mui/material';
 import { ButtonContainer, Icon, Line, Text } from './styles';
 
 export interface ButtonProps {
