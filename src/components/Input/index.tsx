@@ -27,7 +27,6 @@ const Input: React.FC<InputProps> = ({
         fullWidth
         value={value}
         placeholder={placeholder}
-        type={type}
       />
       <StyledDivider orientation="vertical" />
       <StyledIconButton onClick={() => setValue?.('')}>
