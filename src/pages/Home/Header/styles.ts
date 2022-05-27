@@ -3,8 +3,6 @@ import styled from 'styled-components';
 export const HeaderContainer = styled.div`
   display: flex;
   width: fit-content;
-  padding-top: 40px;
-  padding-left: 25px;
   color: var(--color-neutral-3);
 
   .epg-button {
