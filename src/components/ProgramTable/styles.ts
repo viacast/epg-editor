@@ -1,12 +1,13 @@
-import { styled } from '@mui/material/styles';
+import styled from 'styled-components';
+import { styled as styledmui } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import TableContainer from '@mui/material/TableContainer';
 import Table, { tableClasses } from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow, { tableRowClasses } from '@mui/material/TableRow';
 
-export const StyledPaper = styled(Paper)`
-  width: 100vw;
+export const StyledPaper = styledmui(Paper)`
+  width: 100%;
   height: 100%;
   min-height: 300px;
   min-width: 1047px;
@@ -15,12 +16,12 @@ export const StyledPaper = styled(Paper)`
   background-color: var(--color-neutral-5);
 `;
 
-export const StyledTableContainer = styled(TableContainer)`
+export const StyledTableContainer = styledmui(TableContainer)`
   height: 100%;
   border-radius: 4px;
 `;
 
-export const StyledTable = styled(Table)`
+export const StyledTable = styledmui(Table)`
   &.${tableClasses.root} {
     padding: 10px;
     border-radius: 4px;
@@ -29,7 +30,7 @@ export const StyledTable = styled(Table)`
   }
 `;
 
-export const StyledTableCell = styled(TableCell)`
+export const StyledTableCell = styledmui(TableCell)`
   &.${tableCellClasses.root} {
     max-width: 0px;
     overflow: hidden;
@@ -54,7 +55,7 @@ export const StyledTableCell = styled(TableCell)`
   }
 `;
 
-export const StyledTableRow = styled(TableRow)`
+export const StyledTableRow = styledmui(TableRow)`
   &.${tableRowClasses.root} {
     background-color: var(--color-neutral-6);
     border: 4px solid white;
@@ -85,3 +86,22 @@ export interface Data {
   description: string;
   rating: string;
 }
+
+export const IconViacast = styled.img`
+  float: left;
+  margin-right: 14px;
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const Message = styled.div`
+  white-space: nowrap;
+  max-width: 285px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+`;
