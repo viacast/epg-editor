@@ -7,7 +7,6 @@ export const Container = styled.div`
 
 export const Form = styled.form`
   display: flex;
-  width: fit-content; //897px; //46.71875%;
-  font-family: Nunito, sans-serif;
+  width: fit-content;
   color: var(--color-neutral-3);
 `;
