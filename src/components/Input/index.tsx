@@ -5,9 +5,10 @@ import {
   StyledIconButton,
   StyledPaper,
   StyledInput,
+  PaperStylesProps,
 } from './styles';
 
-export interface InputProps {
+export interface InputProps extends PaperStylesProps {
   disabled: boolean;
   value: string;
   placeholder: string;
@@ -19,9 +20,11 @@ const Input: React.FC<InputProps> = ({
   value,
   placeholder,
   setValue,
+  width,
+  height,
 }) => {
   return (
-    <StyledPaper className="epg-input">
+    <StyledPaper width={width} height={height} className="epg-input">
       <StyledInput
         disabled={disabled}
         fullWidth

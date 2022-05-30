@@ -7,7 +7,6 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow, { tableRowClasses } from '@mui/material/TableRow';
 
 export const StyledPaper = styledmui(Paper)`
-  width: 100%;
   height: 100%;
   min-height: 300px;
   min-width: 1047px;
@@ -60,6 +59,24 @@ export const StyledTableRow = styledmui(TableRow)`
     background-color: var(--color-neutral-6);
     border: 4px solid white;
   }
+`;
+
+export const Menu = styled.div`
+  margin-left: 35px;
+  height: 100%;
+  max-height: 740px;
+  min-height: 300px;
+  border-radius: 4px;
+  background-color: var(--color-neutral-5);
+`;
+
+export const Toolbar = styled.div`
+  position: relative;
+  top: 0px;
+  width: 100%;
+  height: 42px;
+  border-radius: 4px;
+  background-color: var(--color-primary-2);
 `;
 
 export interface Column {

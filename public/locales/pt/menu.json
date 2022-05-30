@@ -1,0 +1,10 @@
+{
+    "title": "Título",
+    "description": "Descrição",
+    "parentalRating": "Classificação Indicativa",
+    "date": "Data",
+    "time": "Hora",
+    "length": "Duração",
+    "cancel": "Cancelar",
+    "save": "Salvar"
+}

@@ -9,6 +9,7 @@ import R14 from 'assets/icons/14.png';
 import R16 from 'assets/icons/16.png';
 import R18 from 'assets/icons/18.png';
 
+import MenuContent from 'components/MenuContent';
 import data from './mockdata.json';
 import {
   StyledPaper,
@@ -19,6 +20,8 @@ import {
   Data,
   IconViacast,
   Message,
+  Menu,
+  Toolbar,
 } from './styles';
 import programTableColumns from './programTableColumns';
 
@@ -37,6 +40,10 @@ function createData(
 const ProgramTable: React.FC = () => {
   const { t } = useTranslation();
 
+  const [clicked, setClicked] = React.useState(false);
+  const MenuOpen = () => setClicked(() => true);
+  const MenuClose = () => setClicked(() => false);
+
   const newData = data.map(e => {
     return createData(
       e.position,
@@ -52,67 +59,79 @@ const ProgramTable: React.FC = () => {
   const rows = newData;
 
   return (
-    <StyledPaper>
-      <StyledTableContainer>
-        <StyledTable stickyHeader>
-          <TableHead>
-            <StyledTableRow>
-              {programTableColumns.map(({ id, align, minWidth }) => (
-                <StyledTableCell key={id} align={align} style={{ minWidth }}>
-                  {t(`program-table:columnLabel_${id}`)}
-                </StyledTableCell>
-              ))}
-            </StyledTableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(row => (
-              <StyledTableRow
-                hover
-                role="checkbox"
-                tabIndex={-1}
-                key={row.position}
-              >
-                {programTableColumns.map(({ id, align, minWidth }) => {
-                  let value: string | JSX.Element = row[id];
-                  let aux = '';
-                  if (value === 'RL') {
-                    value = <IconViacast src={RL} alt="RL" />;
-                    aux = t(`parental-guidance:RL`);
-                  } else if (value === 'R10') {
-                    value = <IconViacast src={R10} alt="R10" />;
-                    aux = t(`parental-guidance:R10`);
-                  } else if (value === 'R12') {
-                    value = <IconViacast src={R12} alt="R12" />;
-                    aux = t(`parental-guidance:R12`);
-                  } else if (value === 'R14') {
-                    value = <IconViacast src={R14} alt="R14" />;
-                    aux = t(`parental-guidance:R14`);
-                  } else if (value === 'R16') {
-                    value = <IconViacast src={R16} alt="R16" />;
-                    aux = t(`parental-guidance:R16`);
-                  } else if (value === 'R18') {
-                    value = <IconViacast src={R18} alt="R18" />;
-                    aux = t(`parental-guidance:R18`);
-                  } else {
-                    value = row[id];
-                  }
-                  return (
-                    <StyledTableCell
-                      key={id}
-                      align={align}
-                      style={{ minWidth }}
-                    >
-                      {value}
-                      <Message>{aux}</Message>
-                    </StyledTableCell>
-                  );
-                })}
+    <>
+      <StyledPaper sx={{ width: clicked ? '78.2%' : '100%' }}>
+        <StyledTableContainer>
+          <StyledTable stickyHeader>
+            <TableHead>
+              <StyledTableRow>
+                {programTableColumns.map(({ id, align, minWidth }) => (
+                  <StyledTableCell key={id} align={align} style={{ minWidth }}>
+                    {t(`program-table:columnLabel_${id}`)}
+                  </StyledTableCell>
+                ))}
               </StyledTableRow>
-            ))}
-          </TableBody>
-        </StyledTable>
-      </StyledTableContainer>
-    </StyledPaper>
+            </TableHead>
+            <TableBody>
+              {rows.map(row => (
+                <StyledTableRow
+                  hover
+                  role="checkbox"
+                  tabIndex={-1}
+                  key={row.position}
+                  onClick={MenuOpen}
+                >
+                  {programTableColumns.map(({ id, align, minWidth }) => {
+                    let value: string | JSX.Element = row[id];
+                    let aux = '';
+                    if (value === 'RL') {
+                      value = <IconViacast src={RL} alt="RL" />;
+                      aux = t(`parental-guidance:RL`);
+                    } else if (value === 'R10') {
+                      value = <IconViacast src={R10} alt="R10" />;
+                      aux = t(`parental-guidance:R10`);
+                    } else if (value === 'R12') {
+                      value = <IconViacast src={R12} alt="R12" />;
+                      aux = t(`parental-guidance:R12`);
+                    } else if (value === 'R14') {
+                      value = <IconViacast src={R14} alt="R14" />;
+                      aux = t(`parental-guidance:R14`);
+                    } else if (value === 'R16') {
+                      value = <IconViacast src={R16} alt="R16" />;
+                      aux = t(`parental-guidance:R16`);
+                    } else if (value === 'R18') {
+                      value = <IconViacast src={R18} alt="R18" />;
+                      aux = t(`parental-guidance:R18`);
+                    } else {
+                      value = row[id];
+                    }
+                    return (
+                      <StyledTableCell
+                        key={id}
+                        align={align}
+                        style={{ minWidth }}
+                      >
+                        {value}
+                        <Message>{aux}</Message>
+                      </StyledTableCell>
+                    );
+                  })}
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </StyledTable>
+        </StyledTableContainer>
+      </StyledPaper>
+      <Menu
+        style={{
+          width: clicked ? '500px' : '0px',
+          display: clicked ? 'inline-block' : 'none',
+        }}
+      >
+        <Toolbar onClick={MenuClose} />
+        <MenuContent />
+      </Menu>
+    </>
   );
 };
 

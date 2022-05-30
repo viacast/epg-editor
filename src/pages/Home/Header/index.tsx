@@ -37,6 +37,8 @@ const Header: React.FC = () => {
           }
           setFilename(files[0].name);
         }}
+        width="270px"
+        height="44px"
       />
       <Button
         text={t('header:buttonImportProgram')}
