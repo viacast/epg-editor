@@ -1,22 +1,27 @@
+import { Program } from 'services/epg';
+
 export interface ProgramTableColumn {
-  id: string;
+  id: 'position' | keyof Program;
   minWidth?: number;
   maxWidth?: number;
   align?: 'left' | 'center' | 'right';
+  format?: 'date' | 'time' | 'duration';
 }
 
 export default [
-  { id: 'position', label: '#', minWidth: 90 },
-  { id: 'date', minWidth: 140 },
+  { id: 'position', minWidth: 90 },
+  { id: 'startDate', minWidth: 140, format: 'date' },
   {
-    id: 'hour',
+    id: 'startHour',
     minWidth: 140,
     align: 'left',
+    format: 'time',
   },
   {
     id: 'duration',
     minWidth: 140,
     align: 'left',
+    format: 'duration',
   },
   {
     id: 'title',

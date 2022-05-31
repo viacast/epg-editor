@@ -62,31 +62,6 @@ export const StyledTableRow = styledmui(TableRow)`
   }
 `;
 
-export interface Column {
-  id:
-    | 'position'
-    | 'date'
-    | 'hour'
-    | 'duration'
-    | 'title'
-    | 'description'
-    | 'rating';
-  label: string;
-  minWidth?: number;
-  align?: 'left';
-  format?: (value: number) => string;
-}
-
-export interface Data {
-  position: string;
-  date: string;
-  hour: string;
-  duration: string;
-  title: string;
-  description: string;
-  rating: string;
-}
-
 export const IconViacast = styled.img`
   float: left;
   margin-right: 14px;
