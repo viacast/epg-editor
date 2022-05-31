@@ -17,7 +17,7 @@ import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
-  IconViacast,
+  IconRating,
   Message,
 } from './styles';
 import programTableColumns from './programTableColumns';
@@ -74,7 +74,7 @@ const ProgramTable: React.FC<ProgramTableProps> = ({ programs }) => {
                       R18: IconR18,
                     };
                     value = (
-                      <IconViacast
+                      <IconRating
                         src={ratings[program[id]]}
                         alt={program[id]}
                       />

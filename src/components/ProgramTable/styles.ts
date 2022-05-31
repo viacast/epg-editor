@@ -62,7 +62,7 @@ export const StyledTableRow = styledmui(TableRow)`
   }
 `;
 
-export const IconViacast = styled.img`
+export const IconRating = styled.img`
   float: left;
   margin-right: 14px;
   width: 24px;
