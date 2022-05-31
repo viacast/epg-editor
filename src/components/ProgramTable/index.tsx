@@ -2,12 +2,12 @@ import React from 'react';
 import { TableBody, TableHead } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import RL from 'assets/icons/L.png';
-import R10 from 'assets/icons/10.png';
-import R12 from 'assets/icons/12.png';
-import R14 from 'assets/icons/14.png';
-import R16 from 'assets/icons/16.png';
-import R18 from 'assets/icons/18.png';
+import IconRL from 'assets/icons/ratings/RL.png';
+import IconR10 from 'assets/icons/ratings/R10.png';
+import IconR12 from 'assets/icons/ratings/R12.png';
+import IconR14 from 'assets/icons/ratings/R14.png';
+import IconR16 from 'assets/icons/ratings/R16.png';
+import IconR18 from 'assets/icons/ratings/R18.png';
 
 import data from './mockdata.json';
 import {
@@ -74,27 +74,18 @@ const ProgramTable: React.FC = () => {
               >
                 {programTableColumns.map(({ id, align, minWidth }) => {
                   let value: string | JSX.Element = row[id];
-                  let aux = '';
-                  if (value === 'RL') {
-                    value = <IconViacast src={RL} alt="RL" />;
-                    aux = t(`parental-guidance:RL`);
-                  } else if (value === 'R10') {
-                    value = <IconViacast src={R10} alt="R10" />;
-                    aux = t(`parental-guidance:R10`);
-                  } else if (value === 'R12') {
-                    value = <IconViacast src={R12} alt="R12" />;
-                    aux = t(`parental-guidance:R12`);
-                  } else if (value === 'R14') {
-                    value = <IconViacast src={R14} alt="R14" />;
-                    aux = t(`parental-guidance:R14`);
-                  } else if (value === 'R16') {
-                    value = <IconViacast src={R16} alt="R16" />;
-                    aux = t(`parental-guidance:R16`);
-                  } else if (value === 'R18') {
-                    value = <IconViacast src={R18} alt="R18" />;
-                    aux = t(`parental-guidance:R18`);
-                  } else {
-                    value = row[id];
+                  if (id === 'rating') {
+                    const ratings = {
+                      RL: IconRL,
+                      R10: IconR10,
+                      R12: IconR12,
+                      R14: IconR14,
+                      R16: IconR16,
+                      R18: IconR18,
+                    };
+                    value = (
+                      <IconViacast src={ratings[row[id]]} alt={row[id]} />
+                    );
                   }
                   return (
                     <StyledTableCell
@@ -103,7 +94,11 @@ const ProgramTable: React.FC = () => {
                       style={{ minWidth }}
                     >
                       {value}
-                      <Message>{aux}</Message>
+                      {id === 'rating' && (
+                        <Message>
+                          {t(`parental-guidance:rating_${row[id]}`)}
+                        </Message>
+                      )}
                     </StyledTableCell>
                   );
                 })}
