@@ -80,12 +80,6 @@ const ProgramTable: React.FC<ProgramTableProps> = ({ programs }) => {
                       />
                     );
                   }
-                  // if (format === 'date') {
-                  //   value = formatDate(value, 'dd/MM/yyyy');
-                  // }
-                  // if (format === 'time') {
-                  //   value = formatDate(value, 'HH:mm:ss');
-                  // }
                   return (
                     <StyledTableCell
                       key={id}
