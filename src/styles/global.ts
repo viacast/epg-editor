@@ -47,15 +47,25 @@ export default createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     outline: 0;
+    font-family: 'Nunito', Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    /* color: var(--color-neutral-3); */
   }
 
   body {
     background: var(--color-neutral-1);
-    color: #fff;
+    /* color: #fff; */
     -webkit-font-smoothing: antialiased;
   }
 
   html, body {
+    /* 100vx - 100% = scrollbar width/height */
+    width: calc(100vw - (100vw - 100%));
+    height: calc(100vh - (100vh - 100%));
+  }
+
+  #root {
+    width: 100%;
     height: 100%;
   }
 

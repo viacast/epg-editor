@@ -24,6 +24,9 @@ export const StyledInput = styled(TextField)<InputProps>`
   .MuiOutlinedInput-root.Mui-disabled {
     & > input {
       height: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     & > fieldset {
       border-color: var(--color-neutral-6);
