@@ -1,18 +1,28 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RiMenuAddFill } from 'react-icons/ri';
 import { FaDownload, FaFileExport } from 'react-icons/fa';
 
+import { EPGParser, Program } from 'services/epg';
 import { Button, FileInput, FileInputRefProps } from 'components';
 import { HeaderContainer, Select, Text } from './styles';
 
-const Header: React.FC = () => {
+export interface HeaderProps {
+  programs: Program[];
+  setPrograms: (programs: Program[]) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ programs, setPrograms }) => {
   const { t, i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
   const [programCount, setProgramCount] = useState(0);
-  const [filename, setFilename] = useState('');
+  const [epgFilename, setEpgFilename] = useState('');
 
   const fileInputRef = useRef<FileInputRefProps>({});
+
+  useEffect(() => {
+    setProgramCount(programs.length);
+  }, [programs.length]);
 
   const handleChange = useCallback(
     evt => {
@@ -23,20 +33,26 @@ const Header: React.FC = () => {
     [i18n],
   );
 
+  const handleFileUpload = useCallback(
+    async files => {
+      if (!files.length) {
+        return;
+      }
+      setEpgFilename(files[0].name);
+      const newPrograms = await EPGParser.parseFile(files[0]);
+      setPrograms(newPrograms);
+    },
+    [setPrograms],
+  );
+
   return (
     <HeaderContainer className="no-user-select">
       <FileInput
         forwardRef={fileInputRef}
         disabled
         placeholder={t('header:placeholderInput')}
-        value={filename}
-        setValue={setFilename}
-        onFileUpload={files => {
-          if (!files.length) {
-            return;
-          }
-          setFilename(files[0].name);
-        }}
+        value={epgFilename}
+        onFileUpload={handleFileUpload}
         width="270px"
         height="44px"
       />
@@ -46,11 +62,7 @@ const Header: React.FC = () => {
         onClick={() => fileInputRef?.current.click?.()}
       />
       <Button text={t('header:buttonExportProgram')} icon={<FaFileExport />} />
-      <Button
-        text={t('header:buttonAddProgram')}
-        icon={<RiMenuAddFill />}
-        onClick={() => setProgramCount(c => c + 1)}
-      />
+      <Button text={t('header:buttonAddProgram')} icon={<RiMenuAddFill />} />
       <Text>
         {t('header:labelProgram', {
           count: programCount,

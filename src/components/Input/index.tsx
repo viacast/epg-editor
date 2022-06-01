@@ -13,6 +13,7 @@ export interface InputProps extends PaperStylesProps {
   value: string;
   placeholder: string;
   setValue?: (value: string) => void;
+  withClearButton?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -22,6 +23,7 @@ const Input: React.FC<InputProps> = ({
   setValue,
   width,
   height,
+  withClearButton,
 }) => {
   return (
     <StyledPaper width={width} height={height} className="epg-input">
@@ -31,16 +33,21 @@ const Input: React.FC<InputProps> = ({
         value={value}
         placeholder={placeholder}
       />
-      <StyledDivider orientation="vertical" />
-      <StyledIconButton onClick={() => setValue?.('')}>
-        <CgClose />
-      </StyledIconButton>
+      {withClearButton && (
+        <>
+          <StyledDivider orientation="vertical" />
+          <StyledIconButton onClick={() => setValue?.('')}>
+            <CgClose />
+          </StyledIconButton>
+        </>
+      )}
     </StyledPaper>
   );
 };
 
 Input.defaultProps = {
   setValue: undefined,
+  withClearButton: false,
 };
 
 export default Input;

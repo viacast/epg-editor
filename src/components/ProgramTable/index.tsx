@@ -2,61 +2,39 @@ import React from 'react';
 import { TableBody, TableHead } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import RL from 'assets/icons/L.png';
-import R10 from 'assets/icons/10.png';
-import R12 from 'assets/icons/12.png';
-import R14 from 'assets/icons/14.png';
-import R16 from 'assets/icons/16.png';
-import R18 from 'assets/icons/18.png';
+import IconRL from 'assets/icons/ratings/RL.png';
+import IconR10 from 'assets/icons/ratings/R10.png';
+import IconR12 from 'assets/icons/ratings/R12.png';
+import IconR14 from 'assets/icons/ratings/R14.png';
+import IconR16 from 'assets/icons/ratings/R16.png';
+import IconR18 from 'assets/icons/ratings/R18.png';
 
+import { Program } from 'services/epg';
+import { formatDate, formatTime, secondsToHms } from 'utils';
 import MenuContent from 'components/MenuContent';
-import data from './mockdata.json';
 import {
   StyledPaper,
   StyledTableContainer,
   StyledTable,
   StyledTableCell,
   StyledTableRow,
-  Data,
-  IconViacast,
+  IconRating,
   Message,
   Menu,
   Toolbar,
 } from './styles';
 import programTableColumns from './programTableColumns';
 
-function createData(
-  position: string,
-  date: string,
-  hour: string,
-  duration: string,
-  title: string,
-  description: string,
-  rating: string,
-): Data {
-  return { position, date, hour, duration, title, description, rating };
+export interface ProgramTableProps {
+  programs: Program[];
 }
 
-const ProgramTable: React.FC = () => {
+const ProgramTable: React.FC<ProgramTableProps> = ({ programs }) => {
   const { t } = useTranslation();
 
   const [clicked, setClicked] = React.useState(false);
   const MenuOpen = () => setClicked(() => true);
   const MenuClose = () => setClicked(() => false);
-
-  const newData = data.map(e => {
-    return createData(
-      e.position,
-      e.date,
-      e.hour,
-      e.duration,
-      e.title,
-      e.description,
-      e.rating,
-    );
-  });
-
-  const rows = newData;
 
   return (
     <>
@@ -73,49 +51,62 @@ const ProgramTable: React.FC = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {rows.map(row => (
+              {programs.map((program, i) => (
                 <StyledTableRow
                   hover
                   role="checkbox"
                   tabIndex={-1}
-                  key={row.position}
+                  key={program.id}
                   onClick={MenuOpen}
                 >
-                  {programTableColumns.map(({ id, align, minWidth }) => {
-                    let value: string | JSX.Element = row[id];
-                    let aux = '';
-                    if (value === 'RL') {
-                      value = <IconViacast src={RL} alt="RL" />;
-                      aux = t(`parental-guidance:RL`);
-                    } else if (value === 'R10') {
-                      value = <IconViacast src={R10} alt="R10" />;
-                      aux = t(`parental-guidance:R10`);
-                    } else if (value === 'R12') {
-                      value = <IconViacast src={R12} alt="R12" />;
-                      aux = t(`parental-guidance:R12`);
-                    } else if (value === 'R14') {
-                      value = <IconViacast src={R14} alt="R14" />;
-                      aux = t(`parental-guidance:R14`);
-                    } else if (value === 'R16') {
-                      value = <IconViacast src={R16} alt="R16" />;
-                      aux = t(`parental-guidance:R16`);
-                    } else if (value === 'R18') {
-                      value = <IconViacast src={R18} alt="R18" />;
-                      aux = t(`parental-guidance:R18`);
-                    } else {
-                      value = row[id];
-                    }
-                    return (
-                      <StyledTableCell
-                        key={id}
-                        align={align}
-                        style={{ minWidth }}
-                      >
-                        {value}
-                        <Message>{aux}</Message>
-                      </StyledTableCell>
-                    );
-                  })}
+                  {programTableColumns.map(
+                    ({ id, align, minWidth, format }) => {
+                      let value: Program[keyof Program] | JSX.Element =
+                        program[id];
+                      if (format === 'date') {
+                        value = formatDate(value as Date);
+                      }
+                      if (format === 'time') {
+                        value = formatTime(value as Date);
+                      }
+                      if (format === 'duration') {
+                        value = secondsToHms(value as number);
+                      }
+                      if (id === 'position') {
+                        value = `${i + 1}`;
+                      }
+                      if (id === 'rating') {
+                        const ratings = {
+                          RL: IconRL,
+                          R10: IconR10,
+                          R12: IconR12,
+                          R14: IconR14,
+                          R16: IconR16,
+                          R18: IconR18,
+                        };
+                        value = (
+                          <IconRating
+                            src={ratings[program[id]]}
+                            alt={program[id]}
+                          />
+                        );
+                      }
+                      return (
+                        <StyledTableCell
+                          key={id}
+                          align={align}
+                          style={{ minWidth }}
+                        >
+                          {value}
+                          {id === 'rating' && (
+                            <Message>
+                              {t(`parental-guidance:rating_${program[id]}`)}
+                            </Message>
+                          )}
+                        </StyledTableCell>
+                      );
+                    },
+                  )}
                 </StyledTableRow>
               ))}
             </TableBody>

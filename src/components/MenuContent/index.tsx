@@ -6,7 +6,7 @@ import { AiOutlineSave } from 'react-icons/ai';
 import DatePicker from 'components/Pickers/DatePicker';
 import TimePicker from 'components/Pickers/TimePicker';
 import DurationPickers from 'components/Pickers/DurationPicker';
-import RL from 'assets/icons/L.png';
+import RL from 'assets/icons/ratings/RL.png';
 import {
   BottomContainer,
   ButtonContainer,

@@ -7,22 +7,23 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow, { tableRowClasses } from '@mui/material/TableRow';
 
 export const StyledPaper = styledmui(Paper)`
-  height: 100%;
-  min-height: 300px;
-  min-width: 1047px;
+  display: flex;
+  flex: 1;
   white-space: nowrap;
   border-radius: 4px;
   background-color: var(--color-neutral-5);
+  overflow: hidden;
 `;
 
 export const StyledTableContainer = styledmui(TableContainer)`
-  height: 100%;
   border-radius: 4px;
 `;
 
 export const StyledTable = styledmui(Table)`
   &.${tableClasses.root} {
-    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
     border-radius: 4px;
     background-color: var(--color-neutral-5);
     text-overflow: ellipsis;
@@ -79,32 +80,7 @@ export const Toolbar = styled.div`
   background-color: var(--color-primary-2);
 `;
 
-export interface Column {
-  id:
-    | 'position'
-    | 'date'
-    | 'hour'
-    | 'duration'
-    | 'title'
-    | 'description'
-    | 'rating';
-  label: string;
-  minWidth?: number;
-  align?: 'left';
-  format?: (value: number) => string;
-}
-
-export interface Data {
-  position: string;
-  date: string;
-  hour: string;
-  duration: string;
-  title: string;
-  description: string;
-  rating: string;
-}
-
-export const IconViacast = styled.img`
+export const IconRating = styled.img`
   float: left;
   margin-right: 14px;
   width: 24px;

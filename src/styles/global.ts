@@ -59,11 +59,14 @@ export default createGlobalStyle`
   }
 
   html, body {
+    /* 100vx - 100% = scrollbar width/height */
+    width: calc(100vw - (100vw - 100%));
+    height: calc(100vh - (100vh - 100%));
+  }
+
+  #root {
+    width: 100%;
     height: 100%;
-    overflow-y: scroll;
-    @media only screen and (min-height: 455px) {
-      overflow-y: hidden;
-    }
   }
 
   body,

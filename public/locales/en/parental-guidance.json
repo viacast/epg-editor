@@ -1,8 +1,8 @@
 {
-    "RL": "RL",
-    "R10": "R10",
-    "R12": "R12",
-    "R14": "R14",
-    "R16": "R16",
-    "R18": "R18"
+  "rating_RL": "Livre",
+  "rating_R10": "Não é recomendado para menores de 10 anos",
+  "rating_R12": "Não é recomendado para menores de 12 anos",
+  "rating_R14": "Não é recomendado para menores de 14 anos",
+  "rating_R16": "Não é recomendado para menores de 16 anos",
+  "rating_R18": "Não é recomendado para menores de 18 anos"
 }
