@@ -7,23 +7,23 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow, { tableRowClasses } from '@mui/material/TableRow';
 
 export const StyledPaper = styledmui(Paper)`
-  width: 100%;
-  height: 100%;
-  min-height: 300px;
-  min-width: 1047px;
+  display: flex;
+  flex: 1;
   white-space: nowrap;
   border-radius: 4px;
   background-color: var(--color-neutral-5);
+  overflow: hidden;
 `;
 
 export const StyledTableContainer = styledmui(TableContainer)`
-  height: 100%;
   border-radius: 4px;
 `;
 
 export const StyledTable = styledmui(Table)`
   &.${tableClasses.root} {
-    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
     border-radius: 4px;
     background-color: var(--color-neutral-5);
     text-overflow: ellipsis;
