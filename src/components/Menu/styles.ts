@@ -1,6 +1,25 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const MenuContainer = styled.div`
+  margin-left: 35px;
+  height: 100%;
+  width: 100%;
+  min-height: 300px;
+  border-radius: 4px;
+  background-color: var(--color-neutral-5);
+  overflow: scroll;
+`;
+
+export const Toolbar = styled.div`
+  position: relative;
+  top: 0px;
+  width: 100%;
+  height: 42px;
+  border-radius: 4px;
+  background-color: var(--color-primary-2);
+`;
+
+export const ContentContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -28,10 +47,9 @@ export const LoginFormContainer = styled.div<{ isNarrow?: boolean }>`
 
 export const ButtonContainer = styled.div`
   display: flex;
-  flex: 1;
-  flex-direction: row;
-  margin-top: 143px;
+  min-height: 200px;
   margin-left: auto;
+  margin-bottom: 30px;
 `;
 
 export const Form = styled.form`
