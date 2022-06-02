@@ -50,8 +50,9 @@ const Header: React.FC<HeaderProps> = ({ programs, setPrograms }) => {
       <FileInput
         forwardRef={fileInputRef}
         disabled
-        placeholder={t('header:placeholderInput')}
-        value={epgFilename}
+        placeholder={
+          epgFilename !== '' ? epgFilename : t('header:placeholderInput')
+        }
         onFileUpload={handleFileUpload}
         width="270px"
         height="44px"
