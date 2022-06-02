@@ -17,16 +17,24 @@ export const HeaderContainer = styled.div`
   padding-left: 30px;
 `;
 
-export const TableContainer = styled.div`
+export const TableMenuContainer = styled.div`
   display: flex;
   flex: 1;
-
+  flex-direction: row;
+  width: 100%;
   min-width: 1102px;
-  min-height: 450px;
+  height: 87.1vh;
   padding-bottom: 50px;
   padding-right: 30px;
   padding-left: 30px;
+`;
 
-  font-family: Nunito, sans-serif;
-  color: var(--color-neutral-3);
+export const TableContainer = styled.div`
+  white-space: nowrap;
+  min-width: 1046px;
+  min-height: 450px;
+`;
+
+export const MenuContainer = styled.div`
+  min-height: 450px;
 `;

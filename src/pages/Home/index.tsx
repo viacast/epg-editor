@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { ProgramTable } from 'components';
 import { EPGParser, Program } from 'services/epg';
-import { Container, HeaderContainer, TableContainer } from './styles';
+import Menu from 'components/Menu';
+import {
+  Container,
+  HeaderContainer,
+  MenuContainer,
+  TableContainer,
+  TableMenuContainer,
+} from './styles';
 import Header from './Header';
 
 const Home: React.FC = () => {
   const [programs, setPrograms] = useState([] as Program[]);
+  const [selectedProgramId, setSelectedProgramId] = useState('');
 
   // TODO: Remove
   useEffect(() => {
@@ -20,9 +28,28 @@ const Home: React.FC = () => {
       <HeaderContainer>
         <Header programs={programs} setPrograms={setPrograms} />
       </HeaderContainer>
-      <TableContainer>
-        <ProgramTable programs={programs} />
-      </TableContainer>
+      <TableMenuContainer>
+        <TableContainer
+          style={{ width: selectedProgramId === '' ? '100%' : '78.2%' }}
+        >
+          <ProgramTable
+            setSelectedProgramId={setSelectedProgramId}
+            programs={programs}
+          />
+        </TableContainer>
+        <MenuContainer
+          style={{
+            width: selectedProgramId === '' ? '0px' : '500px',
+            display: selectedProgramId === '' ? 'none' : 'block',
+          }}
+        >
+          <Menu
+            programs={programs}
+            setSelectedProgramId={setSelectedProgramId}
+            selectedProgramId={selectedProgramId}
+          />
+        </MenuContainer>
+      </TableMenuContainer>
     </Container>
   );
 };
