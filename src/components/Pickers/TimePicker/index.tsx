@@ -5,8 +5,16 @@ import Stack from '@mui/material/Stack';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
-export default function ResponsiveTimePickers() {
-  const [value, setValue] = React.useState<Date | null>(new Date());
+export interface ProgramTime {
+  programTime: Date | null;
+}
+
+const TimePickers: React.FC<ProgramTime> = ({ programTime }) => {
+  const [value, setValue] = React.useState<Date | null>(programTime);
+
+  React.useEffect(() => {
+    setValue(programTime);
+  }, [programTime]);
 
   const styleProps = {
     style: {
@@ -32,4 +40,6 @@ export default function ResponsiveTimePickers() {
       </Stack>
     </LocalizationProvider>
   );
-}
+};
+
+export default TimePickers;

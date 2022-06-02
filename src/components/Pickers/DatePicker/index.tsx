@@ -5,8 +5,16 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import Stack from '@mui/material/Stack';
 
-export default function DatePickers() {
-  const [value, setValue] = React.useState<Date | null>(new Date());
+export interface ProgramDate {
+  programDate: Date | null;
+}
+
+const DatePickers: React.FC<ProgramDate> = ({ programDate }) => {
+  const [value, setValue] = React.useState(programDate);
+
+  React.useEffect(() => {
+    setValue(programDate);
+  }, [programDate]);
 
   const styleProps = {
     style: {
@@ -32,4 +40,6 @@ export default function DatePickers() {
       </Stack>
     </LocalizationProvider>
   );
-}
+};
+
+export default DatePickers;

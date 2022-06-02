@@ -1,10 +1,18 @@
+import React, { useState } from 'react';
 import { formatDuration } from 'date-fns';
-import { useState } from 'react';
 import { StyledDurationPicker } from './styles';
 
-export default function DurationPickers() {
+export interface ProgramDuration {
+  programDuration: Date | null;
+}
+
+const DurationPickers: React.FC<ProgramDuration> = ({ programDuration }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [value, setValue] = useState<any>(0);
+
+  React.useEffect(() => {
+    setValue(programDuration);
+  }, [programDuration]);
 
   return (
     <div>
@@ -18,4 +26,6 @@ export default function DurationPickers() {
       />
     </div>
   );
-}
+};
+
+export default DurationPickers;
