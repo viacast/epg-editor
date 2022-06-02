@@ -29,8 +29,8 @@ export const StyledInput = styled(TextField)<InputProps>`
   .MuiOutlinedInput-root,
   .MuiOutlinedInput-root.Mui-disabled {
     & > input {
-      height: 11px;
-      white-space: nowrap;
+      height: 9px;
+      white-space: normal;
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -61,9 +61,13 @@ export const StyledPaper = styled(Paper)<PaperStylesProps>`
   padding: 2px 4px;
   display: flex;
   align-items: center;
-  width: width;
-  height: height;
+  width: ${({ width }) => width || '270px'};
+  height: ${({ height }) => height || '44px'};
   background-color: var(--color-neutral-6);
+  .MuiFormControl #text {
+    width: 5px;
+    height: 10px;
+  }
 `;
 
 export const StyledIconButton = styled(IconButton)<IconProps>`

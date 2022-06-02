@@ -10,10 +10,12 @@ import {
 
 export interface InputProps extends PaperStylesProps {
   disabled: boolean;
-  value: string;
-  placeholder: string;
+  value?: string;
+  placeholder?: string;
   setValue?: (value: string) => void;
   withClearButton?: boolean;
+  multiline?: boolean;
+  maxRows?: number;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -24,15 +26,19 @@ const Input: React.FC<InputProps> = ({
   width,
   height,
   withClearButton,
+  multiline,
+  maxRows,
 }) => {
   return (
     <StyledPaper width={width} height={height} className="epg-input">
       <StyledInput
+        multiline={multiline}
+        maxRows={maxRows}
         disabled={disabled}
         fullWidth
-        value={value}
         placeholder={placeholder}
       />
+      {value}
       {withClearButton && (
         <>
           <StyledDivider orientation="vertical" />
@@ -47,7 +53,11 @@ const Input: React.FC<InputProps> = ({
 
 Input.defaultProps = {
   setValue: undefined,
+  placeholder: '',
   withClearButton: false,
+  value: '',
+  multiline: false,
+  maxRows: 1,
 };
 
 export default Input;
