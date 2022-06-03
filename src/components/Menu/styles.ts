@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const MenuContainer = styled.div`
-  margin-left: 35px;
   height: 100%;
   width: 100%;
   min-height: 300px;
@@ -17,12 +16,33 @@ export const Toolbar = styled.div`
   height: 42px;
   border-radius: 4px;
   background-color: var(--color-primary-2);
+  display: inline-flex;
+  text-align: left;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: auto;
+  font-size: 18px;
+  font-family: 'Nunito' sans-serif;
+  font-weight: 700;
+  color: var(--color-neutral-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  p {
+    font-size: inherit;
+    padding-left: 10px;
+    font-weight: 500;
+  }
 `;
 
 export const ContentContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
+  height: calc(100% - 42px);
+
+  padding-left: 29px;
+  padding-right: 29px;
 `;
 
 export const BottomContainer = styled.div`
@@ -30,9 +50,7 @@ export const BottomContainer = styled.div`
   margin-top: 0px;
   display: flex;
   flex: 1;
-  flex-direction: row;
-  padding-left: 29px;
-  padding-right: 29px;
+  flex-direction: column;
   height: 100%;
 `;
 
@@ -47,7 +65,7 @@ export const FormContainer = styled.div<{ isNarrow?: boolean }>`
 
 export const ButtonContainer = styled.div`
   display: flex;
-  min-height: 200px;
+  margin-top: auto;
   margin-left: auto;
   margin-bottom: 30px;
 `;

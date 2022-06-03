@@ -33,6 +33,7 @@ const Menu: React.FC<MenuProps> = ({
 
   let i = 0;
   let title;
+  let editTitle;
   let description;
   let rating;
   let defaultRate;
@@ -43,6 +44,7 @@ const Menu: React.FC<MenuProps> = ({
   while (i < programs.length) {
     if (programs[i].id === selectedProgramId) {
       title = programs[i].title;
+      editTitle = title.toString();
       description = programs[i].description;
       rating = programs[i].rating;
       defaultRate = rating.toString();
@@ -56,28 +58,23 @@ const Menu: React.FC<MenuProps> = ({
 
   return (
     <MenuContainer>
-      <Toolbar />
+      <Toolbar>
+        {t('menu:edit')} <p>{editTitle}</p>
+      </Toolbar>
       <ContentContainer>
-        <div className="Content" />
         <BottomContainer>
           <FormContainer>
             <Form onSubmit={() => ''}>
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:title')}
               </Text>
-              <Input
-                width="449px"
-                height="45px"
-                defaultValue={title}
-                disabled={false}
-              />
+              <Input height="45px" defaultValue={title} disabled={false} />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:description')}
               </Text>
               <Input
                 multiline
                 maxRows={4}
-                width="449px"
                 height="130px"
                 defaultValue={description}
                 disabled={false}
@@ -86,23 +83,17 @@ const Menu: React.FC<MenuProps> = ({
                 {t('menu:parentalRating')}
               </Text>
               <SelectRate defaultValue={defaultRate} />
-              <div>
-                <div style={{ float: 'left' }}>
+              <div style={{ display: 'inline-flex', width: '100%' }}>
+                <div style={{ width: '50%', float: 'left' }}>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:date')}
                   </Text>
+                  <DatePicker programDate={date} />
                 </div>
-                <div style={{ float: 'right', marginRight: '168px' }}>
+                <div style={{ width: '50%', marginLeft: '30px' }}>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:time')}
                   </Text>
-                </div>
-              </div>
-              <div style={{ display: 'inline-flex', width: '449px' }}>
-                <div style={{ float: 'left' }}>
-                  <DatePicker programDate={date} />
-                </div>
-                <div style={{ marginLeft: '29px' }}>
                   <TimePicker programTime={time} />
                 </div>
               </div>
@@ -110,24 +101,24 @@ const Menu: React.FC<MenuProps> = ({
                 {t('menu:length')}
               </Text>
               <DurationPickers programDuration={timeLength} />
-              <ButtonContainer>
-                <Button
-                  margin="auto 0 0 0"
-                  text={t('menu:save')}
-                  icon={<AiOutlineSave />}
-                />
-                <Button
-                  margin="auto 0 0 27px"
-                  text={t('menu:cancel')}
-                  icon={<CgClose />}
-                  onClick={() => {
-                    setSelectedProgramId('');
-                  }}
-                />
-              </ButtonContainer>
             </Form>
           </FormContainer>
         </BottomContainer>
+        <ButtonContainer>
+          <Button
+            margin="auto 0 0 0"
+            text={t('menu:cancel')}
+            icon={<CgClose />}
+            onClick={() => {
+              setSelectedProgramId('');
+            }}
+          />
+          <Button
+            margin="auto 0 0 27px"
+            text={t('menu:save')}
+            icon={<AiOutlineSave />}
+          />
+        </ButtonContainer>
       </ContentContainer>
     </MenuContainer>
   );

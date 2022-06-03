@@ -6,5 +6,6 @@
     "time": "Hour",
     "length": "Duration",
     "cancel": "Cancel",
-    "save": "Salve"
+    "save": "Salve",
+    "edit": "Editing: "
 }
