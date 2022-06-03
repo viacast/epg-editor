@@ -40,7 +40,7 @@ const Home: React.FC = () => {
         <MenuContainer
           style={{
             width: selectedProgramId === '' ? '0px' : '500px',
-            display: selectedProgramId === '' ? 'none' : 'block',
+            // display: selectedProgramId === '' ? 'none' : 'block',
           }}
         >
           <Menu

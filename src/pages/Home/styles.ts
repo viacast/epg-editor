@@ -37,4 +37,6 @@ export const TableContainer = styled.div`
 
 export const MenuContainer = styled.div`
   min-height: 450px;
+  margin-left: 35px;
+  transition: width 1s ease-in-out;
 `;
