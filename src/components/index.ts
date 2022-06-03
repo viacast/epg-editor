@@ -4,7 +4,7 @@ import Input, { InputProps } from './Input';
 import ProgramTable from './ProgramTable';
 import ToastContainer from './ToastContainer';
 import Text from './Text';
-import InputSelect from './Select';
+import SelectRate from './Select';
 import DatePickers from './Pickers/DatePicker';
 import TimePickers from './Pickers/TimePicker';
 import DurationPickers from './Pickers/DurationPicker';
@@ -16,7 +16,7 @@ export {
   ProgramTable,
   ToastContainer,
   Text,
-  InputSelect,
+  SelectRate,
   DatePickers,
   TimePickers,
   DurationPickers,
