@@ -1,17 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Text, Button, Input, InputSelect } from 'components';
+import { Text, Button, Input, SelectRate } from 'components';
 import { CgClose } from 'react-icons/cg';
 import { AiOutlineSave } from 'react-icons/ai';
 import DatePicker from 'components/Pickers/DatePicker';
 import TimePicker from 'components/Pickers/TimePicker';
 import DurationPickers from 'components/Pickers/DurationPicker';
-import CL from 'assets/icons/ratings/RL.png';
-import C10 from 'assets/icons/ratings/R10.png';
-import C12 from 'assets/icons/ratings/R12.png';
-import C14 from 'assets/icons/ratings/R14.png';
-import C16 from 'assets/icons/ratings/R16.png';
-import C18 from 'assets/icons/ratings/R18.png';
 
 import { Program } from 'services/epg';
 import {
@@ -19,9 +13,7 @@ import {
   ButtonContainer,
   ContentContainer,
   Form,
-  IconContainer,
-  IconViacast,
-  LoginFormContainer,
+  FormContainer,
   MenuContainer,
   Toolbar,
 } from './styles';
@@ -43,6 +35,7 @@ const Menu: React.FC<MenuProps> = ({
   let title;
   let description;
   let rating;
+  let defaultRate;
   let date;
   let time;
   let timeLength;
@@ -52,6 +45,7 @@ const Menu: React.FC<MenuProps> = ({
       title = programs[i].title;
       description = programs[i].description;
       rating = programs[i].rating;
+      defaultRate = rating.toString();
       date = new Date(programs[i].startDate);
       time = new Date(programs[i].startHour);
       timeLength = programs[i].duration;
@@ -60,24 +54,13 @@ const Menu: React.FC<MenuProps> = ({
     ++i;
   }
 
-  const ratings = {
-    RL: CL,
-    R10: C10,
-    R12: C12,
-    R14: C14,
-    R16: C16,
-    R18: C18,
-  };
-
-  const value = <IconViacast src={ratings[rating]} alt={rating} />;
-
   return (
     <MenuContainer>
       <Toolbar />
       <ContentContainer>
         <div className="Content" />
         <BottomContainer>
-          <LoginFormContainer>
+          <FormContainer>
             <Form onSubmit={() => ''}>
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:title')}
@@ -85,9 +68,8 @@ const Menu: React.FC<MenuProps> = ({
               <Input
                 width="449px"
                 height="45px"
-                placeholder={title}
+                defaultValue={title}
                 disabled={false}
-                value=""
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:description')}
@@ -97,34 +79,30 @@ const Menu: React.FC<MenuProps> = ({
                 maxRows={4}
                 width="449px"
                 height="130px"
-                placeholder={description}
+                defaultValue={description}
                 disabled={false}
-                value=""
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:parentalRating')}
               </Text>
-              <div style={{ display: 'inline-flex' }}>
-                <InputSelect />
-                <IconContainer>{value}</IconContainer>
-              </div>
+              <SelectRate defaultValue={defaultRate} />
               <div>
                 <div style={{ float: 'left' }}>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:date')}
                   </Text>
                 </div>
-                <div style={{ float: 'right', marginRight: '170px' }}>
+                <div style={{ float: 'right', marginRight: '168px' }}>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:time')}
                   </Text>
                 </div>
               </div>
-              <div style={{ display: 'inline-flex' }}>
+              <div style={{ display: 'inline-flex', width: '449px' }}>
                 <div style={{ float: 'left' }}>
                   <DatePicker programDate={date} />
                 </div>
-                <div style={{ marginLeft: '37px' }}>
+                <div style={{ marginLeft: '29px' }}>
                   <TimePicker programTime={time} />
                 </div>
               </div>
@@ -148,7 +126,7 @@ const Menu: React.FC<MenuProps> = ({
                 />
               </ButtonContainer>
             </Form>
-          </LoginFormContainer>
+          </FormContainer>
         </BottomContainer>
       </ContentContainer>
     </MenuContainer>
