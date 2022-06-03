@@ -10,9 +10,8 @@ import {
 
 export interface InputProps extends PaperStylesProps {
   disabled: boolean;
-  value?: string;
+  defaultValue?: string;
   placeholder?: string;
-  setValue?: (value: string) => void;
   withClearButton?: boolean;
   multiline?: boolean;
   maxRows?: number;
@@ -20,15 +19,24 @@ export interface InputProps extends PaperStylesProps {
 
 const Input: React.FC<InputProps> = ({
   disabled,
-  value,
+  defaultValue,
   placeholder,
-  setValue,
   width,
   height,
   withClearButton,
   multiline,
   maxRows,
 }) => {
+  const [value, setValue] = React.useState(defaultValue);
+
+  React.useEffect(() => {
+    setValue(defaultValue);
+  }, [defaultValue]);
+
+  function handleChange(event) {
+    setValue(event.target.value);
+  }
+
   return (
     <StyledPaper width={width} height={height} className="epg-input">
       <StyledInput
@@ -36,9 +44,11 @@ const Input: React.FC<InputProps> = ({
         maxRows={maxRows}
         disabled={disabled}
         fullWidth
+        // eslint-disable-next-line react/jsx-no-bind
+        onChange={handleChange}
         placeholder={placeholder}
+        value={value}
       />
-      {value}
       {withClearButton && (
         <>
           <StyledDivider orientation="vertical" />
@@ -52,10 +62,9 @@ const Input: React.FC<InputProps> = ({
 };
 
 Input.defaultProps = {
-  setValue: undefined,
   placeholder: '',
   withClearButton: false,
-  value: '',
+  defaultValue: '',
   multiline: false,
   maxRows: 1,
 };

@@ -35,13 +35,7 @@ export const StyledInput = styled(TextField)<InputProps>`
       text-overflow: ellipsis;
     }
     & > fieldset {
-      border-color: var(--color-neutral-6);
-    }
-    &:hover fieldset {
-      border-color: var(--color-neutral-6);
-    }
-    &.Mui-focused fieldset {
-      border-color: var(--color-neutral-6);
+      border: none;
     }
   }
 
