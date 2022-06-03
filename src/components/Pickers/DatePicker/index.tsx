@@ -1,9 +1,9 @@
 import * as React from 'react';
-import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import Stack from '@mui/material/Stack';
+import { StyledInput } from './styles';
 
 export interface ProgramDate {
   programDate: Date | null;
@@ -18,9 +18,10 @@ const DatePickers: React.FC<ProgramDate> = ({ programDate }) => {
 
   const styleProps = {
     style: {
+      fontSize: '18px',
       backgroundColor: 'var(--color-neutral-6)',
       color: 'var(--color-neutral-3)',
-      width: 200,
+      width: 210,
       height: 45,
     },
   };
@@ -35,7 +36,7 @@ const DatePickers: React.FC<ProgramDate> = ({ programDate }) => {
           }}
           InputProps={styleProps}
           // eslint-disable-next-line react/jsx-props-no-spreading
-          renderInput={params => <TextField {...params} />}
+          renderInput={params => <StyledInput {...params} />}
         />
       </Stack>
     </LocalizationProvider>

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import Stack from '@mui/material/Stack';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import { StyledInput } from './styles';
 
 export interface ProgramTime {
   programTime: Date | null;
@@ -18,9 +18,10 @@ const TimePickers: React.FC<ProgramTime> = ({ programTime }) => {
 
   const styleProps = {
     style: {
+      fontSize: '18px',
       backgroundColor: 'var(--color-neutral-6)',
       color: 'var(--color-neutral-3)',
-      width: 200,
+      width: 210,
       height: 45,
     },
   };
@@ -29,13 +30,20 @@ const TimePickers: React.FC<ProgramTime> = ({ programTime }) => {
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Stack spacing={3}>
         <MobileTimePicker
+          ampm={false}
+          openTo="hours"
+          views={['hours', 'minutes', 'seconds']}
+          inputFormat="HH:mm:ss"
+          mask="__:__:__"
+          InputProps={styleProps}
           value={value}
           onChange={newValue => {
             setValue(newValue);
           }}
-          InputProps={styleProps}
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          renderInput={params => <TextField {...params} />}
+          renderInput={params => (
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            <StyledInput {...params} />
+          )}
         />
       </Stack>
     </LocalizationProvider>
