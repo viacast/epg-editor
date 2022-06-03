@@ -21,7 +21,7 @@ const DatePickers: React.FC<ProgramDate> = ({ programDate }) => {
       fontSize: '18px',
       backgroundColor: 'var(--color-neutral-6)',
       color: 'var(--color-neutral-3)',
-      width: 210,
+      width: '100%',
       height: 45,
     },
   };

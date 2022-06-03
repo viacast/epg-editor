@@ -2,12 +2,12 @@ import * as React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import CL from 'assets/icons/ratings/RL.png';
-import C10 from 'assets/icons/ratings/R10.png';
-import C12 from 'assets/icons/ratings/R12.png';
-import C14 from 'assets/icons/ratings/R14.png';
-import C16 from 'assets/icons/ratings/R16.png';
-import C18 from 'assets/icons/ratings/R18.png';
+import CL from 'assets/icons/ratings/RL.svg';
+import C10 from 'assets/icons/ratings/R10.svg';
+import C12 from 'assets/icons/ratings/R12.svg';
+import C14 from 'assets/icons/ratings/R14.svg';
+import C16 from 'assets/icons/ratings/R16.svg';
+import C18 from 'assets/icons/ratings/R18.svg';
 import { IconContainer, Icon } from './styles';
 
 export interface DefaultSelectProps {
@@ -38,7 +38,7 @@ const SelectRate: React.FC<DefaultSelectProps> = ({ defaultValue }) => {
     PaperProps: {
       style: {
         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 370,
+        width: '100%',
         backgroundColor: 'var(--color-neutral-6)',
         color: 'var(--color-neutral-3)',
       },
@@ -64,9 +64,17 @@ const SelectRate: React.FC<DefaultSelectProps> = ({ defaultValue }) => {
   };
 
   return (
-    <div style={{ display: 'inline-block', width: '449px' }}>
-      <FormControl sx={{ width: 370 }} size="medium">
+    <div style={{ display: 'inline-block', width: '100%' }}>
+      <FormControl sx={{ width: 'calc(100% - 86px)' }} size="medium">
         <Select
+          sx={{
+            '& .MuiSvgIcon-root': {
+              color: 'var(--color-neutral-5)',
+            },
+            '& .MuiOutlinedInput-notchedOutline': {
+              border: 'none',
+            },
+          }}
           SelectDisplayProps={SelectProps}
           MenuProps={MenuProps}
           value={rate}

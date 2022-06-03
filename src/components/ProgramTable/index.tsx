@@ -2,12 +2,12 @@ import React from 'react';
 import { TableBody, TableHead } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import IconRL from 'assets/icons/ratings/RL.png';
-import IconR10 from 'assets/icons/ratings/R10.png';
-import IconR12 from 'assets/icons/ratings/R12.png';
-import IconR14 from 'assets/icons/ratings/R14.png';
-import IconR16 from 'assets/icons/ratings/R16.png';
-import IconR18 from 'assets/icons/ratings/R18.png';
+import IconRL from 'assets/icons/ratings/RL.svg';
+import IconR10 from 'assets/icons/ratings/R10.svg';
+import IconR12 from 'assets/icons/ratings/R12.svg';
+import IconR14 from 'assets/icons/ratings/R14.svg';
+import IconR16 from 'assets/icons/ratings/R16.svg';
+import IconR18 from 'assets/icons/ratings/R18.svg';
 
 import { Program } from 'services/epg';
 import { formatDate, formatTime, secondsToHms } from 'utils';

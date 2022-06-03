@@ -11,8 +11,8 @@ import {
 } from '@mui/material';
 
 export interface PaperStylesProps extends PaperProps {
-  width: string;
-  height: string;
+  width?: string;
+  height?: string;
 }
 
 export const StyledInput = styled(TextField)<InputProps>`
@@ -22,7 +22,7 @@ export const StyledInput = styled(TextField)<InputProps>`
   text-align: center;
   vertical-align: middle;
   text-transform: none;
-  font-size: 20;
+  font-size: 20px;
   border-radius: 2px;
   background-color: var(--color-neutral-6);
 
@@ -55,12 +55,15 @@ export const StyledPaper = styled(Paper)<PaperStylesProps>`
   padding: 2px 4px;
   display: flex;
   align-items: center;
-  width: ${({ width }) => width || '270px'};
+  width: ${({ width }) => width || '100%'};
   height: ${({ height }) => height || '44px'};
   background-color: var(--color-neutral-6);
   .MuiFormControl #text {
     width: 5px;
     height: 10px;
+  }
+  .MuiPaper-root {
+    box-shadow: none;
   }
 `;
 

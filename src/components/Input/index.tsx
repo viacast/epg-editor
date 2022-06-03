@@ -38,7 +38,12 @@ const Input: React.FC<InputProps> = ({
   }
 
   return (
-    <StyledPaper width={width} height={height} className="epg-input">
+    <StyledPaper
+      width={width}
+      height={height}
+      sx={{ boxShadow: 'unset' }}
+      className="epg-input"
+    >
       <StyledInput
         multiline={multiline}
         maxRows={maxRows}
