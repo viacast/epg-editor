@@ -1,8 +1,14 @@
-import { Select, SelectProps, styled } from '@mui/material';
+import styled from 'styled-components';
 
-// eslint-disable-next-line import/prefer-default-export
-export const StyledSelect = styled(Select)<SelectProps>`
-  .MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
-    color: var(--color-neutral-3);
-  }
+export const IconContainer = styled.div`
+  width: 56px;
+  height: 56px;
+  float: right;
+  background: var(--color-neutral-6);
+  border-radius: 4px;
+`;
+
+export const Icon = styled.img`
+  width: 100%;
+  height: 100%;
 `;
