@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import Stack from '@mui/material/Stack';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 import { StyledInput } from './styles';
 
 export interface ProgramTime {
@@ -15,6 +15,32 @@ const TimePickers: React.FC<ProgramTime> = ({ programTime }) => {
   React.useEffect(() => {
     setValue(programTime);
   }, [programTime]);
+
+  const dialogStyleProps = {
+    sx: {
+      '& .MuiPickersArrowSwitcher-root': {
+        right: '85px',
+      },
+      '& .MuiPickersClockNumber': {
+        color: 'var(--color-neutral-2)',
+      },
+      '& .MuiPaper-root': {
+        marginRight: '65px',
+        paddingTop: '20px',
+        width: '442px',
+        backgroundColor: 'var(--color-neutral-6)',
+        color: 'var(--color-neutral-2)',
+        overflow: 'hidden',
+      },
+      '& .MuiButtonBase-root': {
+        backgroundColor: 'var(--color-neutral-6)',
+        color: 'var(--color-neutral-2)',
+      },
+      '& .MuiTypography-root': {
+        color: 'var(--color-neutral-2)',
+      },
+    },
+  };
 
   const styleProps = {
     style: {
@@ -29,12 +55,13 @@ const TimePickers: React.FC<ProgramTime> = ({ programTime }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Stack spacing={3}>
-        <MobileTimePicker
+        <DesktopTimePicker
           ampm={false}
           openTo="hours"
           views={['hours', 'minutes', 'seconds']}
           inputFormat="HH:mm:ss"
           mask="__:__:__"
+          PopperProps={dialogStyleProps}
           InputProps={styleProps}
           value={value}
           onChange={newValue => {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Stack from '@mui/material/Stack';
 import { StyledInput } from './styles';
 
@@ -16,25 +16,48 @@ const DatePickers: React.FC<ProgramDate> = ({ programDate }) => {
     setValue(programDate);
   }, [programDate]);
 
-  const styleProps = {
+  const dialogStyleProps = {
+    sx: {
+      '& .MuiPaper-root': {
+        marginLeft: '164px',
+        paddingTop: '20px',
+        backgroundColor: 'var(--color-neutral-6)',
+        color: 'var(--color-neutral-2)',
+        overflow: 'hidden',
+      },
+      '& .MuiButtonBase-root': {
+        backgroundColor: 'var(--color-neutral-6)',
+        color: 'var(--color-neutral-2)',
+      },
+      '& .MuiTypography-root': {
+        color: 'var(--color-neutral-2)',
+      },
+    },
+  };
+
+  const inputStyleProps = {
     style: {
       fontSize: '18px',
       backgroundColor: 'var(--color-neutral-6)',
       color: 'var(--color-neutral-3)',
       width: '100%',
       height: 45,
+      '& .MuiButtonBase-root': {
+        color: 'var(--color-neutral-3)',
+      },
     },
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Stack spacing={3}>
-        <MobileDatePicker
+        <DesktopDatePicker
+          PopperProps={dialogStyleProps}
           value={value}
           onChange={newValue => {
             setValue(newValue);
           }}
-          InputProps={styleProps}
+          InputProps={inputStyleProps}
           // eslint-disable-next-line react/jsx-props-no-spreading
           renderInput={params => <StyledInput {...params} />}
         />
