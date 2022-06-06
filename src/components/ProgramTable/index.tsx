@@ -24,11 +24,13 @@ import programTableColumns from './programTableColumns';
 
 export interface ProgramTableProps {
   programs: Program[];
+  selectedProgramId: string;
   setSelectedProgramId: (programId: string) => void;
 }
 
 const ProgramTable: React.FC<ProgramTableProps> = ({
   programs,
+  selectedProgramId,
   setSelectedProgramId,
 }) => {
   const { t } = useTranslation();
@@ -49,10 +51,10 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
           <TableBody>
             {programs.map((program, i) => (
               <StyledTableRow
-                hover
                 role="checkbox"
                 tabIndex={-1}
                 key={program.id}
+                focused={selectedProgramId === program.id}
                 onClick={() => setSelectedProgramId(program.id)}
               >
                 {programTableColumns.map(({ id, align, minWidth, format }) => {
