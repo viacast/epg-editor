@@ -1,12 +1,18 @@
 import styled from 'styled-components';
 
-export const MenuContainer = styled.div`
+export interface MenuStyleProps {
+  minWidth?: string;
+  overflowStatus?: string;
+}
+
+export const MenuContainer = styled.div<MenuStyleProps>`
   height: 100%;
   width: 100%;
+  min-width: ${({ minWidth }) => minWidth || '0px'};
   min-height: 300px;
   border-radius: 4px;
   background-color: var(--color-neutral-5);
-  overflow: scroll;
+  overflow: ${({ overflowStatus }) => overflowStatus || 'auto'};
 `;
 
 export const Toolbar = styled.div`

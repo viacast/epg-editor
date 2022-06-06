@@ -15,19 +15,24 @@ import {
   Form,
   FormContainer,
   MenuContainer,
+  MenuStyleProps,
   Toolbar,
 } from './styles';
 
-export interface MenuProps {
+export interface MenuProps extends MenuStyleProps {
+  minWidth;
+  overflowStatus;
   programs: Program[];
   selectedProgramId: string;
-  setSelectedProgramId: (programId: string) => void;
+  setisClosing: (programId: boolean) => void;
 }
 
 const Menu: React.FC<MenuProps> = ({
+  minWidth,
+  overflowStatus,
   programs,
   selectedProgramId,
-  setSelectedProgramId,
+  setisClosing,
 }) => {
   const { t } = useTranslation();
 
@@ -57,7 +62,7 @@ const Menu: React.FC<MenuProps> = ({
   }
 
   return (
-    <MenuContainer>
+    <MenuContainer minWidth={minWidth} overflowStatus={overflowStatus}>
       <Toolbar>
         {t('menu:edit')} <p>{editTitle}</p>
       </Toolbar>
@@ -110,7 +115,7 @@ const Menu: React.FC<MenuProps> = ({
             text={t('menu:cancel')}
             icon={<CgClose />}
             onClick={() => {
-              setSelectedProgramId('');
+              setisClosing(true);
             }}
           />
           <Button
