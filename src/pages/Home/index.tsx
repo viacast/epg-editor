@@ -66,6 +66,7 @@ const Home: React.FC = () => {
         >
           <ProgramTable
             setSelectedProgramId={setSelectedProgramId}
+            selectedProgramId={selectedProgramId}
             programs={programs}
           />
         </TableContainer>
