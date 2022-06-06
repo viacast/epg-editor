@@ -38,7 +38,7 @@ const SelectRate: React.FC<DefaultSelectProps> = ({ defaultValue }) => {
     PaperProps: {
       style: {
         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: '100%',
+        width: '250px',
         backgroundColor: 'var(--color-neutral-6)',
         color: 'var(--color-neutral-3)',
       },

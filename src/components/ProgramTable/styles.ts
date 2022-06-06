@@ -61,6 +61,9 @@ export const StyledTableRow = styledmui(TableRow)`
   &.${tableRowClasses.root} {
     background-color: var(--color-neutral-6);
     border: 4px solid white;
+    :focus {
+      background-color: var(--color-primary-2);
+    }
   }
 `;
 
