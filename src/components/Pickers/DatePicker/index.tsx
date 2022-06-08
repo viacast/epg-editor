@@ -36,6 +36,11 @@ const DatePickers: React.FC<ProgramDate> = ({ programDate }) => {
   };
 
   const inputStyleProps = {
+    sx: {
+      '& .MuiSvgIcon-root': {
+        color: 'var(--color-neutral-5)',
+      },
+    },
     style: {
       fontSize: '18px',
       backgroundColor: 'var(--color-neutral-6)',

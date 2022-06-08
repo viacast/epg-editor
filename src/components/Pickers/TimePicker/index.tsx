@@ -43,6 +43,11 @@ const TimePickers: React.FC<ProgramTime> = ({ programTime }) => {
   };
 
   const styleProps = {
+    sx: {
+      '& .MuiSvgIcon-root': {
+        color: 'var(--color-neutral-5)',
+      },
+    },
     style: {
       fontSize: '18px',
       backgroundColor: 'var(--color-neutral-6)',
