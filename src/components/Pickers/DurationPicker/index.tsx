@@ -17,6 +17,25 @@ const DurationPickers: React.FC<ProgramDuration> = ({ programDuration }) => {
   return (
     <div>
       <StyledDurationPicker
+        DurationDialogProps={{
+          style: {
+            top: '600px',
+            left: 'calc(100% - 536px)',
+            width: '502px',
+            // '& .MuiInputBase-input': {
+            //   color: 'var(--color-neutral-3)',
+            // },
+            // '& .MuiDialog-paper': {
+            //   transform: 'scale(0.8)',
+            //   backgroundColor: 'var(--color-neutral-5)',
+            // },
+            // '& .MuiToolbar-root': {
+            //   backgroundColor: 'var(--color-neutral-5)',
+            // },
+            // '& .MuiDialog-paperWidthSm': {
+            // },
+          },
+        }}
         placeholder="00:00:00"
         value={value}
         onValueChange={v => {
