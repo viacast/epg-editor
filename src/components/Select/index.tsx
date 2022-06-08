@@ -11,14 +11,14 @@ import C18 from 'assets/icons/ratings/R18.svg';
 import { IconContainer, Icon } from './styles';
 
 export interface DefaultSelectProps {
-  defaultValue: string;
+  defaultValue?: string;
 }
 
 const SelectRate: React.FC<DefaultSelectProps> = ({ defaultValue }) => {
   const [rate, setRate] = React.useState('RL');
 
   React.useEffect(() => {
-    setRate(defaultValue);
+    if (defaultValue) setRate(defaultValue);
   }, [defaultValue]);
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -93,6 +93,10 @@ const SelectRate: React.FC<DefaultSelectProps> = ({ defaultValue }) => {
       </IconContainer>
     </div>
   );
+};
+
+SelectRate.defaultProps = {
+  defaultValue: '',
 };
 
 export default SelectRate;
