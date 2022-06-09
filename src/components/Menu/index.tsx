@@ -1,3 +1,6 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-self-assign */
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, Button, Input, SelectRate } from 'components';
@@ -7,7 +10,7 @@ import DatePicker from 'components/Pickers/DatePicker';
 import TimePicker from 'components/Pickers/TimePicker';
 import DurationPickers from 'components/Pickers/DurationPicker';
 
-import { Program } from 'services/epg';
+import { Program, ProgramRating } from 'services/epg';
 import {
   BottomContainer,
   ButtonContainer,
@@ -36,7 +39,10 @@ const Menu: React.FC<MenuProps> = ({
 }) => {
   const { t } = useTranslation();
 
+  const [program, setProgram] = React.useState<Program[]>(programs);
+
   let i = 0;
+  let aux;
   let title;
   let editTitle;
   let description;
@@ -48,6 +54,7 @@ const Menu: React.FC<MenuProps> = ({
 
   while (i < programs.length) {
     if (programs[i].id === selectedProgramId) {
+      aux = i;
       title = programs[i].title;
       editTitle = title.toString();
       description = programs[i].description;
@@ -122,6 +129,53 @@ const Menu: React.FC<MenuProps> = ({
             margin="auto 0 0 27px"
             text={t('menu:save')}
             icon={<AiOutlineSave />}
+            onClick={() => {
+              let desc;
+              if (document.getElementsByTagName('textarea')[0] !== undefined) {
+                desc = document.getElementsByTagName('textarea')[0]?.innerHTML;
+              }
+              let dur;
+              time = document.getElementsByTagName('input')[6].value;
+              // eslint-disable-next-line no-restricted-globals
+              if (isNaN(dur)) {
+                dur =
+                  time.split('hour')[0] * 3600 +
+                  time.split('hour')[1].split('minutes')[0] * 60;
+              } else {
+                dur =
+                  time.split('hours')[0] * 3600 +
+                  time.split('hours')[1].split('minutes')[0] * 60;
+              }
+              const hour = new Date();
+              const instant = document.getElementsByTagName('input')[5].value;
+              hour.setHours(
+                Number(instant.split(':')[0]),
+                Number(instant.split(':')[1]),
+                Number(instant.split(':')[2]),
+              );
+              const rate = document.getElementsByTagName('input')[3].value;
+              const ratings = {
+                RL: ProgramRating.RL,
+                R10: ProgramRating.R10,
+                R12: ProgramRating.R12,
+                R14: ProgramRating.R14,
+                R16: ProgramRating.R16,
+                R18: ProgramRating.R18,
+              };
+              programs[aux].title =
+                document.getElementsByTagName('input')[2].value;
+              programs[aux].description = desc;
+              programs[aux].rating = ratings[rate];
+              programs[aux].startDate = new Date(
+                document.getElementsByTagName('input')[4].value,
+              );
+              programs[aux].startHour = new Date(hour);
+              programs[aux].duration = Number(dur);
+              setProgram(programs);
+              // console.log(aux);
+              // console.log(program);
+              setisClosing(true);
+            }}
           />
         </ButtonContainer>
       </ContentContainer>
