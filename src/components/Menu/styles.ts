@@ -16,7 +16,6 @@ export const MenuContainer = styled.div<MenuStyleProps>`
 `;
 
 export const Toolbar = styled.div`
-  position: relative;
   top: 0px;
   width: 100%;
   height: 42px;
@@ -26,9 +25,8 @@ export const Toolbar = styled.div`
   text-align: left;
   padding-top: 10px;
   padding-left: 10px;
-  padding-right: auto;
   font-size: 18px;
-  font-family: 'Nunito' sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-weight: 700;
   color: var(--color-neutral-2);
   white-space: nowrap;

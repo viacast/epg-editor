@@ -11,7 +11,6 @@ export const HeaderContainer = styled.div`
 `;
 
 export const Text = styled.div`
-  position: relative;
   width: 188px;
   padding: 10px 0;
   font-size: 20px;

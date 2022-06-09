@@ -48,7 +48,6 @@ const DurationPickers: React.FC<ProgramDuration> = ({ programDuration }) => {
               },
             },
           }}
-          placeholder="00:00:00"
           value={value}
           onValueChange={v => {
             setValue(v);
