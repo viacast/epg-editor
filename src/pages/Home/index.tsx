@@ -53,7 +53,11 @@ const Home: React.FC = () => {
       }}
     >
       <HeaderContainer>
-        <Header programs={programs} setPrograms={setPrograms} />
+        <Header
+          programs={programs}
+          setPrograms={setPrograms}
+          setSelectedProgramId={setSelectedProgramId}
+        />
       </HeaderContainer>
       <TableMenuContainer>
         <TableContainer
