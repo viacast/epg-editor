@@ -1,36 +1,37 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Stack } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import Stack from '@mui/material/Stack';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
+import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { StyledInput } from './styles';
 
 export interface ProgramTime {
-  programTime: Date | null;
+  time: Date;
+  onTimeChange?: (value: Date) => void;
 }
 
-const TimePickers: React.FC<ProgramTime> = ({ programTime }) => {
-  const [value, setValue] = React.useState<Date | null>(programTime);
+const TimePickers: React.FC<ProgramTime> = ({ time, onTimeChange }) => {
+  const [value, setValue] = useState<Date>(time);
 
-  React.useEffect(() => {
-    setValue(programTime);
-  }, [programTime]);
+  useEffect(() => {
+    setValue(time);
+  }, [time]);
 
   const dialogStyleProps = {
     sx: {
-      '& .MuiPickersArrowSwitcher-root': {
-        right: '85px',
+      span: {
+        color: 'var(--color-neutral-3)',
+      },
+      '& .MuiClockPicker-arrowSwitcher': {
+        display: 'none',
+        // marginRight: '55px',
       },
       '& .MuiPickersClockNumber': {
         color: 'var(--color-neutral-2)',
       },
       '& .MuiPaper-root': {
         marginRight: '65px',
-        paddingTop: '20px',
-        width: '442px',
         backgroundColor: 'var(--color-neutral-6)',
         color: 'var(--color-neutral-2)',
-        overflow: 'hidden',
       },
       '& .MuiButtonBase-root': {
         backgroundColor: 'var(--color-neutral-6)',
@@ -60,7 +61,7 @@ const TimePickers: React.FC<ProgramTime> = ({ programTime }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Stack spacing={3}>
-        <DesktopTimePicker
+        <TimePicker
           ampm={false}
           openTo="hours"
           views={['hours', 'minutes', 'seconds']}
@@ -70,7 +71,10 @@ const TimePickers: React.FC<ProgramTime> = ({ programTime }) => {
           InputProps={styleProps}
           value={value}
           onChange={newValue => {
-            setValue(newValue);
+            if (newValue) {
+              setValue(newValue);
+              onTimeChange?.(newValue);
+            }
           }}
           renderInput={params => (
             // eslint-disable-next-line react/jsx-props-no-spreading
@@ -80,6 +84,10 @@ const TimePickers: React.FC<ProgramTime> = ({ programTime }) => {
       </Stack>
     </LocalizationProvider>
   );
+};
+
+TimePickers.defaultProps = {
+  onTimeChange: undefined,
 };
 
 export default TimePickers;

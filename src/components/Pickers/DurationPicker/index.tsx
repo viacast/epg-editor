@@ -1,8 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { formatDuration } from 'date-fns';
 import { createTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
-import { StyledDurationPicker } from './styles';
+import { ptBR, es, enUS, StyledDurationPicker } from './styles';
+
+const labelsPt = {
+  cancel: 'Cancelar',
+  ok: 'Salvar',
+  weeks: 'Semanas',
+  days: 'Dias',
+  hours: 'Horas',
+  minutes: 'Minutos',
+  seconds: 'Segundos',
+};
+
+const labelsEs = {
+  cancel: 'Cancelar',
+  ok: 'Acceptar',
+  weeks: 'Semanas',
+  days: 'Días',
+  hours: 'Horas',
+  minutes: 'Minutos',
+  seconds: 'Segundos',
+};
+
+const labelsEn = {
+  cancel: 'Cancel',
+  ok: 'Save',
+  weeks: 'Weeks',
+  days: 'Days',
+  hours: 'Hours',
+  minutes: 'Minutes',
+  seconds: 'Seconds',
+};
 
 const materialTheme = createTheme({
   palette: {
@@ -13,17 +43,38 @@ const materialTheme = createTheme({
   },
 });
 
-export interface ProgramDuration {
-  programDuration: Date | null;
+const aux = localStorage.getItem('i18nextLng');
+let lang;
+let labelLang;
+
+if (aux) {
+  if (aux === 'pt') {
+    lang = ptBR;
+    labelLang = labelsPt;
+  } else if (aux === 'es') {
+    lang = es;
+    labelLang = labelsEs;
+  } else {
+    lang = enUS;
+    labelLang = labelsEn;
+  }
 }
 
-const DurationPickers: React.FC<ProgramDuration> = ({ programDuration }) => {
+export interface ProgramDuration {
+  duration: number;
+  onDurationChange?: (value: number) => void;
+}
+
+const DurationPickers: React.FC<ProgramDuration> = ({
+  duration,
+  onDurationChange,
+}) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [value, setValue] = useState<any>(0);
 
-  React.useEffect(() => {
-    setValue(programDuration);
-  }, [programDuration]);
+  useEffect(() => {
+    setValue(duration);
+  }, [duration]);
 
   return (
     <div>
@@ -42,6 +93,10 @@ const DurationPickers: React.FC<ProgramDuration> = ({ programDuration }) => {
               },
               inputMode: 'text',
             },
+            labels: labelLang,
+            DurationFieldsContainerProps: {
+              labels: labelLang,
+            },
             BackdropProps: {
               style: {
                 backgroundColor: 'transparent',
@@ -49,14 +104,25 @@ const DurationPickers: React.FC<ProgramDuration> = ({ programDuration }) => {
             },
           }}
           value={value}
-          onValueChange={v => {
-            setValue(v);
+          onValueChange={newValue => {
+            if (newValue) {
+              setValue(newValue);
+              onDurationChange?.(newValue);
+            }
           }}
-          formatDuration={formatDuration}
+          formatDuration={d =>
+            formatDuration(d, {
+              locale: lang,
+            })
+          }
         />
       </ThemeProvider>
     </div>
   );
+};
+
+DurationPickers.defaultProps = {
+  onDurationChange: undefined,
 };
 
 export default DurationPickers;

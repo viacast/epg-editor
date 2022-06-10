@@ -3,8 +3,10 @@ import {
   DurationPicker,
   DurationPickerProps,
 } from 'material-duration-picker/dist/durationPicker';
+import { ptBR, es, enUS } from 'date-fns/locale';
 
-// eslint-disable-next-line import/prefer-default-export
+export { ptBR, es, enUS };
+
 export const StyledDurationPicker = styled(DurationPicker)<DurationPickerProps>`
   background-color: var(--color-neutral-6);
   width: 100%;
@@ -13,9 +15,6 @@ export const StyledDurationPicker = styled(DurationPicker)<DurationPickerProps>`
   vertical-align: middle;
   padding: 8px 16px 7px;
 
-  .MuiToolbar-regular {
-    height: 16px;
-  }
   .MuiInputBase-root {
     color: var(--color-neutral-3);
   }

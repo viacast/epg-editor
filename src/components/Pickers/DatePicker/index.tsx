@@ -1,26 +1,37 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import Stack from '@mui/material/Stack';
+import { ptBR, es, enUS } from 'date-fns/locale';
 import { StyledInput } from './styles';
 
 export interface ProgramDate {
-  programDate: Date | null;
+  date: Date;
+  onDateChange?: (value: Date) => void;
 }
 
-const DatePickers: React.FC<ProgramDate> = ({ programDate }) => {
-  const [value, setValue] = React.useState(programDate);
+const DatePickers: React.FC<ProgramDate> = ({ date, onDateChange }) => {
+  const [value, setValue] = useState(date);
+  const aux = localStorage.getItem('i18nextLng');
+  let lang;
 
-  React.useEffect(() => {
-    setValue(programDate);
-  }, [programDate]);
+  if (aux) {
+    if (aux === 'pt') lang = ptBR;
+    else if (aux === 'en') lang = enUS;
+    else lang = es;
+  }
+
+  useEffect(() => {
+    setValue(date);
+  }, [date]);
 
   const dialogStyleProps = {
     sx: {
+      span: {
+        color: 'var(--color-neutral-3)',
+      },
       '& .MuiPaper-root': {
         marginLeft: '164px',
-        paddingTop: '20px',
         backgroundColor: 'var(--color-neutral-6)',
         color: 'var(--color-neutral-2)',
         overflow: 'hidden',
@@ -29,7 +40,7 @@ const DatePickers: React.FC<ProgramDate> = ({ programDate }) => {
         backgroundColor: 'var(--color-neutral-6)',
         color: 'var(--color-neutral-2)',
       },
-      '& .MuiTypography-root': {
+      '& .PrivatePickersSlideTransition-root': {
         color: 'var(--color-neutral-2)',
       },
     },
@@ -54,14 +65,17 @@ const DatePickers: React.FC<ProgramDate> = ({ programDate }) => {
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider adapterLocale={lang} dateAdapter={AdapterDateFns}>
       <Stack spacing={3}>
-        <DesktopDatePicker
+        <DatePicker
           PopperProps={dialogStyleProps}
-          value={value}
           onChange={newValue => {
-            setValue(newValue);
+            if (newValue) {
+              setValue(newValue);
+              onDateChange?.(newValue);
+            }
           }}
+          value={value}
           InputProps={inputStyleProps}
           // eslint-disable-next-line react/jsx-props-no-spreading
           renderInput={params => <StyledInput {...params} />}
@@ -69,6 +83,10 @@ const DatePickers: React.FC<ProgramDate> = ({ programDate }) => {
       </Stack>
     </LocalizationProvider>
   );
+};
+
+DatePickers.defaultProps = {
+  onDateChange: undefined,
 };
 
 export default DatePickers;
