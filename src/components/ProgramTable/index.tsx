@@ -54,7 +54,7 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                 role="checkbox"
                 tabIndex={-1}
                 key={program.id}
-                focused={selectedProgramId === program.id}
+                selected={selectedProgramId === program.id}
                 onClick={() => setSelectedProgramId(program.id)}
               >
                 {programTableColumns.map(({ id, align, minWidth, format }) => {

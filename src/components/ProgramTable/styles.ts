@@ -57,16 +57,14 @@ export const StyledTableCell = styledmui(TableCell)`
   }
 `;
 
-export const StyledTableRow = styledmui(TableRow)<{ focused?: boolean }>`
+export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
   &.${tableRowClasses.root} {
     background-color: var(--color-neutral-6);
     border: 4px solid white;
-    ${({ focused }) =>
-      focused
-        ? `background-color: var(--color-primary-2);`
-        : `:hover {
-      background-color: var(--color-primary-5);
-    }`};
+    ${({ selected }) =>
+      selected
+        ? `background-color: var(--color-primary-2); :hover { background-color: var(--color-primary-2); }`
+        : `:hover { background-color: var(--color-primary-5); }`};
   }
 `;
 
