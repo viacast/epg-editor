@@ -52,6 +52,7 @@ export const StyledDivider = styled(Divider)<DividerProps>`
   border-right-width: 1px;
 `;
 export const StyledPaper = styled(Paper)<PaperStylesProps>`
+  box-shadow: unset;
   padding: 2px 4px;
   display: flex;
   align-items: center;

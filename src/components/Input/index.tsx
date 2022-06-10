@@ -9,8 +9,9 @@ import {
 } from './styles';
 
 export interface InputProps extends PaperStylesProps {
-  disabled: boolean;
-  defaultValue?: string;
+  disabled?: boolean;
+  value?: string;
+  setValue?: (value: string) => void;
   placeholder?: string;
   withClearButton?: boolean;
   multiline?: boolean;
@@ -19,7 +20,8 @@ export interface InputProps extends PaperStylesProps {
 
 const Input: React.FC<InputProps> = ({
   disabled,
-  defaultValue,
+  value,
+  setValue,
   placeholder,
   width,
   height,
@@ -27,30 +29,16 @@ const Input: React.FC<InputProps> = ({
   multiline,
   maxRows,
 }) => {
-  const [value, setValue] = React.useState(defaultValue);
-
-  React.useEffect(() => {
-    setValue(defaultValue);
-  }, [defaultValue]);
-
-  function handleChange(event) {
-    setValue(event.target.value);
-  }
-
   return (
-    <StyledPaper
-      width={width}
-      height={height}
-      sx={{ boxShadow: 'unset' }}
-      className="epg-input"
-    >
+    <StyledPaper width={width} height={height} className="epg-input">
       <StyledInput
         multiline={multiline}
         maxRows={maxRows}
         disabled={disabled}
         fullWidth
-        // eslint-disable-next-line react/jsx-no-bind
-        onChange={handleChange}
+        onChange={e => {
+          setValue?.(e.target.value);
+        }}
         placeholder={placeholder}
         value={value}
       />
@@ -67,11 +55,13 @@ const Input: React.FC<InputProps> = ({
 };
 
 Input.defaultProps = {
+  disabled: false,
   placeholder: '',
   withClearButton: false,
-  defaultValue: '',
+  value: '',
   multiline: false,
   maxRows: 1,
+  setValue: undefined,
 };
 
 export default Input;
