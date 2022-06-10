@@ -17,3 +17,15 @@ export interface Program {
   description: string;
   rating: ProgramRating;
 }
+
+export function emptyProgram(): Program {
+  return {
+    id: '',
+    startDate: new Date(),
+    startHour: new Date(),
+    duration: 0,
+    title: '',
+    description: '',
+    rating: ProgramRating.RL,
+  };
+}
