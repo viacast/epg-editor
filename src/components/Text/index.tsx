@@ -1,11 +1,13 @@
-/* eslint-disable react/require-default-props */
 import React from 'react';
 
 import { Container, TextStyleProps } from './styles';
 
 export interface TextProps extends TextStyleProps {
+  // eslint-disable-next-line react/require-default-props
   className?: string;
+  // eslint-disable-next-line react/require-default-props
   forwardRef?: React.RefObject<HTMLDivElement>;
+  // eslint-disable-next-line react/require-default-props
   noSelect?: boolean;
 }
 
@@ -22,9 +24,7 @@ const Text: React.FC<TextProps> = ({
 }) => {
   return (
     <Container
-      className={`text${noSelect ? ' no-user-select' : ''}${
-        className ? ` ${className}` : ''
-      }`}
+      className={`epg-text ${className} ${noSelect ? ' no-user-select' : ''}`}
       inline={inline}
       fontFamily={fontFamily}
       fontSize={fontSize}
