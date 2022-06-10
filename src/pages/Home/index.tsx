@@ -36,7 +36,7 @@ function useWindowDimensions() {
 const Home: React.FC = () => {
   const [programs, setPrograms] = useState([] as Program[]);
   const [selectedProgramId, setSelectedProgramId] = useState('');
-  const [isClosing, setisClosing] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   // TODO: Remove
   useEffect(() => {
@@ -80,7 +80,7 @@ const Home: React.FC = () => {
               return;
             }
             setSelectedProgramId('');
-            setisClosing(false);
+            setIsClosing(false);
           }}
           style={{
             width: selectedProgramId === '' || isClosing ? '0px' : '500px',
@@ -93,7 +93,10 @@ const Home: React.FC = () => {
             minWidth={selectedProgramId === '' || isClosing ? '0px' : '500px'}
             programs={programs}
             selectedProgramId={selectedProgramId}
-            setisClosing={setisClosing}
+            setIsClosing={setIsClosing}
+            onSaveProgram={newprogram => {
+              console.log(newprogram);
+            }}
           />
         </MenuContainer>
       </TableMenuContainer>
