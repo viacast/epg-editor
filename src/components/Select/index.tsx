@@ -1,7 +1,5 @@
-import * as React from 'react';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import React from 'react';
+import { MenuItem, FormControl, Select } from '@mui/material';
 import CL from 'assets/icons/ratings/RL.svg';
 import C10 from 'assets/icons/ratings/R10.svg';
 import C12 from 'assets/icons/ratings/R12.svg';
@@ -11,20 +9,11 @@ import C18 from 'assets/icons/ratings/R18.svg';
 import { IconContainer, Icon } from './styles';
 
 export interface DefaultSelectProps {
-  defaultValue?: string;
+  value?: string;
+  setValue?: (value: string) => void;
 }
 
-const SelectRate: React.FC<DefaultSelectProps> = ({ defaultValue }) => {
-  const [rate, setRate] = React.useState('RL');
-
-  React.useEffect(() => {
-    if (defaultValue) setRate(defaultValue);
-  }, [defaultValue]);
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setRate(event.target.value);
-  };
-
+const SelectRate: React.FC<DefaultSelectProps> = ({ value = '', setValue }) => {
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const SelectProps = {
@@ -77,8 +66,10 @@ const SelectRate: React.FC<DefaultSelectProps> = ({ defaultValue }) => {
           }}
           SelectDisplayProps={SelectProps}
           MenuProps={MenuProps}
-          value={rate}
-          onChange={handleChange}
+          value={value}
+          onChange={e => {
+            setValue?.(e.target.value);
+          }}
         >
           <MenuItem value="RL">{rates[0]}</MenuItem>
           <MenuItem value="R10">{rates[1]}</MenuItem>
@@ -89,14 +80,15 @@ const SelectRate: React.FC<DefaultSelectProps> = ({ defaultValue }) => {
         </Select>
       </FormControl>
       <IconContainer>
-        <Icon src={ratings[rate]} alt={rate} />
+        <Icon src={ratings[value]} alt={value} />
       </IconContainer>
     </div>
   );
 };
 
 SelectRate.defaultProps = {
-  defaultValue: '',
+  value: '',
+  setValue: undefined,
 };
 
 export default SelectRate;
