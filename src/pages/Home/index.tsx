@@ -65,7 +65,7 @@ const Home: React.FC = () => {
             width:
               selectedProgramId === '' || isClosing
                 ? '100%'
-                : 'calc(100% - 535px - 30px)',
+                : 'calc(100% - 535px)',
           }}
         >
           <ProgramTable
