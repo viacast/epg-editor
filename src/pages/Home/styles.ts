@@ -23,7 +23,6 @@ export const TableMenuContainer = styled.div`
   min-width: 1102px;
   height: 87.1vh;
   padding-bottom: 50px;
-  /* padding-right: 30px; */
   padding-left: 30px;
 `;
 

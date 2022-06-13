@@ -6,12 +6,11 @@ export interface ButtonProps {
   text: string;
   icon: JSX.Element;
   onClick?: () => void;
-  margin?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ text, icon, onClick, margin }) => {
+const Button: React.FC<ButtonProps> = ({ text, icon, onClick }) => {
   return (
-    <Stack className="epg-button" margin={margin} spacing={2} direction="row">
+    <Stack className="epg-button" spacing={2} direction="row">
       <ButtonContainer onClick={onClick} variant="contained">
         <Icon>{icon}</Icon>
         <Line />
@@ -23,7 +22,6 @@ const Button: React.FC<ButtonProps> = ({ text, icon, onClick, margin }) => {
 
 Button.defaultProps = {
   onClick: undefined,
-  margin: '0px',
 };
 
 export default Button;

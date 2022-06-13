@@ -8,6 +8,11 @@ export const HeaderContainer = styled.div`
   .epg-button {
     margin-left: 15px;
   }
+
+  .epg-input {
+    width: 270px;
+    height: 44px;
+  }
 `;
 
 export const Text = styled.div`

@@ -135,7 +135,6 @@ const Menu: React.FC<MenuProps> = ({
         </BottomContainer>
         <ButtonContainer>
           <Button
-            margin="auto 0 0 0"
             text={t('menu:cancel')}
             icon={<CgClose />}
             onClick={() => {
@@ -143,7 +142,6 @@ const Menu: React.FC<MenuProps> = ({
             }}
           />
           <Button
-            margin="auto 0 0 27px"
             text={t('menu:save')}
             icon={<AiOutlineSave />}
             onClick={() => {

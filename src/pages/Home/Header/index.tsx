@@ -53,14 +53,13 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <HeaderContainer className="no-user-select">
       <FileInput
+        className="epg-input"
         forwardRef={fileInputRef}
         disabled
         placeholder={
           epgFilename !== '' ? epgFilename : t('header:placeholderInput')
         }
         onFileUpload={handleFileUpload}
-        width="270px"
-        height="44px"
       />
       <Button
         text={t('header:buttonImportProgram')}

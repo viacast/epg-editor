@@ -56,13 +56,11 @@ export const ContentContainer = styled.div`
   flex: 1;
   flex-direction: column;
   height: calc(100% - 42px);
-
   padding-left: 29px;
   padding-right: 29px;
 `;
 
 export const BottomContainer = styled.div`
-  /* border: 1px solid blue; */
   margin-top: 0px;
   display: flex;
   flex: 1;
@@ -84,6 +82,10 @@ export const ButtonContainer = styled.div`
   margin-top: auto;
   margin-left: auto;
   margin-bottom: 30px;
+
+  .epg-button {
+    margin-left: 30px;
+  }
 `;
 
 export const Form = styled.form`
