@@ -20,7 +20,9 @@ import {
   ButtonContainer,
   ContentContainer,
   Form,
+  FormColumn,
   FormContainer,
+  FormRow,
   MenuContainer,
   MenuStyleProps,
   Toolbar,
@@ -95,8 +97,8 @@ const Menu: React.FC<MenuProps> = ({
                   }));
                 }}
               />
-              <div style={{ display: 'inline-flex', width: '100%' }}>
-                <div style={{ width: '50%', float: 'left' }}>
+              <FormRow>
+                <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:date')}
                   </Text>
@@ -106,8 +108,8 @@ const Menu: React.FC<MenuProps> = ({
                       setNewProgram(p => ({ ...p, startDate }))
                     }
                   />
-                </div>
-                <div style={{ width: '50%', marginLeft: '30px' }}>
+                </FormColumn>
+                <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:time')}
                   </Text>
@@ -117,8 +119,8 @@ const Menu: React.FC<MenuProps> = ({
                       setNewProgram(p => ({ ...p, startHour }))
                     }
                   />
-                </div>
-              </div>
+                </FormColumn>
+              </FormRow>
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:length')}
               </Text>

@@ -5,6 +5,18 @@ export interface MenuStyleProps {
   overflowStatus?: string;
 }
 
+export const FormRow = styled.div`
+  display: inline-flex;
+  width: 100%;
+`;
+
+export const FormColumn = styled.div`
+  width: 100%;
+  :not(:first-child) {
+    margin-left: 30px;
+  }
+`;
+
 export const MenuContainer = styled.div<MenuStyleProps>`
   height: 100%;
   width: 100%;
