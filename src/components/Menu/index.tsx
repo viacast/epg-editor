@@ -6,7 +6,7 @@ import {
   Text,
   Button,
   Input,
-  SelectRate,
+  Select as SelectRate,
   DatePickers,
   TimePickers,
   DurationPickers,
