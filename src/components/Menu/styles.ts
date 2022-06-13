@@ -17,6 +17,22 @@ export const FormColumn = styled.div`
   }
 `;
 
+export const SelectRateContainer = styled.div`
+  display: inline-block;
+  width: 100%;
+`;
+
+export const IconContainer = styled.div`
+  width: 56px;
+  height: 56px;
+  float: right;
+`;
+
+export const Icon = styled.img`
+  width: 100%;
+  height: 100%;
+`;
+
 export const MenuContainer = styled.div<MenuStyleProps>`
   height: 100%;
   width: 100%;
@@ -81,14 +97,15 @@ export const ButtonContainer = styled.div`
   display: flex;
   margin-top: auto;
   margin-left: auto;
-  margin-bottom: 30px;
 
   .epg-button {
     margin-left: 30px;
+    margin-bottom: 30px;
   }
 `;
 
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
+  margin-bottom: 30px;
 `;
