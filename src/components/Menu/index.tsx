@@ -6,7 +6,7 @@ import {
   Text,
   Button,
   Input,
-  Select as SelectRate,
+  Select,
   DatePickers,
   TimePickers,
   DurationPickers,
@@ -15,6 +15,14 @@ import {
 import { Program, ProgramRating } from 'services/epg';
 import structuredClone from '@ungap/structured-clone';
 import { emptyProgram } from 'services/epg/program';
+
+import CL from 'assets/icons/ratings/RL.svg';
+import C10 from 'assets/icons/ratings/R10.svg';
+import C12 from 'assets/icons/ratings/R12.svg';
+import C14 from 'assets/icons/ratings/R14.svg';
+import C16 from 'assets/icons/ratings/R16.svg';
+import C18 from 'assets/icons/ratings/R18.svg';
+
 import {
   BottomContainer,
   ButtonContainer,
@@ -23,10 +31,22 @@ import {
   FormColumn,
   FormContainer,
   FormRow,
+  Icon,
+  IconContainer,
   MenuContainer,
   MenuStyleProps,
+  SelectRateContainer,
   Toolbar,
 } from './styles';
+
+const ratings = {
+  RL: CL,
+  R10: C10,
+  R12: C12,
+  R14: C14,
+  R16: C16,
+  R18: C18,
+};
 
 export interface MenuProps extends MenuStyleProps {
   minWidth;
@@ -88,15 +108,29 @@ const Menu: React.FC<MenuProps> = ({
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:parentalRating')}
               </Text>
-              <SelectRate
-                value={newProgram?.rating.toString() ?? 'RL'}
-                setValue={rating => {
-                  setNewProgram(p => ({
-                    ...p,
-                    rating: rating as ProgramRating,
-                  }));
-                }}
-              />
+              <SelectRateContainer>
+                <Select
+                  value={newProgram?.rating.toString() ?? ProgramRating.RL}
+                  setValue={rating => {
+                    setNewProgram(p => ({
+                      ...p,
+                      rating: rating as ProgramRating,
+                    }));
+                  }}
+                  options={Object.values(ProgramRating).map(r => ({
+                    label: t(`parental-guidance:rating_${r}`),
+                    value: r.toString(),
+                  }))}
+                />
+                <IconContainer>
+                  <Icon
+                    src={
+                      ratings[newProgram?.rating.toString() ?? ProgramRating.RL]
+                    }
+                    alt="Rate Icon"
+                  />
+                </IconContainer>
+              </SelectRateContainer>
               <FormRow>
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
@@ -131,25 +165,25 @@ const Menu: React.FC<MenuProps> = ({
                 }
               />
             </Form>
+            <ButtonContainer>
+              <Button
+                text={t('menu:cancel')}
+                icon={<CgClose />}
+                onClick={() => {
+                  setIsClosing(true);
+                }}
+              />
+              <Button
+                text={t('menu:save')}
+                icon={<AiOutlineSave />}
+                onClick={() => {
+                  if (newProgram) onSaveProgram(newProgram);
+                  setIsClosing(true);
+                }}
+              />
+            </ButtonContainer>
           </FormContainer>
         </BottomContainer>
-        <ButtonContainer>
-          <Button
-            text={t('menu:cancel')}
-            icon={<CgClose />}
-            onClick={() => {
-              setIsClosing(true);
-            }}
-          />
-          <Button
-            text={t('menu:save')}
-            icon={<AiOutlineSave />}
-            onClick={() => {
-              if (newProgram) onSaveProgram(newProgram);
-              setIsClosing(true);
-            }}
-          />
-        </ButtonContainer>
       </ContentContainer>
     </MenuContainer>
   );
