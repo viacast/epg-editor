@@ -77,47 +77,45 @@ const DurationPickers: React.FC<ProgramDuration> = ({
   }, [duration]);
 
   return (
-    <div>
-      <ThemeProvider theme={materialTheme}>
-        <StyledDurationPicker
-          DurationDialogProps={{
+    <ThemeProvider theme={materialTheme}>
+      <StyledDurationPicker
+        DurationDialogProps={{
+          style: {
+            top: '600px',
+            left: 'calc(100% - 536px)',
+            width: '502px',
+          },
+          PaperProps: {
             style: {
-              top: '600px',
-              left: 'calc(100% - 536px)',
-              width: '502px',
+              backgroundColor: 'var(--color-neutral-6)',
+              boxShadow: 'none',
             },
-            PaperProps: {
-              style: {
-                backgroundColor: 'var(--color-neutral-6)',
-                boxShadow: 'none',
-              },
-              inputMode: 'text',
-            },
+            inputMode: 'text',
+          },
+          labels: labelLang,
+          DurationFieldsContainerProps: {
             labels: labelLang,
-            DurationFieldsContainerProps: {
-              labels: labelLang,
+          },
+          BackdropProps: {
+            style: {
+              backgroundColor: 'transparent',
             },
-            BackdropProps: {
-              style: {
-                backgroundColor: 'transparent',
-              },
-            },
-          }}
-          value={value}
-          onValueChange={newValue => {
-            if (newValue) {
-              setValue(newValue);
-              onDurationChange?.(newValue);
-            }
-          }}
-          formatDuration={d =>
-            formatDuration(d, {
-              locale: lang,
-            })
+          },
+        }}
+        value={value}
+        onValueChange={newValue => {
+          if (newValue) {
+            setValue(newValue);
+            onDurationChange?.(newValue);
           }
-        />
-      </ThemeProvider>
-    </div>
+        }}
+        formatDuration={d =>
+          formatDuration(d, {
+            locale: lang,
+          })
+        }
+      />
+    </ThemeProvider>
   );
 };
 

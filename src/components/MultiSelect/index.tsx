@@ -62,39 +62,37 @@ export default function InputSelect() {
   };
 
   return (
-    <div>
-      <FormControl sx={{ width: 370 }}>
-        <Select
-          multiple
-          displayEmpty
-          value={personName}
-          onChange={handleChange}
-          input={<OutlinedInput />}
-          renderValue={selected => {
-            if (selected.length === 0) {
-              return <em>Placeholder</em>;
-            }
+    <FormControl sx={{ width: 370 }}>
+      <Select
+        multiple
+        displayEmpty
+        value={personName}
+        onChange={handleChange}
+        input={<OutlinedInput />}
+        renderValue={selected => {
+          if (selected.length === 0) {
+            return <em>Placeholder</em>;
+          }
 
-            return selected.join(', ');
-          }}
-          SelectDisplayProps={SelectProps}
-          MenuProps={MenuProps}
-          inputProps={{ 'aria-label': 'Without label' }}
-        >
-          <MenuItem disabled value="">
-            <em>Placeholder</em>
+          return selected.join(', ');
+        }}
+        SelectDisplayProps={SelectProps}
+        MenuProps={MenuProps}
+        inputProps={{ 'aria-label': 'Without label' }}
+      >
+        <MenuItem disabled value="">
+          <em>Placeholder</em>
+        </MenuItem>
+        {names.map(name => (
+          <MenuItem
+            key={name}
+            value={name}
+            style={getStyles(name, personName, theme)}
+          >
+            {name}
           </MenuItem>
-          {names.map(name => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
-            >
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
+        ))}
+      </Select>
+    </FormControl>
   );
 }
