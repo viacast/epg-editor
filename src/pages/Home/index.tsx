@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useLayoutEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ProgramTable } from 'components';
 import { EPGParser, Program } from 'services/epg';
 import Menu from 'components/Menu';
@@ -10,28 +10,6 @@ import {
   TableMenuContainer,
 } from './styles';
 import Header from './Header';
-
-function getWindowDimensions() {
-  const { innerWidth: width } = window;
-  return width;
-}
-
-function useWindowDimensions() {
-  const [windowDimensions, setWindowDimensions] = useState(
-    getWindowDimensions(),
-  );
-
-  useLayoutEffect(() => {
-    function handleResize() {
-      setWindowDimensions(getWindowDimensions());
-    }
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowDimensions;
-}
 
 const Home: React.FC = () => {
   const [programs, setPrograms] = useState([] as Program[]);
@@ -47,11 +25,7 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <Container
-      style={{
-        overflow: useWindowDimensions() < 1610 ? 'auto' : 'hidden',
-      }}
-    >
+    <Container>
       <HeaderContainer>
         <Header
           programs={programs}
