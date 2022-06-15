@@ -41,6 +41,7 @@ export const MenuContainer = styled.div<MenuStyleProps>`
   border-radius: 4px;
   background-color: var(--color-neutral-5);
   overflow: ${({ overflowStatus }) => overflowStatus || 'auto'};
+  margin-left: 30px;
 `;
 
 export const Toolbar = styled.div`

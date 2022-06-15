@@ -18,23 +18,22 @@ export const TableMenuContainer = styled.div`
   flex: 1;
   flex-direction: row;
   width: 100%;
-  min-width: 1082px;
+  min-width: 1112px;
   height: 87.1vh;
   padding-top: 20px;
   padding-left: 30px;
+  padding-right: 30px;
 `;
 
 export const TableContainer = styled.div`
   white-space: nowrap;
   min-height: 450px;
   transition: width 0.15s ease-in-out;
-  margin-right: 30px;
   padding-bottom: 50px;
 `;
 
 export const MenuContainer = styled.div`
   min-height: 450px;
-  margin-right: 30px;
   padding-bottom: 50px;
   transition: width 0.15s ease-in-out;
 `;
