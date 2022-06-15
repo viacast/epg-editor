@@ -68,13 +68,14 @@ export const Toolbar = styled.div`
   }
 `;
 
-export const ContentContainer = styled.div`
+export const ContentContainer = styled.div<MenuStyleProps>`
   display: flex;
   flex: 1;
   flex-direction: column;
   height: calc(100% - 42px);
   padding-left: 29px;
   padding-right: 29px;
+  overflow: ${({ overflowStatus }) => overflowStatus || 'auto'};
 `;
 
 export const BottomContainer = styled.div`
