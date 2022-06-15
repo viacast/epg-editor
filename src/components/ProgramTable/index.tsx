@@ -17,6 +17,7 @@ import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
+  StyledText,
   IconRating,
   Message,
 } from './styles';
@@ -93,12 +94,14 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                       align={align}
                       style={{ minWidth }}
                     >
-                      {value}
-                      {id === 'rating' && (
-                        <Message>
-                          {t(`parental-guidance:rating_${program[id]}`)}
-                        </Message>
-                      )}
+                      <StyledText>
+                        {value}
+                        {id === 'rating' && (
+                          <Message>
+                            {t(`parental-guidance:rating_${program[id]}`)}
+                          </Message>
+                        )}
+                      </StyledText>
                     </StyledTableCell>
                   );
                 })}
