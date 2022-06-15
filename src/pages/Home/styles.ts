@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+export interface StyleProps {
+  width?: string;
+}
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -23,17 +27,19 @@ export const TableMenuContainer = styled.div`
   padding-top: 20px;
   padding-left: 30px;
   padding-right: 30px;
+
+  .epg-tableMenuContent {
+    white-space: nowrap;
+    min-height: 450px;
+    transition: width 0.15s ease-in-out;
+    padding-bottom: 50px;
+  }
 `;
 
-export const TableContainer = styled.div`
-  white-space: nowrap;
-  min-height: 450px;
-  transition: width 0.15s ease-in-out;
-  padding-bottom: 50px;
+export const TableContainer = styled.div<StyleProps>`
+  width: ${({ width }) => width || '100%'};
 `;
 
-export const MenuContainer = styled.div`
-  min-height: 450px;
-  padding-bottom: 50px;
-  transition: width 0.15s ease-in-out;
+export const MenuContainer = styled.div<StyleProps>`
+  width: ${({ width }) => width || '0px'};
 `;

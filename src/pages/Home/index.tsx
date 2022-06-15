@@ -61,12 +61,12 @@ const Home: React.FC = () => {
       </HeaderContainer>
       <TableMenuContainer>
         <TableContainer
-          style={{
-            width:
-              selectedProgramId === '' || isClosing
-                ? '100%'
-                : 'calc(100% - 535px)',
-          }}
+          className="epg-tableMenuContent"
+          width={
+            selectedProgramId === '' || isClosing
+              ? '100%'
+              : 'calc(100% - 535px)'
+          }
         >
           <ProgramTable
             setSelectedProgramId={setSelectedProgramId}
@@ -75,6 +75,7 @@ const Home: React.FC = () => {
           />
         </TableContainer>
         <MenuContainer
+          className="epg-tableMenuContent"
           onTransitionEnd={() => {
             if (!isClosing) {
               return;
@@ -82,9 +83,7 @@ const Home: React.FC = () => {
             setSelectedProgramId('');
             setIsClosing(false);
           }}
-          style={{
-            width: selectedProgramId === '' || isClosing ? '0px' : '500px',
-          }}
+          width={selectedProgramId === '' || isClosing ? '0px' : '500px'}
         >
           <Menu
             overflowStatus={
