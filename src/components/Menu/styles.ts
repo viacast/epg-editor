@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { FormControl, InputProps, styled as styledmui } from '@mui/material';
 
 export interface MenuStyleProps {
   minWidth?: string;
@@ -111,3 +112,35 @@ export const Form = styled.form`
   flex-direction: column;
   margin-bottom: 30px;
 `;
+
+export const StyledInput = styledmui(FormControl)<InputProps>`
+  width: 100%;
+  height: 44px;
+  display: flex;
+  text-align: center;
+  vertical-align: middle;
+  text-transform: none;
+  font-size: 20px;
+  border-radius: 4px;
+  background-color: var(--color-neutral-6);
+
+  .MuiOutlinedInput-root,
+  .MuiOutlinedInput-root.Mui-disabled {
+    & > input {
+      height: 9px;
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    & > fieldset {
+      border: none;
+    }
+  }
+
+  .MuiOutlinedInput-input,
+  .MuiOutlinedInput-input.Mui-disabled {
+    -webkit-text-fill-color: var(--color-neutral-3);
+  }
+`;
+
+export const HelpContainer = styled.div``;

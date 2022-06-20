@@ -6,7 +6,7 @@ import {
   styled as muistyled,
 } from '@mui/material';
 
-const ITEM_HEIGHT = 48;
+const ITEM_HEIGHT = 50;
 const ITEM_PADDING_TOP = 8;
 
 export const MenuProps = {

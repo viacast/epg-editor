@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CgClose } from 'react-icons/cg';
-import { AiOutlineSave } from 'react-icons/ai';
+import { AiOutlineSave, AiOutlineClockCircle } from 'react-icons/ai';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import {
   Text,
   Button,
@@ -37,6 +41,8 @@ import {
   MenuStyleProps,
   SelectRateContainer,
   Toolbar,
+  StyledInput,
+  HelpContainer,
 } from './styles';
 
 const ratings = {
@@ -75,6 +81,8 @@ const Menu: React.FC<MenuProps> = ({
   useEffect(() => {
     setNewProgram(program ? structuredClone(program) : emptyProgram());
   }, [program, selectedProgramId]);
+
+  const [style, setStyle] = useState('none');
 
   return (
     <MenuContainer minWidth={minWidth} overflowStatus={overflowStatus}>
@@ -147,13 +155,44 @@ const Menu: React.FC<MenuProps> = ({
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:time')}
                   </Text>
+                  <HelpContainer
+                    onClick={() => {
+                      setStyle(style === 'none' ? 'block' : 'none');
+                    }}
+                  >
+                    <StyledInput disabled variant="outlined">
+                      <InputLabel>12:00:00</InputLabel>
+                      <OutlinedInput
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              edge="end"
+                            >
+                              <AiOutlineClockCircle />
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+                    </StyledInput>
+                  </HelpContainer>
+                </FormColumn>
+                <HelpContainer
+                  style={{
+                    display: style,
+                    position: 'absolute',
+                    zIndex: '3',
+                    marginTop: '88px',
+                    marginLeft: '122px',
+                  }}
+                >
                   <TimePickers
                     time={newProgram?.startHour ?? new Date()}
                     onTimeChange={startHour =>
                       setNewProgram(p => ({ ...p, startHour }))
                     }
                   />
-                </FormColumn>
+                </HelpContainer>
               </FormRow>
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:length')}
