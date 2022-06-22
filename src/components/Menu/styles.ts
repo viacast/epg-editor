@@ -143,4 +143,39 @@ export const StyledInput = styledmui(FormControl)<InputProps>`
   }
 `;
 
-export const HelpContainer = styled.div``;
+export const HelpContainer = styled.div`
+  .MuiOutlinedInput-input {
+    height: '15px';
+  }
+  .MuiPickerStaticWrapper-content {
+    background-color: transparent;
+    color: var(--color-neutral-3);
+    .MuiGrid-root {
+      width: fit-content;
+      margin-left: 40px;
+    }
+    .MuiTypography-overline,
+    svg {
+      display: none;
+    }
+    .MuiTypography-root {
+      color: var(--color-neutral-3);
+    }
+    .MuiTypography-root.Mui-selected {
+      color: var(--color-neutral-2);
+    }
+    .MuiClockPicker-root {
+      span {
+        color: var(--color-neutral-3);
+      }
+      .Mui-selected {
+        color: var(--color-neutral-2);
+      }
+    }
+  }
+  .MuiDialogActions-root {
+    button {
+      color: var(--color-neutral-3);
+    }
+  }
+`;

@@ -1,6 +1,17 @@
 import { TextField, styled } from '@mui/material';
+import { StaticTimePicker } from '@mui/x-date-pickers';
 
-// eslint-disable-next-line import/prefer-default-export
+export const StyledStaticTimePicker = styled(StaticTimePicker)`
+  .MuiPickerStaticWrapper-content {
+    background-color: transparent;
+    color: var(--color-neutral-3);
+  }
+  span,
+  button {
+    color: var(--color-neutral-3);
+  }
+`;
+
 export const StyledInput = styled(TextField)`
   .MuiOutlinedInput-root,
   .MuiOutlinedInput-root.Mui-disabled {

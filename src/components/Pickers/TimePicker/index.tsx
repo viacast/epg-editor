@@ -15,34 +15,16 @@ const TimePickers: React.FC<ProgramTime> = ({ time, onTimeChange }) => {
     setValue(time);
   }, [time]);
 
-  const styleProps = {
-    sx: {
-      '& .MuiSvgIcon-root': {
-        color: 'var(--color-neutral-5)',
-      },
-    },
-    style: {
-      fontSize: '18px',
-      backgroundColor: 'var(--color-neutral-6)',
-      color: 'var(--color-neutral-3)',
-      width: '100%',
-      height: 45,
-    },
-  };
-
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <StaticTimePicker
         ampm={false}
+        displayStaticWrapperAs="mobile"
+        orientation="landscape"
         openTo="hours"
         views={['hours', 'minutes', 'seconds']}
         inputFormat="HH:mm:ss"
         mask="__:__:__"
-        InputProps={styleProps}
-        MuiPickerStaticWrapper-root={{
-          backgroundColor: 'var(--color-neutral-6)',
-        }}
-        orientation="landscape"
         value={value}
         onChange={newValue => {
           if (newValue) {

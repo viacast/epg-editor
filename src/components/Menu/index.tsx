@@ -83,6 +83,7 @@ const Menu: React.FC<MenuProps> = ({
   }, [program, selectedProgramId]);
 
   const [style, setStyle] = useState('none');
+  const [time, setTime] = useState('00:00:00');
 
   return (
     <MenuContainer minWidth={minWidth} overflowStatus={overflowStatus}>
@@ -161,8 +162,13 @@ const Menu: React.FC<MenuProps> = ({
                     }}
                   >
                     <StyledInput disabled variant="outlined">
-                      <InputLabel>12:00:00</InputLabel>
                       <OutlinedInput
+                        style={{
+                          color: 'var(--color-neutral-3)',
+                          fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+                          fontSize: '18px',
+                        }}
+                        value={time}
                         endAdornment={
                           <InputAdornment position="end">
                             <IconButton
@@ -181,9 +187,13 @@ const Menu: React.FC<MenuProps> = ({
                   style={{
                     display: style,
                     position: 'absolute',
+                    background: 'var(--color-neutral-6)',
+                    border: '4px solid var(--color-neutral-6)',
+                    borderRadius: '4px',
                     zIndex: '3',
-                    marginTop: '88px',
-                    marginLeft: '122px',
+                    marginTop: '38px',
+                    marginLeft: '155px',
+                    transform: 'scale(0.75)',
                   }}
                 >
                   <TimePickers
