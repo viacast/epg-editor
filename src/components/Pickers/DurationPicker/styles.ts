@@ -1,38 +1,96 @@
-import { styled } from '@mui/material/styles';
-import {
-  DurationPicker,
-  DurationPickerProps,
-} from 'material-duration-picker/dist/durationPicker';
-import { ptBR, es, enUS } from 'date-fns/locale';
+import { TextField, styled as muistyled } from '@mui/material';
+import { StaticTimePicker } from '@mui/x-date-pickers';
+import styled from 'styled-components';
 
-export { ptBR, es, enUS };
-
-export const StyledDurationPicker = styled(DurationPicker)<DurationPickerProps>`
-  background-color: var(--color-neutral-6);
-  width: 100%;
-  height: 44px;
-  border-radius: 4px;
-  vertical-align: middle;
-  padding: 8px 16px 7px;
-
-  .MuiInputBase-root {
+export const StyledStaticTimePicker = muistyled(StaticTimePicker)`
+  .MuiPickerStaticWrapper-content {
+    background-color: transparent;
     color: var(--color-neutral-3);
   }
-  .MuiInputBase-input {
-    text-align: center;
+  span,
+  button {
+    color: var(--color-neutral-3);
   }
-  .MuiInputBase-root:hover {
+`;
+
+export const StyledInput = muistyled(TextField)`
+  .MuiOutlinedInput-root,
+  .MuiOutlinedInput-root.Mui-disabled {
     & > input {
-      z-index: 2;
-      border-bottom: 2px solid var(--color-neutral-6);
+      height: 16px;
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+      padding-top: 22.5px;
+    }
+    & > fieldset {
+      border: none;
     }
   }
-  .MuiInput-underline::before {
-    border-bottom: 1px solid transparent;
-    transition: none;
+`;
+
+export const HelpContainer = styled.div`
+  .epg-time {
+    color: var(--color-neutral-3);
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    padding-top: 4px;
   }
-  .MuiInput-underline::after {
-    border-bottom: 1px solid transparent;
-    transition: none;
+  /* .epg-timePicker {
+    position: absolute;
+    background: var(--color-neutral-6);
+    border: 4px solid var(--color-neutral-6);
+    border-radius: 4px;
+    z-index: 3;
+    margin-top: -40px;
+    margin-left: -80px;
+    transform: scale(0.75);
+  } */
+  button {
+    margin-bottom: 7px;
+    margin-right: -4px;
+  }
+  svg {
+    transform: scale(1.5);
+    color: var(--color-neutral-5);
+  }
+  input {
+    text-align: center;
+  }
+  .MuiPickerStaticWrapper-content {
+    background-color: transparent;
+    color: var(--color-neutral-3);
+    button {
+      margin-bottom: 0px;
+      margin-right: 0px;
+    }
+    .MuiGrid-root {
+      width: fit-content;
+      margin-left: 40px;
+    }
+    .MuiTypography-overline,
+    svg {
+      display: none;
+    }
+    .MuiTypography-root {
+      color: var(--color-neutral-3);
+    }
+    .MuiTypography-root.Mui-selected {
+      color: var(--color-neutral-2);
+    }
+    .MuiClockPicker-root {
+      span {
+        color: var(--color-neutral-3);
+      }
+      .Mui-selected {
+        color: var(--color-neutral-2);
+      }
+    }
+  }
+  .MuiDialogActions-root {
+    button {
+      display: none;
+    }
   }
 `;

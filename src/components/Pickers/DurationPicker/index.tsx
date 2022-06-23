@@ -1,126 +1,82 @@
 import React, { useState, useEffect } from 'react';
-import { formatDuration } from 'date-fns';
-import { createTheme } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/styles';
-import { ptBR, es, enUS, StyledDurationPicker } from './styles';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider, StaticTimePicker } from '@mui/x-date-pickers';
+import { addHours, format } from 'date-fns';
+import { StyledInput } from './styles';
 
-const labelsPt = {
-  cancel: 'Cancelar',
-  ok: 'Salvar',
-  weeks: 'Semanas',
-  days: 'Dias',
-  hours: 'Horas',
-  minutes: 'Minutos',
-  seconds: 'Segundos',
-};
-
-const labelsEs = {
-  cancel: 'Cancelar',
-  ok: 'Acceptar',
-  weeks: 'Semanas',
-  days: 'Días',
-  hours: 'Horas',
-  minutes: 'Minutos',
-  seconds: 'Segundos',
-};
-
-const labelsEn = {
-  cancel: 'Cancel',
-  ok: 'Save',
-  weeks: 'Weeks',
-  days: 'Days',
-  hours: 'Hours',
-  minutes: 'Minutes',
-  seconds: 'Seconds',
-};
-
-const materialTheme = createTheme({
-  palette: {
-    primary: {
-      main: '#808080',
-      contrastText: '#1d2024',
-    },
-  },
-});
-
-const aux = localStorage.getItem('i18nextLng');
-let lang;
-let labelLang;
-
-if (aux) {
-  if (aux === 'pt') {
-    lang = ptBR;
-    labelLang = labelsPt;
-  } else if (aux === 'es') {
-    lang = es;
-    labelLang = labelsEs;
-  } else {
-    lang = enUS;
-    labelLang = labelsEn;
-  }
+export interface ProgramTime {
+  duration?: number;
+  onDurationChange?: (value: Date) => void;
+  setDuration?: (value: number) => void;
 }
 
-export interface ProgramDuration {
-  duration: number;
-  onDurationChange?: (value: number) => void;
-}
-
-const DurationPickers: React.FC<ProgramDuration> = ({
+const DurationPickers: React.FC<ProgramTime> = ({
   duration,
   onDurationChange,
+  setDuration,
 }) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [value, setValue] = useState<any>(0);
+  const [dValue, setdValue] = useState<Date>(
+    duration ? new Date(duration * 1000) : new Date(),
+  );
+
+  const sum = addHours(dValue, 3);
+  const leng = format(sum, 'HH:mm:ss');
+  const d = new Date();
+  d.setHours(
+    Number(leng.slice(0, 2)),
+    Number(leng.slice(3, 5)),
+    Number(leng.slice(6, 8)),
+  );
 
   useEffect(() => {
-    setValue(duration);
-  }, [duration]);
+    if (duration) {
+      setdValue(new Date(duration * 1000));
+      setDuration?.(duration);
+    }
+  }, [setDuration, duration]);
 
   return (
-    <ThemeProvider theme={materialTheme}>
-      <StyledDurationPicker
-        DurationDialogProps={{
-          style: {
-            top: '600px',
-            left: 'calc(100% - 536px)',
-            width: '502px',
-          },
-          PaperProps: {
-            style: {
-              backgroundColor: 'var(--color-neutral-6)',
-              boxShadow: 'none',
-            },
-            inputMode: 'text',
-          },
-          labels: labelLang,
-          DurationFieldsContainerProps: {
-            labels: labelLang,
-          },
-          BackdropProps: {
-            style: {
-              backgroundColor: 'transparent',
-            },
-          },
-        }}
-        value={value}
-        onValueChange={newValue => {
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <StaticTimePicker
+        ampm={false}
+        displayStaticWrapperAs="mobile"
+        orientation="landscape"
+        openTo="hours"
+        views={['hours', 'minutes', 'seconds']}
+        inputFormat="HH:mm:ss"
+        mask="__:__:__"
+        value={d}
+        onChange={newValue => {
           if (newValue) {
-            setValue(newValue);
-            onDurationChange?.(newValue);
+            if (typeof newValue === 'number') {
+              setdValue?.(new Date(newValue * 1000));
+              const num = newValue;
+              let hours = 0;
+              let minutes = Math.floor(num / 60);
+              if (minutes >= 60) {
+                hours = Math.floor(minutes / 60);
+                minutes %= 60;
+              }
+              const seconds = num % 60;
+              const l = new Date();
+              l.setHours(hours, minutes, seconds);
+              onDurationChange?.(l);
+            }
           }
         }}
-        formatDuration={d =>
-          formatDuration(d, {
-            locale: lang,
-          })
-        }
+        renderInput={params => (
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          <StyledInput {...params} />
+        )}
       />
-    </ThemeProvider>
+    </LocalizationProvider>
   );
 };
 
 DurationPickers.defaultProps = {
+  duration: 0,
   onDurationChange: undefined,
+  setDuration: undefined,
 };
 
 export default DurationPickers;
