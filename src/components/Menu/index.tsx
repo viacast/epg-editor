@@ -4,8 +4,8 @@ import { CgClose } from 'react-icons/cg';
 import { AiOutlineSave, AiOutlineClockCircle } from 'react-icons/ai';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import { format } from 'date-fns';
 import {
   Text,
   Button,
@@ -27,6 +27,7 @@ import C14 from 'assets/icons/ratings/R14.svg';
 import C16 from 'assets/icons/ratings/R16.svg';
 import C18 from 'assets/icons/ratings/R18.svg';
 
+import { Box, ClickAwayListener } from '@mui/material';
 import {
   BottomContainer,
   ButtonContainer,
@@ -77,13 +78,49 @@ const Menu: React.FC<MenuProps> = ({
   const [newProgram, setNewProgram] = useState<Program>(
     program ? structuredClone(program) : emptyProgram(),
   );
+  const [openTime, setOpenTime] = React.useState(false);
+  const [openDuration, setOpenDuration] = React.useState(false);
+  const [time, setTime] = useState(new Date());
+  const [duration, setDuration] = useState(0);
+
+  const stHour = format(time, 'HH:mm:ss');
+
+  const num = duration;
+  let hours = 0;
+  let minutes = Math.floor(num / 60);
+  if (minutes >= 60) {
+    hours = Math.floor(minutes / 60);
+    minutes %= 60;
+  }
+  const seconds = num % 60;
+  const d = new Date();
+  d.setHours(hours, minutes, seconds);
+  const tLength = format(d, 'HH:mm:ss');
+
+  useEffect(() => {
+    setTime(newProgram?.startHour);
+    setDuration(newProgram?.duration);
+  }, [newProgram]);
 
   useEffect(() => {
     setNewProgram(program ? structuredClone(program) : emptyProgram());
   }, [program, selectedProgramId]);
 
-  const [style, setStyle] = useState('none');
-  const [time, setTime] = useState('00:00:00');
+  const handleClickTime = () => {
+    setOpenTime(prev => !prev);
+  };
+
+  const handleClickAwayTime = () => {
+    setOpenTime(false);
+  };
+
+  const handleClickDuration = () => {
+    setOpenDuration(prev => !prev);
+  };
+
+  const handleClickAwayDuration = () => {
+    setOpenDuration(false);
+  };
 
   return (
     <MenuContainer minWidth={minWidth} overflowStatus={overflowStatus}>
@@ -156,63 +193,116 @@ const Menu: React.FC<MenuProps> = ({
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:time')}
                   </Text>
-                  <HelpContainer
-                    onClick={() => {
-                      setStyle(style === 'none' ? 'block' : 'none');
-                    }}
+                  <ClickAwayListener
+                    mouseEvent="onMouseDown"
+                    touchEvent="onTouchStart"
+                    onClickAway={handleClickAwayTime}
                   >
-                    <StyledInput disabled variant="outlined">
-                      <OutlinedInput
-                        style={{
-                          color: 'var(--color-neutral-3)',
-                          fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
-                          fontSize: '18px',
-                        }}
-                        value={time}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              edge="end"
-                            >
-                              <AiOutlineClockCircle />
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                      />
-                    </StyledInput>
-                  </HelpContainer>
+                    <Box>
+                      <HelpContainer>
+                        <StyledInput variant="outlined">
+                          <OutlinedInput
+                            className="epg-time"
+                            value={stHour}
+                            endAdornment={
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={handleClickTime}
+                                  aria-label="toggle password visibility"
+                                  edge="end"
+                                >
+                                  <AiOutlineClockCircle />
+                                </IconButton>
+                              </InputAdornment>
+                            }
+                          />
+                        </StyledInput>
+                      </HelpContainer>
+                      {openTime ? (
+                        <HelpContainer
+                          // className="epg-timePicker"
+                          style={{
+                            position: 'absolute',
+                            background: 'var(--color-neutral-6)',
+                            border: '4px solid var(--color-neutral-6)',
+                            borderRadius: '4px',
+                            zIndex: '3',
+                            marginTop: '-40px',
+                            marginLeft: '-80px',
+                            transform: 'scale(0.75)',
+                          }}
+                        >
+                          <TimePickers
+                            time={newProgram?.startHour ?? new Date()}
+                            onTimeChange={startHour =>
+                              setNewProgram(p => ({ ...p, startHour }))
+                            }
+                            setTime={setTime}
+                          />
+                        </HelpContainer>
+                      ) : null}
+                    </Box>
+                  </ClickAwayListener>
                 </FormColumn>
-                <HelpContainer
-                  style={{
-                    display: style,
-                    position: 'absolute',
-                    background: 'var(--color-neutral-6)',
-                    border: '4px solid var(--color-neutral-6)',
-                    borderRadius: '4px',
-                    zIndex: '3',
-                    marginTop: '38px',
-                    marginLeft: '155px',
-                    transform: 'scale(0.75)',
-                  }}
-                >
-                  <TimePickers
-                    time={newProgram?.startHour ?? new Date()}
-                    onTimeChange={startHour =>
-                      setNewProgram(p => ({ ...p, startHour }))
-                    }
-                  />
-                </HelpContainer>
               </FormRow>
-              <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
-                {t('menu:length')}
-              </Text>
-              <DurationPickers
-                duration={newProgram?.duration ?? 0}
-                onDurationChange={duration =>
-                  setNewProgram(p => ({ ...p, duration }))
-                }
-              />
+              <FormRow>
+                <FormColumn>
+                  <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
+                    {t('menu:length')}
+                  </Text>
+                  <ClickAwayListener
+                    mouseEvent="onMouseDown"
+                    touchEvent="onTouchStart"
+                    onClickAway={handleClickAwayDuration}
+                  >
+                    <Box>
+                      <HelpContainer>
+                        <StyledInput variant="outlined">
+                          <OutlinedInput
+                            className="epg-time"
+                            value={tLength}
+                            endAdornment={
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={handleClickDuration}
+                                  aria-label="toggle password visibility"
+                                  edge="end"
+                                >
+                                  <AiOutlineClockCircle />
+                                </IconButton>
+                              </InputAdornment>
+                            }
+                          />
+                        </StyledInput>
+                      </HelpContainer>
+                      {openDuration ? (
+                        <HelpContainer
+                          // replace style with className="epg-timePicker"
+                          style={{
+                            position: 'absolute',
+                            background: 'var(--color-neutral-6)',
+                            border: '4px solid var(--color-neutral-6)',
+                            borderRadius: '4px',
+                            zIndex: '3',
+                            marginTop: '-40px',
+                            marginLeft: '-80px',
+                            transform: 'scale(0.75)',
+                          }}
+                        >
+                          <DurationPickers
+                            duration={newProgram?.duration ?? 0}
+                            onDurationChange={length =>
+                              setNewProgram(p => ({ ...p, length }))
+                            }
+                            setDuration={setDuration}
+                          />
+                        </HelpContainer>
+                      ) : null}
+                    </Box>
+                  </ClickAwayListener>
+                </FormColumn>
+                <FormColumn /> {/* empty column */}
+              </FormRow>
             </Form>
             <ButtonContainer>
               <Button

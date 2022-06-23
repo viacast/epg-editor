@@ -144,12 +144,40 @@ export const StyledInput = styledmui(FormControl)<InputProps>`
 `;
 
 export const HelpContainer = styled.div`
-  .MuiOutlinedInput-input {
-    height: '15px';
+  .epg-time {
+    color: var(--color-neutral-3);
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    padding-top: 4px;
+  }
+  /* .epg-timePicker {
+    position: absolute;
+    background: var(--color-neutral-6);
+    border: 4px solid var(--color-neutral-6);
+    border-radius: 4px;
+    z-index: 3;
+    margin-top: -40px;
+    margin-left: -80px;
+    transform: scale(0.75);
+  } */
+  button {
+    margin-bottom: 7px;
+    margin-right: -4px;
+  }
+  svg {
+    transform: scale(1.5);
+    color: var(--color-neutral-5);
+  }
+  input {
+    text-align: center;
   }
   .MuiPickerStaticWrapper-content {
     background-color: transparent;
     color: var(--color-neutral-3);
+    button {
+      margin-bottom: 0px;
+      margin-right: 0px;
+    }
     .MuiGrid-root {
       width: fit-content;
       margin-left: 40px;
@@ -175,7 +203,7 @@ export const HelpContainer = styled.div`
   }
   .MuiDialogActions-root {
     button {
-      color: var(--color-neutral-3);
+      display: none;
     }
   }
 `;
