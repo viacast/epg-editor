@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CgClose } from 'react-icons/cg';
+import { CgClose, CgTimer } from 'react-icons/cg';
 import { AiOutlineSave, AiOutlineClockCircle } from 'react-icons/ai';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
@@ -82,25 +82,25 @@ const Menu: React.FC<MenuProps> = ({
   const [openDuration, setOpenDuration] = React.useState(false);
   const [time, setTime] = useState(new Date());
   const [duration, setDuration] = useState(0);
+  const [leng, setLeng] = useState('');
 
   const stHour = format(time, 'HH:mm:ss');
-
-  const num = duration;
-  let hours = 0;
-  let minutes = Math.floor(num / 60);
-  if (minutes >= 60) {
-    hours = Math.floor(minutes / 60);
-    minutes %= 60;
-  }
-  const seconds = num % 60;
-  const d = new Date();
-  d.setHours(hours, minutes, seconds);
-  const tLength = format(d, 'HH:mm:ss');
 
   useEffect(() => {
     setTime(newProgram?.startHour);
     setDuration(newProgram?.duration);
-  }, [newProgram]);
+    const num = duration;
+    let hours = 0;
+    let minutes = Math.floor(num / 60);
+    if (minutes >= 60) {
+      hours = Math.floor(minutes / 60);
+      minutes %= 60;
+    }
+    const seconds = num % 60;
+    const d = new Date();
+    d.setHours(hours, minutes, seconds);
+    setLeng(format(d, 'HH:mm:ss'));
+  }, [duration, newProgram]);
 
   useEffect(() => {
     setNewProgram(program ? structuredClone(program) : emptyProgram());
@@ -260,7 +260,7 @@ const Menu: React.FC<MenuProps> = ({
                         <StyledInput variant="outlined">
                           <OutlinedInput
                             className="epg-time"
-                            value={tLength}
+                            value={leng}
                             endAdornment={
                               <InputAdornment position="end">
                                 <IconButton
@@ -268,7 +268,7 @@ const Menu: React.FC<MenuProps> = ({
                                   aria-label="toggle password visibility"
                                   edge="end"
                                 >
-                                  <AiOutlineClockCircle />
+                                  <CgTimer />
                                 </IconButton>
                               </InputAdornment>
                             }

@@ -6,7 +6,7 @@ import { StyledInput } from './styles';
 export interface ProgramTime {
   time: Date;
   onTimeChange?: (value: Date) => void;
-  setTime?: (value: Date) => void;
+  setTime: (value: Date) => void;
 }
 
 const TimePickers: React.FC<ProgramTime> = ({
@@ -14,11 +14,11 @@ const TimePickers: React.FC<ProgramTime> = ({
   onTimeChange,
   setTime,
 }) => {
-  const [tValue, settValue] = useState<Date>(time);
+  const [value, setValue] = useState<Date>(time);
 
   useEffect(() => {
     if (time) {
-      settValue(time);
+      setValue(time);
       setTime?.(time);
     }
   }, [setTime, time]);
@@ -33,10 +33,10 @@ const TimePickers: React.FC<ProgramTime> = ({
         views={['hours', 'minutes', 'seconds']}
         inputFormat="HH:mm:ss"
         mask="__:__:__"
-        value={tValue}
+        value={value}
         onChange={newValue => {
           if (newValue) {
-            settValue?.(newValue);
+            setValue?.(newValue);
             onTimeChange?.(newValue);
           }
         }}
@@ -51,7 +51,6 @@ const TimePickers: React.FC<ProgramTime> = ({
 
 TimePickers.defaultProps = {
   onTimeChange: undefined,
-  setTime: undefined,
 };
 
 export default TimePickers;

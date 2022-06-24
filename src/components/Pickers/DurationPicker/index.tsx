@@ -5,9 +5,9 @@ import { addHours, format } from 'date-fns';
 import { StyledInput } from './styles';
 
 export interface ProgramTime {
-  duration?: number;
+  duration: number;
   onDurationChange?: (value: Date) => void;
-  setDuration?: (value: number) => void;
+  setDuration: (value: number) => void;
 }
 
 const DurationPickers: React.FC<ProgramTime> = ({
@@ -15,11 +15,11 @@ const DurationPickers: React.FC<ProgramTime> = ({
   onDurationChange,
   setDuration,
 }) => {
-  const [dValue, setdValue] = useState<Date>(
+  const [value, setValue] = useState<Date>(
     duration ? new Date(duration * 1000) : new Date(),
   );
 
-  const sum = addHours(dValue, 3);
+  const sum = addHours(value, 3);
   const leng = format(sum, 'HH:mm:ss');
   const d = new Date();
   d.setHours(
@@ -30,7 +30,7 @@ const DurationPickers: React.FC<ProgramTime> = ({
 
   useEffect(() => {
     if (duration) {
-      setdValue(new Date(duration * 1000));
+      setValue(new Date(duration * 1000));
       setDuration?.(duration);
     }
   }, [setDuration, duration]);
@@ -49,7 +49,7 @@ const DurationPickers: React.FC<ProgramTime> = ({
         onChange={newValue => {
           if (newValue) {
             if (typeof newValue === 'number') {
-              setdValue?.(new Date(newValue * 1000));
+              setValue?.(new Date(newValue * 1000));
               const num = newValue;
               let hours = 0;
               let minutes = Math.floor(num / 60);
@@ -74,9 +74,7 @@ const DurationPickers: React.FC<ProgramTime> = ({
 };
 
 DurationPickers.defaultProps = {
-  duration: 0,
   onDurationChange: undefined,
-  setDuration: undefined,
 };
 
 export default DurationPickers;
