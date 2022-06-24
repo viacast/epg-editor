@@ -11,7 +11,7 @@ export enum ProgramRating {
 export interface Program {
   id: string;
   startDate: Date;
-  startHour: Date;
+  startTime: Date;
   duration: number;
   title: string;
   description: string;
@@ -22,7 +22,7 @@ export function emptyProgram(): Program {
   return {
     id: '',
     startDate: new Date(),
-    startHour: new Date(),
+    startTime: new Date(),
     duration: 0,
     title: '',
     description: '',
