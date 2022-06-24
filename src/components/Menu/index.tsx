@@ -87,7 +87,7 @@ const Menu: React.FC<MenuProps> = ({
   const stHour = format(time, 'HH:mm:ss');
 
   useEffect(() => {
-    setTime(newProgram?.startHour);
+    setTime(newProgram?.startTime);
     setDuration(newProgram?.duration);
     const num = duration;
     let hours = 0;
@@ -233,9 +233,12 @@ const Menu: React.FC<MenuProps> = ({
                           }}
                         >
                           <TimePickers
-                            time={newProgram?.startHour ?? new Date()}
-                            onTimeChange={startHour =>
-                              setNewProgram(p => ({ ...p, startHour }))
+                            time={newProgram?.startTime ?? new Date()}
+                            onTimeChange={startTime =>
+                              setNewProgram(p => ({
+                                ...p,
+                                startTime,
+                              }))
                             }
                             setTime={setTime}
                           />
