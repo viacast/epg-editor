@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-shadow
 export enum ProgramRating {
+  SC = 'SC',
   RL = 'RL',
   R10 = 'R10',
   R12 = 'R12',
