@@ -58,12 +58,3 @@ export function csvLineToArray(text: string) {
   if (/;\s*$/.test(text)) a.push('');
   return a;
 }
-
-export function isValidCsv(csv: string): boolean {
-  const lines = csv.split('\n');
-  const firstLine = csvLineToArray(lines[0]);
-  if (!firstLine) {
-    return false;
-  }
-  return lines.every(line => csvLineToArray(line)?.length === firstLine.length);
-}
