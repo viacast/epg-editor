@@ -1,48 +1,88 @@
 import short from 'short-uuid';
-import {
-  csvLineToArray,
-  hmsToSeconds,
-  InvalidFile,
-  isValidCsv,
-  parseDate,
-} from 'utils';
+import { csvLineToArray, InvalidFile, readFileAsync } from 'utils';
+import { XMLParser } from 'fast-xml-parser';
 import { Program, ProgramRating } from './program';
-import mockupPrograms from './mockupPrograms';
 
 export default class EPGParser {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static parseXml(xml: string): Program[] {
-    throw new Error('not implemented');
+    const parser = new XMLParser({
+      allowBooleanAttributes: true,
+      ignoreAttributes: false,
+      attributeNamePrefix: '',
+    });
+    const aux: Program[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let document: Record<string, any>;
+    try {
+      document = parser.parse(xml);
+    } catch (error) {
+      throw new InvalidFile('Invalid XML');
+    }
+    const content = document.tv;
+    const programs = content.programme;
+
+    programs.forEach(program => {
+      const title: string = program.title['#text'];
+      const description: string = program.desc['#text'];
+      const duration: number = Number(program.length['#text']) * 60;
+
+      const rate = {
+        L: ProgramRating.RL,
+        '10': ProgramRating.R10,
+        '12': ProgramRating.R12,
+        '14': ProgramRating.R14,
+        '16': ProgramRating.R16,
+        '18': ProgramRating.R18,
+      };
+
+      const rating: ProgramRating = rate[program.rating.value];
+
+      const date = program.start;
+
+      const year = Number(date.substring(0, 4));
+      const month = Number(date.substring(4, 6));
+      const day = Number(date.substring(6, 8));
+      const hour = Number(date.substring(8, 10));
+      const minute = Number(date.substring(10, 12));
+
+      const formatDate = new Date(year, month - 1, day);
+      const formatTime = new Date(year, month - 1, day, hour, minute, 0);
+
+      aux.push({
+        id: short.generate(),
+        title,
+        description,
+        startDate: formatDate,
+        startTime: formatTime,
+        duration,
+        rating,
+      });
+
+      return aux;
+    });
+
+    return aux;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static parseCsv(csv: string): Program[] {
     const lines = csv.split('\n');
-
-    if (!isValidCsv(csv)) {
-      throw new InvalidFile('Invalid CSV');
-    }
 
     const progs = lines.slice(1);
     const aux: Program[] = [];
 
-    // eslint-disable-next-line consistent-return
-    progs.forEach(prog => {
-      if (!csvLineToArray(prog)) {
-        aux.push({
-          id: short.generate(),
-          title: '',
-          description: '',
-          startDate: new Date(),
-          startTime: new Date(),
-          duration: 2400,
-          rating: ProgramRating.RL,
-        });
-        return aux;
-      }
+    const firstLine = csvLineToArray(lines[0]);
+    if (!firstLine) {
+      throw new InvalidFile('Invalid CSV');
+    }
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const p: string[] = csvLineToArray(prog)!;
+    progs.forEach(prog => {
+      const p = csvLineToArray(prog);
+      if (!p) {
+        throw new InvalidFile('Invalid CSV');
+      }
+      if (p.length !== firstLine.length) {
+        throw new InvalidFile('Invalid CSV');
+      }
 
       const date = p[4];
 
@@ -109,26 +149,27 @@ export default class EPGParser {
     return aux;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static async parseFile(file: File): Promise<Program[]> {
-    // const content = await readFileAsync(file);
-    // if (content is xml) {
-    //   return this.parseXml(content);
-    // }
-    // if (content is csv) {
-    //   return this.parseCsv(content);
-    // }
-    const programs = mockupPrograms;
-    return programs.map(
-      ({ title, description, startDate, startTime, duration, rating }) => ({
-        id: short.generate(),
-        title,
-        description,
-        startDate: parseDate(startDate, 'dd/MM/yyyy'),
-        startTime: parseDate(startTime, 'HH:mm:ss'),
-        duration: hmsToSeconds(duration),
-        rating,
-      }),
-    );
+    const content = await readFileAsync(file);
+    try {
+      return this.parseCsv(content);
+    } catch (error) {
+      if (error instanceof InvalidFile) {
+        return this.parseXml(content);
+      }
+      throw error;
+    }
+    // const programs = mockupPrograms;
+    // return programs.map(
+    //   ({ title, description, startDate, startTime, duration, rating }) => ({
+    //     id: short.generate(),
+    //     title,
+    //     description,
+    //     startDate: parseDate(startDate, 'dd/MM/yyyy'),
+    //     startTime: parseDate(startTime, 'HH:mm:ss'),
+    //     duration: hmsToSeconds(duration),
+    //     rating,
+    //   }),
+    // );
   }
 }

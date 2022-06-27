@@ -89,7 +89,7 @@ const invalidXml = `
         </rating>
         <category lang="pt">0x3</category>
     </programme>
-    </tv>
+    </tv
 `;
 
 const csvPrograms: Partial<Program>[] = [
