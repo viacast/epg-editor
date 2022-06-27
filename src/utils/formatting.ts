@@ -39,3 +39,31 @@ export function secondsToHms(seconds: number): string {
   const s = Math.floor((seconds % 3600) % 60);
   return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':');
 }
+
+export function csvLineToArray(text: string) {
+  const reValid =
+    /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*(?:;\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*)*$/;
+  const reValue =
+    /(?!\s*$)\s*(?:'([^'\\]*(?:\\[\S\s][^'\\]*)*)'|"([^"\\]*(?:\\[\S\s][^"\\]*)*)"|([^;'"\s\\]*(?:\s+[^;'"\s\\]+)*))\s*(?:;|$)/g;
+  if (!reValid.test(text)) return null;
+  const a: string[] = [];
+  // eslint-disable-next-line react/destructuring-assignment
+  text.replace(reValue, (m0, m1, m2, m3) => {
+    if (m1 !== undefined) a.push(m1.replace(/\\'/g, "'"));
+    else if (m2 !== undefined) a.push(m2.replace(/\\"/g, '"'));
+    else if (m3 !== undefined) a.push(m3);
+    return '';
+  });
+  // Handle special case of empty last value.
+  if (/;\s*$/.test(text)) a.push('');
+  return a;
+}
+
+export function isValidCsv(csv: string): boolean {
+  const lines = csv.split('\n');
+  const firstLine = csvLineToArray(lines[0]);
+  if (!firstLine) {
+    return false;
+  }
+  return lines.every(line => csvLineToArray(line)?.length === firstLine.length);
+}
