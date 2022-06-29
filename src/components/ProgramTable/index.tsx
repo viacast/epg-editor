@@ -2,14 +2,14 @@ import React from 'react';
 import { TableBody, TableHead } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import IconRL from 'assets/icons/ratings/RL.png';
-import IconR10 from 'assets/icons/ratings/R10.png';
-import IconR12 from 'assets/icons/ratings/R12.png';
-import IconR14 from 'assets/icons/ratings/R14.png';
-import IconR16 from 'assets/icons/ratings/R16.png';
-import IconR18 from 'assets/icons/ratings/R18.png';
-import { Program } from 'services/epg';
+import IconRL from 'assets/icons/ratings/RL.svg';
+import IconR10 from 'assets/icons/ratings/R10.svg';
+import IconR12 from 'assets/icons/ratings/R12.svg';
+import IconR14 from 'assets/icons/ratings/R14.svg';
+import IconR16 from 'assets/icons/ratings/R16.svg';
+import IconR18 from 'assets/icons/ratings/R18.svg';
 
+import { Program } from 'services/epg';
 import { formatDate, formatTime, secondsToHms } from 'utils';
 import {
   StyledPaper,
@@ -17,6 +17,7 @@ import {
   StyledTable,
   StyledTableCell,
   StyledTableRow,
+  StyledText,
   IconRating,
   Message,
 } from './styles';
@@ -24,9 +25,15 @@ import programTableColumns from './programTableColumns';
 
 export interface ProgramTableProps {
   programs: Program[];
+  selectedProgramId: string;
+  setSelectedProgramId: (programId: string) => void;
 }
 
-const ProgramTable: React.FC<ProgramTableProps> = ({ programs }) => {
+const ProgramTable: React.FC<ProgramTableProps> = ({
+  programs,
+  selectedProgramId,
+  setSelectedProgramId,
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -45,10 +52,11 @@ const ProgramTable: React.FC<ProgramTableProps> = ({ programs }) => {
           <TableBody>
             {programs.map((program, i) => (
               <StyledTableRow
-                hover
                 role="checkbox"
                 tabIndex={-1}
                 key={program.id}
+                selected={selectedProgramId === program.id}
+                onClick={() => setSelectedProgramId(program.id)}
               >
                 {programTableColumns.map(({ id, align, minWidth, format }) => {
                   let value: Program[keyof Program] | JSX.Element = program[id];
@@ -86,12 +94,14 @@ const ProgramTable: React.FC<ProgramTableProps> = ({ programs }) => {
                       align={align}
                       style={{ minWidth }}
                     >
-                      {value}
-                      {id === 'rating' && (
-                        <Message>
-                          {t(`parental-guidance:rating_${program[id]}`)}
-                        </Message>
-                      )}
+                      <StyledText>
+                        {value}
+                        {id === 'rating' && (
+                          <Message>
+                            {t(`parental-guidance:rating_${program[id]}`)}
+                          </Message>
+                        )}
+                      </StyledText>
                     </StyledTableCell>
                   );
                 })}

@@ -5,30 +5,42 @@ import {
   StyledIconButton,
   StyledPaper,
   StyledInput,
+  PaperStylesProps,
 } from './styles';
 
-export interface InputProps {
-  disabled: boolean;
-  value: string;
-  placeholder: string;
+export interface InputProps extends PaperStylesProps {
+  disabled?: boolean;
+  value?: string;
   setValue?: (value: string) => void;
+  placeholder?: string;
   withClearButton?: boolean;
+  multiline?: boolean;
+  maxRows?: number;
 }
 
 const Input: React.FC<InputProps> = ({
   disabled,
   value,
-  placeholder,
   setValue,
+  placeholder,
+  width,
+  height,
   withClearButton,
+  multiline,
+  maxRows,
 }) => {
   return (
-    <StyledPaper className="epg-input">
+    <StyledPaper width={width} height={height} className="epg-input">
       <StyledInput
+        multiline={multiline}
+        maxRows={maxRows}
         disabled={disabled}
         fullWidth
-        value={value}
+        onChange={e => {
+          setValue?.(e.target.value);
+        }}
         placeholder={placeholder}
+        value={value}
       />
       {withClearButton && (
         <>
@@ -43,8 +55,13 @@ const Input: React.FC<InputProps> = ({
 };
 
 Input.defaultProps = {
-  setValue: undefined,
+  disabled: false,
+  placeholder: '',
   withClearButton: false,
+  value: '',
+  multiline: false,
+  maxRows: 1,
+  setValue: undefined,
 };
 
 export default Input;

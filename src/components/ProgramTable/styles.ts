@@ -9,6 +9,8 @@ import TableRow, { tableRowClasses } from '@mui/material/TableRow';
 export const StyledPaper = styledmui(Paper)`
   display: flex;
   flex: 1;
+  width: 100%;
+  height: 100%;
   white-space: nowrap;
   border-radius: 4px;
   background-color: var(--color-neutral-5);
@@ -55,11 +57,20 @@ export const StyledTableCell = styledmui(TableCell)`
   }
 `;
 
-export const StyledTableRow = styledmui(TableRow)`
+export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
   &.${tableRowClasses.root} {
     background-color: var(--color-neutral-6);
     border: 4px solid white;
+    ${({ selected }) =>
+      selected
+        ? `background-color: var(--color-primary-2); :hover { background-color: var(--color-primary-2); }`
+        : `:hover { background-color: var(--color-primary-5); }`};
   }
+`;
+
+export const StyledText = styled.span`
+  display: table-cell;
+  vertical-align: middle;
 `;
 
 export const IconRating = styled.img`

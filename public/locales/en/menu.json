@@ -1,0 +1,11 @@
+{
+    "title": "Title",
+    "description": "Description",
+    "parentalRating": "Parental Rating",
+    "date": "Date",
+    "time": "Hour",
+    "length": "Duration",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Editing"
+}

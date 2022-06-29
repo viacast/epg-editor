@@ -11,7 +11,7 @@ i18next
     supportedLngs: ['en', 'pt', 'es'],
     fallbackLng: 'pt',
     nonExplicitSupportedLngs: true,
-    ns: ['general', 'header', 'program-table', 'parental-guidance'],
+    ns: ['general', 'header', 'program-table', 'parental-guidance', 'menu'],
     defaultNS: 'general',
     interpolation: {
       escapeValue: false,
