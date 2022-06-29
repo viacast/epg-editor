@@ -6,7 +6,6 @@ import { Program, ProgramRating } from './program';
 export default class EPGParser {
   static parseXml(xml: string): Program[] {
     const parser = new XMLParser({
-      allowBooleanAttributes: true,
       ignoreAttributes: false,
       attributeNamePrefix: '',
     });
@@ -77,10 +76,7 @@ export default class EPGParser {
 
     progs.forEach(prog => {
       const p = csvLineToArray(prog);
-      if (!p) {
-        throw new InvalidFile('Invalid CSV');
-      }
-      if (p.length !== firstLine.length) {
+      if (p?.length !== firstLine.length) {
         throw new InvalidFile('Invalid CSV');
       }
 
