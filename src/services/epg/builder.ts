@@ -1,13 +1,13 @@
 import { Program } from './program';
 
-export default class EPGFormatter {
+export default class EPGBuilder {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  static formatXml(programs: Program[]): string {
+  static buildXml(programs: Program[]): string {
     throw new Error('not implemented');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  static formatCsv(programs: Program[]): string {
+  static buildCsv(programs: Program[]): string {
     throw new Error('not implemented');
   }
 }
