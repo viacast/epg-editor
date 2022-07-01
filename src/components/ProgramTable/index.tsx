@@ -65,7 +65,6 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                     value = formatDate(value as Date);
                   }
                   if (format === 'time') {
-                    console.log(id, program, value);
                     value = formatTime(value as Date);
                   }
                   if (format === 'duration') {
