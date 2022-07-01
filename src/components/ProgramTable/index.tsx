@@ -11,7 +11,7 @@ import IconR16 from 'assets/icons/ratings/R16.svg';
 import IconR18 from 'assets/icons/ratings/R18.svg';
 
 import { Program } from 'services/epg';
-import { formatDate, formatTime, secondsToHms } from 'utils';
+import { EntityMap, formatDate, formatTime, secondsToHms } from 'utils';
 import {
   StyledPaper,
   StyledTableContainer,
@@ -25,7 +25,7 @@ import {
 import programTableColumns from './programTableColumns';
 
 export interface ProgramTableProps {
-  programs: Program[];
+  programs: EntityMap<Program>;
   selectedProgramId: string;
   setSelectedProgramId: (programId: string) => void;
 }
@@ -51,64 +51,70 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {programs.map((program, i) => (
-              <StyledTableRow
-                role="checkbox"
-                tabIndex={-1}
-                key={program.id}
-                selected={selectedProgramId === program.id}
-                onClick={() => setSelectedProgramId(program.id)}
-              >
-                {programTableColumns.map(({ id, align, minWidth, format }) => {
-                  let value: Program[keyof Program] | JSX.Element = program[id];
-                  if (format === 'date') {
-                    value = formatDate(value as Date);
-                  }
-                  if (format === 'time') {
-                    value = formatTime(value as Date);
-                  }
-                  if (format === 'duration') {
-                    value = secondsToHms(value as number);
-                  }
-                  if (id === 'position') {
-                    value = `${i + 1}`;
-                  }
-                  if (id === 'rating') {
-                    const ratings = {
-                      SC: IconSC,
-                      RL: IconRL,
-                      R10: IconR10,
-                      R12: IconR12,
-                      R14: IconR14,
-                      R16: IconR16,
-                      R18: IconR18,
-                    };
-                    value = (
-                      <IconRating
-                        src={ratings[program[id]]}
-                        alt={program[id]}
-                      />
-                    );
-                  }
-                  return (
-                    <StyledTableCell
-                      key={id}
-                      align={align}
-                      style={{ minWidth }}
-                    >
-                      <StyledText>
-                        {value}
-                        {id === 'rating' && (
-                          <Message>
-                            {t(`parental-guidance:rating_${program[id]}`)}
-                          </Message>
-                        )}
-                      </StyledText>
-                    </StyledTableCell>
-                  );
-                })}
-              </StyledTableRow>
-            ))}
+            {programs.ids.map((programId, i) => {
+              const program = programs.entities[programId];
+              return (
+                <StyledTableRow
+                  role="checkbox"
+                  tabIndex={-1}
+                  key={program.id}
+                  selected={selectedProgramId === program.id}
+                  onClick={() => setSelectedProgramId(program.id)}
+                >
+                  {programTableColumns.map(
+                    ({ id, align, minWidth, format }) => {
+                      let value: Program[keyof Program] | JSX.Element =
+                        program[id];
+                      if (format === 'date') {
+                        value = formatDate(value as Date);
+                      }
+                      if (format === 'time') {
+                        value = formatTime(value as Date);
+                      }
+                      if (format === 'duration') {
+                        value = secondsToHms(value as number);
+                      }
+                      if (id === 'position') {
+                        value = `${i + 1}`;
+                      }
+                      if (id === 'rating') {
+                        const ratings = {
+                          SC: IconSC,
+                          RL: IconRL,
+                          R10: IconR10,
+                          R12: IconR12,
+                          R14: IconR14,
+                          R16: IconR16,
+                          R18: IconR18,
+                        };
+                        value = (
+                          <IconRating
+                            src={ratings[program[id]]}
+                            alt={program[id]}
+                          />
+                        );
+                      }
+                      return (
+                        <StyledTableCell
+                          key={id}
+                          align={align}
+                          style={{ minWidth }}
+                        >
+                          <StyledText>
+                            {value}
+                            {id === 'rating' && (
+                              <Message>
+                                {t(`parental-guidance:rating_${program[id]}`)}
+                              </Message>
+                            )}
+                          </StyledText>
+                        </StyledTableCell>
+                      );
+                    },
+                  )}
+                </StyledTableRow>
+              );
+            })}
           </TableBody>
         </StyledTable>
       </StyledTableContainer>
