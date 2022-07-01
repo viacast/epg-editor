@@ -32,3 +32,18 @@ export const Select = styled.select`
   background: var(--color-neutral-6);
   color: var(--color-neutral-3);
 `;
+
+export const MenuOptions = styled.div``;
+
+export const Options = styled.div<{ display: string }>`
+  display: ${({ display }) => display || 'none'};
+  position: absolute;
+  z-index: 3;
+  padding-top: 10px;
+  .epg-button {
+    background: var(--color-neutral-1);
+  }
+  .epg-button:first-child {
+    margin-bottom: 5px;
+  }
+`;

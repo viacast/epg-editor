@@ -2,10 +2,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RiMenuAddFill } from 'react-icons/ri';
 import { FaDownload, FaFileExport } from 'react-icons/fa';
-
+import FileSaver from 'file-saver';
 import { EPGParser, Program } from 'services/epg';
 import { Button, FileInput, FileInputRefProps } from 'components';
-import { HeaderContainer, Select, Text } from './styles';
+import EPGBuilder from 'services/epg/builder';
+import { HeaderContainer, MenuOptions, Options, Select, Text } from './styles';
 
 export interface HeaderProps {
   programs: Program[];
@@ -22,6 +23,7 @@ const Header: React.FC<HeaderProps> = ({
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
   const [programCount, setProgramCount] = useState(0);
   const [epgFilename, setEpgFilename] = useState('');
+  const [open, setOpen] = React.useState(false);
 
   const fileInputRef = useRef<FileInputRefProps>({});
 
@@ -66,7 +68,35 @@ const Header: React.FC<HeaderProps> = ({
         icon={<FaDownload />}
         onClick={() => fileInputRef?.current.click?.()}
       />
-      <Button text={t('header:buttonExportProgram')} icon={<FaFileExport />} />
+      <MenuOptions>
+        <Button
+          text={t('header:buttonExportProgram')}
+          icon={<FaFileExport />}
+          onClick={() => setOpen(!open)}
+        />
+        <Options display={!open ? 'none' : 'block'}>
+          <Button
+            text="XML"
+            icon={<FaFileExport />}
+            onClick={() => {
+              const blob = new Blob([EPGBuilder.buildXml(programs)], {
+                type: 'application/xml',
+              });
+              FileSaver.saveAs(blob, 'EPG.xml');
+            }}
+          />
+          <Button
+            text="CSV"
+            icon={<FaFileExport />}
+            onClick={() => {
+              const blob = new Blob([EPGBuilder.buildCsv(programs)], {
+                type: 'text/csv',
+              });
+              FileSaver.saveAs(blob, 'EPG.csv');
+            }}
+          />
+        </Options>
+      </MenuOptions>
       <Button
         text={t('header:buttonAddProgram')}
         icon={<RiMenuAddFill />}
