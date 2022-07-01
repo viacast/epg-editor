@@ -20,6 +20,7 @@ import { Program, ProgramRating } from 'services/epg';
 import structuredClone from '@ungap/structured-clone';
 import { emptyProgram } from 'services/epg/program';
 
+import SC from 'assets/icons/ratings/SC.svg';
 import CL from 'assets/icons/ratings/RL.svg';
 import C10 from 'assets/icons/ratings/R10.svg';
 import C12 from 'assets/icons/ratings/R12.svg';
@@ -47,6 +48,7 @@ import {
 } from './styles';
 
 const ratings = {
+  SC,
   RL: CL,
   R10: C10,
   R12: C12,

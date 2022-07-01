@@ -12,7 +12,7 @@ export default [
   { id: 'position', minWidth: 90 },
   { id: 'startDate', minWidth: 140, format: 'date' },
   {
-    id: 'startHour',
+    id: 'startTime',
     minWidth: 140,
     align: 'left',
     format: 'time',
