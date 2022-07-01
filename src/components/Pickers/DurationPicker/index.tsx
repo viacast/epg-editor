@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider, StaticTimePicker } from '@mui/x-date-pickers';
-import { addHours, format } from 'date-fns';
 import { StyledInput } from './styles';
 
 export interface ProgramTime {
@@ -13,7 +12,6 @@ export interface ProgramTime {
 const DurationPickers: React.FC<ProgramTime> = ({
   duration,
   onDurationChange,
-  setDuration,
 }) => {
   const [value, setValue] = useState<Date>(new Date());
 
