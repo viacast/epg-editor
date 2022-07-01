@@ -6,6 +6,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { format } from 'date-fns';
+import { Box, ClickAwayListener } from '@mui/material';
+import structuredClone from '@ungap/structured-clone';
+
 import {
   Text,
   Button,
@@ -15,11 +18,9 @@ import {
   TimePickers,
   DurationPickers,
 } from 'components';
-
 import { Program, ProgramRating } from 'services/epg';
-import structuredClone from '@ungap/structured-clone';
 import { emptyProgram } from 'services/epg/program';
-
+import { EntityMap } from 'utils';
 import SC from 'assets/icons/ratings/SC.svg';
 import CL from 'assets/icons/ratings/RL.svg';
 import C10 from 'assets/icons/ratings/R10.svg';
@@ -28,7 +29,6 @@ import C14 from 'assets/icons/ratings/R14.svg';
 import C16 from 'assets/icons/ratings/R16.svg';
 import C18 from 'assets/icons/ratings/R18.svg';
 
-import { Box, ClickAwayListener } from '@mui/material';
 import {
   BottomContainer,
   ButtonContainer,
@@ -60,7 +60,7 @@ const ratings = {
 export interface MenuProps extends MenuStyleProps {
   minWidth;
   overflowStatus;
-  programs: Program[];
+  programs: EntityMap<Program>;
   selectedProgramId: string;
   setIsClosing: (programId: boolean) => void;
   onSaveProgram: (newprogram: Program) => void;
@@ -76,7 +76,7 @@ const Menu: React.FC<MenuProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const program = programs.find(p => p.id === selectedProgramId);
+  const program = programs.entities[selectedProgramId];
   const [newProgram, setNewProgram] = useState<Program>(
     program ? structuredClone(program) : emptyProgram(),
   );

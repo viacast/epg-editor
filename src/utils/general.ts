@@ -1,3 +1,5 @@
+import { EntityMap } from './typings';
+
 export function hasValue(data: unknown): boolean {
   return data !== undefined && data !== null && !Number.isNaN(data);
 }
@@ -22,4 +24,28 @@ export async function readFileAsync(file: File): Promise<string> {
   reader.onerror = e => reject(e.target?.error?.message);
   reader.readAsText(file);
   return promise;
+}
+
+export function arrayToEntityMap<DataType>(
+  array: DataType[],
+  key = 'id',
+): EntityMap<DataType> {
+  const entities: Record<string, DataType> = {};
+  const ids: string[] = array.map(entity => {
+    if (!entity[key]) {
+      throw new Error(`key '${key}' does not exist in entity`);
+    }
+    entities[entity[key]] = entity;
+    return entity[key];
+  });
+  return {
+    ids,
+    entities,
+  };
+}
+
+export function entityMapToArray<DataType>(
+  entityMap: EntityMap<DataType>,
+): DataType[] {
+  return entityMap.ids.map(id => entityMap.entities[id]);
 }

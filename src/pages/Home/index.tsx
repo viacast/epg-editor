@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+
 import { ProgramTable } from 'components';
-import { EPGParser, Program } from 'services/epg';
+import { Program } from 'services/epg';
 import Menu from 'components/Menu';
+import { EntityMap } from 'utils';
+
 import {
   Container,
   HeaderContainer,
@@ -12,17 +15,12 @@ import {
 import Header from './Header';
 
 const Home: React.FC = () => {
-  const [programs, setPrograms] = useState([] as Program[]);
+  const [programs, setPrograms] = useState({
+    ids: [],
+    entities: {},
+  } as EntityMap<Program>);
   const [selectedProgramId, setSelectedProgramId] = useState('');
   const [isClosing, setIsClosing] = useState(false);
-
-  // TODO: Remove
-  useEffect(() => {
-    const loadPrograms = async () => {
-      setPrograms(await EPGParser.parseFile(new File([], 'test 123.xml')));
-    };
-    loadPrograms();
-  }, []);
 
   return (
     <Container>

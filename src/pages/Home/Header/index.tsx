@@ -8,10 +8,12 @@ import {
   FaFileExport,
 } from 'react-icons/fa';
 import FileSaver from 'file-saver';
+
 import { EPGParser, Program } from 'services/epg';
 import { Button, FileInput, FileInputRefProps } from 'components';
 import EPGBuilder from 'services/epg/builder';
 import useClickOutside from 'hooks/useClickOutside';
+import { EntityMap, arrayToEntityMap, entityMapToArray } from 'utils';
 import {
   HeaderContainer,
   MenuOptions,
@@ -21,8 +23,8 @@ import {
 } from './styles';
 
 export interface HeaderProps {
-  programs: Program[];
-  setPrograms: (programs: Program[]) => void;
+  programs: EntityMap<Program>;
+  setPrograms: (programs: EntityMap<Program>) => void;
   setSelectedProgramId: (programId: string) => void;
 }
 
@@ -41,8 +43,8 @@ const Header: React.FC<HeaderProps> = ({
   const exportOptionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setProgramCount(programs.length);
-  }, [programs.length]);
+    setProgramCount(programs.ids.length);
+  }, [programs.ids.length]);
 
   const handleChange = useCallback(
     evt => {
@@ -60,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({
       }
       setEpgFilename(files[0].name);
       const newPrograms = await EPGParser.parseFile(files[0]);
-      setPrograms(newPrograms);
+      setPrograms(arrayToEntityMap(newPrograms));
     },
     [setPrograms],
   );
@@ -97,9 +99,12 @@ const Header: React.FC<HeaderProps> = ({
             text="XML"
             icon={<FaFileCode />}
             onClick={() => {
-              const blob = new Blob([EPGBuilder.buildXml(programs)], {
-                type: 'application/xml',
-              });
+              const blob = new Blob(
+                [EPGBuilder.buildXml(entityMapToArray(programs))],
+                {
+                  type: 'application/xml',
+                },
+              );
               FileSaver.saveAs(blob, 'EPG.xml');
             }}
           />
@@ -107,22 +112,18 @@ const Header: React.FC<HeaderProps> = ({
             text="CSV"
             icon={<FaFileCsv />}
             onClick={() => {
-              const blob = new Blob([EPGBuilder.buildCsv(programs)], {
-                type: 'text/csv',
-              });
+              const blob = new Blob(
+                [EPGBuilder.buildCsv(entityMapToArray(programs))],
+                {
+                  type: 'text/csv',
+                },
+              );
               FileSaver.saveAs(blob, 'EPG.csv');
             }}
           />
         </ExportOptions>
       </MenuOptions>
-      <Button
-        text={t('header:buttonAddProgram')}
-        icon={<RiMenuAddFill />}
-        onClick={() => {
-          setProgramCount(programCount + 1);
-          setSelectedProgramId(programs[programCount].id);
-        }}
-      />
+      <Button text={t('header:buttonAddProgram')} icon={<RiMenuAddFill />} />
       <Text>
         {t('header:labelProgram', {
           count: programCount,
