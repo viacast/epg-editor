@@ -35,7 +35,7 @@ export const Select = styled.select`
 
 export const MenuOptions = styled.div``;
 
-export const Options = styled.div<{ display: string }>`
+export const ExportOptions = styled.div<{ display: string }>`
   display: ${({ display }) => display || 'none'};
   position: absolute;
   z-index: 3;
