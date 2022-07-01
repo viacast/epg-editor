@@ -8,6 +8,7 @@ export default class EPGParser {
     const parser = new XMLParser({
       ignoreAttributes: false,
       attributeNamePrefix: '',
+      isArray: tag => tag === 'programme',
     });
     const aux: Program[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
