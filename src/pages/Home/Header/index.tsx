@@ -1,12 +1,24 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RiMenuAddFill } from 'react-icons/ri';
-import { FaDownload, FaFileExport } from 'react-icons/fa';
+import {
+  FaDownload,
+  FaFileCode,
+  FaFileCsv,
+  FaFileExport,
+} from 'react-icons/fa';
 import FileSaver from 'file-saver';
 import { EPGParser, Program } from 'services/epg';
 import { Button, FileInput, FileInputRefProps } from 'components';
 import EPGBuilder from 'services/epg/builder';
-import { HeaderContainer, MenuOptions, Options, Select, Text } from './styles';
+import useClickOutside from 'hooks/useClickOutside';
+import {
+  HeaderContainer,
+  MenuOptions,
+  ExportOptions,
+  Select,
+  Text,
+} from './styles';
 
 export interface HeaderProps {
   programs: Program[];
@@ -23,9 +35,10 @@ const Header: React.FC<HeaderProps> = ({
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
   const [programCount, setProgramCount] = useState(0);
   const [epgFilename, setEpgFilename] = useState('');
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const fileInputRef = useRef<FileInputRefProps>({});
+  const exportOptionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setProgramCount(programs.length);
@@ -52,6 +65,8 @@ const Header: React.FC<HeaderProps> = ({
     [setPrograms],
   );
 
+  useClickOutside(exportOptionsRef, () => setOpen(false));
+
   return (
     <HeaderContainer className="no-user-select">
       <FileInput
@@ -74,10 +89,13 @@ const Header: React.FC<HeaderProps> = ({
           icon={<FaFileExport />}
           onClick={() => setOpen(!open)}
         />
-        <Options display={!open ? 'none' : 'block'}>
+        <ExportOptions
+          ref={exportOptionsRef}
+          display={!open ? 'none' : 'block'}
+        >
           <Button
             text="XML"
-            icon={<FaFileExport />}
+            icon={<FaFileCode />}
             onClick={() => {
               const blob = new Blob([EPGBuilder.buildXml(programs)], {
                 type: 'application/xml',
@@ -87,7 +105,7 @@ const Header: React.FC<HeaderProps> = ({
           />
           <Button
             text="CSV"
-            icon={<FaFileExport />}
+            icon={<FaFileCsv />}
             onClick={() => {
               const blob = new Blob([EPGBuilder.buildCsv(programs)], {
                 type: 'text/csv',
@@ -95,7 +113,7 @@ const Header: React.FC<HeaderProps> = ({
               FileSaver.saveAs(blob, 'EPG.csv');
             }}
           />
-        </Options>
+        </ExportOptions>
       </MenuOptions>
       <Button
         text={t('header:buttonAddProgram')}
