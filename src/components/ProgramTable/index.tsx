@@ -2,6 +2,7 @@ import React from 'react';
 import { TableBody, TableHead } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
+import IconSC from 'assets/icons/ratings/SC.svg';
 import IconRL from 'assets/icons/ratings/RL.svg';
 import IconR10 from 'assets/icons/ratings/R10.svg';
 import IconR12 from 'assets/icons/ratings/R12.svg';
@@ -64,6 +65,7 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                     value = formatDate(value as Date);
                   }
                   if (format === 'time') {
+                    console.log(id, program, value);
                     value = formatTime(value as Date);
                   }
                   if (format === 'duration') {
@@ -74,6 +76,7 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                   }
                   if (id === 'rating') {
                     const ratings = {
+                      SC: IconSC,
                       RL: IconRL,
                       R10: IconR10,
                       R12: IconR12,
