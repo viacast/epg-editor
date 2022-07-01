@@ -65,8 +65,14 @@ const Home: React.FC = () => {
             programs={programs}
             selectedProgramId={selectedProgramId}
             setIsClosing={setIsClosing}
-            onSaveProgram={newprogram => {
-              console.log(newprogram);
+            onSaveProgram={program => {
+              setPrograms(p => ({
+                ...p,
+                entities: {
+                  ...p.entities,
+                  [program.id]: program,
+                },
+              }));
             }}
           />
         </MenuContainer>
