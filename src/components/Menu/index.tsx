@@ -187,7 +187,13 @@ const Menu: React.FC<MenuProps> = ({
                   <DatePickers
                     date={newProgram?.startDate ?? new Date()}
                     onDateChange={startDate =>
-                      setNewProgram(p => ({ ...p, startDate }))
+                      setNewProgram(p => {
+                        const newStartTime = p.startTime;
+                        newStartTime.setDate(startDate.getDate());
+                        newStartTime.setMonth(startDate.getMonth());
+                        newStartTime.setFullYear(startDate.getFullYear());
+                        return { ...p, startDate, startTime: newStartTime };
+                      })
                     }
                   />
                 </FormColumn>
@@ -296,8 +302,11 @@ const Menu: React.FC<MenuProps> = ({
                         >
                           <DurationPickers
                             duration={newProgram?.duration ?? 0}
-                            onDurationChange={length =>
-                              setNewProgram(p => ({ ...p, length }))
+                            onDurationChange={newDuration =>
+                              setNewProgram(p => ({
+                                ...p,
+                                duration: newDuration,
+                              }))
                             }
                             setDuration={setDuration}
                           />
@@ -322,7 +331,6 @@ const Menu: React.FC<MenuProps> = ({
                 icon={<AiOutlineSave />}
                 onClick={() => {
                   if (newProgram) onSaveProgram(newProgram);
-                  setIsClosing(true);
                 }}
               />
             </ButtonContainer>
