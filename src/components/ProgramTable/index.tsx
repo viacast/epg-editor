@@ -51,8 +51,7 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {programs.ids.map((programId, i) => {
-              const program = programs.entities[programId];
+            {programs.toArray().map((program, i) => {
               return (
                 <StyledTableRow
                   role="checkbox"

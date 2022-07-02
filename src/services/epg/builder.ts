@@ -1,5 +1,5 @@
 import { XMLBuilder } from 'fast-xml-parser';
-import { Program } from './program';
+import Program from './program';
 
 interface Programme {
   title: {
