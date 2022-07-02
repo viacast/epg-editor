@@ -28,6 +28,10 @@ export default class EntityMap<EntityType> {
     return this.keys.length;
   }
 
+  clone(): EntityMap<EntityType> {
+    return new EntityMap(this.toArray());
+  }
+
   toArray(): EntityType[] {
     return this.keys.map(key => this.entities[key]);
   }
@@ -44,7 +48,11 @@ export default class EntityMap<EntityType> {
     return this.keys.indexOf(entityKey);
   }
 
-  add(entity: EntityType): EntityMap<EntityType> {
+  add(entity: EntityType | EntityType[]): EntityMap<EntityType> {
+    if (Array.isArray(entity)) {
+      entity.forEach(this.add);
+      return this;
+    }
     const key = entity[this.key];
     if (!key) {
       throw new InvalidEntity(`Entity is missing '${this.key}' key`);
@@ -71,7 +79,7 @@ export default class EntityMap<EntityType> {
 
   remove(entityKey: string): EntityMap<EntityType> {
     if (!this.entities[entityKey]) {
-      throw new EntityNotFound(`Entity with key '${entityKey}' not found`);
+      return this;
     }
     delete this.entities[entityKey];
     this.keys.splice(this.indexOf(entityKey), 1);
