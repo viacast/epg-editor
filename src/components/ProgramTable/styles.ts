@@ -50,6 +50,7 @@ export const StyledTableCell = styledmui(TableCell)`
     border-bottom: 4px solid var(--color-neutral-1);
   }
   &.${tableCellClasses.body} {
+    cursor: pointer;
     border-top: 6px solid var(--color-neutral-5);
     font-size: 16px;
     font-weight: 700;
