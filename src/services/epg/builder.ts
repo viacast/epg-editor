@@ -22,7 +22,7 @@ interface Programme {
 const getDateTime = (date: Date, length?: number) => {
   const y = date.getFullYear();
   const m = date.getMonth() + 1;
-  const d = date.getUTCDate();
+  let d = date.getUTCDate();
   let h = date.getHours();
   let mm = date.getMinutes();
   const s = date.getSeconds();
@@ -34,6 +34,10 @@ const getDateTime = (date: Date, length?: number) => {
     if (mm >= 60) {
       h += Math.floor(mm / 60);
       mm %= 60;
+    }
+    if (h >= 24) {
+      d += Math.floor(mm / 24);
+      h %= 24;
     }
   }
 

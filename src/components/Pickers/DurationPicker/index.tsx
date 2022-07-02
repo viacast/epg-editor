@@ -1,39 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider, StaticTimePicker } from '@mui/x-date-pickers';
-import { addHours, format } from 'date-fns';
 import { StyledInput } from './styles';
 
 export interface ProgramTime {
   duration: number;
-  onDurationChange?: (value: Date) => void;
+  onDurationChange?: (value: number) => void;
   setDuration: (value: number) => void;
 }
 
 const DurationPickers: React.FC<ProgramTime> = ({
   duration,
   onDurationChange,
-  setDuration,
 }) => {
-  const [value, setValue] = useState<Date>(
-    duration ? new Date(duration * 1000) : new Date(),
-  );
-
-  const sum = addHours(value, 3);
-  const leng = format(sum, 'HH:mm:ss');
-  const d = new Date();
-  d.setHours(
-    Number(leng.slice(0, 2)),
-    Number(leng.slice(3, 5)),
-    Number(leng.slice(6, 8)),
-  );
+  const [value, setValue] = useState<Date>(new Date());
 
   useEffect(() => {
-    if (duration) {
-      setValue(new Date(duration * 1000));
-      setDuration?.(duration);
-    }
-  }, [setDuration, duration]);
+    const date = new Date();
+    date.setHours(Math.floor(duration / 3600));
+    date.setMinutes(Math.floor((duration % 3600) / 60));
+    date.setSeconds((duration % 3600) % 60);
+    setValue(date);
+  }, [duration]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -45,24 +33,17 @@ const DurationPickers: React.FC<ProgramTime> = ({
         views={['hours', 'minutes', 'seconds']}
         inputFormat="HH:mm:ss"
         mask="__:__:__"
-        value={d}
+        value={value}
         onChange={newValue => {
-          if (newValue) {
-            if (typeof newValue === 'number') {
-              setValue?.(new Date(newValue * 1000));
-              const num = newValue;
-              let hours = 0;
-              let minutes = Math.floor(num / 60);
-              if (minutes >= 60) {
-                hours = Math.floor(minutes / 60);
-                minutes %= 60;
-              }
-              const seconds = num % 60;
-              const l = new Date();
-              l.setHours(hours, minutes, seconds);
-              onDurationChange?.(l);
-            }
+          if (!newValue) {
+            return;
           }
+          setValue?.(newValue);
+          let newDuration = 0;
+          newDuration += newValue.getSeconds();
+          newDuration += newValue.getMinutes() * 60;
+          newDuration += newValue.getHours() * 3600;
+          onDurationChange?.(newDuration);
         }}
         renderInput={params => (
           // eslint-disable-next-line react/jsx-props-no-spreading
