@@ -1,7 +1,7 @@
-import short from 'short-uuid';
-import { csvLineToArray, InvalidFile, readFileAsync } from 'utils';
 import { XMLParser } from 'fast-xml-parser';
-import { Program, ProgramRating } from './program';
+
+import { csvLineToArray, InvalidFile, readFileAsync } from 'utils';
+import Program, { ProgramRating } from './program';
 
 export default class EPGParser {
   static parseXml(xml: string): Program[] {
@@ -10,7 +10,6 @@ export default class EPGParser {
       attributeNamePrefix: '',
       isArray: tag => tag === 'programme',
     });
-    const aux: Program[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let document: Record<string, any>;
     try {
@@ -21,7 +20,7 @@ export default class EPGParser {
     const content = document.tv;
     const programs = content.programme;
 
-    programs.forEach(program => {
+    return programs.map(program => {
       const title: string = program.title['#text'];
       const description: string = program.desc['#text'];
       const duration: number = Number(program.length['#text']) * 60;
@@ -48,8 +47,7 @@ export default class EPGParser {
       const formatDate = new Date(year, month - 1, day);
       const formatTime = new Date(year, month - 1, day, hour, minute, 0);
 
-      aux.push({
-        id: short.generate(),
+      return new Program({
         title,
         description,
         startDate: formatDate,
@@ -57,25 +55,19 @@ export default class EPGParser {
         duration,
         rating,
       });
-
-      return aux;
     });
-
-    return aux;
   }
 
   static parseCsv(csv: string): Program[] {
     const lines = csv.split('\n');
-
-    const progs = lines.slice(1);
-    const aux: Program[] = [];
+    const programs = lines.slice(1);
 
     const firstLine = csvLineToArray(lines[0]);
     if (!firstLine) {
       throw new InvalidFile('Invalid CSV');
     }
 
-    progs.forEach(prog => {
+    return programs.map(prog => {
       const p = csvLineToArray(prog);
       if (p?.length !== firstLine.length) {
         throw new InvalidFile('Invalid CSV');
@@ -132,8 +124,7 @@ export default class EPGParser {
       const brate = base.concat(hex2bin(rating));
       const pg: ProgramRating = rate[Number(brate)];
 
-      aux.push({
-        id: short.generate(),
+      return new Program({
         title: progTitle,
         description: progDescription,
         startDate: formatDate,
@@ -142,8 +133,6 @@ export default class EPGParser {
         rating: pg,
       });
     });
-
-    return aux;
   }
 
   static async parseFile(file: File): Promise<Program[]> {
@@ -156,17 +145,5 @@ export default class EPGParser {
       }
       throw error;
     }
-    // const programs = mockupPrograms;
-    // return programs.map(
-    //   ({ title, description, startDate, startTime, duration, rating }) => ({
-    //     id: short.generate(),
-    //     title,
-    //     description,
-    //     startDate: parseDate(startDate, 'dd/MM/yyyy'),
-    //     startTime: parseDate(startTime, 'HH:mm:ss'),
-    //     duration: hmsToSeconds(duration),
-    //     rating,
-    //   }),
-    // );
   }
 }

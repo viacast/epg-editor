@@ -13,7 +13,7 @@ import { EPGParser, Program } from 'services/epg';
 import { Button, FileInput, FileInputRefProps } from 'components';
 import EPGBuilder from 'services/epg/builder';
 import useClickOutside from 'hooks/useClickOutside';
-import { EntityMap, arrayToEntityMap, entityMapToArray } from 'utils';
+import { EntityMap } from 'utils';
 import {
   HeaderContainer,
   MenuOptions,
@@ -43,8 +43,8 @@ const Header: React.FC<HeaderProps> = ({
   const exportOptionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setProgramCount(programs.ids.length);
-  }, [programs.ids.length]);
+    setProgramCount(programs.count);
+  }, [programs.count]);
 
   const handleChange = useCallback(
     evt => {
@@ -62,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({
       }
       setEpgFilename(files[0].name);
       const newPrograms = await EPGParser.parseFile(files[0]);
-      setPrograms(arrayToEntityMap(newPrograms));
+      setPrograms(new EntityMap(newPrograms));
     },
     [setPrograms],
   );
@@ -99,12 +99,9 @@ const Header: React.FC<HeaderProps> = ({
             text="XML"
             icon={<FaFileCode />}
             onClick={() => {
-              const blob = new Blob(
-                [EPGBuilder.buildXml(entityMapToArray(programs))],
-                {
-                  type: 'application/xml',
-                },
-              );
+              const blob = new Blob([EPGBuilder.buildXml(programs.toArray())], {
+                type: 'application/xml',
+              });
               FileSaver.saveAs(blob, 'EPG.xml');
             }}
           />
@@ -112,12 +109,9 @@ const Header: React.FC<HeaderProps> = ({
             text="CSV"
             icon={<FaFileCsv />}
             onClick={() => {
-              const blob = new Blob(
-                [EPGBuilder.buildCsv(entityMapToArray(programs))],
-                {
-                  type: 'text/csv',
-                },
-              );
+              const blob = new Blob([EPGBuilder.buildCsv(programs.toArray())], {
+                type: 'text/csv',
+              });
               FileSaver.saveAs(blob, 'EPG.csv');
             }}
           />

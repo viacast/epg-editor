@@ -15,10 +15,7 @@ import {
 import Header from './Header';
 
 const Home: React.FC = () => {
-  const [programs, setPrograms] = useState({
-    ids: [],
-    entities: {},
-  } as EntityMap<Program>);
+  const [programs, setPrograms] = useState(new EntityMap<Program>());
   const [selectedProgramId, setSelectedProgramId] = useState('');
   const [isClosing, setIsClosing] = useState(false);
 
@@ -65,15 +62,9 @@ const Home: React.FC = () => {
             programs={programs}
             selectedProgramId={selectedProgramId}
             setIsClosing={setIsClosing}
-            onSaveProgram={program => {
-              setPrograms(p => ({
-                ...p,
-                entities: {
-                  ...p.entities,
-                  [program.id]: program,
-                },
-              }));
-            }}
+            onSaveProgram={program =>
+              setPrograms(p => new EntityMap(p.update(program).toArray()))
+            }
           />
         </MenuContainer>
       </TableMenuContainer>

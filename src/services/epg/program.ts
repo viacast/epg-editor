@@ -1,3 +1,5 @@
+import shortUUID from 'short-uuid';
+
 // eslint-disable-next-line no-shadow
 export enum ProgramRating {
   SC = 'SC',
@@ -9,8 +11,8 @@ export enum ProgramRating {
   R18 = 'R18',
 }
 
-export interface Program {
-  id: string;
+export interface IProgram {
+  id?: string;
   startDate: Date;
   startTime: Date;
   duration: number;
@@ -19,14 +21,38 @@ export interface Program {
   rating: ProgramRating;
 }
 
-export function emptyProgram(): Program {
-  return {
-    id: '',
-    startDate: new Date(),
-    startTime: new Date(),
-    duration: 0,
-    title: '',
-    description: '',
-    rating: ProgramRating.RL,
-  };
+export default class Program implements IProgram {
+  public id: string;
+
+  public startDate: Date;
+
+  public startTime: Date;
+
+  public duration: number;
+
+  public title: string;
+
+  public description: string;
+
+  public rating: ProgramRating;
+
+  constructor(program?: IProgram) {
+    const { id, startDate, startTime, duration, title, description, rating } =
+      program ?? {
+        id: shortUUID.generate(),
+        startDate: new Date(),
+        startTime: new Date(),
+        duration: 0,
+        title: '',
+        description: '',
+        rating: ProgramRating.SC,
+      };
+    this.id = id ?? shortUUID.generate();
+    this.startDate = startDate;
+    this.startTime = startTime;
+    this.duration = duration;
+    this.title = title;
+    this.description = description;
+    this.rating = rating;
+  }
 }

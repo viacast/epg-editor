@@ -19,7 +19,6 @@ import {
   DurationPickers,
 } from 'components';
 import { Program, ProgramRating } from 'services/epg';
-import { emptyProgram } from 'services/epg/program';
 import { EntityMap } from 'utils';
 import SC from 'assets/icons/ratings/SC.svg';
 import CL from 'assets/icons/ratings/RL.svg';
@@ -76,9 +75,9 @@ const Menu: React.FC<MenuProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const program = programs.entities[selectedProgramId];
+  const program = programs.get(selectedProgramId);
   const [newProgram, setNewProgram] = useState<Program>(
-    program ? structuredClone(program) : emptyProgram(),
+    program ? structuredClone(program) : new Program(),
   );
   const [openTime, setOpenTime] = React.useState(false);
   const [openDuration, setOpenDuration] = React.useState(false);
@@ -105,7 +104,7 @@ const Menu: React.FC<MenuProps> = ({
   }, [duration, newProgram]);
 
   useEffect(() => {
-    setNewProgram(program ? structuredClone(program) : emptyProgram());
+    setNewProgram(program ? structuredClone(program) : new Program());
   }, [program, selectedProgramId]);
 
   const handleClickTime = () => {
@@ -127,7 +126,7 @@ const Menu: React.FC<MenuProps> = ({
   return (
     <MenuContainer minWidth={minWidth} overflowStatus={overflowStatus}>
       <Toolbar>
-        {t('menu:edit')}: <p>{newProgram?.title}</p>
+        {t('menu:edit')}: <p>{program?.title}</p>
       </Toolbar>
       <ContentContainer>
         <BottomContainer>
