@@ -62,7 +62,7 @@ export interface MenuProps extends MenuStyleProps {
   programs: EntityMap<Program>;
   selectedProgramId: string;
   setIsClosing: (programId: boolean) => void;
-  onSaveProgram: (newprogram: Program) => void;
+  onSaveProgram: (program: Program) => void;
 }
 
 const Menu: React.FC<MenuProps> = ({

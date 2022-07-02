@@ -24,7 +24,7 @@ import {
 
 export interface HeaderProps {
   programs: EntityMap<Program>;
-  setPrograms: (programs: EntityMap<Program>) => void;
+  setPrograms: (programs: Program[]) => void;
   setSelectedProgramId: (programId: string) => void;
 }
 
@@ -62,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({
       }
       setEpgFilename(files[0].name);
       const newPrograms = await EPGParser.parseFile(files[0]);
-      setPrograms(new EntityMap(newPrograms));
+      setPrograms(newPrograms);
     },
     [setPrograms],
   );

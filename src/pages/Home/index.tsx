@@ -24,7 +24,7 @@ const Home: React.FC = () => {
       <HeaderContainer>
         <Header
           programs={programs}
-          setPrograms={setPrograms}
+          setPrograms={newPrograms => setPrograms(new EntityMap(newPrograms))}
           setSelectedProgramId={setSelectedProgramId}
         />
       </HeaderContainer>
@@ -63,7 +63,7 @@ const Home: React.FC = () => {
             selectedProgramId={selectedProgramId}
             setIsClosing={setIsClosing}
             onSaveProgram={program =>
-              setPrograms(p => new EntityMap(p.update(program).toArray()))
+              setPrograms(p => p.update(program).clone())
             }
           />
         </MenuContainer>
