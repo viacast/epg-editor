@@ -12,7 +12,7 @@ import FileSaver from 'file-saver';
 import { EPGParser, Program } from 'services/epg';
 import { Button, FileInput, FileInputRefProps } from 'components';
 import EPGBuilder from 'services/epg/builder';
-import useClickOutside from 'hooks/useClickOutside';
+import { useClickOutside } from 'hooks';
 import { EntityMap } from 'utils';
 import { format } from 'date-fns';
 import {

@@ -2,6 +2,7 @@ import Button, { ButtonProps } from './Button';
 import FileInput, { FileInputProps, FileInputRefProps } from './FileInput';
 import Input, { InputProps } from './Input';
 import ProgramTable from './ProgramTable';
+import Menu from './Menu';
 import ToastContainer from './ToastContainer';
 import Text from './Text';
 import Select from './Select';
@@ -14,6 +15,7 @@ export {
   Input,
   FileInput,
   ProgramTable,
+  Menu,
   ToastContainer,
   Text,
   Select,
