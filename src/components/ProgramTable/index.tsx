@@ -64,11 +64,28 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                     ({ id, align, minWidth, format }) => {
                       let value: Program[keyof Program] | JSX.Element =
                         program[id];
-                      if (format === 'date') {
-                        value = formatDate(value as Date);
+                      if (format === 'startDateTime') {
+                        const date = formatDate(program.startDate as Date);
+                        const startTime = formatTime(program.startTime as Date);
+                        value = `${date} ${startTime}`;
                       }
-                      if (format === 'time') {
-                        value = formatTime(value as Date);
+                      if (format === 'endDateTime') {
+                        const date = formatDate(program.startDate as Date);
+                        const endTime = program.startTime;
+                        endTime.setHours(
+                          endTime.getHours() +
+                            Math.floor(program.duration / 3600),
+                        );
+                        endTime.setMinutes(
+                          endTime.getMinutes() +
+                            Math.floor((program.duration % 3600) / 60),
+                        );
+                        endTime.setSeconds(
+                          endTime.getSeconds() +
+                            ((program.duration % 3600) % 60),
+                        );
+                        const time = formatTime(endTime as Date);
+                        value = `${date} ${time}`;
                       }
                       if (format === 'duration') {
                         value = secondsToHms(value as number);
