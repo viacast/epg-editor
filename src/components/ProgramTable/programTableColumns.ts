@@ -12,13 +12,13 @@ export default [
   { id: 'position', minWidth: 90 },
   {
     id: 'startDateTime',
-    minWidth: 160,
+    minWidth: 230,
     align: 'left',
     format: 'startDateTime',
   },
   {
     id: 'endDateTime',
-    minWidth: 180,
+    minWidth: 250,
     align: 'left',
     format: 'endDateTime',
   },

@@ -72,6 +72,9 @@ export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
 export const StyledText = styled.span`
   display: table-cell;
   vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const IconRating = styled.img`
