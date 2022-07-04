@@ -100,8 +100,11 @@ const Home: React.FC = () => {
               setPrograms(p => p.update(program).clone())
             }
             handleRemoveProgram={programId => {
-              setPrograms(p => p.remove(programId).clone());
-              setSelectedProgramId('');
+              setPrograms(p => {
+                const index = p.indexOf(programId);
+                setSelectedProgramId(p.at(index + 1).id);
+                return p.remove(programId).clone();
+              });
             }}
           />
         </MenuContainer>
