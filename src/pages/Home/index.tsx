@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { ProgramTable } from 'components';
+import { ProgramTable, Menu } from 'components';
 import { Program } from 'services/epg';
-import Menu from 'components/Menu';
 import { EntityMap } from 'utils';
 
 import {
