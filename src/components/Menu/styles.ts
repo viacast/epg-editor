@@ -62,11 +62,26 @@ export const Toolbar = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  justify-content: space-between;
   p {
     font-size: inherit;
     padding-left: 10px;
     font-weight: 500;
   }
+  svg {
+    color: var(--color-system-1);
+    margin-right: 10px;
+    cursor: pointer;
+
+    &:hover {
+      color: red;
+    }
+  }
+`;
+
+export const ToolbarText = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 export const ContentContainer = styled.div<MenuStyleProps>`
