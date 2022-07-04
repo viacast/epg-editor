@@ -1,7 +1,7 @@
 import { XMLParser } from 'fast-xml-parser';
 import short from 'short-uuid';
 import EPGBuilder from '../../../src/services/epg/builder';
-import { Program, ProgramRating } from '../../../src/services/epg/program';
+import Program, { ProgramRating } from '../../../src/services/epg/program';
 
 const programs: Program[] = [
   {
@@ -42,7 +42,7 @@ const expectedCsv = `"Event ID";"Audio number";"Copy control number";"Data conte
 3;1;2;1;20220612;073000;013000;"Bora Brasil";"As principais informações do Brasil e do Mundo com leveza, interatividade e credibilidade.";0;"0x00";"0x05B3";;"0x10";"0x0603";0;1;1;7;"por";;"Estéreo";;"0x11";"0x30";"0xE0";0;2;0;1;"0x00";0;0;0;1;"0x10";0;0;0;1;"0x0008";"0x30";"0113706F72";;"Closed Caption";;;;;;;;;;2;;"Bora Brasil";"BRA";"0xf1";0;0;0;0;;;;;`;
 
 const expectedXml = `
-    <tv date="20220612115207">
+    <tv>
       <channel id="59360">
           <display-name lang="pt">SBT - SÃO PAULO</display-name>
           <display-name lang="pt">SBT - SÃO PAULO</display-name>
