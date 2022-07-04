@@ -60,74 +60,70 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                   selected={selectedProgramId === program.id}
                   onClick={() => setSelectedProgramId(program.id)}
                 >
-                  {programTableColumns.map(
-                    ({ id, align, minWidth, format }) => {
-                      let value: Program[keyof Program] | JSX.Element =
-                        program[id];
-                      if (format === 'startDateTime') {
-                        const date = formatDate(program.startDate as Date);
-                        const startTime = formatTime(program.startTime as Date);
-                        value = `${date} ${startTime}`;
-                      }
-                      if (format === 'endDateTime') {
-                        const date = formatDate(program.startDate as Date);
-                        const endTime = program.startTime;
-                        endTime.setHours(
-                          endTime.getHours() +
-                            Math.floor(program.duration / 3600),
-                        );
-                        endTime.setMinutes(
-                          endTime.getMinutes() +
-                            Math.floor((program.duration % 3600) / 60),
-                        );
-                        endTime.setSeconds(
-                          endTime.getSeconds() +
-                            ((program.duration % 3600) % 60),
-                        );
-                        const time = formatTime(endTime as Date);
-                        value = `${date} ${time}`;
-                      }
-                      if (format === 'duration') {
-                        value = secondsToHms(value as number);
-                      }
-                      if (id === 'position') {
-                        value = `${i + 1}`;
-                      }
-                      if (id === 'rating') {
-                        const ratings = {
-                          SC: IconSC,
-                          RL: IconRL,
-                          R10: IconR10,
-                          R12: IconR12,
-                          R14: IconR14,
-                          R16: IconR16,
-                          R18: IconR18,
-                        };
-                        value = (
-                          <IconRating
-                            src={ratings[program[id]]}
-                            alt={program[id]}
-                          />
-                        );
-                      }
-                      return (
-                        <StyledTableCell
-                          key={id}
-                          align={align}
-                          style={{ minWidth }}
-                        >
-                          <StyledText>
-                            {value}
-                            {id === 'rating' && (
-                              <Message>
-                                {t(`parental-guidance:rating_${program[id]}`)}
-                              </Message>
-                            )}
-                          </StyledText>
-                        </StyledTableCell>
+                  {programTableColumns.map(({ id, align, format }) => {
+                    let value: Program[keyof Program] | JSX.Element =
+                      program[id];
+                    if (format === 'startDateTime') {
+                      value = `${formatDate(
+                        program.startTime as Date,
+                      )} ${formatTime(program.startTime as Date)}`;
+                    }
+                    if (format === 'endDateTime') {
+                      const year = program.startTime.getFullYear();
+                      const month = program.startTime.getMonth();
+                      const day = program.startTime.getDate();
+                      const hour = program.startTime.getHours();
+                      const minute = program.startTime.getMinutes();
+                      const second = program.startTime.getSeconds();
+                      value = `${formatDate(
+                        program.startTime as Date,
+                      )} ${formatTime(
+                        new Date(
+                          year,
+                          month,
+                          day,
+                          hour + Math.floor(program.duration / 3600),
+                          minute + Math.floor((program.duration % 3600) / 60),
+                          second + Math.floor((program.duration % 3600) % 60),
+                        ) as Date,
+                      )}`;
+                    }
+                    if (format === 'duration') {
+                      value = secondsToHms(value as number);
+                    }
+                    if (id === 'position') {
+                      value = `${i + 1}`;
+                    }
+                    if (id === 'rating') {
+                      const ratings = {
+                        SC: IconSC,
+                        RL: IconRL,
+                        R10: IconR10,
+                        R12: IconR12,
+                        R14: IconR14,
+                        R16: IconR16,
+                        R18: IconR18,
+                      };
+                      value = (
+                        <IconRating
+                          src={ratings[program[id]]}
+                          alt={program[id]}
+                        />
                       );
-                    },
-                  )}
+                    }
+                    return (
+                      <StyledTableCell key={id} align={align}>
+                        <StyledText>
+                          {value}
+                          {id === 'rating' && (
+                            <Message>
+                              {t(`parental-guidance:rating_${program[id]}`)}
+                            </Message>
+                          )}
+                        </StyledText>
+                      </StyledTableCell>
+                    );
+                  })}
                 </StyledTableRow>
               );
             })}
