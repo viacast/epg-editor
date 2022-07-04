@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ProgramTable } from 'components';
 import { Program } from 'services/epg';
@@ -18,6 +18,20 @@ const Home: React.FC = () => {
   const [programs, setPrograms] = useState(new EntityMap<Program>());
   const [selectedProgramId, setSelectedProgramId] = useState('');
   const [isClosing, setIsClosing] = useState(false);
+
+  useEffect(() => {
+    const handlePageRefresh = e => {
+      if (!programs.count) {
+        return;
+      }
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handlePageRefresh);
+    return () => {
+      window.removeEventListener('beforeunload', handlePageRefresh);
+    };
+  }, []);
 
   return (
     <Container>
