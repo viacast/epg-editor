@@ -31,7 +31,7 @@ const Home: React.FC = () => {
     return () => {
       window.removeEventListener('beforeunload', handlePageRefresh);
     };
-  }, []);
+  }, [programs.count]);
 
   return (
     <Container>
