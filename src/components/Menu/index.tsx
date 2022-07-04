@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CgClose, CgTimer } from 'react-icons/cg';
+import { CgClose, CgTimer, CgTrash } from 'react-icons/cg';
 import { AiOutlineSave, AiOutlineClockCircle } from 'react-icons/ai';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
@@ -44,6 +44,7 @@ import {
   Toolbar,
   StyledInput,
   HelpContainer,
+  ToolbarText,
 } from './styles';
 
 const ratings = {
@@ -63,6 +64,7 @@ export interface MenuProps extends MenuStyleProps {
   selectedProgramId: string;
   setIsClosing: (programId: boolean) => void;
   onSaveProgram: (program: Program) => void;
+  handleRemoveProgram: (programId: string) => void;
 }
 
 const Menu: React.FC<MenuProps> = ({
@@ -72,6 +74,7 @@ const Menu: React.FC<MenuProps> = ({
   selectedProgramId,
   setIsClosing,
   onSaveProgram,
+  handleRemoveProgram,
 }) => {
   const { t } = useTranslation();
 
@@ -126,7 +129,18 @@ const Menu: React.FC<MenuProps> = ({
   return (
     <MenuContainer minWidth={minWidth} overflowStatus={overflowStatus}>
       <Toolbar>
-        {t('menu:edit')}: <p>{program?.title}</p>
+        <ToolbarText>
+          {t('menu:edit')}: <p>{program?.title}</p>
+        </ToolbarText>
+        <CgTrash
+          size="20px"
+          onClick={() => {
+            // eslint-disable-next-line no-restricted-globals, no-alert
+            if (confirm(t('menu:delete', { programTitle: program.title }))) {
+              handleRemoveProgram(program.id);
+            }
+          }}
+        />
       </Toolbar>
       <ContentContainer>
         <BottomContainer>
@@ -329,7 +343,9 @@ const Menu: React.FC<MenuProps> = ({
                 text={t('menu:save')}
                 icon={<AiOutlineSave />}
                 onClick={() => {
-                  if (newProgram) onSaveProgram(newProgram);
+                  if (newProgram) {
+                    onSaveProgram(newProgram);
+                  }
                 }}
               />
             </ButtonContainer>

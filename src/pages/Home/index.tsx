@@ -25,7 +25,11 @@ const Home: React.FC = () => {
         <Header
           programs={programs}
           setPrograms={newPrograms => setPrograms(new EntityMap(newPrograms))}
-          setSelectedProgramId={setSelectedProgramId}
+          handleAddProgram={() => {
+            const addedProgram = new Program();
+            setPrograms(p => p.add(addedProgram).clone());
+            setSelectedProgramId(addedProgram.id);
+          }}
         />
       </HeaderContainer>
       <TableMenuContainer>
@@ -65,6 +69,10 @@ const Home: React.FC = () => {
             onSaveProgram={program =>
               setPrograms(p => p.update(program).clone())
             }
+            handleRemoveProgram={programId => {
+              setPrograms(p => p.remove(programId).clone());
+              setSelectedProgramId('');
+            }}
           />
         </MenuContainer>
       </TableMenuContainer>

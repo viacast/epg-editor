@@ -25,13 +25,13 @@ import {
 export interface HeaderProps {
   programs: EntityMap<Program>;
   setPrograms: (programs: Program[]) => void;
-  setSelectedProgramId: (programId: string) => void;
+  handleAddProgram: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
   programs,
   setPrograms,
-  setSelectedProgramId,
+  handleAddProgram,
 }) => {
   const { t, i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
@@ -117,7 +117,11 @@ const Header: React.FC<HeaderProps> = ({
           />
         </ExportOptions>
       </MenuOptions>
-      <Button text={t('header:buttonAddProgram')} icon={<RiMenuAddFill />} />
+      <Button
+        text={t('header:buttonAddProgram')}
+        icon={<RiMenuAddFill />}
+        onClick={handleAddProgram}
+      />
       <Text>
         {t('header:labelProgram', {
           count: programCount,

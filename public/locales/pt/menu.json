@@ -7,5 +7,6 @@
     "length": "Duração",
     "cancel": "Cancelar",
     "save": "Salvar",
+    "delete": "Tem certeza que deseja remover o programa '{{programTitle}}'?",
     "edit": "Editando"
 }
