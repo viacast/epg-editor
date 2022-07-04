@@ -5,17 +5,22 @@ export interface ProgramTableColumn {
   minWidth?: number;
   maxWidth?: number;
   align?: 'left' | 'center' | 'right';
-  format?: 'date' | 'time' | 'duration';
+  format?: 'startDateTime' | 'endDateTime' | 'duration';
 }
 
 export default [
   { id: 'position', minWidth: 90 },
-  { id: 'startDate', minWidth: 140, format: 'date' },
   {
-    id: 'startTime',
-    minWidth: 140,
+    id: 'startDateTime',
+    minWidth: 160,
     align: 'left',
-    format: 'time',
+    format: 'startDateTime',
+  },
+  {
+    id: 'endDateTime',
+    minWidth: 180,
+    align: 'left',
+    format: 'endDateTime',
   },
   {
     id: 'duration',
