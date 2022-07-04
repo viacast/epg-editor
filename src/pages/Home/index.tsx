@@ -101,8 +101,16 @@ const Home: React.FC = () => {
             }
             handleRemoveProgram={programId => {
               setPrograms(p => {
+                const size = p.toArray().length;
                 const index = p.indexOf(programId);
-                setSelectedProgramId(p.at(index + 1).id);
+                console.log(size, index);
+                if (index === 0) {
+                  setSelectedProgramId('');
+                } else if (size - 1 === index) {
+                  setSelectedProgramId(p.at(index - 1).id);
+                } else {
+                  setSelectedProgramId(p.at(index + 1).id);
+                }
                 return p.remove(programId).clone();
               });
             }}
