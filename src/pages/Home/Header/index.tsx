@@ -14,6 +14,7 @@ import { Button, FileInput, FileInputRefProps } from 'components';
 import EPGBuilder from 'services/epg/builder';
 import useClickOutside from 'hooks/useClickOutside';
 import { EntityMap } from 'utils';
+import { format } from 'date-fns';
 import {
   HeaderContainer,
   MenuOptions,
@@ -102,7 +103,10 @@ const Header: React.FC<HeaderProps> = ({
               const blob = new Blob([EPGBuilder.buildXml(programs.toArray())], {
                 type: 'application/xml',
               });
-              FileSaver.saveAs(blob, 'EPG.xml');
+              FileSaver.saveAs(
+                blob,
+                `EPG_${format(new Date(), 'yyyyMMdd_HHmmss')}.xml`,
+              );
             }}
           />
           <Button
@@ -112,7 +116,10 @@ const Header: React.FC<HeaderProps> = ({
               const blob = new Blob([EPGBuilder.buildCsv(programs.toArray())], {
                 type: 'text/csv',
               });
-              FileSaver.saveAs(blob, 'EPG.csv');
+              FileSaver.saveAs(
+                blob,
+                `EPG_${format(new Date(), 'yyyyMMdd_HHmmss')}.csv`,
+              );
             }}
           />
         </ExportOptions>
