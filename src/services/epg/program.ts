@@ -48,8 +48,8 @@ export default class Program implements IProgram {
         rating: ProgramRating.SC,
       };
     this.id = id ?? shortUUID.generate();
-    this.startDate = startDate;
-    this.startTime = startTime;
+    this.startDate = new Date(startDate);
+    this.startTime = new Date(startTime);
     this.duration = duration;
     this.title = title;
     this.description = description;

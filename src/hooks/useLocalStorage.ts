@@ -3,7 +3,7 @@ import { hasValue } from 'utils';
 
 // eslint-disable-next-line no-shadow
 export enum LocalStorageKeys {
-  EXAMPLE_KEY = 'example-key',
+  CURRENT_PROGRAMS = 'current-programs',
 }
 
 export default function useLocalStorage<DataType = unknown>(
