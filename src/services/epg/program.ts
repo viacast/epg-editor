@@ -2,7 +2,7 @@ import shortUUID from 'short-uuid';
 
 // eslint-disable-next-line no-shadow
 export enum ProgramRating {
-  SC = 'SC',
+  RSC = 'RSC',
   RL = 'RL',
   R10 = 'R10',
   R12 = 'R12',
@@ -45,7 +45,7 @@ export default class Program implements IProgram {
         duration: 0,
         title: '',
         description: '',
-        rating: ProgramRating.SC,
+        rating: ProgramRating.RSC,
       };
     this.id = id ?? shortUUID.generate();
     this.startDate = new Date(startDate);

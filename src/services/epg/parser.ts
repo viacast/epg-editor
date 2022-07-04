@@ -35,7 +35,7 @@ export default class EPGParser {
       };
 
       const rating: ProgramRating =
-        rate[program.rating.value] ?? ProgramRating.SC;
+        rate[program.rating.value] ?? ProgramRating.RSC;
       const date = program.start;
 
       const year = Number(date.substring(0, 4));
