@@ -55,7 +55,10 @@ const Home: React.FC = () => {
       <HeaderContainer>
         <Header
           programs={programs}
-          setPrograms={newPrograms => setPrograms(new EntityMap(newPrograms))}
+          setPrograms={newPrograms => {
+            setSelectedProgramId('');
+            setPrograms(new EntityMap(newPrograms));
+          }}
           handleAddProgram={handleAddProgram}
         />
       </HeaderContainer>
