@@ -1,8 +1,4 @@
-import {
-  EntityAlreadyExists,
-  EntityNotFound,
-  InvalidEntity,
-} from './exceptions';
+import { EntityNotFound, InvalidEntity } from './exceptions';
 
 export default class EntityMap<EntityType> {
   private key: string;
@@ -58,7 +54,8 @@ export default class EntityMap<EntityType> {
       throw new InvalidEntity(`Entity is missing '${this.key}' key`);
     }
     if (this.entities[key]) {
-      throw new EntityAlreadyExists(`Entity with key '${key}' already exists`);
+      return this;
+      // throw new EntityAlreadyExists(`Entity with key '${key}' already exists`);
     }
     this.keys.push(key);
     this.entities[key] = entity;
