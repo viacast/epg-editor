@@ -121,7 +121,7 @@ export default class EPGBuilder {
 
     const program = {
       tv: {
-        '@date': getDateTime(new Date(2022, 5, 12, 11, 52, 7)),
+        '@date': getDateTime(new Date()),
         channel: {
           '@id': '59360',
           'display-name': [
