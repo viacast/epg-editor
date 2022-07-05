@@ -96,7 +96,7 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                     }
                     if (id === 'rating') {
                       const ratings = {
-                        SC: IconSC,
+                        RSC: IconSC,
                         RL: IconRL,
                         R10: IconR10,
                         R12: IconR12,
