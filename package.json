@@ -1,11 +1,13 @@
 {
   "name": "epg-editor",
   "version": "0.1.0",
-  "private": true,
-  "homepage": "./",
+  "private": false,
+  "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "deploy": "./utils/deploy.sh",
+    "build-deploy": "yarn build && yarn run deploy",
     "test": "jest",
     "eject": "react-scripts eject"
   },
