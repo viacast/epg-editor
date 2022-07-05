@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { ProgramTable, Menu } from 'components';
+import { ProgramTable, Menu, ProgramTableRefProps } from 'components';
 import { Program } from 'services/epg';
 import { EntityMap } from 'utils';
 
@@ -17,6 +17,7 @@ import Header from './Header';
 const Home: React.FC = () => {
   const [selectedProgramId, setSelectedProgramId] = useState('');
   const [isClosing, setIsClosing] = useState(false);
+  const programTableRef = useRef<ProgramTableRefProps>({});
 
   const [savedPrograms, setSavedPrograms] = useLocalStorage(
     LocalStorageKeys.CURRENT_PROGRAMS,
@@ -30,24 +31,11 @@ const Home: React.FC = () => {
     setSavedPrograms(programs.toArray());
   }, [programs, setSavedPrograms]);
 
-  // useEffect(() => {
-  //   const handlePageRefresh = e => {
-  //     if (!programs.count) {
-  //       return;
-  //     }
-  //     e.preventDefault();
-  //     e.returnValue = '';
-  //   };
-  //   window.addEventListener('beforeunload', handlePageRefresh);
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handlePageRefresh);
-  //   };
-  // }, [programs]);
-
   const handleAddProgram = useCallback(() => {
     const addedProgram = new Program();
     setPrograms(p => p.add(addedProgram).clone());
     setSelectedProgramId(addedProgram.id);
+    setTimeout(() => programTableRef.current.scrollToSelected?.(), 100);
   }, []);
 
   return (
@@ -72,6 +60,7 @@ const Home: React.FC = () => {
           }
         >
           <ProgramTable
+            forwardRef={programTableRef}
             setSelectedProgramId={setSelectedProgramId}
             selectedProgramId={selectedProgramId}
             programs={programs}

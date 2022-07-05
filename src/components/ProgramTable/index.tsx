@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { TableBody, TableHead } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -12,6 +12,7 @@ import IconR18 from 'assets/icons/ratings/R18.svg';
 
 import { Program } from 'services/epg';
 import { EntityMap, formatDate, formatTime, secondsToHms } from 'utils';
+import { useScrollIntoView } from 'hooks';
 import {
   StyledPaper,
   StyledTableContainer,
@@ -24,18 +25,34 @@ import {
 } from './styles';
 import programTableColumns from './programTableColumns';
 
+export interface ProgramTableRefProps {
+  scrollToSelected?: (options?: ScrollToOptions) => void;
+}
+
 export interface ProgramTableProps {
+  forwardRef?: React.MutableRefObject<ProgramTableRefProps>;
   programs: EntityMap<Program>;
   selectedProgramId: string;
   setSelectedProgramId: (programId: string) => void;
 }
 
 const ProgramTable: React.FC<ProgramTableProps> = ({
+  forwardRef,
   programs,
   selectedProgramId,
   setSelectedProgramId,
 }) => {
   const { t } = useTranslation();
+  const selectedRowRef = useRef<HTMLTableRowElement>(null);
+
+  const scrollToSelected = useScrollIntoView({
+    ref: selectedRowRef,
+  });
+
+  if (forwardRef?.current) {
+    // eslint-disable-next-line no-param-reassign
+    forwardRef.current.scrollToSelected = scrollToSelected;
+  }
 
   return (
     <StyledPaper>
@@ -54,6 +71,11 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
             {programs.toArray().map((program, i) => {
               return (
                 <StyledTableRow
+                  ref={
+                    selectedProgramId === program.id
+                      ? selectedRowRef
+                      : undefined
+                  }
                   role="checkbox"
                   tabIndex={-1}
                   key={program.id}
@@ -132,6 +154,10 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
       </StyledTableContainer>
     </StyledPaper>
   );
+};
+
+ProgramTable.defaultProps = {
+  forwardRef: undefined,
 };
 
 export default ProgramTable;
