@@ -48,7 +48,7 @@ import {
 } from './styles';
 
 const ratings = {
-  SC,
+  RSC: SC,
   RL: CL,
   R10: C10,
   R12: C12,

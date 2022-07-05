@@ -26,6 +26,7 @@ export default class EPGParser {
       const duration: number = Number(program.length['#text']) * 60;
 
       const rate = {
+        SC: ProgramRating.RSC,
         L: ProgramRating.RL,
         '10': ProgramRating.R10,
         '12': ProgramRating.R12,
