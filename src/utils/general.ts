@@ -12,14 +12,24 @@ export function promisify<Type = unknown>() {
   return { promise, resolve: res, reject: rej };
 }
 
-export async function readFileAsync(file: File): Promise<string> {
+export async function readFileAsync(
+  file: File,
+  encoding: 'utf8' | 'iso8859-1' = 'utf8',
+  retry = true,
+): Promise<string> {
   const reader = new FileReader();
   const { promise, resolve, reject } = promisify<string>();
-  reader.onload = e => {
+  reader.onload = async e => {
     const content = e.target?.result;
+    if (content?.toString().includes('�') && retry) {
+      if (encoding === 'utf8') {
+        resolve(await readFileAsync(file, 'iso8859-1', false));
+        return;
+      }
+    }
     resolve(content?.toString() ?? '');
   };
   reader.onerror = e => reject(e.target?.error?.message);
-  reader.readAsText(file);
+  reader.readAsText(file, encoding);
   return promise;
 }
