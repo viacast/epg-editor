@@ -1,7 +1,7 @@
 {
   "columnLabel_position": "#",
-  "columnLabel_startDateTime": "Data de Início",
-  "columnLabel_endDateTime": "Data de Encerramento",
+  "columnLabel_startDateTime": "Início",
+  "columnLabel_endDateTime": "Encerramento",
   "columnLabel_duration": "Duração",
   "columnLabel_title": "Título",
   "columnLabel_description": "Descrição",
