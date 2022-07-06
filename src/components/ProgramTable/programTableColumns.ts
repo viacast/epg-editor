@@ -9,22 +9,22 @@ export interface ProgramTableColumn {
 }
 
 export default [
-  { id: 'position', minWidth: 90 },
+  { id: 'position', minWidth: 50 },
   {
     id: 'startDateTime',
-    minWidth: 230,
+    minWidth: 190,
     align: 'left',
     format: 'startDateTime',
   },
   {
     id: 'endDateTime',
-    minWidth: 250,
+    minWidth: 190,
     align: 'left',
     format: 'endDateTime',
   },
   {
     id: 'duration',
-    minWidth: 140,
+    minWidth: 100,
     align: 'left',
     format: 'duration',
   },
@@ -34,13 +34,13 @@ export default [
     align: 'left',
   },
   {
-    id: 'description',
-    minWidth: 645,
+    id: 'rating',
+    minWidth: 400,
     align: 'left',
   },
   {
-    id: 'rating',
-    minWidth: 250,
+    id: 'description',
+    minWidth: 645,
     align: 'left',
   },
 ] as ProgramTableColumn[];

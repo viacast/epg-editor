@@ -1,7 +1,7 @@
 {
   "columnLabel_position": "#",
-  "columnLabel_startDateTime": "Start Date",
-  "columnLabel_endDateTime": "End Date",
+  "columnLabel_startDateTime": "Start",
+  "columnLabel_endDateTime": "End",
   "columnLabel_duration": "Duration",
   "columnLabel_title": "Title",
   "columnLabel_description": "Description",
