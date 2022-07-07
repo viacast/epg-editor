@@ -38,6 +38,10 @@ const Home: React.FC = () => {
     setTimeout(() => programTableRef.current.scrollToSelected?.(), 100);
   }, []);
 
+  const handleClearProgramList = useCallback(() => {
+    setPrograms(new EntityMap<Program>());
+  }, []);
+
   return (
     <Container>
       <HeaderContainer>
@@ -48,6 +52,7 @@ const Home: React.FC = () => {
             setPrograms(new EntityMap(newPrograms));
           }}
           handleAddProgram={handleAddProgram}
+          handleClearProgramList={handleClearProgramList}
         />
       </HeaderContainer>
       <TableMenuContainer>
