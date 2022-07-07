@@ -53,7 +53,7 @@ export const Toolbar = styled.div`
   background-color: var(--color-primary-2);
   display: inline-flex;
   text-align: left;
-  padding-top: 10px;
+  padding-top: 12px;
   padding-left: 10px;
   font-size: 18px;
   font-family: 'Nunito', sans-serif;
@@ -82,6 +82,10 @@ export const Toolbar = styled.div`
 export const ToolbarText = styled.div`
   display: flex;
   flex-direction: row;
+  width: 450px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const ContentContainer = styled.div<MenuStyleProps>`
@@ -165,16 +169,6 @@ export const HelpContainer = styled.div`
     font-size: 18px;
     padding-top: 4px;
   }
-  /* .epg-timePicker {
-    position: absolute;
-    background: var(--color-neutral-6);
-    border: 4px solid var(--color-neutral-6);
-    border-radius: 4px;
-    z-index: 3;
-    margin-top: -40px;
-    margin-left: -80px;
-    transform: scale(0.75);
-  } */
   button {
     margin-bottom: 7px;
     margin-right: -4px;
@@ -185,40 +179,5 @@ export const HelpContainer = styled.div`
   }
   input {
     text-align: center;
-  }
-  .MuiPickerStaticWrapper-content {
-    background-color: transparent;
-    color: var(--color-neutral-3);
-    button {
-      margin-bottom: 0px;
-      margin-right: 0px;
-    }
-    .MuiGrid-root {
-      width: fit-content;
-      margin-left: 40px;
-    }
-    .MuiTypography-overline,
-    svg {
-      display: none;
-    }
-    .MuiTypography-root {
-      color: var(--color-neutral-3);
-    }
-    .MuiTypography-root.Mui-selected {
-      color: var(--color-neutral-2);
-    }
-    .MuiClockPicker-root {
-      span {
-        color: var(--color-neutral-3);
-      }
-      .Mui-selected {
-        color: var(--color-neutral-2);
-      }
-    }
-  }
-  .MuiDialogActions-root {
-    button {
-      display: none;
-    }
   }
 `;
