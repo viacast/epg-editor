@@ -69,27 +69,25 @@ const Header: React.FC<HeaderProps> = ({
         return;
       }
       const newPrograms = await EPGParser.parseFile(files[0]);
-      const newList = programs.toArray();
-      newList.push(...newPrograms);
-      if (epgFilename !== '') {
-        // eslint-disable-next-line no-restricted-globals, no-alert
-        if (confirm(t('header:overwrite'))) {
-          setPrograms(newPrograms);
-          setEpgFilename(files[0].name);
-          setSavedFilename(files[0].name);
-        } else {
-          setPrograms(newList);
-          setEpgFilename(`${epgFilename}, ${files[0].name}`);
-          setSavedFilename(`${epgFilename}, ${files[0].name}`);
-        }
-      } else {
+      // eslint-disable-next-line no-restricted-globals, no-alert
+      if (epgFilename === '' || confirm(t('header:overwrite'))) {
         setPrograms(newPrograms);
         setEpgFilename(files[0].name);
         setSavedFilename(files[0].name);
       }
     },
-    [epgFilename, programs, setPrograms, setSavedFilename, t],
+    [epgFilename, setPrograms, setSavedFilename, t],
   );
+
+  const handleClearFiles = useCallback(() => {
+    // eslint-disable-next-line no-restricted-globals, no-alert
+    if (confirm(t('header:clear'))) {
+      setEpgFilename('');
+      setSavedFilename('');
+      handleClearProgramList();
+      fileInputRef.current.clearFiles?.();
+    }
+  }, [handleClearProgramList, setSavedFilename, t]);
 
   useClickOutside(exportOptionsRef, () => setOpen(false));
 
@@ -155,14 +153,7 @@ const Header: React.FC<HeaderProps> = ({
       <Button
         text={t('header:buttonClearProgramList')}
         icon={<CgPlayListRemove />}
-        onClick={() => {
-          // eslint-disable-next-line no-restricted-globals, no-alert
-          if (confirm(t('header:clear'))) {
-            setEpgFilename('');
-            setSavedFilename('');
-            handleClearProgramList();
-          }
-        }}
+        onClick={handleClearFiles}
       />
       <Text>
         {t('header:labelProgram', {
