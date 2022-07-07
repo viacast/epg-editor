@@ -4,6 +4,7 @@ import { hasValue } from 'utils';
 // eslint-disable-next-line no-shadow
 export enum LocalStorageKeys {
   CURRENT_PROGRAMS = 'current-programs',
+  CURRENT_FILENAME = 'current-filename',
 }
 
 export default function useLocalStorage<DataType = unknown>(
