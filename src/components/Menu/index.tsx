@@ -82,8 +82,8 @@ const Menu: React.FC<MenuProps> = ({
   const [newProgram, setNewProgram] = useState<Program>(
     program ? structuredClone(program) : new Program(),
   );
-  const [openTime, setOpenTime] = React.useState(false);
-  const [openDuration, setOpenDuration] = React.useState(false);
+  const [openTime, setOpenTime] = useState(false);
+  const [openDuration, setOpenDuration] = useState(false);
   const [time, setTime] = useState(new Date());
   const [duration, setDuration] = useState(0);
   const [leng, setLeng] = useState('');
@@ -145,7 +145,7 @@ const Menu: React.FC<MenuProps> = ({
       <ContentContainer>
         <BottomContainer>
           <FormContainer>
-            <Form onSubmit={() => ''}>
+            <Form>
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:title')}
               </Text>
@@ -153,6 +153,7 @@ const Menu: React.FC<MenuProps> = ({
                 height="45px"
                 value={newProgram?.title}
                 setValue={title => setNewProgram(p => ({ ...p, title }))}
+                onCtrlEnter={() => onSaveProgram(newProgram)}
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:description')}
@@ -165,6 +166,7 @@ const Menu: React.FC<MenuProps> = ({
                 setValue={description =>
                   setNewProgram(p => ({ ...p, description }))
                 }
+                onCtrlEnter={() => onSaveProgram(newProgram)}
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:parentalRating')}
@@ -240,30 +242,16 @@ const Menu: React.FC<MenuProps> = ({
                         </StyledInput>
                       </HelpContainer>
                       {openTime ? (
-                        <HelpContainer
-                          // className="epg-timePicker"
-                          style={{
-                            position: 'absolute',
-                            background: 'var(--color-neutral-6)',
-                            border: '4px solid var(--color-neutral-6)',
-                            borderRadius: '4px',
-                            zIndex: '3',
-                            marginTop: '-40px',
-                            marginLeft: '-80px',
-                            transform: 'scale(0.75)',
-                          }}
-                        >
-                          <TimePickers
-                            time={newProgram?.startTime ?? new Date()}
-                            onTimeChange={startTime =>
-                              setNewProgram(p => ({
-                                ...p,
-                                startTime,
-                              }))
-                            }
-                            setTime={setTime}
-                          />
-                        </HelpContainer>
+                        <TimePickers
+                          time={newProgram?.startTime ?? new Date()}
+                          onTimeChange={startTime =>
+                            setNewProgram(p => ({
+                              ...p,
+                              startTime,
+                            }))
+                          }
+                          setTime={setTime}
+                        />
                       ) : null}
                     </Box>
                   </ClickAwayListener>
@@ -300,30 +288,16 @@ const Menu: React.FC<MenuProps> = ({
                         </StyledInput>
                       </HelpContainer>
                       {openDuration ? (
-                        <HelpContainer
-                          // replace style with className="epg-timePicker"
-                          style={{
-                            position: 'absolute',
-                            background: 'var(--color-neutral-6)',
-                            border: '4px solid var(--color-neutral-6)',
-                            borderRadius: '4px',
-                            zIndex: '3',
-                            marginTop: '-40px',
-                            marginLeft: '-80px',
-                            transform: 'scale(0.75)',
-                          }}
-                        >
-                          <DurationPickers
-                            duration={newProgram?.duration ?? 0}
-                            onDurationChange={newDuration =>
-                              setNewProgram(p => ({
-                                ...p,
-                                duration: newDuration,
-                              }))
-                            }
-                            setDuration={setDuration}
-                          />
-                        </HelpContainer>
+                        <DurationPickers
+                          duration={newProgram?.duration ?? 0}
+                          onDurationChange={newDuration =>
+                            setNewProgram(p => ({
+                              ...p,
+                              duration: newDuration,
+                            }))
+                          }
+                          setDuration={setDuration}
+                        />
                       ) : null}
                     </Box>
                   </ClickAwayListener>

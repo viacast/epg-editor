@@ -58,9 +58,6 @@ const DatePickers: React.FC<ProgramDate> = ({ date, onDateChange }) => {
       color: 'var(--color-neutral-3)',
       width: '100%',
       height: 45,
-      '& .MuiButtonBase-root': {
-        color: 'var(--color-neutral-3)',
-      },
     },
   };
 
