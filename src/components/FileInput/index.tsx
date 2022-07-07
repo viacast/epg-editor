@@ -4,6 +4,7 @@ import { Input, InputProps } from 'components';
 
 export interface FileInputRefProps {
   click?: () => void;
+  clearFiles?: () => void;
 }
 
 export interface FileInputProps {
@@ -21,6 +22,12 @@ const FileInput: React.FC<InputProps & FileInputProps> = ({
   if (forwardRef?.current) {
     // eslint-disable-next-line no-param-reassign
     forwardRef.current.click = () => fileInputRef.current?.click();
+    // eslint-disable-next-line no-param-reassign
+    forwardRef.current.clearFiles = () => {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    };
   }
 
   return (
@@ -32,7 +39,8 @@ const FileInput: React.FC<InputProps & FileInputProps> = ({
         type="file"
         ref={fileInputRef}
         onChange={e => {
-          onFileUpload?.(e.target.files ?? new FileList());
+          const { files } = e.target;
+          onFileUpload?.(files ?? new FileList());
         }}
       />
     </>
