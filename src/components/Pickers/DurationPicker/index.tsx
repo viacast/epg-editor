@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider, StaticTimePicker } from '@mui/x-date-pickers';
 import { StyledInput } from './styles';
+import { HelpContainer } from '../TimePicker/styles';
 
 export interface ProgramTime {
   duration: number;
@@ -14,6 +15,16 @@ const DurationPickers: React.FC<ProgramTime> = ({
   onDurationChange,
 }) => {
   const [value, setValue] = useState<Date>(new Date());
+  const [pageHeight, setPageHeight] = useState(window.innerHeight);
+  useEffect(() => {
+    function handleResize() {
+      setPageHeight(window.innerHeight);
+    }
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  });
 
   useEffect(() => {
     const date = new Date();
@@ -24,33 +35,35 @@ const DurationPickers: React.FC<ProgramTime> = ({
   }, [duration]);
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <StaticTimePicker
-        ampm={false}
-        displayStaticWrapperAs="mobile"
-        orientation="landscape"
-        openTo="hours"
-        views={['hours', 'minutes', 'seconds']}
-        inputFormat="HH:mm:ss"
-        mask="__:__:__"
-        value={value}
-        onChange={newValue => {
-          if (!newValue) {
-            return;
-          }
-          setValue?.(newValue);
-          let newDuration = 0;
-          newDuration += newValue.getSeconds();
-          newDuration += newValue.getMinutes() * 60;
-          newDuration += newValue.getHours() * 3600;
-          onDurationChange?.(newDuration);
-        }}
-        renderInput={params => (
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          <StyledInput {...params} />
-        )}
-      />
-    </LocalizationProvider>
+    <HelpContainer marginTop={pageHeight <= 970 ? '-368px' : '-40px'}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <StaticTimePicker
+          ampm={false}
+          displayStaticWrapperAs="mobile"
+          orientation="landscape"
+          openTo="hours"
+          views={['hours', 'minutes', 'seconds']}
+          inputFormat="HH:mm:ss"
+          mask="__:__:__"
+          value={value}
+          onChange={newValue => {
+            if (!newValue) {
+              return;
+            }
+            setValue?.(newValue);
+            let newDuration = 0;
+            newDuration += newValue.getSeconds();
+            newDuration += newValue.getMinutes() * 60;
+            newDuration += newValue.getHours() * 3600;
+            onDurationChange?.(newDuration);
+          }}
+          renderInput={params => (
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            <StyledInput {...params} />
+          )}
+        />
+      </LocalizationProvider>
+    </HelpContainer>
   );
 };
 
