@@ -82,10 +82,16 @@ export const Toolbar = styled.div`
 export const ToolbarText = styled.div`
   display: flex;
   flex-direction: row;
-  width: 450px;
+  max-width: 450px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  p {
+    max-width: 450px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 export const ContentContainer = styled.div<MenuStyleProps>`
