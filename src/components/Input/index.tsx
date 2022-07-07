@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { CgClose } from 'react-icons/cg';
 import {
   StyledDivider,
@@ -16,6 +16,7 @@ export interface InputProps extends PaperStylesProps {
   withClearButton?: boolean;
   multiline?: boolean;
   maxRows?: number;
+  onCtrlEnter?: (value: string) => void;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -28,19 +29,32 @@ const Input: React.FC<InputProps> = ({
   withClearButton,
   multiline,
   maxRows,
+  onCtrlEnter,
 }) => {
+  const [internalValue, setInternalValue] = useState(value ?? '');
+
+  useEffect(() => {
+    setInternalValue(value ?? '');
+  }, [value]);
+
   return (
     <StyledPaper width={width} height={height} className="epg-input">
       <StyledInput
+        onKeyDown={(e: KeyboardEvent) => {
+          if (e.ctrlKey && e.key === 'Enter') {
+            onCtrlEnter?.(internalValue);
+          }
+        }}
         multiline={multiline}
         maxRows={maxRows}
         disabled={disabled}
         fullWidth
         onChange={e => {
+          setInternalValue(e.target.value);
           setValue?.(e.target.value);
         }}
         placeholder={placeholder}
-        value={value}
+        value={internalValue}
       />
       {withClearButton && (
         <>
@@ -62,6 +76,7 @@ Input.defaultProps = {
   multiline: false,
   maxRows: 1,
   setValue: undefined,
+  onCtrlEnter: undefined,
 };
 
 export default Input;
