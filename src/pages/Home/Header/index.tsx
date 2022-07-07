@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RiMenuAddFill } from 'react-icons/ri';
+import { CgPlayListAdd, CgPlayListRemove } from 'react-icons/cg';
 import {
   FaDownload,
   FaFileCode,
@@ -12,7 +12,7 @@ import FileSaver from 'file-saver';
 import { EPGParser, Program } from 'services/epg';
 import { Button, FileInput, FileInputRefProps } from 'components';
 import EPGBuilder from 'services/epg/builder';
-import { useClickOutside } from 'hooks';
+import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
 import { EntityMap } from 'utils';
 import { format } from 'date-fns';
 import {
@@ -27,18 +27,25 @@ export interface HeaderProps {
   programs: EntityMap<Program>;
   setPrograms: (programs: Program[]) => void;
   handleAddProgram: () => void;
+  handleClearProgramList: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
   programs,
   setPrograms,
   handleAddProgram,
+  handleClearProgramList,
 }) => {
   const { t, i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
   const [programCount, setProgramCount] = useState(0);
-  const [epgFilename, setEpgFilename] = useState('');
   const [open, setOpen] = useState(false);
+
+  const [savedFilename, setSavedFilename] = useLocalStorage(
+    LocalStorageKeys.CURRENT_FILENAME,
+    '',
+  );
+  const [epgFilename, setEpgFilename] = useState(savedFilename || '');
 
   const fileInputRef = useRef<FileInputRefProps>({});
   const exportOptionsRef = useRef<HTMLDivElement>(null);
@@ -61,11 +68,27 @@ const Header: React.FC<HeaderProps> = ({
       if (!files.length) {
         return;
       }
-      setEpgFilename(files[0].name);
       const newPrograms = await EPGParser.parseFile(files[0]);
-      setPrograms(newPrograms);
+      const newList = programs.toArray();
+      newList.push(...newPrograms);
+      if (epgFilename !== '') {
+        // eslint-disable-next-line no-restricted-globals, no-alert
+        if (confirm(t('header:overwrite'))) {
+          setPrograms(newPrograms);
+          setEpgFilename(files[0].name);
+          setSavedFilename(files[0].name);
+        } else {
+          setPrograms(newList);
+          setEpgFilename(`${epgFilename}, ${files[0].name}`);
+          setSavedFilename(`${epgFilename}, ${files[0].name}`);
+        }
+      } else {
+        setPrograms(newPrograms);
+        setEpgFilename(files[0].name);
+        setSavedFilename(files[0].name);
+      }
     },
-    [setPrograms],
+    [epgFilename, programs, setPrograms, setSavedFilename, t],
   );
 
   useClickOutside(exportOptionsRef, () => setOpen(false));
@@ -126,8 +149,20 @@ const Header: React.FC<HeaderProps> = ({
       </MenuOptions>
       <Button
         text={t('header:buttonAddProgram')}
-        icon={<RiMenuAddFill />}
+        icon={<CgPlayListAdd />}
         onClick={handleAddProgram}
+      />
+      <Button
+        text={t('header:buttonClearProgramList')}
+        icon={<CgPlayListRemove />}
+        onClick={() => {
+          // eslint-disable-next-line no-restricted-globals, no-alert
+          if (confirm(t('header:clear'))) {
+            setEpgFilename('');
+            setSavedFilename('');
+            handleClearProgramList();
+          }
+        }}
       />
       <Text>
         {t('header:labelProgram', {
