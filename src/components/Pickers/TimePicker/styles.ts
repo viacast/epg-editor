@@ -30,23 +30,21 @@ export const StyledInput = muistyled(TextField)`
   }
 `;
 
-export const HelpContainer = styled.div`
+export const HelpContainer = styled.div<{ marginTop: string }>`
+  position: absolute;
+  background: var(--color-neutral-6);
+  border: 4px solid var(--color-neutral-6);
+  border-radius: 4px;
+  z-index: 3;
+  margin-top: ${({ marginTop }) => marginTop || '-40px'};
+  margin-left: -80px;
+  transform: scale(0.75);
   .epg-time {
     color: var(--color-neutral-3);
     font-family: Roboto, Helvetica, Arial, sans-serif;
     font-size: 18px;
     padding-top: 4px;
   }
-  /* .epg-timePicker {
-    position: absolute;
-    background: var(--color-neutral-6);
-    border: 4px solid var(--color-neutral-6);
-    border-radius: 4px;
-    z-index: 3;
-    margin-top: -40px;
-    margin-left: -80px;
-    transform: scale(0.75);
-  } */
   button {
     margin-bottom: 7px;
     margin-right: -4px;
