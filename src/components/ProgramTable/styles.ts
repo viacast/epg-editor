@@ -69,7 +69,8 @@ export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
   }
 `;
 
-export const StyledText = styled.span`
+export const StyledText = styled.span<{ maxWidth?: string }>`
+  max-width: ${({ maxWidth }) => maxWidth || '645px'};
   display: table-cell;
   vertical-align: middle;
   white-space: nowrap;
@@ -90,8 +91,23 @@ export const IconRating = styled.img`
 
 export const Message = styled.div`
   white-space: nowrap;
-  max-width: 285px;
+  max-width: 300px;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
 `;
+
+// export const Reorder = styled.div`
+//   height: 62px;
+//   background-color: var(--color-neutral-5);
+//   svg {
+//     color: var(--color-neutral-2);
+//     margin-top: 18.5px;
+//     margin-bottom: 18.5px;
+//     margin-left: 10px;
+//     margin-right: -10px;
+//   }
+//   svg :hover {
+//     color: var(--color-neutral-6);
+//   }
+// `;

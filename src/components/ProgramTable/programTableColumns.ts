@@ -3,7 +3,6 @@ import { Program } from 'services/epg';
 export interface ProgramTableColumn {
   id: 'position' | keyof Program;
   minWidth?: number;
-  maxWidth?: number;
   align?: 'left' | 'center' | 'right';
   format?: 'startDateTime' | 'endDateTime' | 'duration';
 }
@@ -35,7 +34,7 @@ export default [
   },
   {
     id: 'rating',
-    minWidth: 400,
+    minWidth: 340,
     align: 'left',
   },
   {
