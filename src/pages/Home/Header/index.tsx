@@ -81,7 +81,7 @@ const Header: React.FC<HeaderProps> = ({
       if (!files.length) {
         return;
       }
-      if (files.type !== 'text/xml' && files.type !== 'text/csv') {
+      if (files[0].type !== 'text/xml' && files[0].type !== 'text/csv') {
         addNotification();
       }
       const newPrograms = await EPGParser.parseFile(files[0]);
