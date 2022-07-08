@@ -28,7 +28,7 @@ export const StyledTable = styledmui(Table)`
     padding-bottom: 10px;
     border-radius: 4px;
     background-color: var(--color-neutral-5);
-    text-overflow: ellipsis;
+    overflow: hidden;
   }
 `;
 
@@ -91,7 +91,6 @@ export const IconRating = styled.img`
 
 export const Message = styled.div`
   white-space: nowrap;
-  max-width: 300px;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
