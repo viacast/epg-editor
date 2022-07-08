@@ -27,6 +27,26 @@ const Home: React.FC = () => {
     new EntityMap<Program>(savedPrograms?.map(p => new Program(p))),
   );
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [dimensions, setDimensions] = useState({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  });
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    function handleResize() {
+      setDimensions({
+        height: window.innerHeight,
+        width: window.innerWidth,
+      });
+    }
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  });
+
   useEffect(() => {
     setSavedPrograms(programs.toArray());
   }, [programs, setSavedPrograms]);
@@ -43,7 +63,7 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <Container>
+    <Container overflow={dimensions.width > 1768 ? 'hidden' : 'scrool'}>
       <HeaderContainer>
         <Header
           programs={programs}
