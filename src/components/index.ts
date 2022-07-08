@@ -1,6 +1,7 @@
 import Button, { ButtonProps } from './Button';
 import FileInput, { FileInputProps, FileInputRefProps } from './FileInput';
 import Input, { InputProps } from './Input';
+import Autosize, { AutosizeProps } from './Autosize';
 import ProgramTable, { ProgramTableRefProps } from './ProgramTable';
 import Menu from './Menu';
 import ToastContainer from './ToastContainer';
@@ -13,6 +14,7 @@ import DurationPickers from './Pickers/DurationPicker';
 export {
   Button,
   Input,
+  Autosize,
   FileInput,
   ProgramTable,
   Menu,
@@ -27,6 +29,7 @@ export {
 export type {
   ButtonProps,
   InputProps,
+  AutosizeProps,
   FileInputProps,
   FileInputRefProps,
   ProgramTableRefProps,

@@ -14,6 +14,7 @@ import {
   Text,
   Button,
   Input,
+  Autosize,
   Select,
   DatePickers,
   TimePickers,
@@ -60,20 +61,24 @@ const ratings = {
 
 export interface MenuProps extends MenuStyleProps {
   minWidth;
+  hasChange;
   overflowStatus;
   programs: EntityMap<Program>;
   selectedProgramId: string;
   setIsClosing: (programId: boolean) => void;
+  setHasChange: (programId: boolean) => void;
   onSaveProgram: (program: Program) => void;
   handleRemoveProgram: (programId: string) => void;
 }
 
 const Menu: React.FC<MenuProps> = ({
   minWidth,
+  hasChange,
   overflowStatus,
   programs,
   selectedProgramId,
   setIsClosing,
+  setHasChange,
   onSaveProgram,
   handleRemoveProgram,
 }) => {
@@ -83,7 +88,6 @@ const Menu: React.FC<MenuProps> = ({
   const [newProgram, setNewProgram] = useState<Program>(
     program ? structuredClone(program) : new Program(),
   );
-  const [hasChange, setHasChange] = useState(false);
   const [openTime, setOpenTime] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
   const [time, setTime] = useState(new Date());
@@ -175,10 +179,9 @@ const Menu: React.FC<MenuProps> = ({
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:description')}
               </Text>
-              <Input
-                multiline
+              <Autosize
                 maxRows={4}
-                height="130px"
+                maxheight="270px"
                 value={newProgram?.description}
                 setValue={description => {
                   setNewProgram(p => ({ ...p, description }));
@@ -333,6 +336,7 @@ const Menu: React.FC<MenuProps> = ({
                 icon={<CgClose />}
                 onClick={() => {
                   setIsClosing(true);
+                  setHasChange(false);
                 }}
               />
               <Button
@@ -341,6 +345,7 @@ const Menu: React.FC<MenuProps> = ({
                 onClick={() => {
                   if (newProgram) {
                     onSaveProgram(newProgram);
+                    setHasChange(false);
                   }
                 }}
               />
