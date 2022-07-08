@@ -122,7 +122,7 @@ const Home: React.FC = () => {
               setPrograms(p => {
                 const size = p.toArray().length;
                 const index = p.indexOf(programId);
-                if (index === 0) {
+                if (size - 1 === 0) {
                   setSelectedProgramId('');
                 } else if (size - 1 === index) {
                   setSelectedProgramId(p.at(index - 1).id);
