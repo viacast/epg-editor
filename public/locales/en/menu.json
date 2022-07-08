@@ -7,7 +7,7 @@
     "length": "Duration",
     "cancel": "Cancel",
     "save": "Save",
-    "discard": "Are you sure you want to discard '{{programTitle}}'?",
+    "discard": "Are you sure you want to discard modifications to '{{programTitle}}'?",
     "delete": "Are you sure you want to remove '{{programTitle}}'?",
     "edit": "Editing"
 }
