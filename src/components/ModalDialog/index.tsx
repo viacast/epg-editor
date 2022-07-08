@@ -1,13 +1,13 @@
 import React from 'react';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import {
+  StyledDialog,
+  StyledDialogActions,
+  StyledDialogContent,
+  StyledDialogContentText,
+  StyledDialogTitle,
+  StyledButton,
+} from './styles';
 
 export interface ModalDialogProps {
   title: string;
@@ -30,36 +30,36 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
 
   return (
     <div>
-      <Dialog
+      <StyledDialog
         open={modalState}
         onClose={() => setModalState(false)}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
+        <StyledDialogTitle>{title}</StyledDialogTitle>
+        <StyledDialogContent>
+          <StyledDialogContentText id="alert-dialog-slide-description">
             {content}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
+          </StyledDialogContentText>
+        </StyledDialogContent>
+        <StyledDialogActions>
+          <StyledButton
             onClick={() => {
               setModalState(false);
               cancel();
             }}
           >
             {t('modal:cancel')}
-          </Button>
-          <Button
+          </StyledButton>
+          <StyledButton
             onClick={() => {
               setModalState(false);
               confirm();
             }}
           >
             {t('modal:confirm')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          </StyledButton>
+        </StyledDialogActions>
+      </StyledDialog>
     </div>
   );
 };
