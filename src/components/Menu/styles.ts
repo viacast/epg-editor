@@ -66,7 +66,11 @@ export const Toolbar = styled.div<{ display: string }>`
   p {
     font-size: inherit;
     padding-left: 10px;
+    padding-right: 10px;
     font-weight: 500;
+  }
+  svg {
+    min-width: 20px;
   }
   #discard {
     display: ${({ display }) => display || 'none'};
