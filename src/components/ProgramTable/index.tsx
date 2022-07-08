@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { TableBody, TableHead } from '@mui/material';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+
 import { useTranslation } from 'react-i18next';
 
 import IconSC from 'assets/icons/ratings/SC.svg';
@@ -27,6 +30,15 @@ import {
   // Reorder,
 } from './styles';
 import programTableColumns from './programTableColumns';
+
+const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  <Tooltip {...props} classes={{ popper: className }} />
+))({
+  [`& .${tooltipClasses.tooltip}`]: {
+    maxWidth: 500,
+  },
+});
 
 export interface ProgramTableRefProps {
   scrollToSelected?: (options?: ScrollToOptions) => void;
@@ -164,16 +176,32 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                           align={align}
                           ref={componentRef}
                         >
-                          <StyledText
-                            maxWidth={`${(width * (pc / 680)).toString()}px`}
+                          <CustomWidthTooltip
+                            title={
+                              <>
+                                {id !== 'rating' && value}
+                                {id === 'rating' && (
+                                  <Message>
+                                    {t(
+                                      `parental-guidance:rating_${program[id]}`,
+                                    )}
+                                  </Message>
+                                )}
+                              </>
+                            }
+                            arrow
                           >
-                            {value}
-                            {id === 'rating' && (
-                              <Message>
-                                {t(`parental-guidance:rating_${program[id]}`)}
-                              </Message>
-                            )}
-                          </StyledText>
+                            <StyledText
+                              maxWidth={`${(width * (pc / 680)).toString()}px`}
+                            >
+                              {value}
+                              {id === 'rating' && (
+                                <Message>
+                                  {t(`parental-guidance:rating_${program[id]}`)}
+                                </Message>
+                              )}
+                            </StyledText>
+                          </CustomWidthTooltip>
                         </StyledTableCell>
                       );
                     },
