@@ -13,8 +13,6 @@ import IconR14 from 'assets/icons/ratings/R14.svg';
 import IconR16 from 'assets/icons/ratings/R16.svg';
 import IconR18 from 'assets/icons/ratings/R18.svg';
 
-// import { BiArrowFromBottom, BiArrowFromTop } from 'react-icons/bi';
-
 import { Program } from 'services/epg';
 import { EntityMap, formatDate, formatTime, secondsToHms } from 'utils';
 import { useScrollIntoView } from 'hooks';
@@ -206,10 +204,6 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                       );
                     },
                   )}
-                  {/* <Reorder>
-                    <BiArrowFromBottom size={25} />
-                    <BiArrowFromTop size={25} />
-                  </Reorder> */}
                 </StyledTableRow>
               );
             })}

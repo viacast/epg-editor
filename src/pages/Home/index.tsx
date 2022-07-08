@@ -17,6 +17,7 @@ import Header from './Header';
 const Home: React.FC = () => {
   const [selectedProgramId, setSelectedProgramId] = useState('');
   const [isClosing, setIsClosing] = useState(false);
+  const [hasChange, setHasChange] = useState(false);
   const programTableRef = useRef<ProgramTableRefProps>({});
 
   const [savedPrograms, setSavedPrograms] = useLocalStorage(
@@ -66,6 +67,8 @@ const Home: React.FC = () => {
     <Container overflow={dimensions.width > 1768 ? 'hidden' : 'scrool'}>
       <HeaderContainer>
         <Header
+          setIsClosing={setIsClosing}
+          setHasChange={setHasChange}
           programs={programs}
           setPrograms={newPrograms => {
             setSelectedProgramId('');
@@ -103,6 +106,8 @@ const Home: React.FC = () => {
           width={selectedProgramId === '' || isClosing ? '0px' : '500px'}
         >
           <Menu
+            hasChange={hasChange}
+            setHasChange={setHasChange}
             overflowStatus={
               selectedProgramId === '' || isClosing ? 'hidden' : 'auto'
             }
