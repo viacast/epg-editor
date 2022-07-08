@@ -15,6 +15,8 @@ import EPGBuilder from 'services/epg/builder';
 import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
 import { EntityMap } from 'utils';
 import { format } from 'date-fns';
+import { toast, TypeOptions } from 'react-toastify';
+import types from '@emotion/styled';
 import {
   HeaderContainer,
   MenuOptions,
@@ -28,11 +30,15 @@ export interface HeaderProps {
   setPrograms: (programs: Program[]) => void;
   handleAddProgram: () => void;
   handleClearProgramList: () => void;
+  setIsClosing: (programId: boolean) => void;
+  setHasChange: (programId: boolean) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
   programs,
   setPrograms,
+  setHasChange,
+  setIsClosing,
   handleAddProgram,
   handleClearProgramList,
 }) => {
@@ -49,6 +55,13 @@ const Header: React.FC<HeaderProps> = ({
 
   const fileInputRef = useRef<FileInputRefProps>({});
   const exportOptionsRef = useRef<HTMLDivElement>(null);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const addNotification = () => {
+    toast(t('header:alert'), {
+      type: types[Math.floor(Math.random() * types.length)] as TypeOptions,
+    });
+  };
 
   useEffect(() => {
     setProgramCount(programs.count);
@@ -68,6 +81,9 @@ const Header: React.FC<HeaderProps> = ({
       if (!files.length) {
         return;
       }
+      if (files.type !== 'text/xml' && files.type !== 'text/csv') {
+        addNotification();
+      }
       const newPrograms = await EPGParser.parseFile(files[0]);
       // eslint-disable-next-line no-restricted-globals, no-alert
       if (epgFilename === '' || confirm(t('header:overwrite'))) {
@@ -76,7 +92,7 @@ const Header: React.FC<HeaderProps> = ({
         setSavedFilename(files[0].name);
       }
     },
-    [epgFilename, setPrograms, setSavedFilename, t],
+    [addNotification, epgFilename, setPrograms, setSavedFilename, t],
   );
 
   const handleClearFiles = useCallback(() => {
@@ -153,7 +169,11 @@ const Header: React.FC<HeaderProps> = ({
       <Button
         text={t('header:buttonClearProgramList')}
         icon={<CgPlayListRemove />}
-        onClick={handleClearFiles}
+        onClick={() => {
+          handleClearFiles();
+          setIsClosing(true);
+          setHasChange(false);
+        }}
       />
       <Text>
         {t('header:labelProgram', {
