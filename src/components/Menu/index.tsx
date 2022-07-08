@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CgClose, CgTimer, CgTrash } from 'react-icons/cg';
+import { VscDiscard } from 'react-icons/vsc';
 import { AiOutlineSave, AiOutlineClockCircle } from 'react-icons/ai';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
@@ -82,6 +83,7 @@ const Menu: React.FC<MenuProps> = ({
   const [newProgram, setNewProgram] = useState<Program>(
     program ? structuredClone(program) : new Program(),
   );
+  const [hasChange, setHasChange] = useState(false);
   const [openTime, setOpenTime] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
   const [time, setTime] = useState(new Date());
@@ -128,11 +130,23 @@ const Menu: React.FC<MenuProps> = ({
 
   return (
     <MenuContainer minWidth={minWidth} overflowStatus={overflowStatus}>
-      <Toolbar>
+      <Toolbar display={hasChange ? 'block' : 'none'}>
         <ToolbarText>
           {t('menu:edit')}: <p>{program?.title}</p>
         </ToolbarText>
+        <VscDiscard
+          id="discard"
+          size="20px"
+          onClick={() => {
+            // eslint-disable-next-line no-restricted-globals, no-alert
+            if (confirm(t('menu:discard', { programTitle: program.title }))) {
+              setNewProgram(program);
+              setHasChange(false);
+            }
+          }}
+        />
         <CgTrash
+          id="trash"
           size="20px"
           onClick={() => {
             // eslint-disable-next-line no-restricted-globals, no-alert
@@ -152,7 +166,10 @@ const Menu: React.FC<MenuProps> = ({
               <Input
                 height="45px"
                 value={newProgram?.title}
-                setValue={title => setNewProgram(p => ({ ...p, title }))}
+                setValue={title => {
+                  setNewProgram(p => ({ ...p, title }));
+                  setHasChange(true);
+                }}
                 onCtrlEnter={() => onSaveProgram(newProgram)}
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
@@ -163,9 +180,10 @@ const Menu: React.FC<MenuProps> = ({
                 maxRows={4}
                 height="130px"
                 value={newProgram?.description}
-                setValue={description =>
-                  setNewProgram(p => ({ ...p, description }))
-                }
+                setValue={description => {
+                  setNewProgram(p => ({ ...p, description }));
+                  setHasChange(true);
+                }}
                 onCtrlEnter={() => onSaveProgram(newProgram)}
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
@@ -179,6 +197,7 @@ const Menu: React.FC<MenuProps> = ({
                       ...p,
                       rating: rating as ProgramRating,
                     }));
+                    setHasChange(true);
                   }}
                   options={Object.values(ProgramRating).map(r => ({
                     label: t(`parental-guidance:rating_${r}`),
@@ -201,15 +220,16 @@ const Menu: React.FC<MenuProps> = ({
                   </Text>
                   <DatePickers
                     date={newProgram?.startDate ?? new Date()}
-                    onDateChange={startDate =>
+                    onDateChange={startDate => {
                       setNewProgram(p => {
                         const newStartTime = p.startTime;
                         newStartTime.setDate(startDate.getDate());
                         newStartTime.setMonth(startDate.getMonth());
                         newStartTime.setFullYear(startDate.getFullYear());
                         return { ...p, startDate, startTime: newStartTime };
-                      })
-                    }
+                      });
+                      setHasChange(true);
+                    }}
                   />
                 </FormColumn>
                 <FormColumn>
@@ -244,12 +264,13 @@ const Menu: React.FC<MenuProps> = ({
                       {openTime ? (
                         <TimePickers
                           time={newProgram?.startTime ?? new Date()}
-                          onTimeChange={startTime =>
+                          onTimeChange={startTime => {
                             setNewProgram(p => ({
                               ...p,
                               startTime,
-                            }))
-                          }
+                            }));
+                            setHasChange(true);
+                          }}
                           setTime={setTime}
                         />
                       ) : null}
@@ -290,12 +311,13 @@ const Menu: React.FC<MenuProps> = ({
                       {openDuration ? (
                         <DurationPickers
                           duration={newProgram?.duration ?? 0}
-                          onDurationChange={newDuration =>
+                          onDurationChange={newDuration => {
                             setNewProgram(p => ({
                               ...p,
                               duration: newDuration,
-                            }))
-                          }
+                            }));
+                            setHasChange(true);
+                          }}
                           setDuration={setDuration}
                         />
                       ) : null}

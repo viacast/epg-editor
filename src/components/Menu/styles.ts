@@ -45,7 +45,7 @@ export const MenuContainer = styled.div<MenuStyleProps>`
   margin-left: 30px;
 `;
 
-export const Toolbar = styled.div`
+export const Toolbar = styled.div<{ display: string }>`
   top: 0px;
   width: 100%;
   height: 42px;
@@ -68,7 +68,18 @@ export const Toolbar = styled.div`
     padding-left: 10px;
     font-weight: 500;
   }
-  svg {
+  #discard {
+    display: ${({ display }) => display || 'none'};
+    color: var(--color-neutral-4);
+    margin-left: auto;
+    margin-right: 10px;
+    cursor: pointer;
+
+    &:hover {
+      color: white;
+    }
+  }
+  #trash {
     color: var(--color-system-1);
     margin-right: 10px;
     cursor: pointer;
