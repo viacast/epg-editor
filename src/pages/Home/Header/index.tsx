@@ -10,7 +10,7 @@ import {
 import FileSaver from 'file-saver';
 
 import { EPGParser, Program } from 'services/epg';
-import { Button, FileInput, FileInputRefProps } from 'components';
+import { Button, FileInput, FileInputRefProps, ModalDialog } from 'components';
 import EPGBuilder from 'services/epg/builder';
 import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
 import { EntityMap } from 'utils';
@@ -30,17 +30,17 @@ export interface HeaderProps {
   setPrograms: (programs: Program[]) => void;
   handleAddProgram: () => void;
   handleClearProgramList: () => void;
-  setIsClosing: (programId: boolean) => void;
-  setHasChange: (programId: boolean) => void;
+  modalState: boolean;
+  setModalState: (value: boolean) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
   programs,
   setPrograms,
-  setHasChange,
-  setIsClosing,
   handleAddProgram,
   handleClearProgramList,
+  modalState,
+  setModalState,
 }) => {
   const { t, i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
@@ -94,16 +94,6 @@ const Header: React.FC<HeaderProps> = ({
     },
     [addNotification, epgFilename, setPrograms, setSavedFilename, t],
   );
-
-  const handleClearFiles = useCallback(() => {
-    // eslint-disable-next-line no-restricted-globals, no-alert
-    if (confirm(t('header:clear'))) {
-      setEpgFilename('');
-      setSavedFilename('');
-      handleClearProgramList();
-      fileInputRef.current.clearFiles?.();
-    }
-  }, [handleClearProgramList, setSavedFilename, t]);
 
   useClickOutside(exportOptionsRef, () => setOpen(false));
 
@@ -170,10 +160,25 @@ const Header: React.FC<HeaderProps> = ({
         text={t('header:buttonClearProgramList')}
         icon={<CgPlayListRemove />}
         onClick={() => {
-          handleClearFiles();
-          setIsClosing(true);
-          setHasChange(false);
+          if (epgFilename !== '') {
+            setModalState(true);
+          }
         }}
+      />
+      <ModalDialog
+        title={t('header:buttonClearProgramList')}
+        content={t('header:clear')}
+        confirm={() => {
+          setEpgFilename('');
+          setSavedFilename('');
+          handleClearProgramList();
+          fileInputRef.current.clearFiles?.();
+        }}
+        cancel={() => {
+          ('');
+        }}
+        modalState={modalState}
+        setModalState={setModalState}
       />
       <Text>
         {t('header:labelProgram', {

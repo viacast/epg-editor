@@ -18,6 +18,8 @@ const Home: React.FC = () => {
   const [selectedProgramId, setSelectedProgramId] = useState('');
   const [isClosing, setIsClosing] = useState(false);
   const [hasChange, setHasChange] = useState(false);
+  const [modalState, setModalState] = useState(false);
+
   const programTableRef = useRef<ProgramTableRefProps>({});
 
   const [savedPrograms, setSavedPrograms] = useLocalStorage(
@@ -67,8 +69,8 @@ const Home: React.FC = () => {
     <Container overflow={dimensions.width > 1768 ? 'hidden' : 'scrool'}>
       <HeaderContainer>
         <Header
-          setIsClosing={setIsClosing}
-          setHasChange={setHasChange}
+          modalState={modalState}
+          setModalState={setModalState}
           programs={programs}
           setPrograms={newPrograms => {
             setSelectedProgramId('');

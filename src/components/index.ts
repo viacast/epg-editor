@@ -2,6 +2,7 @@ import Button, { ButtonProps } from './Button';
 import FileInput, { FileInputProps, FileInputRefProps } from './FileInput';
 import Input, { InputProps } from './Input';
 import Autosize, { AutosizeProps } from './Autosize';
+import ModalDialog, { ModalDialogProps } from './ModalDialog';
 import ProgramTable, { ProgramTableRefProps } from './ProgramTable';
 import Menu from './Menu';
 import ToastContainer from './ToastContainer';
@@ -15,6 +16,7 @@ export {
   Button,
   Input,
   Autosize,
+  ModalDialog,
   FileInput,
   ProgramTable,
   Menu,
@@ -30,6 +32,7 @@ export type {
   ButtonProps,
   InputProps,
   AutosizeProps,
+  ModalDialogProps,
   FileInputProps,
   FileInputRefProps,
   ProgramTableRefProps,
