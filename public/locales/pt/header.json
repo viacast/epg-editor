@@ -4,11 +4,9 @@
   "buttonExportProgram" : "Exportar",
   "buttonAddProgram" : "Adicionar",
   "buttonClearProgramList": "Limpar",
-  "clear": "Tem certeza que deseja limpar todos os programas na lista?",
-  "overwrite": "Deseja sobrescrever todos os programas na lista?",
-  "alert": "Esse formato de arquivo não é válido. Em vez disso tente um '.csv' ou '.xml'.",
+  "clearProgramList": "Tem certeza que deseja limpar a lista de programas?",
+  "overwriteProgramList": "Tem certeza que deseja sobrescrever a lista de programas?",
+  "alertInvalidFile": "Esse formato de arquivo não é válido. Em vez disso tente um arquivo '.csv' ou '.xml'.",
   "titleOverwrite": "Sobrescrever",
-  "labelProgram_zero" : "Programas: {{count}}",
-  "labelProgram_one" : "Programa: {{count}}",
-  "labelProgram_other" : "Programas: {{count}}"
+  "labelProgram" : "Programas: {{count}}"
 }

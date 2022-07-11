@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  DatePicker as MUIDatePicker,
+  LocalizationProvider,
+} from '@mui/x-date-pickers';
 import Stack from '@mui/material/Stack';
 import { ptBR, es, enUS } from 'date-fns/locale';
 import { StyledInput } from './styles';
 
-export interface ProgramDate {
+export interface DatePickerProps {
   date: Date;
   onDateChange?: (value: Date) => void;
 }
 
-const DatePickers: React.FC<ProgramDate> = ({ date, onDateChange }) => {
+const DatePicker: React.FC<DatePickerProps> = ({ date, onDateChange }) => {
   const [value, setValue] = useState(date);
   const aux = localStorage.getItem('i18nextLng');
   let lang;
@@ -64,7 +67,7 @@ const DatePickers: React.FC<ProgramDate> = ({ date, onDateChange }) => {
   return (
     <LocalizationProvider adapterLocale={lang} dateAdapter={AdapterDateFns}>
       <Stack spacing={3}>
-        <DatePicker
+        <MUIDatePicker
           PopperProps={dialogStyleProps}
           onChange={newValue => {
             if (newValue) {
@@ -82,8 +85,8 @@ const DatePickers: React.FC<ProgramDate> = ({ date, onDateChange }) => {
   );
 };
 
-DatePickers.defaultProps = {
+DatePicker.defaultProps = {
   onDateChange: undefined,
 };
 
-export default DatePickers;
+export default DatePicker;

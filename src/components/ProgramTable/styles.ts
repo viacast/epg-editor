@@ -38,6 +38,7 @@ export const StyledTableCell = styledmui(TableCell)`
     overflow: hidden;
     color: var(--color-neutral-2);
     border-bottom: none;
+    text-overflow: ellipsis;
   }
   &:last-child td,
   &:last-child th {
@@ -70,9 +71,8 @@ export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
 `;
 
 export const StyledText = styled.span<{ maxWidth?: string }>`
+  display: block;
   max-width: ${({ maxWidth }) => maxWidth || '645px'};
-  display: table-cell;
-  vertical-align: middle;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -95,18 +95,3 @@ export const Message = styled.div`
   text-overflow: ellipsis;
   vertical-align: middle;
 `;
-
-// export const Reorder = styled.div`
-//   height: 62px;
-//   background-color: var(--color-neutral-5);
-//   svg {
-//     color: var(--color-neutral-2);
-//     margin-top: 18.5px;
-//     margin-bottom: 18.5px;
-//     margin-left: 10px;
-//     margin-right: -10px;
-//   }
-//   svg :hover {
-//     color: var(--color-neutral-6);
-//   }
-// `;

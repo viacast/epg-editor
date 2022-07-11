@@ -15,9 +15,8 @@ import EPGBuilder from 'services/epg/builder';
 import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
 import { EntityMap } from 'utils';
 import { format } from 'date-fns';
-import { toast, TypeOptions } from 'react-toastify';
-import types from '@emotion/styled';
 import { useModalProvider } from 'providers/ModalProvider';
+import { toast } from 'react-toastify';
 import {
   HeaderContainer,
   MenuOptions,
@@ -31,15 +30,15 @@ export interface HeaderProps {
   setPrograms: (programs: Program[]) => void;
   handleAddProgram: () => void;
   handleClearProgramList: () => void;
-  setIsClosing: (value: boolean) => void;
+  setIsClosing: (programId: boolean) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
   programs,
   setPrograms,
+  setIsClosing,
   handleAddProgram,
   handleClearProgramList,
-  setIsClosing,
 }) => {
   const { t, i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
@@ -56,12 +55,11 @@ const Header: React.FC<HeaderProps> = ({
 
   const { openModal } = useModalProvider();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const addNotification = () => {
-    toast(t('header:alert'), {
-      type: types[Math.floor(Math.random() * types.length)] as TypeOptions,
+  const notifyInvalidFile = useCallback(() => {
+    toast(t('header:alertInvalidFile'), {
+      type: 'warning',
     });
-  };
+  }, [t]);
 
   useEffect(() => {
     setProgramCount(programs.count);
@@ -82,7 +80,8 @@ const Header: React.FC<HeaderProps> = ({
         return;
       }
       if (files[0].type !== 'text/xml' && files[0].type !== 'text/csv') {
-        addNotification();
+        notifyInvalidFile();
+        return;
       }
       const newPrograms = await EPGParser.parseFile(files[0]);
       if (epgFilename === '') {
@@ -101,7 +100,14 @@ const Header: React.FC<HeaderProps> = ({
         });
       }
     },
-    [addNotification, epgFilename, openModal, setPrograms, setSavedFilename, t],
+    [
+      epgFilename,
+      notifyInvalidFile,
+      setPrograms,
+      setSavedFilename,
+      openModal,
+      t,
+    ],
   );
 
   useClickOutside(exportOptionsRef, () => setOpen(false));

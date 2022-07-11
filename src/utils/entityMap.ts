@@ -32,11 +32,11 @@ export default class EntityMap<EntityType> {
     return this.keys.map(key => this.entities[key]);
   }
 
-  get(entityKey: string): EntityType {
+  get(entityKey: string): EntityType | undefined {
     return this.entities[entityKey];
   }
 
-  at(index: number): EntityType {
+  at(index: number): EntityType | undefined {
     return this.entities[this.keys[index] ?? ''];
   }
 
