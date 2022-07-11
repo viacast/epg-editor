@@ -60,27 +60,6 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
     ref: selectedRowRef,
   });
 
-  const useResize = myRef => {
-    const [width, setWidth] = useState(906);
-
-    const handleResize = useCallback(() => {
-      setWidth(myRef.current.offsetWidth);
-    }, [myRef]);
-
-    useEffect(() => {
-      window.addEventListener('resize', handleResize);
-    }, [myRef, handleResize]);
-
-    setTimeout(() => {
-      handleResize();
-    }, 100);
-
-    return { width };
-  };
-
-  const componentRef = useRef();
-  const { width } = useResize(componentRef);
-
   if (forwardRef?.current) {
     // eslint-disable-next-line no-param-reassign
     forwardRef.current.scrollToSelected = scrollToSelected;
@@ -118,7 +97,6 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                     ({ id, align, format, minWidth }) => {
                       let value: Program[keyof Program] | JSX.Element =
                         program[id];
-                      const pc = minWidth ?? 1;
                       if (format === 'startDateTime') {
                         value = `${formatDate(
                           program.startTime as Date,
@@ -168,11 +146,7 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                         );
                       }
                       return (
-                        <StyledTableCell
-                          key={id}
-                          align={align}
-                          ref={componentRef}
-                        >
+                        <StyledTableCell key={id} align={align}>
                           <CustomWidthTooltip
                             title={
                               <>
@@ -188,9 +162,7 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                             }
                             arrow
                           >
-                            <StyledText
-                              maxWidth={`${(width * (pc / 680)).toString()}px`}
-                            >
+                            <StyledText>
                               {value}
                               {id === 'rating' && (
                                 <Message>

@@ -28,24 +28,6 @@ const Home: React.FC = () => {
     new EntityMap<Program>(savedPrograms?.map(p => new Program(p))),
   );
 
-  const [dimensions, setDimensions] = useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
-
-  useEffect(() => {
-    const handleResize = () => {
-      setDimensions({
-        height: window.innerHeight,
-        width: window.innerWidth,
-      });
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  });
-
   useEffect(() => {
     setSavedPrograms(programs.toArray());
   }, [programs, setSavedPrograms]);
@@ -62,7 +44,7 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <Container overflow={dimensions.width > 1768 ? 'hidden' : 'scroll'}>
+    <Container>
       <HeaderContainer>
         <Header
           setIsClosing={setIsClosing}

@@ -4,8 +4,7 @@ export interface StyleProps {
   width?: string;
 }
 
-export const Container = styled.div<{ overflow: string }>`
-  overflow: ${({ overflow }) => overflow || 'auto'};
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
