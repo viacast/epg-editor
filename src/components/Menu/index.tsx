@@ -19,7 +19,6 @@ import {
   DatePickers,
   TimePickers,
   DurationPickers,
-  ModalDialog,
 } from 'components';
 import { Program, ProgramRating } from 'services/epg';
 import { EntityMap } from 'utils';
@@ -70,8 +69,10 @@ export interface MenuProps extends MenuStyleProps {
   setHasChange: (programId: boolean) => void;
   onSaveProgram: (program: Program) => void;
   handleRemoveProgram: (programId: string) => void;
-  modalState: boolean;
   setModalState: (value: boolean) => void;
+  setModalTitle: (value: string) => void;
+  setModalContent: (value: string) => void;
+  setConfirm: (value: () => () => void) => void;
 }
 
 const Menu: React.FC<MenuProps> = ({
@@ -84,8 +85,10 @@ const Menu: React.FC<MenuProps> = ({
   setHasChange,
   onSaveProgram,
   handleRemoveProgram,
-  modalState,
   setModalState,
+  setModalTitle,
+  setModalContent,
+  setConfirm,
 }) => {
   const { t } = useTranslation();
 
@@ -98,12 +101,6 @@ const Menu: React.FC<MenuProps> = ({
   const [time, setTime] = useState(new Date());
   const [duration, setDuration] = useState(0);
   const [leng, setLeng] = useState('');
-
-  const [modalTitle, setModalTitle] = useState('');
-  const [modalContent, setModalContent] = useState('');
-  const [confirm, setConfirm] = useState(() => () => {
-    ('');
-  });
 
   const stHour = format(time, 'HH:mm:ss');
 
@@ -349,16 +346,6 @@ const Menu: React.FC<MenuProps> = ({
                 <FormColumn /> {/* empty column */}
               </FormRow>
             </Form>
-            <ModalDialog
-              title={modalTitle}
-              content={modalContent}
-              confirm={confirm}
-              cancel={() => {
-                ('');
-              }}
-              modalState={modalState}
-              setModalState={setModalState}
-            />
             <ButtonContainer>
               <Button
                 text={t('menu:cancel')}

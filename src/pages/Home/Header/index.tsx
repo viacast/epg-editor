@@ -10,7 +10,7 @@ import {
 import FileSaver from 'file-saver';
 
 import { EPGParser, Program } from 'services/epg';
-import { Button, FileInput, FileInputRefProps, ModalDialog } from 'components';
+import { Button, FileInput, FileInputRefProps } from 'components';
 import EPGBuilder from 'services/epg/builder';
 import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
 import { EntityMap } from 'utils';
@@ -30,9 +30,11 @@ export interface HeaderProps {
   setPrograms: (programs: Program[]) => void;
   handleAddProgram: () => void;
   handleClearProgramList: () => void;
-  modalState: boolean;
   setModalState: (value: boolean) => void;
   setIsClosing: (value: boolean) => void;
+  setModalTitle: (value: string) => void;
+  setModalContent: (value: string) => void;
+  setConfirm: (value: () => () => void) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -40,21 +42,16 @@ const Header: React.FC<HeaderProps> = ({
   setPrograms,
   handleAddProgram,
   handleClearProgramList,
-  modalState,
   setModalState,
   setIsClosing,
+  setModalTitle,
+  setModalContent,
+  setConfirm,
 }) => {
   const { t, i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
   const [programCount, setProgramCount] = useState(0);
   const [open, setOpen] = useState(false);
-
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [confirm, setConfirm] = useState(() => () => {
-    ('');
-  });
-
   const [savedFilename, setSavedFilename] = useLocalStorage(
     LocalStorageKeys.CURRENT_FILENAME,
     '',
@@ -99,8 +96,8 @@ const Header: React.FC<HeaderProps> = ({
         setEpgFilename(files[0].name);
         setSavedFilename(files[0].name);
       } else if (epgFilename !== '') {
-        setTitle(t('header:titleOverwrite'));
-        setContent(t('header:overwrite'));
+        setModalTitle(t('header:titleOverwrite'));
+        setModalContent(t('header:overwrite'));
         setModalState(true);
         setConfirm(() => () => {
           setPrograms(newPrograms);
@@ -112,7 +109,10 @@ const Header: React.FC<HeaderProps> = ({
     [
       addNotification,
       epgFilename,
+      setConfirm,
+      setModalContent,
       setModalState,
+      setModalTitle,
       setPrograms,
       setSavedFilename,
       t,
@@ -187,8 +187,8 @@ const Header: React.FC<HeaderProps> = ({
         icon={<CgPlayListRemove />}
         onClick={() => {
           if (epgFilename !== '') {
-            setTitle(t('header:buttonClearProgramList'));
-            setContent(t('header:clear'));
+            setModalTitle(t('header:buttonClearProgramList'));
+            setModalContent(t('header:clear'));
             setModalState(true);
             setConfirm(() => () => {
               setEpgFilename('');
@@ -199,16 +199,6 @@ const Header: React.FC<HeaderProps> = ({
             });
           }
         }}
-      />
-      <ModalDialog
-        title={title}
-        content={content}
-        confirm={confirm}
-        cancel={() => {
-          ('');
-        }}
-        modalState={modalState}
-        setModalState={setModalState}
       />
       <Text>
         {t('header:labelProgram', {
