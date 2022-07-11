@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider, StaticTimePicker } from '@mui/x-date-pickers';
-import { StyledInput } from './styles';
-import { HelpContainer } from '../TimePicker/styles';
+import { StyledInput, HelpContainer } from './styles';
 
-export interface ProgramTime {
+export interface DurationPickerProps {
   duration: number;
   onDurationChange?: (value: number) => void;
   setDuration: (value: number) => void;
 }
 
-const DurationPickers: React.FC<ProgramTime> = ({
+const DurationPicker: React.FC<DurationPickerProps> = ({
   duration,
   onDurationChange,
 }) => {
@@ -67,8 +66,8 @@ const DurationPickers: React.FC<ProgramTime> = ({
   );
 };
 
-DurationPickers.defaultProps = {
+DurationPicker.defaultProps = {
   onDurationChange: undefined,
 };
 
-export default DurationPickers;
+export default DurationPicker;

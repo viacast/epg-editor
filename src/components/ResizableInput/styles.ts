@@ -2,7 +2,7 @@ import { TextareaAutosize, TextareaAutosizeProps, styled } from '@mui/material';
 
 export interface StylesProps extends TextareaAutosizeProps {
   maxWidth?: string;
-  maxheight?: string;
+  maxHeight?: string;
 }
 
 export const StyledInput = styled(TextareaAutosize)<StylesProps>`
@@ -10,7 +10,7 @@ export const StyledInput = styled(TextareaAutosize)<StylesProps>`
   max-width: 442px;
   min-height: 44px;
   height: 130px;
-  max-height: ${({ maxheight: maxHeight }) => maxHeight || '130px'};
+  max-height: ${({ maxHeight }) => maxHeight || '130px'};
   display: flex;
   text-align: left;
   color: var(--color-neutral-3);

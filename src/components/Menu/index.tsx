@@ -14,11 +14,11 @@ import {
   Text,
   Button,
   Input,
-  Autosize,
+  ResizableInput,
   Select,
-  DatePickers,
-  TimePickers,
-  DurationPickers,
+  DatePicker,
+  TimePicker,
+  DurationPicker,
 } from 'components';
 import { Program, ProgramRating } from 'services/epg';
 import { EntityMap } from 'utils';
@@ -66,7 +66,7 @@ export interface MenuProps extends MenuStyleProps {
   programs: EntityMap<Program>;
   selectedProgramId: string;
   setIsClosing: (programId: boolean) => void;
-  setHasChange: (programId: boolean) => void;
+  setHasChanges: (programId: boolean) => void;
   onSaveProgram: (program: Program) => void;
   handleRemoveProgram: (programId: string) => void;
 }
@@ -78,7 +78,7 @@ const Menu: React.FC<MenuProps> = ({
   programs,
   selectedProgramId,
   setIsClosing,
-  setHasChange,
+  setHasChanges,
   onSaveProgram,
   handleRemoveProgram,
 }) => {
@@ -92,7 +92,7 @@ const Menu: React.FC<MenuProps> = ({
   const [openDuration, setOpenDuration] = useState(false);
   const [time, setTime] = useState(new Date());
   const [duration, setDuration] = useState(0);
-  const [leng, setLeng] = useState('');
+  const [formattedDuration, setFormattedDuration] = useState('00:00:00');
 
   const stHour = format(time, 'HH:mm:ss');
 
@@ -109,7 +109,7 @@ const Menu: React.FC<MenuProps> = ({
     const seconds = num % 60;
     const d = new Date();
     d.setHours(hours, minutes, seconds);
-    setLeng(format(d, 'HH:mm:ss'));
+    setFormattedDuration(format(d, 'HH:mm:ss'));
   }, [duration, newProgram]);
 
   useEffect(() => {
@@ -139,22 +139,28 @@ const Menu: React.FC<MenuProps> = ({
           {t('menu:edit')}: <p>{program?.title}</p>
         </ToolbarText>
         <VscDiscard
-          id="discard"
+          id="menu-button-discard"
           size="20px"
           onClick={() => {
-            // eslint-disable-next-line no-restricted-globals, no-alert
-            if (confirm(t('menu:discard', { programTitle: program.title }))) {
+            if (
+              program &&
+              // eslint-disable-next-line no-restricted-globals, no-alert
+              confirm(t('menu:discard', { programTitle: program.title }))
+            ) {
               setNewProgram(program);
-              setHasChange(false);
+              setHasChanges(false);
             }
           }}
         />
         <CgTrash
-          id="trash"
+          id="menu-button-remove"
           size="20px"
           onClick={() => {
-            // eslint-disable-next-line no-restricted-globals, no-alert
-            if (confirm(t('menu:delete', { programTitle: program.title }))) {
+            if (
+              program &&
+              // eslint-disable-next-line no-restricted-globals, no-alert
+              confirm(t('menu:delete', { programTitle: program.title }))
+            ) {
               handleRemoveProgram(program.id);
             }
           }}
@@ -172,20 +178,20 @@ const Menu: React.FC<MenuProps> = ({
                 value={newProgram?.title}
                 setValue={title => {
                   setNewProgram(p => ({ ...p, title }));
-                  setHasChange(true);
+                  setHasChanges(true);
                 }}
                 onCtrlEnter={() => onSaveProgram(newProgram)}
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:description')}
               </Text>
-              <Autosize
+              <ResizableInput
                 maxRows={4}
-                maxheight="270px"
+                maxHeight="270px"
                 value={newProgram?.description}
                 setValue={description => {
                   setNewProgram(p => ({ ...p, description }));
-                  setHasChange(true);
+                  setHasChanges(true);
                 }}
                 onCtrlEnter={() => onSaveProgram(newProgram)}
               />
@@ -200,7 +206,7 @@ const Menu: React.FC<MenuProps> = ({
                       ...p,
                       rating: rating as ProgramRating,
                     }));
-                    setHasChange(true);
+                    setHasChanges(true);
                   }}
                   options={Object.values(ProgramRating).map(r => ({
                     label: t(`parental-guidance:rating_${r}`),
@@ -219,9 +225,9 @@ const Menu: React.FC<MenuProps> = ({
               <FormRow>
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
-                    {t('menu:date')}
+                    {t('menu:startDate')}
                   </Text>
-                  <DatePickers
+                  <DatePicker
                     date={newProgram?.startDate ?? new Date()}
                     onDateChange={startDate => {
                       setNewProgram(p => {
@@ -231,13 +237,13 @@ const Menu: React.FC<MenuProps> = ({
                         newStartTime.setFullYear(startDate.getFullYear());
                         return { ...p, startDate, startTime: newStartTime };
                       });
-                      setHasChange(true);
+                      setHasChanges(true);
                     }}
                   />
                 </FormColumn>
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
-                    {t('menu:time')}
+                    {t('menu:startTime')}
                   </Text>
                   <ClickAwayListener
                     mouseEvent="onMouseDown"
@@ -265,14 +271,14 @@ const Menu: React.FC<MenuProps> = ({
                         </StyledInput>
                       </HelpContainer>
                       {openTime ? (
-                        <TimePickers
+                        <TimePicker
                           time={newProgram?.startTime ?? new Date()}
                           onTimeChange={startTime => {
                             setNewProgram(p => ({
                               ...p,
                               startTime,
                             }));
-                            setHasChange(true);
+                            setHasChanges(true);
                           }}
                           setTime={setTime}
                         />
@@ -284,7 +290,7 @@ const Menu: React.FC<MenuProps> = ({
               <FormRow>
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
-                    {t('menu:length')}
+                    {t('menu:duration')}
                   </Text>
                   <ClickAwayListener
                     mouseEvent="onMouseDown"
@@ -296,7 +302,7 @@ const Menu: React.FC<MenuProps> = ({
                         <StyledInput variant="outlined">
                           <OutlinedInput
                             className="epg-time"
-                            value={leng}
+                            value={formattedDuration}
                             endAdornment={
                               <InputAdornment position="end">
                                 <IconButton
@@ -312,14 +318,14 @@ const Menu: React.FC<MenuProps> = ({
                         </StyledInput>
                       </HelpContainer>
                       {openDuration ? (
-                        <DurationPickers
+                        <DurationPicker
                           duration={newProgram?.duration ?? 0}
                           onDurationChange={newDuration => {
                             setNewProgram(p => ({
                               ...p,
                               duration: newDuration,
                             }));
-                            setHasChange(true);
+                            setHasChanges(true);
                           }}
                           setDuration={setDuration}
                         />
@@ -327,7 +333,7 @@ const Menu: React.FC<MenuProps> = ({
                     </Box>
                   </ClickAwayListener>
                 </FormColumn>
-                <FormColumn /> {/* empty column */}
+                <FormColumn />
               </FormRow>
             </Form>
             <ButtonContainer>
@@ -336,7 +342,7 @@ const Menu: React.FC<MenuProps> = ({
                 icon={<CgClose />}
                 onClick={() => {
                   setIsClosing(true);
-                  setHasChange(false);
+                  setHasChanges(false);
                 }}
               />
               <Button
@@ -345,7 +351,7 @@ const Menu: React.FC<MenuProps> = ({
                 onClick={() => {
                   if (newProgram) {
                     onSaveProgram(newProgram);
-                    setHasChange(false);
+                    setHasChanges(false);
                   }
                 }}
               />
