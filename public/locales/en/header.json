@@ -7,7 +7,5 @@
   "clearProgramList": "Are you sure you want to clear the program list?",
   "overwriteProgramList": "Are you sure you want to overwrite the program list?",
   "alertInvalidFile": "This file format is not valid. Try a '.csv' or '.xml' file instead.",
-  "labelProgram_zero" : "Programs: {{count}}",
-  "labelProgram_one" : "Program: {{count}}",
-  "labelProgram_other" : "Programs: {{count}}"
+  "labelProgram" : "Programs: {{count}}"
 }
