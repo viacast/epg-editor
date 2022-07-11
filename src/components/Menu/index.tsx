@@ -351,7 +351,6 @@ const Menu: React.FC<MenuProps> = ({
                 onClick={() => {
                   if (newProgram) {
                     onSaveProgram(newProgram);
-                    setHasChanges(false);
                   }
                 }}
               />
