@@ -15,8 +15,16 @@ export const StyledDialog = styled(Dialog)`
 `;
 export const StyledDialogActions = styled(DialogActions)``;
 export const StyledDialogContent = styled(DialogContent)``;
-export const StyledDialogContentText = styled(DialogContentText)``;
-export const StyledDialogTitle = styled(DialogTitle)``;
+export const StyledDialogContentText = styled(DialogContentText)`
+  color: var(--color-neutral-3);
+  font-family: Nunito, sans-serif;
+  font-size: 16px;
+`;
+export const StyledDialogTitle = styled(DialogTitle)`
+  color: var(--color-neutral-2);
+  font-family: Nunito, sans-serif;
+  font-size: 24px;
+`;
 export const StyledButton = styled(Button)`
-  color: var(--color-system-2);
+  color: var(--color-system-4);
 `;

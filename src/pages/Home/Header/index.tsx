@@ -47,6 +47,12 @@ const Header: React.FC<HeaderProps> = ({
   const [programCount, setProgramCount] = useState(0);
   const [open, setOpen] = useState(false);
 
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [confirm, setConfirm] = useState(() => () => {
+    ('');
+  });
+
   const [savedFilename, setSavedFilename] = useLocalStorage(
     LocalStorageKeys.CURRENT_FILENAME,
     '',
@@ -86,13 +92,29 @@ const Header: React.FC<HeaderProps> = ({
       }
       const newPrograms = await EPGParser.parseFile(files[0]);
       // eslint-disable-next-line no-restricted-globals, no-alert
-      if (epgFilename === '' || confirm(t('header:overwrite'))) {
+      if (epgFilename === '') {
         setPrograms(newPrograms);
         setEpgFilename(files[0].name);
         setSavedFilename(files[0].name);
+      } else if (epgFilename !== '') {
+        setTitle(t('header:titleOverwrite'));
+        setContent(t('header:overwrite'));
+        setModalState(true);
+        setConfirm(() => () => {
+          setPrograms(newPrograms);
+          setEpgFilename(files[0].name);
+          setSavedFilename(files[0].name);
+        });
       }
     },
-    [addNotification, epgFilename, setPrograms, setSavedFilename, t],
+    [
+      addNotification,
+      epgFilename,
+      setModalState,
+      setPrograms,
+      setSavedFilename,
+      t,
+    ],
   );
 
   useClickOutside(exportOptionsRef, () => setOpen(false));
@@ -111,7 +133,9 @@ const Header: React.FC<HeaderProps> = ({
       <Button
         text={t('header:buttonImportProgram')}
         icon={<FaDownload />}
-        onClick={() => fileInputRef?.current.click?.()}
+        onClick={() => {
+          fileInputRef?.current.click?.();
+        }}
       />
       <MenuOptions>
         <Button
@@ -161,19 +185,22 @@ const Header: React.FC<HeaderProps> = ({
         icon={<CgPlayListRemove />}
         onClick={() => {
           if (epgFilename !== '') {
+            setTitle(t('header:buttonClearProgramList'));
+            setContent(t('header:clear'));
             setModalState(true);
+            setConfirm(() => () => {
+              setEpgFilename('');
+              setSavedFilename('');
+              handleClearProgramList();
+              fileInputRef.current.clearFiles?.();
+            });
           }
         }}
       />
       <ModalDialog
-        title={t('header:buttonClearProgramList')}
-        content={t('header:clear')}
-        confirm={() => {
-          setEpgFilename('');
-          setSavedFilename('');
-          handleClearProgramList();
-          fileInputRef.current.clearFiles?.();
-        }}
+        title={title}
+        content={content}
+        confirm={confirm}
         cancel={() => {
           ('');
         }}

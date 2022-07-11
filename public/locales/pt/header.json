@@ -7,6 +7,7 @@
   "clear": "Tem certeza que deseja limpar todos os programas na lista?",
   "overwrite": "Deseja sobrescrever todos os programas na lista?",
   "alert": "Esse formato de arquivo não é válido. Em vez disso tente um '.csv' ou '.xml'.",
+  "titleOverwrite": "Sobrescrever",
   "labelProgram_zero" : "Programas: {{count}}",
   "labelProgram_one" : "Programa: {{count}}",
   "labelProgram_other" : "Programas: {{count}}"
