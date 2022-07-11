@@ -84,29 +84,29 @@ const Header: React.FC<HeaderProps> = ({
         return;
       }
       const newPrograms = await EPGParser.parseFile(files[0]);
-      if (epgFilename === '') {
+      if (!programCount) {
         setPrograms(newPrograms);
         setEpgFilename(files[0].name);
         setSavedFilename(files[0].name);
-      } else if (epgFilename !== '') {
-        openModal({
-          title: t('header:titleOverwrite'),
-          content: t('header:overwrite'),
-          confirm: () => {
-            setPrograms(newPrograms);
-            setEpgFilename(files[0].name);
-            setSavedFilename(files[0].name);
-          },
-        });
+        return;
       }
+      openModal({
+        title: t('header:titleOverwrite'),
+        content: t('header:overwriteProgramList'),
+        confirm: () => {
+          setPrograms(newPrograms);
+          setEpgFilename(files[0].name);
+          setSavedFilename(files[0].name);
+        },
+      });
     },
     [
-      epgFilename,
+      programCount,
+      openModal,
+      t,
       notifyInvalidFile,
       setPrograms,
       setSavedFilename,
-      openModal,
-      t,
     ],
   );
 
@@ -177,19 +177,17 @@ const Header: React.FC<HeaderProps> = ({
         text={t('header:buttonClearProgramList')}
         icon={<CgPlayListRemove />}
         onClick={() => {
-          if (epgFilename !== '') {
-            openModal({
-              title: t('header:buttonClearProgramList'),
-              content: t('header:clear'),
-              confirm: () => {
-                setEpgFilename('');
-                setSavedFilename('');
-                handleClearProgramList();
-                fileInputRef.current.clearFiles?.();
-                setIsClosing(true);
-              },
-            });
-          }
+          openModal({
+            title: t('header:buttonClearProgramList'),
+            content: t('header:clearProgramList'),
+            confirm: () => {
+              setEpgFilename('');
+              setSavedFilename('');
+              handleClearProgramList();
+              fileInputRef.current.clearFiles?.();
+              setIsClosing(true);
+            },
+          });
         }}
       />
       <Text>

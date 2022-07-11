@@ -42,7 +42,7 @@ const ModalProvider: React.FC<WithChildren> = ({ children }) => {
       setModalIsOpen(true);
       setModalTitle(title);
       setModalContent(content);
-      setModalConfirm(() => {
+      setModalConfirm(() => () => {
         confirm();
         setModalIsOpen(false);
       });

@@ -1,7 +1,7 @@
 import Button, { ButtonProps } from './Button';
 import FileInput, { FileInputProps, FileInputRefProps } from './FileInput';
 import Input, { InputProps } from './Input';
-import ModalDialog, { ModalDialogProps } from './ModalDialog';
+import ModalDialog from './ModalDialog';
 import ResizableInput, { ResizableInputProps } from './ResizableInput';
 import ProgramTable, { ProgramTableRefProps } from './ProgramTable';
 import Menu from './Menu';
@@ -31,7 +31,6 @@ export {
 export type {
   ButtonProps,
   InputProps,
-  ModalDialogProps,
   ResizableInputProps,
   FileInputProps,
   FileInputRefProps,

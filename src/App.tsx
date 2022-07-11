@@ -1,4 +1,3 @@
-import { useModalProvider } from 'providers/ModalProvider';
 import React from 'react';
 import { Slide } from 'react-toastify';
 import { ModalDialog, ToastContainer } from './components';
@@ -8,9 +7,6 @@ import AppRoutes from './routes';
 import GlobalStyle from './styles/global';
 
 const App: React.FC = () => {
-  const { modalIsOpen, modalTitle, modalContent, modalConfirm, closeModal } =
-    useModalProvider();
-
   return (
     <AppProvider>
       <AppRoutes />
@@ -24,13 +20,7 @@ const App: React.FC = () => {
         pauseOnHover
         theme="dark"
       />
-      <ModalDialog
-        isOpen={modalIsOpen}
-        title={modalTitle}
-        content={modalContent}
-        confirm={modalConfirm}
-        cancel={closeModal}
-      />
+      <ModalDialog />
       <GlobalStyle />
     </AppProvider>
   );

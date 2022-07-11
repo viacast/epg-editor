@@ -1,5 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { useModalProvider } from 'providers/ModalProvider';
 import {
   StyledDialog,
   StyledDialogActions,
@@ -9,47 +11,35 @@ import {
   StyledButton,
 } from './styles';
 
-export interface ModalDialogProps {
-  isOpen: boolean;
-  title: string;
-  content: string;
-  confirm: () => void;
-  cancel: () => void;
-}
-
-const ModalDialog: React.FC<ModalDialogProps> = ({
-  isOpen,
-  title,
-  content,
-  confirm,
-  cancel,
-}) => {
+const ModalDialog: React.FC = () => {
   const { t } = useTranslation();
+  const { modalIsOpen, modalTitle, modalContent, modalConfirm, closeModal } =
+    useModalProvider();
 
   return (
     <div>
       <StyledDialog
-        open={isOpen}
-        onClose={() => cancel()}
+        open={modalIsOpen}
+        onClose={() => closeModal()}
         aria-describedby="alert-dialog-slide-description"
       >
-        <StyledDialogTitle>{title}</StyledDialogTitle>
+        <StyledDialogTitle>{modalTitle}</StyledDialogTitle>
         <StyledDialogContent>
           <StyledDialogContentText id="alert-dialog-slide-description">
-            {content}
+            {modalContent}
           </StyledDialogContentText>
         </StyledDialogContent>
         <StyledDialogActions>
           <StyledButton
             onClick={() => {
-              cancel();
+              closeModal();
             }}
           >
             {t('modal:cancel')}
           </StyledButton>
           <StyledButton
             onClick={() => {
-              confirm();
+              modalConfirm();
             }}
           >
             {t('modal:confirm')}
