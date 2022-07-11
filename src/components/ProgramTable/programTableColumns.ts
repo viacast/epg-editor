@@ -23,7 +23,7 @@ export default [
   },
   {
     id: 'duration',
-    minWidth: 100,
+    minWidth: 110,
     align: 'left',
     format: 'duration',
   },
