@@ -5,7 +5,9 @@ export interface StylesProps extends TextareaAutosizeProps {
   maxHeight?: string;
 }
 
-export const StyledInput = styled(TextareaAutosize)<StylesProps>`
+export const StyledInput = styled(TextareaAutosize, {
+  shouldForwardProp: prop => prop !== 'maxHeight',
+})<StylesProps>`
   min-width: 442px;
   max-width: 442px;
   min-height: 44px;
