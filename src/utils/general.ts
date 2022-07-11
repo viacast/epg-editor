@@ -33,3 +33,6 @@ export async function readFileAsync(
   reader.readAsText(file, encoding);
   return promise;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export function NOOP(): void {}

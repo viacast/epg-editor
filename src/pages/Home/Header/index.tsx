@@ -17,6 +17,7 @@ import { EntityMap } from 'utils';
 import { format } from 'date-fns';
 import { toast, TypeOptions } from 'react-toastify';
 import types from '@emotion/styled';
+import { useModalProvider } from 'providers/ModalProvider';
 import {
   HeaderContainer,
   MenuOptions,
@@ -30,11 +31,7 @@ export interface HeaderProps {
   setPrograms: (programs: Program[]) => void;
   handleAddProgram: () => void;
   handleClearProgramList: () => void;
-  setModalState: (value: boolean) => void;
   setIsClosing: (value: boolean) => void;
-  setModalTitle: (value: string) => void;
-  setModalContent: (value: string) => void;
-  setConfirm: (value: () => () => void) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -42,11 +39,7 @@ const Header: React.FC<HeaderProps> = ({
   setPrograms,
   handleAddProgram,
   handleClearProgramList,
-  setModalState,
   setIsClosing,
-  setModalTitle,
-  setModalContent,
-  setConfirm,
 }) => {
   const { t, i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
@@ -60,6 +53,8 @@ const Header: React.FC<HeaderProps> = ({
 
   const fileInputRef = useRef<FileInputRefProps>({});
   const exportOptionsRef = useRef<HTMLDivElement>(null);
+
+  const { openModal } = useModalProvider();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const addNotification = () => {
@@ -90,33 +85,23 @@ const Header: React.FC<HeaderProps> = ({
         addNotification();
       }
       const newPrograms = await EPGParser.parseFile(files[0]);
-      // eslint-disable-next-line no-restricted-globals, no-alert
       if (epgFilename === '') {
         setPrograms(newPrograms);
         setEpgFilename(files[0].name);
         setSavedFilename(files[0].name);
       } else if (epgFilename !== '') {
-        setModalTitle(t('header:titleOverwrite'));
-        setModalContent(t('header:overwrite'));
-        setModalState(true);
-        setConfirm(() => () => {
-          setPrograms(newPrograms);
-          setEpgFilename(files[0].name);
-          setSavedFilename(files[0].name);
+        openModal({
+          title: t('header:titleOverwrite'),
+          content: t('header:overwrite'),
+          confirm: () => {
+            setPrograms(newPrograms);
+            setEpgFilename(files[0].name);
+            setSavedFilename(files[0].name);
+          },
         });
       }
     },
-    [
-      addNotification,
-      epgFilename,
-      setConfirm,
-      setModalContent,
-      setModalState,
-      setModalTitle,
-      setPrograms,
-      setSavedFilename,
-      t,
-    ],
+    [addNotification, epgFilename, openModal, setPrograms, setSavedFilename, t],
   );
 
   useClickOutside(exportOptionsRef, () => setOpen(false));
@@ -187,15 +172,16 @@ const Header: React.FC<HeaderProps> = ({
         icon={<CgPlayListRemove />}
         onClick={() => {
           if (epgFilename !== '') {
-            setModalTitle(t('header:buttonClearProgramList'));
-            setModalContent(t('header:clear'));
-            setModalState(true);
-            setConfirm(() => () => {
-              setEpgFilename('');
-              setSavedFilename('');
-              handleClearProgramList();
-              fileInputRef.current.clearFiles?.();
-              setIsClosing(true);
+            openModal({
+              title: t('header:buttonClearProgramList'),
+              content: t('header:clear'),
+              confirm: () => {
+                setEpgFilename('');
+                setSavedFilename('');
+                handleClearProgramList();
+                fileInputRef.current.clearFiles?.();
+                setIsClosing(true);
+              },
             });
           }
         }}

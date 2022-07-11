@@ -30,6 +30,7 @@ import C14 from 'assets/icons/ratings/R14.svg';
 import C16 from 'assets/icons/ratings/R16.svg';
 import C18 from 'assets/icons/ratings/R18.svg';
 
+import { useModalProvider } from 'providers/ModalProvider';
 import {
   BottomContainer,
   ButtonContainer,
@@ -69,10 +70,6 @@ export interface MenuProps extends MenuStyleProps {
   setHasChange: (programId: boolean) => void;
   onSaveProgram: (program: Program) => void;
   handleRemoveProgram: (programId: string) => void;
-  setModalState: (value: boolean) => void;
-  setModalTitle: (value: string) => void;
-  setModalContent: (value: string) => void;
-  setConfirm: (value: () => () => void) => void;
 }
 
 const Menu: React.FC<MenuProps> = ({
@@ -85,13 +82,10 @@ const Menu: React.FC<MenuProps> = ({
   setHasChange,
   onSaveProgram,
   handleRemoveProgram,
-  setModalState,
-  setModalTitle,
-  setModalContent,
-  setConfirm,
 }) => {
   const { t } = useTranslation();
 
+  const { openModal } = useModalProvider();
   const program = programs.get(selectedProgramId);
   const [newProgram, setNewProgram] = useState<Program>(
     program ? structuredClone(program) : new Program(),
@@ -150,14 +144,15 @@ const Menu: React.FC<MenuProps> = ({
           id="discard"
           size="20px"
           onClick={() => {
-            setModalState(true);
-            setModalTitle(t('menu:discardProgramTitle'));
-            setModalContent(
-              t('menu:discardProgramMessage', { programTitle: program.title }),
-            );
-            setConfirm(() => () => {
-              setNewProgram(program);
-              setHasChange(false);
+            openModal({
+              title: t('menu:discardProgramTitle'),
+              content: t('menu:discardProgramMessage', {
+                programTitle: program.title,
+              }),
+              confirm: () => {
+                setNewProgram(program);
+                setHasChange(false);
+              },
             });
           }}
         />
@@ -165,13 +160,14 @@ const Menu: React.FC<MenuProps> = ({
           id="trash"
           size="20px"
           onClick={() => {
-            setModalState(true);
-            setModalTitle(t('menu:deleteProgramTitle'));
-            setModalContent(
-              t('menu:deleteProgramMessage', { programTitle: program.title }),
-            );
-            setConfirm(() => () => {
-              handleRemoveProgram(program.id);
+            openModal({
+              title: t('menu:deleteProgramTitle'),
+              content: t('menu:deleteProgramMessage', {
+                programTitle: program.title,
+              }),
+              confirm: () => {
+                handleRemoveProgram(program.id);
+              },
             });
           }}
         />

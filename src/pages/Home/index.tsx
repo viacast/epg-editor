@@ -1,11 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import {
-  ProgramTable,
-  Menu,
-  ProgramTableRefProps,
-  ModalDialog,
-} from 'components';
+import { ProgramTable, Menu, ProgramTableRefProps } from 'components';
 import { Program } from 'services/epg';
 import { EntityMap } from 'utils';
 
@@ -23,13 +18,6 @@ const Home: React.FC = () => {
   const [selectedProgramId, setSelectedProgramId] = useState('');
   const [isClosing, setIsClosing] = useState(false);
   const [hasChange, setHasChange] = useState(false);
-  const [modalState, setModalState] = useState(false);
-
-  const [modalTitle, setModalTitle] = useState('');
-  const [modalContent, setModalContent] = useState('');
-  const [confirm, setConfirm] = useState(() => () => {
-    ('');
-  });
 
   const programTableRef = useRef<ProgramTableRefProps>({});
 
@@ -81,10 +69,6 @@ const Home: React.FC = () => {
       <HeaderContainer>
         <Header
           setIsClosing={setIsClosing}
-          setModalState={setModalState}
-          setModalTitle={setModalTitle}
-          setModalContent={setModalContent}
-          setConfirm={setConfirm}
           programs={programs}
           setPrograms={newPrograms => {
             setSelectedProgramId('');
@@ -122,10 +106,6 @@ const Home: React.FC = () => {
           width={selectedProgramId === '' || isClosing ? '0px' : '500px'}
         >
           <Menu
-            setModalTitle={setModalTitle}
-            setModalContent={setModalContent}
-            setConfirm={setConfirm}
-            setModalState={setModalState}
             hasChange={hasChange}
             setHasChange={setHasChange}
             overflowStatus={
@@ -155,16 +135,6 @@ const Home: React.FC = () => {
           />
         </MenuContainer>
       </TableMenuContainer>
-      <ModalDialog
-        title={modalTitle}
-        content={modalContent}
-        confirm={confirm}
-        cancel={() => {
-          ('');
-        }}
-        modalState={modalState}
-        setModalState={setModalState}
-      />
     </Container>
   );
 };

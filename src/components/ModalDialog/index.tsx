@@ -10,21 +10,19 @@ import {
 } from './styles';
 
 export interface ModalDialogProps {
+  modalState: boolean;
   title: string;
   content: string;
   confirm: () => void;
   cancel: () => void;
-  modalState: boolean;
-  setModalState: (value: boolean) => void;
 }
 
 const ModalDialog: React.FC<ModalDialogProps> = ({
+  modalState,
   title,
   content,
   confirm,
   cancel,
-  modalState,
-  setModalState,
 }) => {
   const { t } = useTranslation();
 
@@ -32,7 +30,7 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
     <div>
       <StyledDialog
         open={modalState}
-        onClose={() => setModalState(false)}
+        onClose={() => cancel()}
         aria-describedby="alert-dialog-slide-description"
       >
         <StyledDialogTitle>{title}</StyledDialogTitle>
@@ -44,7 +42,6 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
         <StyledDialogActions>
           <StyledButton
             onClick={() => {
-              setModalState(false);
               cancel();
             }}
           >
@@ -52,7 +49,6 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
           </StyledButton>
           <StyledButton
             onClick={() => {
-              setModalState(false);
               confirm();
             }}
           >
