@@ -72,7 +72,7 @@ export const Toolbar = styled.div<{ display: string }>`
   svg {
     min-width: 20px;
   }
-  #discard {
+  #menu-button-discard {
     display: ${({ display }) => display || 'none'};
     color: var(--color-neutral-4);
     margin-left: auto;
@@ -83,7 +83,7 @@ export const Toolbar = styled.div<{ display: string }>`
       color: white;
     }
   }
-  #trash {
+  #menu-button-remove {
     color: var(--color-system-1);
     margin-right: 10px;
     cursor: pointer;

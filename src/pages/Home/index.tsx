@@ -17,7 +17,7 @@ import Header from './Header';
 const Home: React.FC = () => {
   const [selectedProgramId, setSelectedProgramId] = useState('');
   const [isClosing, setIsClosing] = useState(false);
-  const [hasChange, setHasChange] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
   const programTableRef = useRef<ProgramTableRefProps>({});
 
   const [savedPrograms, setSavedPrograms] = useLocalStorage(
@@ -28,20 +28,18 @@ const Home: React.FC = () => {
     new EntityMap<Program>(savedPrograms?.map(p => new Program(p))),
   );
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [dimensions, setDimensions] = useState({
     height: window.innerHeight,
     width: window.innerWidth,
   });
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
-    function handleResize() {
+    const handleResize = () => {
       setDimensions({
         height: window.innerHeight,
         width: window.innerWidth,
       });
-    }
+    };
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -64,11 +62,11 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <Container overflow={dimensions.width > 1768 ? 'hidden' : 'scrool'}>
+    <Container overflow={dimensions.width > 1768 ? 'hidden' : 'scroll'}>
       <HeaderContainer>
         <Header
           setIsClosing={setIsClosing}
-          setHasChange={setHasChange}
+          setHasChanges={setHasChanges}
           programs={programs}
           setPrograms={newPrograms => {
             setSelectedProgramId('');
@@ -106,8 +104,8 @@ const Home: React.FC = () => {
           width={selectedProgramId === '' || isClosing ? '0px' : '500px'}
         >
           <Menu
-            hasChange={hasChange}
-            setHasChange={setHasChange}
+            hasChange={hasChanges}
+            setHasChanges={setHasChanges}
             overflowStatus={
               selectedProgramId === '' || isClosing ? 'hidden' : 'auto'
             }
@@ -122,12 +120,15 @@ const Home: React.FC = () => {
               setPrograms(p => {
                 const size = p.toArray().length;
                 const index = p.indexOf(programId);
-                if (size - 1 === 0) {
+                if (size === 1) {
+                  // was the only program on the list
                   setSelectedProgramId('');
-                } else if (size - 1 === index) {
-                  setSelectedProgramId(p.at(index - 1).id);
+                } else if (index === size - 1) {
+                  // was the last program on the list
+                  setSelectedProgramId(p.at(index - 1)?.id ?? '');
                 } else {
-                  setSelectedProgramId(p.at(index + 1).id);
+                  // all other cases
+                  setSelectedProgramId(p.at(index + 1)?.id ?? '');
                 }
                 return p.remove(programId).clone();
               });

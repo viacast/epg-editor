@@ -15,8 +15,7 @@ import EPGBuilder from 'services/epg/builder';
 import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
 import { EntityMap } from 'utils';
 import { format } from 'date-fns';
-import { toast, TypeOptions } from 'react-toastify';
-import types from '@emotion/styled';
+import { toast } from 'react-toastify';
 import {
   HeaderContainer,
   MenuOptions,
@@ -31,13 +30,13 @@ export interface HeaderProps {
   handleAddProgram: () => void;
   handleClearProgramList: () => void;
   setIsClosing: (programId: boolean) => void;
-  setHasChange: (programId: boolean) => void;
+  setHasChanges: (programId: boolean) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
   programs,
   setPrograms,
-  setHasChange,
+  setHasChanges,
   setIsClosing,
   handleAddProgram,
   handleClearProgramList,
@@ -56,12 +55,11 @@ const Header: React.FC<HeaderProps> = ({
   const fileInputRef = useRef<FileInputRefProps>({});
   const exportOptionsRef = useRef<HTMLDivElement>(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const addNotification = () => {
-    toast(t('header:alert'), {
-      type: types[Math.floor(Math.random() * types.length)] as TypeOptions,
+  const notifyInvalidFile = useCallback(() => {
+    toast(t('header:alertInvalidFile'), {
+      type: 'warning',
     });
-  };
+  }, [t]);
 
   useEffect(() => {
     setProgramCount(programs.count);
@@ -82,22 +80,23 @@ const Header: React.FC<HeaderProps> = ({
         return;
       }
       if (files[0].type !== 'text/xml' && files[0].type !== 'text/csv') {
-        addNotification();
+        notifyInvalidFile();
+        return;
       }
       const newPrograms = await EPGParser.parseFile(files[0]);
       // eslint-disable-next-line no-restricted-globals, no-alert
-      if (epgFilename === '' || confirm(t('header:overwrite'))) {
+      if (epgFilename === '' || confirm(t('header:overwriteProgramList'))) {
         setPrograms(newPrograms);
         setEpgFilename(files[0].name);
         setSavedFilename(files[0].name);
       }
     },
-    [addNotification, epgFilename, setPrograms, setSavedFilename, t],
+    [notifyInvalidFile, epgFilename, setPrograms, setSavedFilename, t],
   );
 
   const handleClearFiles = useCallback(() => {
     // eslint-disable-next-line no-restricted-globals, no-alert
-    if (confirm(t('header:clear'))) {
+    if (confirm(t('header:clearProgramList'))) {
       setEpgFilename('');
       setSavedFilename('');
       handleClearProgramList();
@@ -172,7 +171,7 @@ const Header: React.FC<HeaderProps> = ({
         onClick={() => {
           handleClearFiles();
           setIsClosing(true);
-          setHasChange(false);
+          setHasChanges(false);
         }}
       />
       <Text>

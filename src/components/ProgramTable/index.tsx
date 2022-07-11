@@ -25,7 +25,6 @@ import {
   StyledText,
   IconRating,
   Message,
-  // Reorder,
 } from './styles';
 import programTableColumns from './programTableColumns';
 

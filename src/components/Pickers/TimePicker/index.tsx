@@ -3,13 +3,13 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider, StaticTimePicker } from '@mui/x-date-pickers';
 import { HelpContainer, StyledInput } from './styles';
 
-export interface ProgramTime {
+export interface TimePickerProps {
   time: Date;
   onTimeChange?: (value: Date) => void;
   setTime: (value: Date) => void;
 }
 
-const TimePickers: React.FC<ProgramTime> = ({
+const TimePicker: React.FC<TimePickerProps> = ({
   time,
   onTimeChange,
   setTime,
@@ -61,8 +61,8 @@ const TimePickers: React.FC<ProgramTime> = ({
   );
 };
 
-TimePickers.defaultProps = {
+TimePicker.defaultProps = {
   onTimeChange: undefined,
 };
 
-export default TimePickers;
+export default TimePicker;

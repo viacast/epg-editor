@@ -1,7 +1,7 @@
 import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { StyledInput, StylesProps } from './styles';
 
-export interface AutosizeProps extends StylesProps {
+export interface ResizableInputProps extends StylesProps {
   disabled?: boolean;
   value?: string;
   setValue?: (value: string) => void;
@@ -10,12 +10,12 @@ export interface AutosizeProps extends StylesProps {
   onCtrlEnter?: (value: string) => void;
 }
 
-const Autosize: React.FC<AutosizeProps> = ({
+const ResizableInput: React.FC<ResizableInputProps> = ({
   disabled,
   value,
   setValue,
   placeholder,
-  maxheight: maxHeight,
+  maxHeight,
   maxRows,
   onCtrlEnter,
 }) => {
@@ -27,7 +27,7 @@ const Autosize: React.FC<AutosizeProps> = ({
 
   return (
     <StyledInput
-      maxheight={maxHeight}
+      maxHeight={maxHeight}
       onKeyDown={(e: KeyboardEvent) => {
         if (e.ctrlKey && e.key === 'Enter') {
           onCtrlEnter?.(internalValue);
@@ -46,7 +46,7 @@ const Autosize: React.FC<AutosizeProps> = ({
   );
 };
 
-Autosize.defaultProps = {
+ResizableInput.defaultProps = {
   disabled: false,
   placeholder: '',
   value: '',
@@ -55,4 +55,4 @@ Autosize.defaultProps = {
   onCtrlEnter: undefined,
 };
 
-export default Autosize;
+export default ResizableInput;

@@ -4,9 +4,9 @@
   "buttonExportProgram" : "Export",
   "buttonAddProgram" : "Add",
   "buttonClearProgramList": "Clear",
-  "clear": "Are you sure you want to clear all programs in the list?",
-  "overwrite": "Do you want overwrite all programs in the list?",
-  "alert": "This file format is not valid. Try a '.csv' or '.xml' instead.",
+  "clearProgramList": "Are you sure you want to clear the program list?",
+  "overwriteProgramList": "Are you sure you want to overwrite the program list?",
+  "alertInvalidFile": "This file format is not valid. Try a '.csv' or '.xml' file instead.",
   "labelProgram_zero" : "Programs: {{count}}",
   "labelProgram_one" : "Program: {{count}}",
   "labelProgram_other" : "Programs: {{count}}"

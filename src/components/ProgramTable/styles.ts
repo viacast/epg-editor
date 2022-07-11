@@ -95,18 +95,3 @@ export const Message = styled.div`
   text-overflow: ellipsis;
   vertical-align: middle;
 `;
-
-// export const Reorder = styled.div`
-//   height: 62px;
-//   background-color: var(--color-neutral-5);
-//   svg {
-//     color: var(--color-neutral-2);
-//     margin-top: 18.5px;
-//     margin-bottom: 18.5px;
-//     margin-left: 10px;
-//     margin-right: -10px;
-//   }
-//   svg :hover {
-//     color: var(--color-neutral-6);
-//   }
-// `;
