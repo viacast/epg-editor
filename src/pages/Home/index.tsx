@@ -95,9 +95,10 @@ const Home: React.FC = () => {
             programs={programs}
             selectedProgramId={selectedProgramId}
             setIsClosing={setIsClosing}
-            onSaveProgram={program =>
-              setPrograms(p => p.update(program).clone())
-            }
+            onSaveProgram={program => {
+              setPrograms(p => p.update(program).clone());
+              setHasChanges(false);
+            }}
             handleRemoveProgram={programId => {
               setPrograms(p => {
                 const size = p.toArray().length;
