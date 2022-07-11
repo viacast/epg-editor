@@ -19,6 +19,7 @@ import {
   DatePickers,
   TimePickers,
   DurationPickers,
+  ModalDialog,
 } from 'components';
 import { Program, ProgramRating } from 'services/epg';
 import { EntityMap } from 'utils';
@@ -69,6 +70,8 @@ export interface MenuProps extends MenuStyleProps {
   setHasChange: (programId: boolean) => void;
   onSaveProgram: (program: Program) => void;
   handleRemoveProgram: (programId: string) => void;
+  modalState: boolean;
+  setModalState: (value: boolean) => void;
 }
 
 const Menu: React.FC<MenuProps> = ({
@@ -81,6 +84,8 @@ const Menu: React.FC<MenuProps> = ({
   setHasChange,
   onSaveProgram,
   handleRemoveProgram,
+  modalState,
+  setModalState,
 }) => {
   const { t } = useTranslation();
 
@@ -93,6 +98,12 @@ const Menu: React.FC<MenuProps> = ({
   const [time, setTime] = useState(new Date());
   const [duration, setDuration] = useState(0);
   const [leng, setLeng] = useState('');
+
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalContent, setModalContent] = useState('');
+  const [confirm, setConfirm] = useState(() => () => {
+    ('');
+  });
 
   const stHour = format(time, 'HH:mm:ss');
 
@@ -142,21 +153,29 @@ const Menu: React.FC<MenuProps> = ({
           id="discard"
           size="20px"
           onClick={() => {
-            // eslint-disable-next-line no-restricted-globals, no-alert
-            if (confirm(t('menu:discard', { programTitle: program.title }))) {
+            setModalState(true);
+            setModalTitle(t('menu:discardProgramTitle'));
+            setModalContent(
+              t('menu:discardProgramMessage', { programTitle: program.title }),
+            );
+            setConfirm(() => () => {
               setNewProgram(program);
               setHasChange(false);
-            }
+            });
           }}
         />
         <CgTrash
           id="trash"
           size="20px"
           onClick={() => {
-            // eslint-disable-next-line no-restricted-globals, no-alert
-            if (confirm(t('menu:delete', { programTitle: program.title }))) {
+            setModalState(true);
+            setModalTitle(t('menu:deleteProgramTitle'));
+            setModalContent(
+              t('menu:deleteProgramMessage', { programTitle: program.title }),
+            );
+            setConfirm(() => () => {
               handleRemoveProgram(program.id);
-            }
+            });
           }}
         />
       </Toolbar>
@@ -330,6 +349,16 @@ const Menu: React.FC<MenuProps> = ({
                 <FormColumn /> {/* empty column */}
               </FormRow>
             </Form>
+            <ModalDialog
+              title={modalTitle}
+              content={modalContent}
+              confirm={confirm}
+              cancel={() => {
+                ('');
+              }}
+              modalState={modalState}
+              setModalState={setModalState}
+            />
             <ButtonContainer>
               <Button
                 text={t('menu:cancel')}

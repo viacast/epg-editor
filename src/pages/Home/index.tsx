@@ -109,6 +109,8 @@ const Home: React.FC = () => {
           width={selectedProgramId === '' || isClosing ? '0px' : '500px'}
         >
           <Menu
+            modalState={modalState}
+            setModalState={setModalState}
             hasChange={hasChange}
             setHasChange={setHasChange}
             overflowStatus={
