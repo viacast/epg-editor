@@ -32,6 +32,7 @@ export interface HeaderProps {
   handleClearProgramList: () => void;
   modalState: boolean;
   setModalState: (value: boolean) => void;
+  setIsClosing: (value: boolean) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -41,6 +42,7 @@ const Header: React.FC<HeaderProps> = ({
   handleClearProgramList,
   modalState,
   setModalState,
+  setIsClosing,
 }) => {
   const { t, i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
@@ -193,6 +195,7 @@ const Header: React.FC<HeaderProps> = ({
               setSavedFilename('');
               handleClearProgramList();
               fileInputRef.current.clearFiles?.();
+              setIsClosing(true);
             });
           }
         }}

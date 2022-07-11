@@ -69,6 +69,7 @@ const Home: React.FC = () => {
     <Container overflow={dimensions.width > 1768 ? 'hidden' : 'scrool'}>
       <HeaderContainer>
         <Header
+          setIsClosing={setIsClosing}
           modalState={modalState}
           setModalState={setModalState}
           programs={programs}
