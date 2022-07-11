@@ -8,7 +8,7 @@ import AppRoutes from './routes';
 import GlobalStyle from './styles/global';
 
 const App: React.FC = () => {
-  const { modalState, modalTitle, modalContent, modalConfirm, closeModal } =
+  const { modalIsOpen, modalTitle, modalContent, modalConfirm, closeModal } =
     useModalProvider();
 
   return (
@@ -25,10 +25,10 @@ const App: React.FC = () => {
         theme="dark"
       />
       <ModalDialog
+        isOpen={modalIsOpen}
         title={modalTitle}
         content={modalContent}
         confirm={modalConfirm}
-        modalState={modalState}
         cancel={closeModal}
       />
       <GlobalStyle />

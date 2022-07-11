@@ -118,22 +118,6 @@ const Menu: React.FC<MenuProps> = ({
     setNewProgram(program ? structuredClone(program) : new Program());
   }, [program, selectedProgramId]);
 
-  const handleClickTime = () => {
-    setOpenTime(prev => !prev);
-  };
-
-  const handleClickAwayTime = () => {
-    setOpenTime(false);
-  };
-
-  const handleClickDuration = () => {
-    setOpenDuration(prev => !prev);
-  };
-
-  const handleClickAwayDuration = () => {
-    setOpenDuration(false);
-  };
-
   return (
     <MenuContainer minWidth={minWidth} overflowStatus={overflowStatus}>
       <Toolbar display={hasChange ? 'block' : 'none'}>
@@ -260,7 +244,7 @@ const Menu: React.FC<MenuProps> = ({
                   <ClickAwayListener
                     mouseEvent="onMouseDown"
                     touchEvent="onTouchStart"
-                    onClickAway={handleClickAwayTime}
+                    onClickAway={() => setOpenTime(false)}
                   >
                     <Box>
                       <HelpContainer>
@@ -271,7 +255,7 @@ const Menu: React.FC<MenuProps> = ({
                             endAdornment={
                               <InputAdornment position="end">
                                 <IconButton
-                                  onClick={handleClickTime}
+                                  onClick={() => setOpenTime(prev => !prev)}
                                   aria-label="toggle password visibility"
                                   edge="end"
                                 >
@@ -307,7 +291,7 @@ const Menu: React.FC<MenuProps> = ({
                   <ClickAwayListener
                     mouseEvent="onMouseDown"
                     touchEvent="onTouchStart"
-                    onClickAway={handleClickAwayDuration}
+                    onClickAway={() => setOpenDuration(false)}
                   >
                     <Box>
                       <HelpContainer>
@@ -318,7 +302,7 @@ const Menu: React.FC<MenuProps> = ({
                             endAdornment={
                               <InputAdornment position="end">
                                 <IconButton
-                                  onClick={handleClickDuration}
+                                  onClick={() => setOpenDuration(prev => !prev)}
                                   aria-label="toggle password visibility"
                                   edge="end"
                                 >

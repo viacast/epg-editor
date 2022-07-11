@@ -10,7 +10,7 @@ import {
 } from './styles';
 
 export interface ModalDialogProps {
-  modalState: boolean;
+  isOpen: boolean;
   title: string;
   content: string;
   confirm: () => void;
@@ -18,7 +18,7 @@ export interface ModalDialogProps {
 }
 
 const ModalDialog: React.FC<ModalDialogProps> = ({
-  modalState,
+  isOpen,
   title,
   content,
   confirm,
@@ -29,7 +29,7 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
   return (
     <div>
       <StyledDialog
-        open={modalState}
+        open={isOpen}
         onClose={() => cancel()}
         aria-describedby="alert-dialog-slide-description"
       >

@@ -28,7 +28,7 @@ export const TableMenuContainer = styled.div`
   padding-left: 30px;
   padding-right: 30px;
 
-  .epg-tableMenuContent {
+  .epg-table-menu-content {
     white-space: nowrap;
     min-height: 450px;
     transition: width 0.15s ease-in-out;

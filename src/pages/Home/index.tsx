@@ -59,7 +59,7 @@ const Home: React.FC = () => {
       </HeaderContainer>
       <TableMenuContainer>
         <TableContainer
-          className="epg-tableMenuContent"
+          className="epg-table-menu-content"
           width={
             selectedProgramId === '' || isClosing
               ? '100%'
@@ -74,7 +74,7 @@ const Home: React.FC = () => {
           />
         </TableContainer>
         <MenuContainer
-          className="epg-tableMenuContent"
+          className="epg-table-menu-content"
           onTransitionEnd={() => {
             if (!isClosing) {
               return;

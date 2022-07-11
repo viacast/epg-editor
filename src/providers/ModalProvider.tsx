@@ -16,47 +16,59 @@ export interface OpenModalArgs {
 interface ModalProviderContextData {
   openModal: (arg: OpenModalArgs) => void;
   closeModal: () => void;
-  modalState: boolean;
+  modalIsOpen: boolean;
   modalTitle: string;
   modalContent: string;
   modalConfirm: () => void;
 }
 
-const ModalProviderContext = createContext<ModalProviderContextData>(
-  {} as ModalProviderContextData,
-);
+const ModalProviderContext = createContext<ModalProviderContextData>({
+  openModal: NOOP,
+  closeModal: NOOP,
+  modalIsOpen: false,
+  modalTitle: '',
+  modalContent: '',
+  modalConfirm: NOOP,
+} as ModalProviderContextData);
 
 const ModalProvider: React.FC<WithChildren> = ({ children }) => {
-  const [modalState, setModalState] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalContent, setModalContent] = useState('');
   const [modalConfirm, setModalConfirm] = useState<() => void>(NOOP);
 
   const openModal = useCallback(
     ({ title, content, confirm }: OpenModalArgs) => {
-      setModalState(true);
+      setModalIsOpen(true);
       setModalTitle(title);
       setModalContent(content);
       setModalConfirm(() => {
         confirm();
-        setModalState(false);
+        setModalIsOpen(false);
       });
     },
     [],
   );
 
-  const closeModal = useCallback(() => setModalState(false), []);
+  const closeModal = useCallback(() => setModalIsOpen(false), []);
 
   const providerValue = useMemo(
     () => ({
       openModal,
       closeModal,
-      modalState,
+      modalIsOpen,
       modalTitle,
       modalContent,
       modalConfirm,
     }),
-    [closeModal, modalConfirm, modalContent, modalState, modalTitle, openModal],
+    [
+      closeModal,
+      modalConfirm,
+      modalContent,
+      modalIsOpen,
+      modalTitle,
+      openModal,
+    ],
   );
 
   return (

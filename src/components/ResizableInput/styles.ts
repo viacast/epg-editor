@@ -6,12 +6,14 @@ export interface StylesProps extends TextareaAutosizeProps {
 }
 
 export const StyledInput = styled(TextareaAutosize, {
-  shouldForwardProp: prop => prop !== 'maxHeight',
+  shouldForwardProp: prop =>
+    !['maxHeight', 'maxWidth'].includes(prop as string),
 })<StylesProps>`
   min-width: 442px;
   max-width: 442px;
   min-height: 44px;
   height: 130px;
+  max-width: ${({ maxWidth }) => maxWidth || '100%'};
   max-height: ${({ maxHeight }) => maxHeight || '130px'};
   display: flex;
   text-align: left;
