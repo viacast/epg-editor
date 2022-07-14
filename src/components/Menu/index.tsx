@@ -42,7 +42,6 @@ import {
   Icon,
   IconContainer,
   MenuContainer,
-  MenuStyleProps,
   SelectRateContainer,
   Toolbar,
   StyledInput,
@@ -61,10 +60,8 @@ const ratings = {
   R18: C18,
 };
 
-export interface MenuProps extends MenuStyleProps {
-  minWidth;
-  hasChange;
-  overflowStatus;
+export interface MenuProps {
+  hasChanges: boolean;
   programs: EntityMap<Program>;
   selectedProgramId: string;
   setSelectedProgramId: (id: string) => void;
@@ -74,9 +71,7 @@ export interface MenuProps extends MenuStyleProps {
 }
 
 const Menu: React.FC<MenuProps> = ({
-  minWidth,
-  hasChange,
-  overflowStatus,
+  hasChanges,
   programs,
   selectedProgramId,
   setSelectedProgramId,
@@ -120,13 +115,13 @@ const Menu: React.FC<MenuProps> = ({
   }, [program, selectedProgramId]);
 
   return (
-    <MenuContainer minWidth={minWidth} overflowStatus={overflowStatus}>
+    <MenuContainer>
       <Toolbar>
         <ToolbarText>
           <p>{t('menu:edit')}:</p>
           <p>{program?.title}</p>
         </ToolbarText>
-        <ActionButtons display={hasChange ? 'block' : 'none'}>
+        <ActionButtons display={hasChanges ? 'block' : 'none'}>
           <VscDiscard
             id="menu-button-discard"
             size="20px"

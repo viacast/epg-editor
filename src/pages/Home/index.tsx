@@ -18,16 +18,6 @@ const Home: React.FC = () => {
   const [selectedProgramId, setSelectedProgramId] = useState('');
   const [hasChanges, setHasChanges] = useState(false);
   const programTableRef = useRef<ProgramTableRefProps>({});
-  const [pageWidth, setPageWidth] = useState(window.innerWidth);
-  useEffect(() => {
-    function handleResize() {
-      setPageWidth(window.innerWidth);
-    }
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  });
   const [savedPrograms, setSavedPrograms] = useLocalStorage(
     LocalStorageKeys.CURRENT_PROGRAMS,
     [] as Program[],
@@ -52,7 +42,7 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <Container overflow={pageWidth >= 1230 ? 'hidden' : 'auto'}>
+    <Container>
       <HeaderContainer>
         <Header
           programs={programs}
@@ -82,10 +72,8 @@ const Home: React.FC = () => {
           width={selectedProgramId === '' ? '0px' : '500px'}
         >
           <Menu
-            hasChange={hasChanges}
+            hasChanges={hasChanges}
             setHasChanges={setHasChanges}
-            overflowStatus={selectedProgramId === '' ? 'hidden' : 'auto'}
-            minWidth={selectedProgramId === '' ? '0px' : '500px'}
             programs={programs}
             selectedProgramId={selectedProgramId}
             setSelectedProgramId={setSelectedProgramId}
