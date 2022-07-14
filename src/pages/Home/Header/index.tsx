@@ -29,15 +29,15 @@ export interface HeaderProps {
   programs: EntityMap<Program>;
   setPrograms: (programs: Program[]) => void;
   handleAddProgram: () => void;
+  setSelectedProgramId: (id: string) => void;
   handleClearProgramList: () => void;
-  setIsClosing: (programId: boolean) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
   programs,
   setPrograms,
-  setIsClosing,
   handleAddProgram,
+  setSelectedProgramId,
   handleClearProgramList,
 }) => {
   const { t, i18n } = useTranslation();
@@ -184,7 +184,7 @@ const Header: React.FC<HeaderProps> = ({
               setSavedFilename('');
               handleClearProgramList();
               fileInputRef.current.clearFiles?.();
-              setIsClosing(true);
+              setSelectedProgramId('');
             },
           });
         }}
