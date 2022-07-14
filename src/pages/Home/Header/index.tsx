@@ -50,12 +50,6 @@ const Header: React.FC<HeaderProps> = ({
   );
   const [epgFilename, setEpgFilename] = useState(savedFilename || '');
 
-  const [savedFilename, setSavedFilename] = useLocalStorage(
-    LocalStorageKeys.CURRENT_FILENAME,
-    '',
-  );
-  const [epgFilename, setEpgFilename] = useState(savedFilename || '');
-
   const fileInputRef = useRef<FileInputRefProps>({});
   const exportOptionsRef = useRef<HTMLDivElement>(null);
 
@@ -114,16 +108,6 @@ const Header: React.FC<HeaderProps> = ({
       setSavedFilename,
     ],
   );
-
-  const handleClearFiles = useCallback(() => {
-    // eslint-disable-next-line no-restricted-globals, no-alert
-    if (confirm(t('header:clearProgramList'))) {
-      setEpgFilename('');
-      setSavedFilename('');
-      handleClearProgramList();
-      fileInputRef.current.clearFiles?.();
-    }
-  }, [handleClearProgramList, setSavedFilename, t]);
 
   useClickOutside(exportOptionsRef, () => setOpen(false));
 
