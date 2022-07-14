@@ -1,10 +1,10 @@
 import { Program } from 'services/epg';
 
 export interface ProgramTableColumn {
-  id: 'position' | keyof Program;
+  id: 'position' | 'endDateTime' | keyof Program;
   minWidth?: number;
   align?: 'left' | 'center' | 'right';
-  format?: 'startDateTime' | 'endDateTime' | 'duration';
+  format?: 'dateTime' | 'duration';
 }
 
 export default [
@@ -13,13 +13,13 @@ export default [
     id: 'startDateTime',
     minWidth: 190,
     align: 'left',
-    format: 'startDateTime',
+    format: 'dateTime',
   },
   {
     id: 'endDateTime',
     minWidth: 190,
     align: 'left',
-    format: 'endDateTime',
+    format: 'dateTime',
   },
   {
     id: 'duration',

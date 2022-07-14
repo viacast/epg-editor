@@ -114,8 +114,8 @@ export default class EPGBuilder {
           '@lang': 'pt',
         },
         '@channel': '59360',
-        '@stop': getDateTime(p.startTime, p.duration).slice(0, 12),
-        '@start': getDateTime(p.startTime).slice(0, 12),
+        '@stop': getDateTime(p.startDateTime, p.duration).slice(0, 12),
+        '@start': getDateTime(p.startDateTime).slice(0, 12),
       });
     });
 
@@ -165,8 +165,8 @@ export default class EPGBuilder {
         '1',
         '2',
         '1',
-        getDateTime(p.startDate).slice(0, 8),
-        getDateTime(p.startTime).slice(8, 14),
+        getDateTime(p.startDateTime).slice(0, 8),
+        getDateTime(p.startDateTime).slice(8, 14),
         getDuration(p.duration),
         `"${p.title}"`,
         `"${p.description}"`,

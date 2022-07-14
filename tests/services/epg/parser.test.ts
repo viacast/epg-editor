@@ -97,8 +97,7 @@ const csvPrograms: Partial<Program>[] = [
     title: 'VALE A PENA VER DE NOVO',
     description:
       'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
-    startDate: new Date(2022, 5, 22),
-    startTime: new Date(2022, 5, 22, 16, 55, 0),
+    startDateTime: new Date(2022, 5, 22, 16, 55, 0),
     duration: 3600,
     rating: ProgramRating.R12,
   },
@@ -106,8 +105,7 @@ const csvPrograms: Partial<Program>[] = [
     title: 'MALHAÇÃO - VIDAS BRASILEIRAS',
     description:
       'Em Malhação: Vidas Brasileiras, uma figura importante vai mergulhar fundo no universo dos alunos do ensino médio da escola Sapiência: a professora Gabriela Fortes.',
-    startDate: new Date(2022, 5, 22),
-    startTime: new Date(2022, 5, 22, 17, 55, 0),
+    startDateTime: new Date(2022, 5, 22, 17, 55, 0),
     duration: 2100,
     rating: ProgramRating.R12,
   },
@@ -115,8 +113,7 @@ const csvPrograms: Partial<Program>[] = [
     title: 'ESPELHO DA VIDA',
     description:
       'De Elizabeth Jhin, a novela apresenta uma trama de amor e mistério que ultrapassa as barreiras do tempo e do espaço ao se desenrolar em duas épocas distintas concomitantemente.',
-    startDate: new Date(2022, 5, 22),
-    startTime: new Date(2022, 5, 22, 18, 30, 0),
+    startDateTime: new Date(2022, 5, 22, 18, 30, 0),
     duration: 2400,
     rating: ProgramRating.R10,
   },
@@ -127,16 +124,14 @@ const xmlPrograms: Partial<Program>[] = [
     title: 'SABADO ANIMADO',
     description:
       'Seu fim de semana começa com muito mais alegria no Sábado Animado. Os desenhos que fazem sucesso entre a garotada de todas as idades estão reunidos aqui.',
-    startDate: new Date(2022, 5, 25),
-    startTime: new Date(2022, 5, 25, 6, 0, 0),
+    startDateTime: new Date(2022, 5, 25, 6, 0, 0),
     duration: 21600,
     rating: ProgramRating.RL,
   },
   {
     title: 'SÁBADO SÉRIES',
     description: 'Séries de sábado no SBT.',
-    startDate: new Date(2022, 5, 25),
-    startTime: new Date(2022, 5, 25, 12, 0, 0),
+    startDateTime: new Date(2022, 5, 25, 12, 0, 0),
     duration: 8100,
     rating: ProgramRating.RL,
   },
@@ -144,8 +139,7 @@ const xmlPrograms: Partial<Program>[] = [
     title: 'PROGRAMA RAUL GIL',
     description:
       'Raul Gil com seu bom humor e irreverência inova com as revelações da música brasileira no concurso Jovens Talentos, a polêmica do Pra Quem Você tira o Chapéu? e os talentos da molecada.',
-    startDate: new Date(2022, 5, 25),
-    startTime: new Date(2022, 5, 25, 14, 15, 0),
+    startDateTime: new Date(2022, 5, 25, 14, 15, 0),
     duration: 14400,
     rating: ProgramRating.RL,
   },

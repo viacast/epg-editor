@@ -45,14 +45,12 @@ export default class EPGParser {
       const hour = Number(date.substring(8, 10));
       const minute = Number(date.substring(10, 12));
 
-      const formatDate = new Date(year, month - 1, day);
-      const formatTime = new Date(year, month - 1, day, hour, minute, 0);
+      const startDateTime = new Date(year, month - 1, day, hour, minute, 0);
 
       return new Program({
         title,
         description,
-        startDate: formatDate,
-        startTime: formatTime,
+        startDateTime,
         duration,
         rating,
       });
@@ -79,8 +77,6 @@ export default class EPGParser {
       const year = Number(date.substring(0, 4));
       const month = Number(date.substring(4, 6));
       const day = Number(date.substring(6, 8));
-
-      const formatDate = new Date(year, month - 1, day);
 
       const time = p[5];
 
@@ -128,8 +124,7 @@ export default class EPGParser {
       return new Program({
         title: progTitle,
         description: progDescription,
-        startDate: formatDate,
-        startTime: formatTime,
+        startDateTime: formatTime,
         duration: formatDuration,
         rating: pg,
       });
