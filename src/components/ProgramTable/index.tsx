@@ -14,7 +14,7 @@ import IconR16 from 'assets/icons/ratings/R16.svg';
 import IconR18 from 'assets/icons/ratings/R18.svg';
 
 import { Program } from 'services/epg';
-import { EntityMap, formatDate, formatTime, secondsToHms } from 'utils';
+import { addToDate, EntityMap, formatDateTime, secondsToHms } from 'utils';
 import { useScrollIntoView } from 'hooks';
 import {
   StyledPaper,
@@ -96,36 +96,14 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                   {programTableColumns.map(({ id, align, format }) => {
                     let value: Program[keyof Program] | JSX.Element =
                       program[id];
-                    if (format === 'startDateTime') {
-                      value = `${formatDate(
-                        program.startTime as Date,
-                      )} ${formatTime(program.startTime as Date)}`;
-                    }
-                    if (format === 'endDateTime') {
-                      const year = program.startTime.getFullYear();
-                      const month = program.startTime.getMonth();
-                      const day = program.startTime.getDate();
-                      const hour = program.startTime.getHours();
-                      const minute = program.startTime.getMinutes();
-                      const second = program.startTime.getSeconds();
-                      value = `${formatDate(
-                        program.startTime as Date,
-                      )} ${formatTime(
-                        new Date(
-                          year,
-                          month,
-                          day,
-                          hour + Math.floor(program.duration / 3600),
-                          minute + Math.floor((program.duration % 3600) / 60),
-                          second + Math.floor((program.duration % 3600) % 60),
-                        ) as Date,
-                      )}`;
-                    }
-                    if (format === 'duration') {
-                      value = secondsToHms(value as number);
-                    }
                     if (id === 'position') {
                       value = `${i + 1}`;
+                    }
+                    if (id === 'endDateTime') {
+                      value = addToDate(
+                        program.startDateTime,
+                        program.duration,
+                      );
                     }
                     if (id === 'rating') {
                       const ratings = {
@@ -143,6 +121,12 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                           alt={program[id]}
                         />
                       );
+                    }
+                    if (format === 'dateTime') {
+                      value = formatDateTime(value as Date);
+                    }
+                    if (format === 'duration') {
+                      value = secondsToHms(value as number);
                     }
                     return (
                       <StyledTableCell key={id} align={align}>

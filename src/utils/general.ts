@@ -34,5 +34,9 @@ export async function readFileAsync(
   return promise;
 }
 
+export function addToDate(date: Date, seconds: number): Date {
+  return new Date(date.getTime() + seconds * 1000);
+}
+
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export function NOOP(): void {}

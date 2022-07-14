@@ -20,6 +20,10 @@ export function formatTime(date: Date | number): string {
   return format(new Date(date), 'HH:mm:ss');
 }
 
+export function formatDateTime(date: Date | number): string {
+  return format(new Date(date), 'dd/MM/yyyy HH:mm:ss');
+}
+
 export function parseDate(date: string, f = 'dd/MM/yyyy HH:mm:ss'): Date {
   return parse(date, f, Date.now());
 }

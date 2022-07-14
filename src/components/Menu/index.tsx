@@ -88,14 +88,14 @@ const Menu: React.FC<MenuProps> = ({
   );
   const [openTime, setOpenTime] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
-  const [time, setTime] = useState(new Date());
+  const [dateTime, setDateTime] = useState(new Date());
   const [duration, setDuration] = useState(0);
   const [formattedDuration, setFormattedDuration] = useState('00:00:00');
 
-  const stHour = format(time, 'HH:mm:ss');
+  const stHour = format(dateTime, 'HH:mm:ss');
 
   useEffect(() => {
-    setTime(newProgram?.startTime);
+    setDateTime(newProgram?.startDateTime);
     setDuration(newProgram?.duration);
     const num = duration;
     let hours = 0;
@@ -221,14 +221,14 @@ const Menu: React.FC<MenuProps> = ({
                     {t('menu:startDate')}
                   </Text>
                   <DatePicker
-                    date={newProgram?.startDate ?? new Date()}
+                    date={newProgram?.startDateTime ?? new Date()}
                     onDateChange={startDate => {
                       setNewProgram(p => {
-                        const newStartTime = p.startTime;
-                        newStartTime.setDate(startDate.getDate());
-                        newStartTime.setMonth(startDate.getMonth());
-                        newStartTime.setFullYear(startDate.getFullYear());
-                        return { ...p, startDate, startTime: newStartTime };
+                        const { startDateTime } = p;
+                        startDateTime.setDate(startDate.getDate());
+                        startDateTime.setMonth(startDate.getMonth());
+                        startDateTime.setFullYear(startDate.getFullYear());
+                        return { ...p, startDateTime };
                       });
                       setHasChanges(true);
                     }}
@@ -265,15 +265,18 @@ const Menu: React.FC<MenuProps> = ({
                       </HelpContainer>
                       {openTime ? (
                         <TimePicker
-                          time={newProgram?.startTime ?? new Date()}
+                          time={newProgram?.startDateTime ?? new Date()}
                           onTimeChange={startTime => {
-                            setNewProgram(p => ({
-                              ...p,
-                              startTime,
-                            }));
+                            setNewProgram(p => {
+                              const { startDateTime } = p;
+                              startDateTime.setHours(startTime.getHours());
+                              startDateTime.setMinutes(startTime.getMinutes());
+                              startDateTime.setSeconds(startTime.getSeconds());
+                              return { ...p, startDateTime };
+                            });
                             setHasChanges(true);
                           }}
-                          setTime={setTime}
+                          setTime={setDateTime}
                         />
                       ) : null}
                     </Box>

@@ -9,8 +9,7 @@ const programs: Program[] = [
     title: '1º Jornal',
     description:
       'As principais notícias do Brasil e do Mundo, com agilidade e prestação de serviços, deixando o telespectador bem informado logo nas primeiras horas da manhã.',
-    startDate: new Date(2022, 5, 12),
-    startTime: new Date(2022, 5, 12, 4, 0, 0),
+    startDateTime: new Date(2022, 5, 12, 4, 0, 0),
     duration: 7200,
     rating: ProgramRating.R10,
   },
@@ -19,8 +18,7 @@ const programs: Program[] = [
     title: 'Bora SP',
     description:
       'Programa jornalístico leve, interativo e com muita prestação de serviço, valorizando sempre as notícias locais.',
-    startDate: new Date(2022, 5, 12),
-    startTime: new Date(2022, 5, 12, 6, 0, 0),
+    startDateTime: new Date(2022, 5, 12, 6, 0, 0),
     duration: 5400,
     rating: ProgramRating.R12,
   },
@@ -29,8 +27,7 @@ const programs: Program[] = [
     title: 'Bora Brasil',
     description:
       'As principais informações do Brasil e do Mundo com leveza, interatividade e credibilidade.',
-    startDate: new Date(2022, 5, 12),
-    startTime: new Date(2022, 5, 12, 7, 30, 0),
+    startDateTime: new Date(2022, 5, 12, 7, 30, 0),
     duration: 5400,
     rating: ProgramRating.RL,
   },
