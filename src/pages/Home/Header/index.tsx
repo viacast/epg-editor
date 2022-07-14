@@ -7,6 +7,7 @@ import {
   FaFileCsv,
   FaFileExport,
 } from 'react-icons/fa';
+import { BsClockHistory } from 'react-icons/bs';
 import FileSaver from 'file-saver';
 
 import { EPGParser, Program } from 'services/epg';
@@ -188,6 +189,11 @@ const Header: React.FC<HeaderProps> = ({
             },
           });
         }}
+      />
+      <Button
+        text={t('header:buttonStartDateTime')}
+        icon={<BsClockHistory />}
+        onClick={() => ''}
       />
       <Text>
         {t('header:labelProgram', {
