@@ -2,13 +2,15 @@ import styled from 'styled-components';
 
 export interface StyleProps {
   width?: string;
+  overflow?: string;
 }
 
-export const Container = styled.div`
+export const Container = styled.div<StyleProps>`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
+  overflow-x: ${({ overflow }) => overflow || 'auto'};
 `;
 
 export const HeaderContainer = styled.div`
