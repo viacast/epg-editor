@@ -1,11 +1,6 @@
 import styled from 'styled-components';
 import { FormControl, InputProps, styled as styledmui } from '@mui/material';
 
-export interface MenuStyleProps {
-  minWidth?: string;
-  overflowStatus?: string;
-}
-
 export const FormRow = styled.div`
   display: inline-flex;
   width: 100%;
@@ -34,15 +29,14 @@ export const Icon = styled.img`
   height: 100%;
 `;
 
-export const MenuContainer = styled.div<MenuStyleProps>`
+export const MenuContainer = styled.div`
   height: 100%;
   width: 100%;
-  min-width: ${({ minWidth }) => minWidth || '0px'};
   min-height: 300px;
   border-radius: 4px;
   background-color: var(--color-neutral-5);
-  overflow: ${({ overflowStatus }) => overflowStatus || 'auto'};
   margin-left: 30px;
+  overflow: hidden;
 `;
 
 export const Toolbar = styled.div`
@@ -111,14 +105,15 @@ export const ActionButtons = styled.div<{ display: string }>`
   }
 `;
 
-export const ContentContainer = styled.div<MenuStyleProps>`
+export const ContentContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
   height: calc(100% - 42px);
   padding-left: 29px;
   padding-right: 29px;
-  overflow: ${({ overflowStatus }) => overflowStatus || 'auto'};
+  overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 export const BottomContainer = styled.div`

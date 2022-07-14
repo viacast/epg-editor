@@ -5,12 +5,11 @@ export interface StyleProps {
   overflow?: string;
 }
 
-export const Container = styled.div<StyleProps>`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  overflow-x: ${({ overflow }) => overflow || 'auto'};
 `;
 
 export const HeaderContainer = styled.div`
