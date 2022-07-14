@@ -16,7 +16,6 @@ import Header from './Header';
 
 const Home: React.FC = () => {
   const [selectedProgramId, setSelectedProgramId] = useState('');
-  const [isClosing, setIsClosing] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const programTableRef = useRef<ProgramTableRefProps>({});
 
@@ -47,12 +46,12 @@ const Home: React.FC = () => {
     <Container>
       <HeaderContainer>
         <Header
-          setIsClosing={setIsClosing}
           programs={programs}
           setPrograms={newPrograms => {
             setSelectedProgramId('');
             setPrograms(new EntityMap(newPrograms));
           }}
+          setSelectedProgramId={setSelectedProgramId}
           handleAddProgram={handleAddProgram}
           handleClearProgramList={handleClearProgramList}
         />
@@ -60,11 +59,7 @@ const Home: React.FC = () => {
       <TableMenuContainer>
         <TableContainer
           className="epg-table-menu-content"
-          width={
-            selectedProgramId === '' || isClosing
-              ? '100%'
-              : 'calc(100% - 535px)'
-          }
+          width={selectedProgramId === '' ? '100%' : 'calc(100% - 535px)'}
         >
           <ProgramTable
             forwardRef={programTableRef}
@@ -75,25 +70,16 @@ const Home: React.FC = () => {
         </TableContainer>
         <MenuContainer
           className="epg-table-menu-content"
-          onTransitionEnd={() => {
-            if (!isClosing) {
-              return;
-            }
-            setSelectedProgramId('');
-            setIsClosing(false);
-          }}
-          width={selectedProgramId === '' || isClosing ? '0px' : '500px'}
+          width={selectedProgramId === '' ? '0px' : '500px'}
         >
           <Menu
             hasChange={hasChanges}
             setHasChanges={setHasChanges}
-            overflowStatus={
-              selectedProgramId === '' || isClosing ? 'hidden' : 'auto'
-            }
-            minWidth={selectedProgramId === '' || isClosing ? '0px' : '500px'}
+            overflowStatus={selectedProgramId === '' ? 'hidden' : 'auto'}
+            minWidth={selectedProgramId === '' ? '0px' : '500px'}
             programs={programs}
             selectedProgramId={selectedProgramId}
-            setIsClosing={setIsClosing}
+            setSelectedProgramId={setSelectedProgramId}
             onSaveProgram={program => {
               setPrograms(p => p.update(program).clone());
               setHasChanges(false);

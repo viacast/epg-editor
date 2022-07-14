@@ -66,7 +66,7 @@ export interface MenuProps extends MenuStyleProps {
   overflowStatus;
   programs: EntityMap<Program>;
   selectedProgramId: string;
-  setIsClosing: (programId: boolean) => void;
+  setSelectedProgramId: (id: string) => void;
   setHasChanges: (programId: boolean) => void;
   onSaveProgram: (program: Program) => void;
   handleRemoveProgram: (programId: string) => void;
@@ -78,7 +78,7 @@ const Menu: React.FC<MenuProps> = ({
   overflowStatus,
   programs,
   selectedProgramId,
-  setIsClosing,
+  setSelectedProgramId,
   setHasChanges,
   onSaveProgram,
   handleRemoveProgram,
@@ -337,7 +337,7 @@ const Menu: React.FC<MenuProps> = ({
                 text={t('menu:cancel')}
                 icon={<CgClose />}
                 onClick={() => {
-                  setIsClosing(true);
+                  setSelectedProgramId('');
                   setHasChanges(false);
                 }}
               />
