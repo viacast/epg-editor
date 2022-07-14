@@ -7,5 +7,6 @@
   "clearProgramList": "Tem certeza que deseja limpar a lista de programas?",
   "overwriteProgramList": "Tem certeza que deseja sobrescrever a lista de programas?",
   "alertInvalidFile": "Esse formato de arquivo não é válido. Em vez disso tente um arquivo '.csv' ou '.xml'.",
+  "titleOverwrite": "Sobrescrever",
   "labelProgram" : "Programas: {{count}}"
 }

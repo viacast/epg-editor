@@ -30,6 +30,7 @@ import C14 from 'assets/icons/ratings/R14.svg';
 import C16 from 'assets/icons/ratings/R16.svg';
 import C18 from 'assets/icons/ratings/R18.svg';
 
+import { useModalProvider } from 'providers/ModalProvider';
 import {
   BottomContainer,
   ButtonContainer,
@@ -84,6 +85,7 @@ const Menu: React.FC<MenuProps> = ({
 }) => {
   const { t } = useTranslation();
 
+  const { openModal } = useModalProvider();
   const program = programs.get(selectedProgramId);
   const [newProgram, setNewProgram] = useState<Program>(
     program ? structuredClone(program) : new Program(),
@@ -116,22 +118,6 @@ const Menu: React.FC<MenuProps> = ({
     setNewProgram(program ? structuredClone(program) : new Program());
   }, [program, selectedProgramId]);
 
-  const handleClickTime = () => {
-    setOpenTime(prev => !prev);
-  };
-
-  const handleClickAwayTime = () => {
-    setOpenTime(false);
-  };
-
-  const handleClickDuration = () => {
-    setOpenDuration(prev => !prev);
-  };
-
-  const handleClickAwayDuration = () => {
-    setOpenDuration(false);
-  };
-
   return (
     <MenuContainer minWidth={minWidth} overflowStatus={overflowStatus}>
       <Toolbar display={hasChange ? 'block' : 'none'}>
@@ -142,27 +128,37 @@ const Menu: React.FC<MenuProps> = ({
           id="menu-button-discard"
           size="20px"
           onClick={() => {
-            if (
-              program &&
-              // eslint-disable-next-line no-restricted-globals, no-alert
-              confirm(t('menu:discard', { programTitle: program.title }))
-            ) {
-              setNewProgram(program);
-              setHasChanges(false);
+            if (!program) {
+              return;
             }
+            openModal({
+              title: t('menu:discardProgramTitle'),
+              content: t('menu:discardProgramMessage', {
+                programTitle: program.title,
+              }),
+              confirm: () => {
+                setNewProgram(program);
+                setHasChanges(false);
+              },
+            });
           }}
         />
         <CgTrash
           id="menu-button-remove"
           size="20px"
           onClick={() => {
-            if (
-              program &&
-              // eslint-disable-next-line no-restricted-globals, no-alert
-              confirm(t('menu:delete', { programTitle: program.title }))
-            ) {
-              handleRemoveProgram(program.id);
+            if (!program) {
+              return;
             }
+            openModal({
+              title: t('menu:deleteProgramTitle'),
+              content: t('menu:deleteProgramMessage', {
+                programTitle: program.title,
+              }),
+              confirm: () => {
+                handleRemoveProgram(program.id);
+              },
+            });
           }}
         />
       </Toolbar>
@@ -248,7 +244,7 @@ const Menu: React.FC<MenuProps> = ({
                   <ClickAwayListener
                     mouseEvent="onMouseDown"
                     touchEvent="onTouchStart"
-                    onClickAway={handleClickAwayTime}
+                    onClickAway={() => setOpenTime(false)}
                   >
                     <Box>
                       <HelpContainer>
@@ -259,7 +255,7 @@ const Menu: React.FC<MenuProps> = ({
                             endAdornment={
                               <InputAdornment position="end">
                                 <IconButton
-                                  onClick={handleClickTime}
+                                  onClick={() => setOpenTime(prev => !prev)}
                                   aria-label="toggle password visibility"
                                   edge="end"
                                 >
@@ -295,7 +291,7 @@ const Menu: React.FC<MenuProps> = ({
                   <ClickAwayListener
                     mouseEvent="onMouseDown"
                     touchEvent="onTouchStart"
-                    onClickAway={handleClickAwayDuration}
+                    onClickAway={() => setOpenDuration(false)}
                   >
                     <Box>
                       <HelpContainer>
@@ -306,7 +302,7 @@ const Menu: React.FC<MenuProps> = ({
                             endAdornment={
                               <InputAdornment position="end">
                                 <IconButton
-                                  onClick={handleClickDuration}
+                                  onClick={() => setOpenDuration(prev => !prev)}
                                   aria-label="toggle password visibility"
                                   edge="end"
                                 >

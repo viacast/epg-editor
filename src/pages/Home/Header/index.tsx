@@ -15,6 +15,7 @@ import EPGBuilder from 'services/epg/builder';
 import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
 import { EntityMap } from 'utils';
 import { format } from 'date-fns';
+import { useModalProvider } from 'providers/ModalProvider';
 import { toast } from 'react-toastify';
 import {
   HeaderContainer,
@@ -30,13 +31,11 @@ export interface HeaderProps {
   handleAddProgram: () => void;
   handleClearProgramList: () => void;
   setIsClosing: (programId: boolean) => void;
-  setHasChanges: (programId: boolean) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
   programs,
   setPrograms,
-  setHasChanges,
   setIsClosing,
   handleAddProgram,
   handleClearProgramList,
@@ -45,6 +44,11 @@ const Header: React.FC<HeaderProps> = ({
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
   const [programCount, setProgramCount] = useState(0);
   const [open, setOpen] = useState(false);
+  const [savedFilename, setSavedFilename] = useLocalStorage(
+    LocalStorageKeys.CURRENT_FILENAME,
+    '',
+  );
+  const [epgFilename, setEpgFilename] = useState(savedFilename || '');
 
   const [savedFilename, setSavedFilename] = useLocalStorage(
     LocalStorageKeys.CURRENT_FILENAME,
@@ -55,6 +59,7 @@ const Header: React.FC<HeaderProps> = ({
   const fileInputRef = useRef<FileInputRefProps>({});
   const exportOptionsRef = useRef<HTMLDivElement>(null);
 
+  const { openModal } = useModalProvider();
   const notifyInvalidFile = useCallback(() => {
     toast(t('header:alertInvalidFile'), {
       type: 'warning',
@@ -84,14 +89,30 @@ const Header: React.FC<HeaderProps> = ({
         return;
       }
       const newPrograms = await EPGParser.parseFile(files[0]);
-      // eslint-disable-next-line no-restricted-globals, no-alert
-      if (epgFilename === '' || confirm(t('header:overwriteProgramList'))) {
+      if (!programCount) {
         setPrograms(newPrograms);
         setEpgFilename(files[0].name);
         setSavedFilename(files[0].name);
+        return;
       }
+      openModal({
+        title: t('header:titleOverwrite'),
+        content: t('header:overwriteProgramList'),
+        confirm: () => {
+          setPrograms(newPrograms);
+          setEpgFilename(files[0].name);
+          setSavedFilename(files[0].name);
+        },
+      });
     },
-    [notifyInvalidFile, epgFilename, setPrograms, setSavedFilename, t],
+    [
+      programCount,
+      openModal,
+      t,
+      notifyInvalidFile,
+      setPrograms,
+      setSavedFilename,
+    ],
   );
 
   const handleClearFiles = useCallback(() => {
@@ -120,7 +141,9 @@ const Header: React.FC<HeaderProps> = ({
       <Button
         text={t('header:buttonImportProgram')}
         icon={<FaDownload />}
-        onClick={() => fileInputRef?.current.click?.()}
+        onClick={() => {
+          fileInputRef?.current.click?.();
+        }}
       />
       <MenuOptions>
         <Button
@@ -169,9 +192,17 @@ const Header: React.FC<HeaderProps> = ({
         text={t('header:buttonClearProgramList')}
         icon={<CgPlayListRemove />}
         onClick={() => {
-          handleClearFiles();
-          setIsClosing(true);
-          setHasChanges(false);
+          openModal({
+            title: t('header:buttonClearProgramList'),
+            content: t('header:clearProgramList'),
+            confirm: () => {
+              setEpgFilename('');
+              setSavedFilename('');
+              handleClearProgramList();
+              fileInputRef.current.clearFiles?.();
+              setIsClosing(true);
+            },
+          });
         }}
       />
       <Text>

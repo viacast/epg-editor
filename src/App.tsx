@@ -1,6 +1,6 @@
 import React from 'react';
 import { Slide } from 'react-toastify';
-import { ToastContainer } from './components';
+import { ModalDialog, ToastContainer } from './components';
 
 import AppProvider from './providers';
 import AppRoutes from './routes';
@@ -20,6 +20,7 @@ const App: React.FC = () => {
         pauseOnHover
         theme="dark"
       />
+      <ModalDialog />
       <GlobalStyle />
     </AppProvider>
   );

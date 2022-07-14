@@ -1,6 +1,7 @@
 import Button, { ButtonProps } from './Button';
 import FileInput, { FileInputProps, FileInputRefProps } from './FileInput';
 import Input, { InputProps } from './Input';
+import ModalDialog from './ModalDialog';
 import ResizableInput, { ResizableInputProps } from './ResizableInput';
 import ProgramTable, { ProgramTableRefProps } from './ProgramTable';
 import Menu from './Menu';
@@ -14,6 +15,7 @@ import DurationPicker from './Pickers/DurationPicker';
 export {
   Button,
   Input,
+  ModalDialog,
   ResizableInput,
   FileInput,
   ProgramTable,

@@ -1,9 +1,9 @@
 import React from 'react';
 import { WithChildren } from 'utils';
-import { ExampleProvider } from './ExampleProvider';
+import { ModalProvider } from './ModalProvider';
 
 const AppProvider: React.FC<WithChildren> = ({ children }) => {
-  return <ExampleProvider>{children}</ExampleProvider>;
+  return <ModalProvider>{children}</ModalProvider>;
 };
 
 export default AppProvider;
