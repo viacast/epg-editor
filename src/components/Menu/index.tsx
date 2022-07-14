@@ -190,8 +190,6 @@ const Menu: React.FC<MenuProps> = ({
                 {t('menu:description')}
               </Text>
               <ResizableInput
-                maxRows={4}
-                maxHeight="270px"
                 value={newProgram?.description}
                 setValue={description => {
                   setNewProgram(p => ({ ...p, description }));

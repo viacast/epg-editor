@@ -1,22 +1,17 @@
 import React, { KeyboardEvent, useEffect, useState } from 'react';
-import { StyledInput, StylesProps } from './styles';
+import { StyledInput } from './styles';
 
-export interface ResizableInputProps extends StylesProps {
-  disabled?: boolean;
+export interface ResizableInputProps {
   value?: string;
   setValue?: (value: string) => void;
   placeholder?: string;
-  maxRows?: number;
   onCtrlEnter?: (value: string) => void;
 }
 
 const ResizableInput: React.FC<ResizableInputProps> = ({
-  disabled,
   value,
   setValue,
   placeholder,
-  maxHeight,
-  maxRows,
   onCtrlEnter,
 }) => {
   const [internalValue, setInternalValue] = useState(value ?? '');
@@ -27,15 +22,13 @@ const ResizableInput: React.FC<ResizableInputProps> = ({
 
   return (
     <StyledInput
-      maxHeight={maxHeight}
       onKeyDown={(e: KeyboardEvent) => {
         if (e.ctrlKey && e.key === 'Enter') {
           onCtrlEnter?.(internalValue);
         }
       }}
-      minRows={3}
-      maxRows={maxRows}
-      disabled={disabled}
+      minRows={1}
+      maxRows={4}
       onChange={e => {
         setInternalValue(e.target.value);
         setValue?.(e.target.value);
@@ -47,10 +40,8 @@ const ResizableInput: React.FC<ResizableInputProps> = ({
 };
 
 ResizableInput.defaultProps = {
-  disabled: false,
   placeholder: '',
   value: '',
-  maxRows: 1,
   setValue: undefined,
   onCtrlEnter: undefined,
 };

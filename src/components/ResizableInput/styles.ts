@@ -1,20 +1,13 @@
-import { TextareaAutosize, TextareaAutosizeProps, styled } from '@mui/material';
+import { TextareaAutosize, styled } from '@mui/material';
 
-export interface StylesProps extends TextareaAutosizeProps {
-  maxWidth?: string;
-  maxHeight?: string;
-}
-
-export const StyledInput = styled(TextareaAutosize, {
-  shouldForwardProp: prop =>
-    !['maxHeight', 'maxWidth'].includes(prop as string),
-})<StylesProps>`
+// eslint-disable-next-line import/prefer-default-export
+export const StyledInput = styled(TextareaAutosize)`
   min-width: 442px;
+  width: 442px;
   max-width: 442px;
   min-height: 44px;
-  height: 130px;
-  max-width: ${({ maxWidth }) => maxWidth || '100%'};
-  max-height: ${({ maxHeight }) => maxHeight || '130px'};
+  height: 162px;
+  max-height: 270px;
   display: flex;
   text-align: left;
   color: var(--color-neutral-3);
