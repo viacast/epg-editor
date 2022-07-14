@@ -48,6 +48,7 @@ import {
   StyledInput,
   HelpContainer,
   ToolbarText,
+  ActionButtons,
 } from './styles';
 
 const ratings = {
@@ -122,45 +123,52 @@ const Menu: React.FC<MenuProps> = ({
     <MenuContainer minWidth={minWidth} overflowStatus={overflowStatus}>
       <Toolbar display={hasChange ? 'block' : 'none'}>
         <ToolbarText>
-          {t('menu:edit')}: <p>{program?.title}</p>
+          <div id="epg-menuHeader-fixed">
+            <p>{t('menu:edit')}:</p>
+          </div>
+          <div id="epg-menuHeader-mutable">
+            <p>{program?.title}</p>
+          </div>
         </ToolbarText>
-        <VscDiscard
-          id="menu-button-discard"
-          size="20px"
-          onClick={() => {
-            if (!program) {
-              return;
-            }
-            openModal({
-              title: t('menu:discardProgramTitle'),
-              content: t('menu:discardProgramMessage', {
-                programTitle: program.title,
-              }),
-              confirm: () => {
-                setNewProgram(program);
-                setHasChanges(false);
-              },
-            });
-          }}
-        />
-        <CgTrash
-          id="menu-button-remove"
-          size="20px"
-          onClick={() => {
-            if (!program) {
-              return;
-            }
-            openModal({
-              title: t('menu:deleteProgramTitle'),
-              content: t('menu:deleteProgramMessage', {
-                programTitle: program.title,
-              }),
-              confirm: () => {
-                handleRemoveProgram(program.id);
-              },
-            });
-          }}
-        />
+        <ActionButtons>
+          <VscDiscard
+            id="menu-button-discard"
+            size="20px"
+            onClick={() => {
+              if (!program) {
+                return;
+              }
+              openModal({
+                title: t('menu:discardProgramTitle'),
+                content: t('menu:discardProgramMessage', {
+                  programTitle: program.title,
+                }),
+                confirm: () => {
+                  setNewProgram(program);
+                  setHasChanges(false);
+                },
+              });
+            }}
+          />
+          <CgTrash
+            id="menu-button-remove"
+            size="20px"
+            onClick={() => {
+              if (!program) {
+                return;
+              }
+              openModal({
+                title: t('menu:deleteProgramTitle'),
+                content: t('menu:deleteProgramMessage', {
+                  programTitle: program.title,
+                }),
+                confirm: () => {
+                  handleRemoveProgram(program.id);
+                },
+              });
+            }}
+          />
+        </ActionButtons>
       </Toolbar>
       <ContentContainer>
         <BottomContainer>

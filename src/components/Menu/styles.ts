@@ -50,32 +50,41 @@ export const Toolbar = styled.div<{ display: string }>`
   width: 100%;
   height: 42px;
   border-radius: 4px;
+  color: var(--color-neutral-2);
   background-color: var(--color-primary-2);
   display: inline-flex;
   text-align: left;
-  padding-top: 12px;
   padding-left: 10px;
   font-size: 18px;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 700;
-  color: var(--color-neutral-2);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   justify-content: space-between;
-  p {
+  #epg-menuHeader-fixed p {
+    position: relative;
+    top: 50%;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    transform: translate(0%, -50%);
+  }
+  #epg-menuHeader-mutable {
+    width: 340px;
+  }
+  #epg-menuHeader-mutable p {
+    position: relative;
+    top: 50%;
     font-size: inherit;
     padding-left: 10px;
     padding-right: 10px;
     font-weight: 500;
+    transform: translate(0%, -50%);
   }
   svg {
+    position: relative;
+    top: 50%;
     min-width: 20px;
+    transform: translate(0%, -50%);
   }
   #menu-button-discard {
     display: ${({ display }) => display || 'none'};
     color: var(--color-neutral-4);
-    margin-left: auto;
     margin-right: 10px;
     cursor: pointer;
 
@@ -107,6 +116,12 @@ export const ToolbarText = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+`;
+
+export const ActionButtons = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const ContentContainer = styled.div<MenuStyleProps>`
