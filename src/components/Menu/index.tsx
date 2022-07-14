@@ -121,16 +121,12 @@ const Menu: React.FC<MenuProps> = ({
 
   return (
     <MenuContainer minWidth={minWidth} overflowStatus={overflowStatus}>
-      <Toolbar display={hasChange ? 'block' : 'none'}>
+      <Toolbar>
         <ToolbarText>
-          <div id="epg-menuHeader-fixed">
-            <p>{t('menu:edit')}:</p>
-          </div>
-          <div id="epg-menuHeader-mutable">
-            <p>{program?.title}</p>
-          </div>
+          <p>{t('menu:edit')}:</p>
+          <p>{program?.title}</p>
         </ToolbarText>
-        <ActionButtons>
+        <ActionButtons display={hasChange ? 'block' : 'none'}>
           <VscDiscard
             id="menu-button-discard"
             size="20px"

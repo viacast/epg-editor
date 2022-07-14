@@ -45,7 +45,7 @@ export const MenuContainer = styled.div<MenuStyleProps>`
   margin-left: 30px;
 `;
 
-export const Toolbar = styled.div<{ display: string }>`
+export const Toolbar = styled.div`
   top: 0px;
   width: 100%;
   height: 42px;
@@ -57,71 +57,58 @@ export const Toolbar = styled.div<{ display: string }>`
   padding-left: 10px;
   font-size: 18px;
   justify-content: space-between;
-  #epg-menuHeader-fixed p {
-    position: relative;
-    top: 50%;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    transform: translate(0%, -50%);
-  }
-  #epg-menuHeader-mutable {
-    width: 340px;
-  }
-  #epg-menuHeader-mutable p {
-    position: relative;
-    top: 50%;
-    font-size: inherit;
-    padding-left: 10px;
-    padding-right: 10px;
-    font-weight: 500;
-    transform: translate(0%, -50%);
-  }
   svg {
     position: relative;
     top: 50%;
     min-width: 20px;
+    cursor: pointer;
+    margin-right: 10px;
     transform: translate(0%, -50%);
-  }
-  #menu-button-discard {
-    display: ${({ display }) => display || 'none'};
-    color: var(--color-neutral-4);
-    margin-right: 10px;
-    cursor: pointer;
-
-    &:hover {
-      color: white;
-    }
-  }
-  #menu-button-remove {
-    color: var(--color-system-1);
-    margin-right: 10px;
-    cursor: pointer;
-
-    &:hover {
-      color: red;
-    }
   }
 `;
 
 export const ToolbarText = styled.div`
   display: flex;
   flex-direction: row;
-  max-width: 450px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  position: relative;
+  top: 50%;
+  transform: translate(0%, -50%);
   p {
-    max-width: 450px;
+    margin: auto 0px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  p:first-child {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+  }
+  p:last-child {
+    width: 340px;
+    font-size: 18px;
+    font-weight: 500;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 `;
 
-export const ActionButtons = styled.div`
+export const ActionButtons = styled.div<{ display: string }>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  #menu-button-discard {
+    display: ${({ display }) => display || 'none'};
+    color: var(--color-neutral-4);
+    &:hover {
+      color: white;
+    }
+  }
+  #menu-button-remove {
+    color: var(--color-system-1);
+    &:hover {
+      color: red;
+    }
+  }
 `;
 
 export const ContentContainer = styled.div<MenuStyleProps>`
