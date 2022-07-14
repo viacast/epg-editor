@@ -1,4 +1,5 @@
 import { XMLBuilder } from 'fast-xml-parser';
+import { formatDateTime, addToDate, secondsToHms } from 'utils';
 import Program from './program';
 
 interface Programme {
@@ -19,75 +20,28 @@ interface Programme {
   '@start': string;
 }
 
-const getDateTime = (date: Date, length?: number) => {
-  const y = date.getFullYear();
-  const m = date.getMonth() + 1;
-  let d = date.getUTCDate();
-  let h = date.getHours();
-  let mm = date.getMinutes();
-  const s = date.getSeconds();
-
-  if (length) {
-    const l = length;
-
-    mm += Math.ceil(l / 60);
-    if (mm >= 60) {
-      h += Math.floor(mm / 60);
-      mm %= 60;
-    }
-    if (h >= 24) {
-      d += Math.floor(mm / 24);
-      h %= 24;
-    }
-  }
-
-  let auxMonth = m.toString();
-  if (m <= 10) auxMonth = `0${m.toString()}`;
-
-  let auxDay = d.toString();
-  if (d <= 10) auxDay = `0${d.toString()}`;
-
-  let auxHour = h.toString();
-  if (h <= 10) auxHour = `0${h.toString()}`;
-
-  let auxMin = mm.toString();
-  if (mm <= 10) auxMin = `0${mm.toString()}`;
-
-  let auxSec = s.toString();
-  if (s <= 10) auxSec = `0${s.toString()}`;
-
-  return `${y.toString()}${auxMonth}${auxDay}${auxHour}${auxMin}${auxSec}`;
-};
-
-const getDuration = (duration: number) => {
-  let seconds = 0;
-  let minutes = 0;
-  let hours = 0;
-
-  seconds += duration;
-  if (seconds >= 60) {
-    minutes += Math.floor(seconds / 60);
-    seconds %= 60;
-  }
-  if (minutes >= 60) {
-    hours += Math.floor(minutes / 60);
-    minutes %= 60;
-  }
-
-  let auxHour = hours.toString();
-  if (hours <= 10) auxHour = `0${hours.toString()}`;
-
-  let auxMin = minutes.toString();
-  if (minutes <= 10) auxMin = `0${minutes.toString()}`;
-
-  let auxSec = seconds.toString();
-  if (seconds <= 10) auxSec = `0${seconds.toString()}`;
-
-  return `${auxHour}${auxMin}${auxSec}`;
-};
 export default class EPGBuilder {
   static buildXml(programs: Program[]): string {
     const programmeList: Programme[] = [];
+
+    /*
+      <tv date="20220621115207">
+        <channel id="59360">
+            <display-name lang="pt">SBT - SÃO PAULO</display-name>
+            <display-name lang="pt">SBT - SÃO PAULO</display-name>
+        </channel>
+        <programme channel="59360" stop="202206251200" start="202206250600">
+            <title lang="pt">SABADO ANIMADO</title>
+            <sub-title lang="pt"/>
+            <desc lang="pt">Seu fim de semana começa com muito mais alegria no Sábado Animado. Os desenhos que fazem sucesso entre a garotada de todas as idades estão reunidos aqui.</desc>
+            <length units="minutes">360</length>
+            <rating>
+                <value>L</value>
+            </rating>
+            <category lang="pt">0x2</category>
+        </programme>
+      </tv>
+    */
 
     programs.forEach(p => {
       programmeList.push({
@@ -114,14 +68,17 @@ export default class EPGBuilder {
           '@lang': 'pt',
         },
         '@channel': '59360',
-        '@stop': getDateTime(p.startDateTime, p.duration).slice(0, 12),
-        '@start': getDateTime(p.startDateTime).slice(0, 12),
+        '@stop': formatDateTime(
+          addToDate(p.startDateTime, p.duration),
+          'yyyyMMddHHmm',
+        ),
+        '@start': formatDateTime(p.startDateTime, 'yyyyMMddHHmm'),
       });
     });
 
     const program = {
       tv: {
-        '@date': getDateTime(new Date()),
+        '@date': formatDateTime(new Date(), 'yyyyMMddHHmmss'),
         channel: {
           '@id': '59360',
           'display-name': [
@@ -159,15 +116,20 @@ export default class EPGBuilder {
       R18: '0xf6',
     };
 
+    /*
+      "Event ID";"Audio number";"Copy control number";"Data contents number";"Broadcast starting date";"Broadcast starting time";"Duration";"Program title";"Program content";"Free CA mode";"video Component tag";"Stream_content + video component type";"Vido text";"audio component tag 1";"Steam content + audio component type 1";"audio multilingual flag 1";"audio main component flag 1";"audio quality indicator 1";"audio sampling rate 1";"main language code 1";"secondary language code 1";"audio text1 1";"audio text2 1";"audio stream type 1";"content_nibble_level_1 + content_nibble_level_2";"user_nibble";"degital recording control data all";"APS control all";"maximum bit rate all";"digital copy control type all";"digital copy component tag 1";"digital recording control data 1";"APS control 1";"maximum bit rate 1";"digital copy control type 1";"digital copy component tag 2";"digital recording control data 2";"APS control 2";"maximum bit rate 2";"digital copy control type 2";"data Component ID1";"entry component1";"selector byte1";"component ref1";"data contents text1";"group type";"Common service id";"Common event id";"series id";"repear label";"program patterm";"expire data";"episode number";"last episode number";"series name char";"extended_item_descriptor_char";"extended_item_char";"Country Code";"rating";"Image constration token";"Retention mode";" Retention state";" Encryption mode";" linkage transport stream id";" linkage original network id";" linkage service id";" linkage type";" any"
+      4015;1;2;1;20220622;165500;010000;"VALE A PENA VER DE NOVO";"Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.";0;"0x00";"0x05B3";;"0x10";"0x0603";0;1;1;7;"por";;"Estéreo";;"0x11";"0x30";"0xE0";0;2;0;1;"0x00";0;0;0;1;"0x10";0;0;0;1;"0x0008";"0x30";"0113706F72";;"Closed Caption";;;;;;;;;;2;;"VALE A PENA VER DE NOVO";"BRA";"0x03";0;0;0;0;;;;;
+    */
+
     const csvLines = programs.map((p, i) =>
       [
         `${1 + i}`,
         '1',
         '2',
         '1',
-        getDateTime(p.startDateTime).slice(0, 8),
-        getDateTime(p.startDateTime).slice(8, 14),
-        getDuration(p.duration),
+        formatDateTime(p.startDateTime, 'yyyyMMdd'),
+        formatDateTime(p.startDateTime, 'HHmmss'),
+        secondsToHms(p.duration, ''),
         `"${p.title}"`,
         `"${p.description}"`,
         '0',

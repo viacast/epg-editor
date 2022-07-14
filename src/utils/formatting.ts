@@ -20,8 +20,11 @@ export function formatTime(date: Date | number): string {
   return format(new Date(date), 'HH:mm:ss');
 }
 
-export function formatDateTime(date: Date | number): string {
-  return format(new Date(date), 'dd/MM/yyyy HH:mm:ss');
+export function formatDateTime(
+  date: Date | number,
+  f = 'dd/MM/yyyy HH:mm:ss',
+): string {
+  return format(new Date(date), f);
 }
 
 export function parseDate(date: string, f = 'dd/MM/yyyy HH:mm:ss'): Date {
@@ -37,11 +40,11 @@ export function hmsToSeconds(hms: string): number {
   return Number(h) * 3600 + Number(m) * 60 + Number(s);
 }
 
-export function secondsToHms(seconds: number): string {
+export function secondsToHms(seconds: number, sep = ':'): string {
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
   const s = Math.floor((seconds % 3600) % 60);
-  return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':');
+  return [h, m, s].map(v => v.toString().padStart(2, '0')).join(sep);
 }
 
 // adapted from https://stackoverflow.com/a/8497474/
