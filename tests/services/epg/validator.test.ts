@@ -381,7 +381,9 @@ describe('Adjust programs', () => {
         rating: ProgramRating.R12,
       },
     ];
-    expect(EPGValidator.validate(originalPrograms)).toEqual(ordinatedPrograms);
+    expect(EPGValidator.adjustDateTimes(originalPrograms)).toEqual(
+      ordinatedPrograms,
+    );
   });
   it('should return an ordinated programs list', () => {
     const originalPrograms: Program[] = [
@@ -424,6 +426,8 @@ describe('Adjust programs', () => {
         rating: ProgramRating.R12,
       },
     ];
-    expect(EPGValidator.validate(originalPrograms)).toEqual(ordinatedPrograms);
+    expect(EPGValidator.adjustDateTimes(originalPrograms)).toEqual(
+      ordinatedPrograms,
+    );
   });
 });
