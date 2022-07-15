@@ -10,9 +10,8 @@ import {
 import { BsClockHistory } from 'react-icons/bs';
 import FileSaver from 'file-saver';
 
-import { EPGParser, Program } from 'services/epg';
+import { EPGParser, Program, EPGBuilder } from 'services/epg';
 import { Button, FileInput, FileInputRefProps } from 'components';
-import EPGBuilder from 'services/epg/builder';
 import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
 import { addToDate, EntityMap } from 'utils';
 import { format } from 'date-fns';
