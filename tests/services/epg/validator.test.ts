@@ -4,6 +4,9 @@ import EPGValidator, {
   EPGValidationMessageType,
 } from '../../../src/services/epg/validator';
 
+const firstStartDateTime = new Date(Date.now());
+const secondStartDateTime = new Date(Date.now() + 3600 * 1000);
+
 describe('Validate programs', () => {
   it('should return no validation messages on a valid list of programs', () => {
     const validPrograms: Program[] = [
@@ -12,7 +15,7 @@ describe('Validate programs', () => {
         title: 'VALE A PENA VER DE NOVO',
         description:
           'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
-        startDateTime: new Date(2022, 5, 22, 16, 55, 0),
+        startDateTime: firstStartDateTime,
         duration: 3600,
         rating: ProgramRating.R12,
       },
@@ -21,7 +24,7 @@ describe('Validate programs', () => {
         title: 'MALHAÇÃO - VIDAS BRASILEIRAS',
         description:
           'Em Malhação: Vidas Brasileiras, uma figura importante vai mergulhar fundo no universo dos alunos do ensino médio da escola Sapiência: a professora Gabriela Fortes.',
-        startDateTime: new Date(2022, 5, 22, 17, 55, 0),
+        startDateTime: secondStartDateTime,
         duration: 2100,
         rating: ProgramRating.R12,
       },
@@ -38,7 +41,7 @@ describe('Validate programs', () => {
         title: '',
         description:
           'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
-        startDateTime: new Date(2022, 5, 22, 16, 55, 0),
+        startDateTime: firstStartDateTime,
         duration: 3600,
         rating: ProgramRating.R12,
       },
@@ -47,7 +50,7 @@ describe('Validate programs', () => {
         title: 'MALHAÇÃO - VIDAS BRASILEIRAS',
         description:
           'Em Malhação: Vidas Brasileiras, uma figura importante vai mergulhar fundo no universo dos alunos do ensino médio da escola Sapiência: a professora Gabriela Fortes.',
-        startDateTime: new Date(2022, 5, 22, 17, 55, 0),
+        startDateTime: secondStartDateTime,
         duration: 2100,
         rating: ProgramRating.R12,
       },
@@ -66,7 +69,7 @@ describe('Validate programs', () => {
         title: 'VALE A PENA VER DE NOVO',
         description:
           'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
-        startDateTime: new Date(2022, 5, 22, 16, 55, 0),
+        startDateTime: firstStartDateTime,
         duration: 3600,
         rating: ProgramRating.R12,
       },
@@ -74,7 +77,7 @@ describe('Validate programs', () => {
         id: shortUUID.toString(),
         title: 'MALHAÇÃO - VIDAS BRASILEIRAS',
         description: '',
-        startDateTime: new Date(2022, 5, 22, 17, 55, 0),
+        startDateTime: secondStartDateTime,
         duration: 2100,
         rating: ProgramRating.R12,
       },
@@ -93,8 +96,8 @@ describe('Validate programs', () => {
         title: 'VALE A PENA VER DE NOVO',
         description:
           'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
-        startDateTime: new Date(2022, 5, 22, 16, 55, 0),
-        duration: -1,
+        startDateTime: firstStartDateTime,
+        duration: 3600,
         rating: ProgramRating.R12,
       },
       {
@@ -102,16 +105,16 @@ describe('Validate programs', () => {
         title: 'MALHAÇÃO - VIDAS BRASILEIRAS',
         description:
           'Em Malhação: Vidas Brasileiras, uma figura importante vai mergulhar fundo no universo dos alunos do ensino médio da escola Sapiência: a professora Gabriela Fortes.',
-        startDateTime: new Date(2022, 5, 22, 17, 55, 0),
-        duration: 2100,
+        startDateTime: secondStartDateTime,
+        duration: -1,
         rating: ProgramRating.R12,
       },
     ];
     expect(EPGValidator.validate(invalidDurationPrograms)).toMatchObject({
-      [invalidDurationPrograms[0].id]: EPGValidator.buildValidationMessages([
+      [invalidDurationPrograms[0].id]: EPGValidator.buildValidationMessages(),
+      [invalidDurationPrograms[1].id]: EPGValidator.buildValidationMessages([
         EPGValidationMessageType.INVALID_DURATION,
       ]),
-      [invalidDurationPrograms[1].id]: EPGValidator.buildValidationMessages(),
     });
   });
   it('should return a validation message of type `NO_PARENTAL_RATING` when there is no parental rating', () => {
@@ -121,7 +124,7 @@ describe('Validate programs', () => {
         title: 'VALE A PENA VER DE NOVO',
         description:
           'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
-        startDateTime: new Date(2022, 5, 22, 16, 55, 0),
+        startDateTime: firstStartDateTime,
         duration: 3600,
         rating: ProgramRating.R12,
       },
@@ -130,7 +133,7 @@ describe('Validate programs', () => {
         title: 'MALHAÇÃO - VIDAS BRASILEIRAS',
         description:
           'Em Malhação: Vidas Brasileiras, uma figura importante vai mergulhar fundo no universo dos alunos do ensino médio da escola Sapiência: a professora Gabriela Fortes.',
-        startDateTime: new Date(2022, 5, 22, 17, 55, 0),
+        startDateTime: secondStartDateTime,
         duration: 2100,
         rating: ProgramRating.RSC,
       },
@@ -149,7 +152,7 @@ describe('Validate programs', () => {
         title: 'VALE A PENA VER DE NOVO',
         description:
           'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
-        startDateTime: new Date(2022, 5, 12, 16, 55, 0),
+        startDateTime: new Date(Date.now() - 864000 * 1000),
         duration: 3600,
         rating: ProgramRating.R12,
       },
@@ -158,7 +161,7 @@ describe('Validate programs', () => {
         title: 'MALHAÇÃO - VIDAS BRASILEIRAS',
         description:
           'Em Malhação: Vidas Brasileiras, uma figura importante vai mergulhar fundo no universo dos alunos do ensino médio da escola Sapiência: a professora Gabriela Fortes.',
-        startDateTime: new Date(2022, 5, 22, 17, 55, 0),
+        startDateTime: secondStartDateTime,
         duration: 2100,
         rating: ProgramRating.R12,
       },
@@ -177,7 +180,7 @@ describe('Validate programs', () => {
         title: 'VALE A PENA VER DE NOVO',
         description:
           'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
-        startDateTime: new Date(2022, 5, 22, 16, 55, 0),
+        startDateTime: new Date(Date.now() + 2592000 * 1000),
         duration: 3600,
         rating: ProgramRating.R12,
       },
@@ -186,16 +189,16 @@ describe('Validate programs', () => {
         title: 'MALHAÇÃO - VIDAS BRASILEIRAS',
         description:
           'Em Malhação: Vidas Brasileiras, uma figura importante vai mergulhar fundo no universo dos alunos do ensino médio da escola Sapiência: a professora Gabriela Fortes.',
-        startDateTime: new Date(2022, 6, 22, 17, 55, 0),
+        startDateTime: secondStartDateTime,
         duration: 2100,
         rating: ProgramRating.R12,
       },
     ];
     expect(EPGValidator.validate(farStartDatePrograms)).toMatchObject({
-      [farStartDatePrograms[0].id]: EPGValidator.buildValidationMessages(),
-      [farStartDatePrograms[1].id]: EPGValidator.buildValidationMessages([
+      [farStartDatePrograms[0].id]: EPGValidator.buildValidationMessages([
         EPGValidationMessageType.FAR_START_DATE,
       ]),
+      [farStartDatePrograms[1].id]: EPGValidator.buildValidationMessages(),
     });
   });
   it('should return a validation message of type `TIME_GAP` when there is a time gap between two programs', () => {
@@ -205,7 +208,7 @@ describe('Validate programs', () => {
         title: 'VALE A PENA VER DE NOVO',
         description:
           'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
-        startDateTime: new Date(2022, 5, 22, 16, 55, 0),
+        startDateTime: firstStartDateTime,
         duration: 3600,
         rating: ProgramRating.R12,
       },
@@ -214,7 +217,7 @@ describe('Validate programs', () => {
         title: 'MALHAÇÃO - VIDAS BRASILEIRAS',
         description:
           'Em Malhação: Vidas Brasileiras, uma figura importante vai mergulhar fundo no universo dos alunos do ensino médio da escola Sapiência: a professora Gabriela Fortes.',
-        startDateTime: new Date(2022, 5, 22, 18, 35, 0),
+        startDateTime: new Date(Date.now() + 5700 * 1000),
         duration: 2100,
         rating: ProgramRating.R12,
       },
@@ -232,7 +235,7 @@ describe('Validate programs', () => {
         id: shortUUID.toString(),
         title: '',
         description: '',
-        startDateTime: new Date(2022, 4, 22, 16, 55, 0),
+        startDateTime: new Date(Date.now() - 2592000 * 1000),
         duration: 0,
         rating: ProgramRating.RSC,
       },
@@ -240,7 +243,7 @@ describe('Validate programs', () => {
         id: shortUUID.toString(),
         title: '',
         description: '',
-        startDateTime: new Date(2022, 6, 22, 18, 35, 0),
+        startDateTime: new Date(Date.now() + 2592000 * 1000),
         duration: 0,
         rating: ProgramRating.RSC,
       },
@@ -273,7 +276,7 @@ describe('Adjust programs', () => {
         title: 'VALE A PENA VER DE NOVO',
         description:
           'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
-        startDateTime: new Date(2022, 5, 22, 16, 55, 0),
+        startDateTime: firstStartDateTime,
         duration: 3600,
         rating: ProgramRating.R12,
       },
@@ -282,7 +285,7 @@ describe('Adjust programs', () => {
         title: 'MALHAÇÃO - VIDAS BRASILEIRAS',
         description:
           'Em Malhação: Vidas Brasileiras, uma figura importante vai mergulhar fundo no universo dos alunos do ensino médio da escola Sapiência: a professora Gabriela Fortes.',
-        startDateTime: new Date(2022, 5, 22, 17, 55, 0),
+        startDateTime: secondStartDateTime,
         duration: 2100,
         rating: ProgramRating.R12,
       },
@@ -293,7 +296,7 @@ describe('Adjust programs', () => {
         title: 'VALE A PENA VER DE NOVO',
         description:
           'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
-        startDateTime: new Date(2022, 5, 22, 16, 55, 0),
+        startDateTime: firstStartDateTime,
         duration: 3600,
         rating: ProgramRating.R12,
       },
@@ -302,7 +305,7 @@ describe('Adjust programs', () => {
         title: 'MALHAÇÃO - VIDAS BRASILEIRAS',
         description:
           'Em Malhação: Vidas Brasileiras, uma figura importante vai mergulhar fundo no universo dos alunos do ensino médio da escola Sapiência: a professora Gabriela Fortes.',
-        startDateTime: new Date(2022, 5, 22, 17, 55, 0),
+        startDateTime: secondStartDateTime,
         duration: 2100,
         rating: ProgramRating.R12,
       },
@@ -318,7 +321,7 @@ describe('Adjust programs', () => {
         title: 'VALE A PENA VER DE NOVO',
         description:
           'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
-        startDateTime: new Date(2022, 5, 22, 16, 55, 0),
+        startDateTime: firstStartDateTime,
         duration: 3600,
         rating: ProgramRating.R12,
       },
@@ -327,7 +330,7 @@ describe('Adjust programs', () => {
         title: 'MALHAÇÃO - VIDAS BRASILEIRAS',
         description:
           'Em Malhação: Vidas Brasileiras, uma figura importante vai mergulhar fundo no universo dos alunos do ensino médio da escola Sapiência: a professora Gabriela Fortes.',
-        startDateTime: new Date(2022, 5, 22, 18, 35, 0),
+        startDateTime: new Date(Date.now() + 5700 * 1000),
         duration: 2100,
         rating: ProgramRating.R12,
       },
@@ -338,7 +341,7 @@ describe('Adjust programs', () => {
         title: 'VALE A PENA VER DE NOVO',
         description:
           'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
-        startDateTime: new Date(2022, 5, 22, 16, 55, 0),
+        startDateTime: firstStartDateTime,
         duration: 3600,
         rating: ProgramRating.R12,
       },
@@ -347,7 +350,7 @@ describe('Adjust programs', () => {
         title: 'MALHAÇÃO - VIDAS BRASILEIRAS',
         description:
           'Em Malhação: Vidas Brasileiras, uma figura importante vai mergulhar fundo no universo dos alunos do ensino médio da escola Sapiência: a professora Gabriela Fortes.',
-        startDateTime: new Date(2022, 5, 22, 17, 55, 0),
+        startDateTime: secondStartDateTime,
         duration: 2100,
         rating: ProgramRating.R12,
       },
