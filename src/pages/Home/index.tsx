@@ -31,18 +31,26 @@ const Home: React.FC = () => {
   }, [programs, setSavedPrograms]);
 
   const handleAddProgram = useCallback(() => {
-    const addedProgram = new Program();
-    const programList = programs.toArray();
-    addedProgram.startDateTime = addToDate(
-      programList[programList.length - 1].startDateTime,
-      programList[programList.length - 1].duration,
-    );
+    let startDateTime = new Date();
+    if (programs.count) {
+      const programList = programs.toArray();
+      const lastProgram = programList[programList.length - 1];
+      startDateTime = addToDate(
+        lastProgram.startDateTime,
+        lastProgram.duration,
+      );
+    }
+    const addedProgram = new Program({
+      duration: 3600,
+      startDateTime,
+    });
     setPrograms(p => p.add(addedProgram).clone());
     setSelectedProgramId(addedProgram.id);
     setTimeout(() => programTableRef.current.scrollToSelected?.(), 100);
   }, [programs]);
 
   const handleClearProgramList = useCallback(() => {
+    setSelectedProgramId('');
     setPrograms(new EntityMap<Program>());
   }, []);
 
@@ -51,8 +59,10 @@ const Home: React.FC = () => {
       <HeaderContainer>
         <Header
           programs={programs}
-          setPrograms={setPrograms}
-          setSelectedProgramId={setSelectedProgramId}
+          setPrograms={newPrograms => {
+            setSelectedProgramId('');
+            setPrograms(newPrograms);
+          }}
           handleAddProgram={handleAddProgram}
           handleClearProgramList={handleClearProgramList}
         />
