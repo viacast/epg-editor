@@ -1,12 +1,11 @@
 import shortUUID from 'short-uuid';
 import Program, { ProgramRating } from '../../../src/services/epg/program';
 import EPGValidator, {
-  EPGValidationMessageLevel,
   EPGValidationMessageType,
 } from '../../../src/services/epg/validator';
 
 describe('Validate programs', () => {
-  it('should return a list of programs when there are no exceptions', () => {
+  it('should return no validation messages on a valid list of programs', () => {
     const validPrograms: Program[] = [
       {
         id: shortUUID.toString(),
@@ -28,20 +27,12 @@ describe('Validate programs', () => {
       },
     ];
     expect(EPGValidator.validate(validPrograms)).toMatchObject({
-      [validPrograms[0].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [],
-      },
-      [validPrograms[1].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [],
-      },
+      [validPrograms[0].id]: EPGValidator.buildValidationMessages(),
+      [validPrograms[1].id]: EPGValidator.buildValidationMessages(),
     });
   });
-  it('should return an `ERROR` validation message of type `EMPTY_TITLE` when a program title is empty', () => {
-    const emptyTitle: Program[] = [
+  it('should return a validation message of type `EMPTY_TITLE` when a program title is empty', () => {
+    const emptyTitlePrograms: Program[] = [
       {
         id: shortUUID.toString(),
         title: '',
@@ -61,23 +52,15 @@ describe('Validate programs', () => {
         rating: ProgramRating.R12,
       },
     ];
-    expect(EPGValidator.validate(emptyTitle)).toMatchObject({
-      [emptyTitle[0].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [
-          EPGValidationMessageType.EMPTY_TITLE,
-        ],
-      },
-      [emptyTitle[1].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [],
-      },
+    expect(EPGValidator.validate(emptyTitlePrograms)).toMatchObject({
+      [emptyTitlePrograms[0].id]: EPGValidator.buildValidationMessages([
+        EPGValidationMessageType.EMPTY_TITLE,
+      ]),
+      [emptyTitlePrograms[1].id]: EPGValidator.buildValidationMessages(),
     });
   });
-  it('should return an `ERROR` validation message of type `EMPTY_DESCRIPTION` when a program description is empty', () => {
-    const emptyDescription: Program[] = [
+  it('should return a validation message of type `EMPTY_DESCRIPTION` when a program description is empty', () => {
+    const emptyDescriptionPrograms: Program[] = [
       {
         id: shortUUID.toString(),
         title: 'VALE A PENA VER DE NOVO',
@@ -96,30 +79,22 @@ describe('Validate programs', () => {
         rating: ProgramRating.R12,
       },
     ];
-    expect(EPGValidator.validate(emptyDescription)).toMatchObject({
-      [emptyDescription[0].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [],
-      },
-      [emptyDescription[1].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [
-          EPGValidationMessageType.EMPTY_DESCRIPTION,
-        ],
-      },
+    expect(EPGValidator.validate(emptyDescriptionPrograms)).toMatchObject({
+      [emptyDescriptionPrograms[0].id]: EPGValidator.buildValidationMessages(),
+      [emptyDescriptionPrograms[1].id]: EPGValidator.buildValidationMessages([
+        EPGValidationMessageType.EMPTY_DESCRIPTION,
+      ]),
     });
   });
-  it('should return an `ERROR` validation message of type `INVALID_DURATION` when a program duration is zero', () => {
-    const invalidDuration: Program[] = [
+  it('should return a validation message of type `INVALID_DURATION` when a program duration is not valid', () => {
+    const invalidDurationPrograms: Program[] = [
       {
         id: shortUUID.toString(),
         title: 'VALE A PENA VER DE NOVO',
         description:
           'Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.',
         startDateTime: new Date(2022, 5, 22, 16, 55, 0),
-        duration: 0,
+        duration: -1,
         rating: ProgramRating.R12,
       },
       {
@@ -132,23 +107,15 @@ describe('Validate programs', () => {
         rating: ProgramRating.R12,
       },
     ];
-    expect(EPGValidator.validate(invalidDuration)).toMatchObject({
-      [invalidDuration[0].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [
-          EPGValidationMessageType.INVALID_DURATION,
-        ],
-      },
-      [invalidDuration[1].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [],
-      },
+    expect(EPGValidator.validate(invalidDurationPrograms)).toMatchObject({
+      [invalidDurationPrograms[0].id]: EPGValidator.buildValidationMessages([
+        EPGValidationMessageType.INVALID_DURATION,
+      ]),
+      [invalidDurationPrograms[1].id]: EPGValidator.buildValidationMessages(),
     });
   });
-  it('should return an `WARN` validation message of type `NO_PARENTAL_RATING` when there are no parental rating', () => {
-    const noParentalRating: Program[] = [
+  it('should return a validation message of type `NO_PARENTAL_RATING` when there is no parental rating', () => {
+    const noParentalRatingPrograms: Program[] = [
       {
         id: shortUUID.toString(),
         title: 'VALE A PENA VER DE NOVO',
@@ -168,23 +135,15 @@ describe('Validate programs', () => {
         rating: ProgramRating.RSC,
       },
     ];
-    expect(EPGValidator.validate(noParentalRating)).toMatchObject({
-      [noParentalRating[0].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [],
-      },
-      [noParentalRating[1].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [
-          EPGValidationMessageType.NO_PARENTAL_RATING,
-        ],
-        [EPGValidationMessageLevel.ERROR]: [],
-      },
+    expect(EPGValidator.validate(noParentalRatingPrograms)).toMatchObject({
+      [noParentalRatingPrograms[0].id]: EPGValidator.buildValidationMessages(),
+      [noParentalRatingPrograms[1].id]: EPGValidator.buildValidationMessages([
+        EPGValidationMessageType.NO_PARENTAL_RATING,
+      ]),
     });
   });
-  it('should return an `WARN` validation message of type `PAST_START_DATE` when a program startDateTime is in the past', () => {
-    const pastStartDate: Program[] = [
+  it('should return a validation message of type `PAST_START_DATE` when a program `startDateTime` is in the past', () => {
+    const pastStartDatePrograms: Program[] = [
       {
         id: shortUUID.toString(),
         title: 'VALE A PENA VER DE NOVO',
@@ -204,22 +163,14 @@ describe('Validate programs', () => {
         rating: ProgramRating.R12,
       },
     ];
-    expect(EPGValidator.validate(pastStartDate)).toMatchObject({
-      [pastStartDate[0].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [
-          EPGValidationMessageType.PAST_START_DATE,
-        ],
-        [EPGValidationMessageLevel.ERROR]: [],
-      },
-      [pastStartDate[1].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [],
-      },
+    expect(EPGValidator.validate(pastStartDatePrograms)).toMatchObject({
+      [pastStartDatePrograms[0].id]: EPGValidator.buildValidationMessages([
+        EPGValidationMessageType.PAST_START_DATE,
+      ]),
+      [pastStartDatePrograms[1].id]: EPGValidator.buildValidationMessages(),
     });
   });
-  it('should return an `INFO` validation message of type `FAR_START_DATE` when a program `startDateTime` is too far in the future', () => {
+  it('should return a validation message of type `FAR_START_DATE` when a program `startDateTime` is too far in the future', () => {
     const farStartDatePrograms: Program[] = [
       {
         id: shortUUID.toString(),
@@ -241,22 +192,14 @@ describe('Validate programs', () => {
       },
     ];
     expect(EPGValidator.validate(farStartDatePrograms)).toMatchObject({
-      [farStartDatePrograms[0].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [],
-      },
-      [farStartDatePrograms[1].id]: {
-        [EPGValidationMessageLevel.INFO]: [
-          EPGValidationMessageType.FAR_START_DATE,
-        ],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [],
-      },
+      [farStartDatePrograms[0].id]: EPGValidator.buildValidationMessages(),
+      [farStartDatePrograms[1].id]: EPGValidator.buildValidationMessages([
+        EPGValidationMessageType.FAR_START_DATE,
+      ]),
     });
   });
-  it('should return an `ERROR` validation message of type `TIME_GAP` when there are a gap between two programs', () => {
-    const timeGap: Program[] = [
+  it('should return a validation message of type `TIME_GAP` when there is a time gap between two programs', () => {
+    const timeGapPrograms: Program[] = [
       {
         id: shortUUID.toString(),
         title: 'VALE A PENA VER DE NOVO',
@@ -276,21 +219,15 @@ describe('Validate programs', () => {
         rating: ProgramRating.R12,
       },
     ];
-    expect(EPGValidator.validate(timeGap)).toMatchObject({
-      [timeGap[0].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [],
-      },
-      [timeGap[1].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [],
-        [EPGValidationMessageLevel.ERROR]: [EPGValidationMessageType.TIME_GAP],
-      },
+    expect(EPGValidator.validate(timeGapPrograms)).toMatchObject({
+      [timeGapPrograms[0].id]: EPGValidator.buildValidationMessages(),
+      [timeGapPrograms[1].id]: EPGValidator.buildValidationMessages([
+        EPGValidationMessageType.TIME_GAP,
+      ]),
     });
   });
   it('should return all possible validation messages', () => {
-    const allExceptions: Program[] = [
+    const allMessagesPrograms: Program[] = [
       {
         id: shortUUID.toString(),
         title: '',
@@ -308,39 +245,28 @@ describe('Validate programs', () => {
         rating: ProgramRating.RSC,
       },
     ];
-    expect(EPGValidator.validate(allExceptions)).toMatchObject({
-      [allExceptions[0].id]: {
-        [EPGValidationMessageLevel.INFO]: [],
-        [EPGValidationMessageLevel.WARN]: [
-          EPGValidationMessageType.NO_PARENTAL_RATING,
-          EPGValidationMessageType.PAST_START_DATE,
-        ],
-        [EPGValidationMessageLevel.ERROR]: [
-          EPGValidationMessageType.EMPTY_TITLE,
-          EPGValidationMessageType.INVALID_DURATION,
-          EPGValidationMessageType.EMPTY_DESCRIPTION,
-        ],
-      },
-      [allExceptions[1].id]: {
-        [EPGValidationMessageLevel.INFO]: [
-          EPGValidationMessageType.FAR_START_DATE,
-        ],
-        [EPGValidationMessageLevel.WARN]: [
-          EPGValidationMessageType.NO_PARENTAL_RATING,
-        ],
-        [EPGValidationMessageLevel.ERROR]: [
-          EPGValidationMessageType.EMPTY_TITLE,
-          EPGValidationMessageType.EMPTY_DESCRIPTION,
-          EPGValidationMessageType.INVALID_DURATION,
-          EPGValidationMessageType.TIME_GAP,
-        ],
-      },
+    expect(EPGValidator.validate(allMessagesPrograms)).toMatchObject({
+      [allMessagesPrograms[0].id]: EPGValidator.buildValidationMessages([
+        EPGValidationMessageType.NO_PARENTAL_RATING,
+        EPGValidationMessageType.PAST_START_DATE,
+        EPGValidationMessageType.EMPTY_TITLE,
+        EPGValidationMessageType.INVALID_DURATION,
+        EPGValidationMessageType.EMPTY_DESCRIPTION,
+      ]),
+      [allMessagesPrograms[1].id]: EPGValidator.buildValidationMessages([
+        EPGValidationMessageType.FAR_START_DATE,
+        EPGValidationMessageType.NO_PARENTAL_RATING,
+        EPGValidationMessageType.EMPTY_TITLE,
+        EPGValidationMessageType.EMPTY_DESCRIPTION,
+        EPGValidationMessageType.INVALID_DURATION,
+        EPGValidationMessageType.TIME_GAP,
+      ]),
     });
   });
 });
 
 describe('Adjust programs', () => {
-  it('should return the same list of programs when the startDateTimes are ordinated', () => {
+  it('should return the same list of programs when adjusting programs that do not require adjustment', () => {
     const originalPrograms: Program[] = [
       {
         id: shortUUID.toString(),
@@ -361,7 +287,7 @@ describe('Adjust programs', () => {
         rating: ProgramRating.R12,
       },
     ];
-    const ordinatedPrograms: Program[] = [
+    const adjustedPrograms: Program[] = [
       {
         id: shortUUID.toString(),
         title: 'VALE A PENA VER DE NOVO',
@@ -382,10 +308,10 @@ describe('Adjust programs', () => {
       },
     ];
     expect(EPGValidator.adjustDateTimes(originalPrograms)).toEqual(
-      ordinatedPrograms,
+      adjustedPrograms,
     );
   });
-  it('should return an ordinated programs list', () => {
+  it('should return a programs list with adjusted start date times', () => {
     const originalPrograms: Program[] = [
       {
         id: shortUUID.toString(),
@@ -406,7 +332,7 @@ describe('Adjust programs', () => {
         rating: ProgramRating.R12,
       },
     ];
-    const ordinatedPrograms: Program[] = [
+    const adjustedPrograms: Program[] = [
       {
         id: shortUUID.toString(),
         title: 'VALE A PENA VER DE NOVO',
@@ -427,7 +353,7 @@ describe('Adjust programs', () => {
       },
     ];
     expect(EPGValidator.adjustDateTimes(originalPrograms)).toEqual(
-      ordinatedPrograms,
+      adjustedPrograms,
     );
   });
 });

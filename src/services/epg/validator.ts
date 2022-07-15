@@ -20,12 +20,35 @@ export enum EPGValidationMessageType {
 }
 
 export type EPGValidationMessages = Record<
-  string, // programId
-  Record<EPGValidationMessageLevel, EPGValidationMessageType[]>
+  EPGValidationMessageLevel,
+  EPGValidationMessageType[]
 >;
 
+export const EPGValidationMessageTypeLevels = {
+  [EPGValidationMessageType.EMPTY_TITLE]: EPGValidationMessageLevel.ERROR,
+  [EPGValidationMessageType.EMPTY_DESCRIPTION]: EPGValidationMessageLevel.ERROR,
+  [EPGValidationMessageType.INVALID_DURATION]: EPGValidationMessageLevel.ERROR,
+  [EPGValidationMessageType.NO_PARENTAL_RATING]: EPGValidationMessageLevel.WARN,
+  [EPGValidationMessageType.PAST_START_DATE]: EPGValidationMessageLevel.WARN,
+  [EPGValidationMessageType.FAR_START_DATE]: EPGValidationMessageLevel.INFO,
+  [EPGValidationMessageType.TIME_GAP]: EPGValidationMessageLevel.ERROR,
+};
+
 export default class EPGValidator {
-  static validate(programs: Program[]): EPGValidationMessages {
+  static buildValidationMessages(
+    types: EPGValidationMessageType[] = [],
+  ): EPGValidationMessages {
+    const messages = {} as EPGValidationMessages;
+    Object.values(EPGValidationMessageLevel).forEach(l => {
+      messages[l] = [];
+    });
+    types.forEach(t => {
+      messages[EPGValidationMessageTypeLevels[t]].push(t);
+    });
+    return messages;
+  }
+
+  static validate(programs: Program[]): Record<string, EPGValidationMessages> {
     throw new Error('not implemented');
   }
 
