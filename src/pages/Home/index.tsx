@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { ProgramTable, Menu, ProgramTableRefProps } from 'components';
 import { Program } from 'services/epg';
-import { EntityMap } from 'utils';
+import { addToDate, EntityMap } from 'utils';
 
 import { LocalStorageKeys, useLocalStorage } from 'hooks';
 import {
@@ -32,10 +32,15 @@ const Home: React.FC = () => {
 
   const handleAddProgram = useCallback(() => {
     const addedProgram = new Program();
+    const programList = programs.toArray();
+    addedProgram.startDateTime = addToDate(
+      programList[programList.length - 1].startDateTime,
+      programList[programList.length - 1].duration,
+    );
     setPrograms(p => p.add(addedProgram).clone());
     setSelectedProgramId(addedProgram.id);
     setTimeout(() => programTableRef.current.scrollToSelected?.(), 100);
-  }, []);
+  }, [programs]);
 
   const handleClearProgramList = useCallback(() => {
     setPrograms(new EntityMap<Program>());
@@ -46,10 +51,7 @@ const Home: React.FC = () => {
       <HeaderContainer>
         <Header
           programs={programs}
-          setPrograms={newPrograms => {
-            setSelectedProgramId('');
-            setPrograms(new EntityMap(newPrograms));
-          }}
+          setPrograms={setPrograms}
           setSelectedProgramId={setSelectedProgramId}
           handleAddProgram={handleAddProgram}
           handleClearProgramList={handleClearProgramList}

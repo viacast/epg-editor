@@ -14,7 +14,7 @@ import { EPGParser, Program } from 'services/epg';
 import { Button, FileInput, FileInputRefProps } from 'components';
 import EPGBuilder from 'services/epg/builder';
 import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
-import { EntityMap } from 'utils';
+import { addToDate, EntityMap } from 'utils';
 import { format } from 'date-fns';
 import { useModalProvider } from 'providers/ModalProvider';
 import { toast } from 'react-toastify';
@@ -28,7 +28,7 @@ import {
 
 export interface HeaderProps {
   programs: EntityMap<Program>;
-  setPrograms: (programs: Program[]) => void;
+  setPrograms: (programs: EntityMap<Program>) => void;
   handleAddProgram: () => void;
   setSelectedProgramId: (id: string) => void;
   handleClearProgramList: () => void;
@@ -85,7 +85,7 @@ const Header: React.FC<HeaderProps> = ({
       }
       const newPrograms = await EPGParser.parseFile(files[0]);
       if (!programCount) {
-        setPrograms(newPrograms);
+        setPrograms(new EntityMap(newPrograms));
         setEpgFilename(files[0].name);
         setSavedFilename(files[0].name);
         return;
@@ -94,7 +94,7 @@ const Header: React.FC<HeaderProps> = ({
         title: t('header:titleOverwrite'),
         content: t('header:overwriteProgramList'),
         confirm: () => {
-          setPrograms(newPrograms);
+          setPrograms(new EntityMap(newPrograms));
           setEpgFilename(files[0].name);
           setSavedFilename(files[0].name);
         },
@@ -193,7 +193,27 @@ const Header: React.FC<HeaderProps> = ({
       <Button
         text={t('header:buttonStartDateTime')}
         icon={<BsClockHistory />}
-        onClick={() => ''}
+        onClick={() => {
+          openModal({
+            title: t('header:buttonStartDateTime'),
+            content: t('header:adjustStartDateTime'),
+            confirm: () => {
+              const programList = programs.toArray();
+              programList.forEach((p, i) => {
+                if (i === programList.length - 1) {
+                  return;
+                }
+                const { startDateTime, duration } = programList[i];
+                const endTime = addToDate(startDateTime, duration);
+                programList[i + 1].startDateTime = endTime;
+              });
+              const newList = new EntityMap(programList);
+              programList.forEach(p => {
+                setPrograms(newList.update(p).clone());
+              });
+            },
+          });
+        }}
       />
       <Text>
         {t('header:labelProgram', {
