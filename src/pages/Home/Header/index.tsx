@@ -10,10 +10,10 @@ import {
 import { BsClockHistory } from 'react-icons/bs';
 import FileSaver from 'file-saver';
 
-import { EPGParser, Program, EPGBuilder } from 'services/epg';
+import { EPGParser, Program, EPGBuilder, EPGValidator } from 'services/epg';
 import { Button, FileInput, FileInputRefProps } from 'components';
 import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
-import { addToDate, EntityMap } from 'utils';
+import { EntityMap } from 'utils';
 import { format } from 'date-fns';
 import { useModalProvider } from 'providers/ModalProvider';
 import { toast } from 'react-toastify';
@@ -194,15 +194,9 @@ const Header: React.FC<HeaderProps> = ({
             title: t('header:buttonStartDateTime'),
             content: t('header:adjustStartDateTime'),
             confirm: () => {
-              const programList = programs.toArray();
-              programList.forEach((p, i) => {
-                if (i === programList.length - 1) {
-                  return;
-                }
-                const { startDateTime, duration } = programList[i];
-                const endTime = addToDate(startDateTime, duration);
-                programList[i + 1].startDateTime = endTime;
-              });
+              const programList = EPGValidator.adjustDateTimes(
+                programs.toArray(),
+              );
               const newList = new EntityMap(programList);
               programList.forEach(p => {
                 setPrograms(newList.update(p).clone());

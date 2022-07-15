@@ -1,3 +1,4 @@
+import { addToDate } from 'utils/general';
 import Program from './program';
 
 // eslint-disable-next-line no-shadow
@@ -29,6 +30,15 @@ export default class EPGValidator {
   }
 
   static adjustDateTimes(programs: Program[]): Program[] {
-    throw new Error('not implemented');
+    programs.forEach((p, i) => {
+      if (i === programs.length - 1) {
+        return;
+      }
+      const { startDateTime, duration } = programs[i];
+      const endTime = addToDate(startDateTime, duration);
+      // eslint-disable-next-line no-param-reassign
+      programs[i + 1].startDateTime = endTime;
+    });
+    return programs;
   }
 }
