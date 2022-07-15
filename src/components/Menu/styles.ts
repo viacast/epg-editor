@@ -4,16 +4,6 @@ import { FormControl, InputProps, styled as styledmui } from '@mui/material';
 export const FormRow = styled.div`
   display: inline-flex;
   width: 100%;
-  justify-content: space-around;
-  button {
-    background-color: transparent;
-    border: none;
-    color: var(--color-system-4);
-    cursor: pointer;
-    :hover {
-      opacity: 0.5;
-    }
-  }
 `;
 
 export const FormColumn = styled.div`
