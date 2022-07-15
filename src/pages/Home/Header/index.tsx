@@ -30,7 +30,6 @@ export interface HeaderProps {
   programs: EntityMap<Program>;
   setPrograms: (programs: EntityMap<Program>) => void;
   handleAddProgram: () => void;
-  setSelectedProgramId: (id: string) => void;
   handleClearProgramList: () => void;
 }
 
@@ -38,7 +37,6 @@ const Header: React.FC<HeaderProps> = ({
   programs,
   setPrograms,
   handleAddProgram,
-  setSelectedProgramId,
   handleClearProgramList,
 }) => {
   const { t, i18n } = useTranslation();
@@ -185,7 +183,6 @@ const Header: React.FC<HeaderProps> = ({
               setSavedFilename('');
               handleClearProgramList();
               fileInputRef.current.clearFiles?.();
-              setSelectedProgramId('');
             },
           });
         }}

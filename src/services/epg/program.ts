@@ -33,7 +33,7 @@ export default class Program implements IProgram {
 
   public rating: ProgramRating;
 
-  constructor(program?: IProgram) {
+  constructor(program?: Partial<IProgram>) {
     const { id, startDateTime, duration, title, description, rating } =
       program ?? {
         id: shortUUID.generate(),
@@ -45,7 +45,7 @@ export default class Program implements IProgram {
       };
     this.id = id ?? shortUUID.generate();
     this.startDateTime = startDateTime ? new Date(startDateTime) : new Date();
-    this.duration = duration ?? 3600;
+    this.duration = duration ?? 0;
     this.title = title ?? '';
     this.description = description ?? '';
     this.rating = rating ?? ProgramRating.RSC;
