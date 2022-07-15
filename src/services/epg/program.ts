@@ -45,7 +45,7 @@ export default class Program implements IProgram {
       };
     this.id = id ?? shortUUID.generate();
     this.startDateTime = startDateTime ? new Date(startDateTime) : new Date();
-    this.duration = duration ?? 0;
+    this.duration = duration ?? 3600;
     this.title = title ?? '';
     this.description = description ?? '';
     this.rating = rating ?? ProgramRating.RSC;
