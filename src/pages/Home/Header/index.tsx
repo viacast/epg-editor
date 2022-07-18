@@ -194,13 +194,10 @@ const Header: React.FC<HeaderProps> = ({
             title: t('header:buttonStartDateTime'),
             content: t('header:adjustStartDateTime'),
             confirm: () => {
-              const programList = EPGValidator.adjustDateTimes(
+              const adjustedPrograms = EPGValidator.adjustDateTimes(
                 programs.toArray(),
               );
-              const newList = new EntityMap(programList);
-              programList.forEach(p => {
-                setPrograms(newList.update(p).clone());
-              });
+              setPrograms(new EntityMap(adjustedPrograms));
             },
           });
         }}
