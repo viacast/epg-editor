@@ -1,5 +1,5 @@
-import { addToDate } from 'utils/general';
-import Program from './program';
+import { addToDate } from 'utils';
+import Program, { ProgramRating } from './program';
 
 // eslint-disable-next-line no-shadow
 export enum EPGValidationMessageLevel {
@@ -49,7 +49,38 @@ export default class EPGValidator {
   }
 
   static validate(programs: Program[]): Record<string, EPGValidationMessages> {
-    throw new Error('not implemented');
+    const messages: Record<string, EPGValidationMessages> = {};
+    programs.forEach((p, i, progs) => {
+      const messageTypes: EPGValidationMessageType[] = [];
+      if (p.title === '') {
+        messageTypes.push(EPGValidationMessageType.EMPTY_TITLE);
+      }
+      if (p.description === '') {
+        messageTypes.push(EPGValidationMessageType.EMPTY_DESCRIPTION);
+      }
+      if (p.duration <= 0) {
+        messageTypes.push(EPGValidationMessageType.INVALID_DURATION);
+      }
+      if (p.rating === ProgramRating.RSC) {
+        messageTypes.push(EPGValidationMessageType.NO_PARENTAL_RATING);
+      }
+      if (p.startDateTime < new Date()) {
+        messageTypes.push(EPGValidationMessageType.PAST_START_DATE);
+      }
+      if (p.startDateTime >= addToDate(new Date(), 2592000)) {
+        // the start time is 30 days far from now
+        messageTypes.push(EPGValidationMessageType.FAR_START_DATE);
+      }
+      if (
+        i > 0 &&
+        p.startDateTime.getTime() !==
+          addToDate(progs[i - 1].startDateTime, progs[i - 1].duration).getTime()
+      ) {
+        messageTypes.push(EPGValidationMessageType.TIME_GAP);
+      }
+      messages[p.id] = EPGValidator.buildValidationMessages(messageTypes);
+    });
+    return messages;
   }
 
   static adjustDateTimes(programs: Program[]): Program[] {
