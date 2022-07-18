@@ -44,9 +44,12 @@ export default class EntityMap<EntityType> {
     return this.keys.indexOf(entityKey);
   }
 
-  add(entity: EntityType | EntityType[]): EntityMap<EntityType> {
+  add(
+    entity: EntityType | EntityType[],
+    target?: string,
+  ): EntityMap<EntityType> {
     if (Array.isArray(entity)) {
-      entity.forEach(this.add);
+      entity.forEach(e => this.add(e, target));
       return this;
     }
     const key = entity[this.key];
@@ -55,9 +58,12 @@ export default class EntityMap<EntityType> {
     }
     if (this.entities[key]) {
       return this;
-      // throw new EntityAlreadyExists(`Entity with key '${key}' already exists`);
     }
-    this.keys.push(key);
+    if (target) {
+      this.keys.splice(this.keys.indexOf(target), 0, key);
+    } else {
+      this.keys.push(key);
+    }
     this.entities[key] = entity;
     return this;
   }
@@ -80,6 +86,29 @@ export default class EntityMap<EntityType> {
     }
     delete this.entities[entityKey];
     this.keys.splice(this.indexOf(entityKey), 1);
+    return this;
+  }
+
+  moveTo(entityKey: string, targetKey?: string): EntityMap<EntityType> {
+    this.keys.splice(this.keys.indexOf(entityKey), 1);
+    this.keys.splice(this.keys.indexOf(targetKey ?? entityKey), 0, entityKey);
+    return this;
+  }
+
+  moveRelative(
+    entityKey: string,
+    step: number | 'start' | 'end',
+  ): EntityMap<EntityType> {
+    let target: number;
+    if (step === 'start') {
+      target = 0;
+    } else if (step === 'end') {
+      target = this.keys.length;
+    } else {
+      target = step;
+    }
+    this.keys.splice(this.keys.indexOf(entityKey), 1);
+    this.keys.splice(target, 0, entityKey);
     return this;
   }
 }
