@@ -59,8 +59,9 @@ export default class EntityMap<EntityType> {
     if (this.entities[key]) {
       return this;
     }
-    if (target && this.keys.indexOf(target) !== -1) {
-      this.keys.splice(this.keys.indexOf(target), 0, key);
+    const targetIndex = this.keys.indexOf(target ?? '');
+    if (targetIndex !== -1) {
+      this.keys.splice(targetIndex, 0, key);
     } else {
       this.keys.push(key);
     }
@@ -89,9 +90,15 @@ export default class EntityMap<EntityType> {
     return this;
   }
 
-  moveTo(entityKey: string, targetKey?: string): EntityMap<EntityType> {
+  moveTo(entityKey: string, targetKey: string): EntityMap<EntityType> {
+    if (!this.entities[entityKey]) {
+      throw new EntityNotFound(`Entity with key '${entityKey}' not found`);
+    }
+    if (!this.entities[targetKey]) {
+      throw new EntityNotFound(`Entity with key '${targetKey}' not found`);
+    }
     this.keys.splice(this.keys.indexOf(entityKey), 1);
-    this.keys.splice(this.keys.indexOf(targetKey ?? entityKey), 0, entityKey);
+    this.keys.splice(this.keys.indexOf(targetKey), 0, entityKey);
     return this;
   }
 
@@ -99,6 +106,9 @@ export default class EntityMap<EntityType> {
     entityKey: string,
     step: number | 'start' | 'end',
   ): EntityMap<EntityType> {
+    if (!this.entities[entityKey]) {
+      throw new EntityNotFound(`Entity with key '${entityKey}' not found`);
+    }
     let target: number;
     if (step === 'start') {
       target = 0;
