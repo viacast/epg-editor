@@ -76,6 +76,15 @@ export const StyledText = styled.span<{ maxWidth?: string }>`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  div {
+    width: 50%;
+    white-space: normal;
+  }
+  svg {
+    z-index: 50;
+    color: var(--color-neutral-2);
+    vertical-align: middle;
+  }
 `;
 
 export const IconRating = styled.img`

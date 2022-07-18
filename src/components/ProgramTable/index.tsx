@@ -4,6 +4,8 @@ import { TableBody, TableHead } from '@mui/material';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 
 import { useTranslation } from 'react-i18next';
+import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md';
+import { HiPlus } from 'react-icons/hi';
 
 import IconSC from 'assets/icons/ratings/SC.svg';
 import IconRL from 'assets/icons/ratings/RL.svg';
@@ -144,6 +146,13 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                           arrow
                         >
                           <StyledText>
+                            {id === 'position' && (
+                              <div>
+                                <HiPlus size="20px" />
+                                <MdKeyboardArrowUp size="20px" />
+                                <MdKeyboardArrowDown size="20px" />
+                              </div>
+                            )}
                             {value}
                             {id === 'rating' && (
                               <Message>
