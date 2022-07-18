@@ -59,7 +59,7 @@ export default class EntityMap<EntityType> {
     if (this.entities[key]) {
       return this;
     }
-    if (target) {
+    if (target && this.keys.indexOf(target) !== -1) {
       this.keys.splice(this.keys.indexOf(target), 0, key);
     } else {
       this.keys.push(key);
