@@ -68,6 +68,25 @@ export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
         ? `background-color: var(--color-primary-2); :hover { background-color: var(--color-primary-2); }`
         : `:hover { background-color: var(--color-primary-5); }`};
   }
+  div {
+    display: inline-flex;
+    flex-direction: column;
+    vertical-align: middle;
+    margin-right: 10px;
+    height: 30px;
+  }
+  svg {
+    z-index: 50;
+    display: none;
+    margin-right: 10px;
+    color: var(--color-neutral-2);
+    vertical-align: middle;
+  }
+  &:hover {
+    svg {
+      display: inline-flex;
+    }
+  }
 `;
 
 export const StyledText = styled.span<{ maxWidth?: string }>`
@@ -76,15 +95,6 @@ export const StyledText = styled.span<{ maxWidth?: string }>`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  div {
-    width: 50%;
-    white-space: normal;
-  }
-  svg {
-    z-index: 50;
-    color: var(--color-neutral-2);
-    vertical-align: middle;
-  }
 `;
 
 export const IconRating = styled.img`
