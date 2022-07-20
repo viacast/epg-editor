@@ -35,17 +35,17 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
   const { t } = useTranslation();
 
   const renderProgramRow = useCallback(
-    (program, index, isSelected) => (
+    (program, index) => (
       <ProgramRow
         forwardRef={forwardRef}
         key={program.id}
         index={index}
         program={program}
-        isSelected={isSelected}
+        isSelected={program.id === selectedProgramId}
         setSelectedProgramId={setSelectedProgramId}
       />
     ),
-    [forwardRef, setSelectedProgramId],
+    [forwardRef, selectedProgramId, setSelectedProgramId],
   );
 
   return (
@@ -61,17 +61,7 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
               ))}
             </StyledTableRow>
           </TableHead>
-          <TableBody>
-            {programs
-              .toArray()
-              .map((program, index) =>
-                renderProgramRow(
-                  program,
-                  index,
-                  program.id === selectedProgramId,
-                ),
-              )}
-          </TableBody>
+          <TableBody>{programs.toArray().map(renderProgramRow)}</TableBody>
         </StyledTable>
       </StyledTableContainer>
     </StyledPaper>
