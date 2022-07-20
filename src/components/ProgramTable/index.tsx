@@ -93,7 +93,6 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                   tabIndex={-1}
                   key={program.id}
                   selected={selectedProgramId === program.id}
-                  onClick={() => setSelectedProgramId(program.id)}
                 >
                   {programTableColumns.map(({ id, align, format }) => {
                     let value: Program[keyof Program] | JSX.Element =
@@ -131,7 +130,15 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                       value = secondsToHms(value as number);
                     }
                     return (
-                      <StyledTableCell key={id} align={align}>
+                      <StyledTableCell
+                        key={id}
+                        align={align}
+                        onClick={() => {
+                          if (id !== 'position') {
+                            setSelectedProgramId(program.id);
+                          }
+                        }}
+                      >
                         <CustomWidthTooltip
                           title={
                             <>
@@ -147,11 +154,33 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                         >
                           <StyledText>
                             {id === 'position' && (
-                              <div>
-                                <HiPlus size="20px" />
-                                <MdKeyboardArrowUp size="20px" />
-                                <MdKeyboardArrowDown size="20px" />
-                              </div>
+                              <>
+                                <HiPlus
+                                  size="15px"
+                                  onClick={() => {
+                                    console.log('add');
+                                    programs
+                                      .add(new Program(), program.id)
+                                      .clone();
+                                  }}
+                                />
+                                <div>
+                                  <MdKeyboardArrowUp
+                                    size="15px"
+                                    onClick={() => {
+                                      console.log('up');
+                                      programs.moveRelative(program.id, -1);
+                                    }}
+                                  />
+                                  <MdKeyboardArrowDown
+                                    size="15px"
+                                    onClick={() => {
+                                      console.log('down');
+                                      programs.moveRelative(program.id, 1);
+                                    }}
+                                  />
+                                </div>
+                              </>
                             )}
                             {value}
                             {id === 'rating' && (
