@@ -95,6 +95,7 @@ export const StyledText = styled.span<{ maxWidth?: string }>`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  user-select: none;
 `;
 
 export const IconRating = styled.img`
