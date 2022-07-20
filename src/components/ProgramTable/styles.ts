@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import { styled as styledmui } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import TableContainer from '@mui/material/TableContainer';
@@ -60,38 +59,12 @@ export const StyledTableCell = styledmui(TableCell)`
 `;
 
 export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
-  &.${tableRowClasses.root} {
-    background-color: var(--color-neutral-6);
-    border: 4px solid white;
-    ${({ selected }) =>
-      selected
-        ? `background-color: var(--color-primary-2); :hover { background-color: var(--color-primary-2); }`
-        : `:hover { background-color: var(--color-primary-5); }`};
-  }
-`;
-
-export const StyledText = styled.span<{ maxWidth?: string }>`
-  display: block;
-  max-width: ${({ maxWidth }) => maxWidth || '645px'};
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-export const IconRating = styled.img`
-  float: left;
-  margin-right: 14px;
-  width: 24px;
-  height: 24px;
-  vertical-align: middle;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-export const Message = styled.div`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: middle;
+&.${tableRowClasses.root} {
+  background-color: var(--color-neutral-6);
+  border: 4px solid white;
+  ${({ selected }) =>
+    selected
+      ? `background-color: var(--color-primary-2); :hover { background-color: var(--color-primary-2); }`
+      : `:hover { background-color: var(--color-primary-5); }`};
+}
 `;
