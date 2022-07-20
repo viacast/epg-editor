@@ -56,6 +56,7 @@ const Header: React.FC<HeaderProps> = ({
     toast(t('header:alertInvalidFile'), {
       type: 'warning',
     });
+    fileInputRef.current.clearFiles?.();
   }, [t]);
 
   useEffect(() => {
@@ -76,15 +77,22 @@ const Header: React.FC<HeaderProps> = ({
       if (!files.length) {
         return;
       }
-      if (files[0].type !== 'text/xml' && files[0].type !== 'text/csv') {
+      const [file] = files;
+      if (file.type !== 'text/xml' && file.type !== 'text/csv') {
         notifyInvalidFile();
         return;
       }
-      const newPrograms = await EPGParser.parseFile(files[0]);
+      let newPrograms: Program[];
+      try {
+        newPrograms = await EPGParser.parseFile(file);
+      } catch (e) {
+        notifyInvalidFile();
+        return;
+      }
       if (!programCount) {
         setNewPrograms(new EntityMap(newPrograms));
-        setEpgFilename(files[0].name);
-        setSavedFilename(files[0].name);
+        setEpgFilename(file.name);
+        setSavedFilename(file.name);
         return;
       }
       openModal({
@@ -92,8 +100,8 @@ const Header: React.FC<HeaderProps> = ({
         content: t('header:overwriteProgramList'),
         confirm: () => {
           setNewPrograms(new EntityMap(newPrograms));
-          setEpgFilename(files[0].name);
-          setSavedFilename(files[0].name);
+          setEpgFilename(file.name);
+          setSavedFilename(file.name);
         },
       });
     },
@@ -107,6 +115,19 @@ const Header: React.FC<HeaderProps> = ({
     ],
   );
 
+  const handleClear = useCallback(() => {
+    openModal({
+      title: t('header:buttonClearProgramList'),
+      content: t('header:clearProgramList'),
+      confirm: () => {
+        setEpgFilename('');
+        setSavedFilename('');
+        handleClearProgramList();
+        fileInputRef.current.clearFiles?.();
+      },
+    });
+  }, [handleClearProgramList, openModal, setSavedFilename, t]);
+
   useClickOutside(exportOptionsRef, () => setOpen(false));
 
   return (
@@ -118,7 +139,10 @@ const Header: React.FC<HeaderProps> = ({
         placeholder={
           epgFilename !== '' ? epgFilename : t('header:placeholderInput')
         }
-        onFileUpload={handleFileUpload}
+        onFileUpload={async files => {
+          await handleFileUpload(files);
+          fileInputRef.current.clearFiles?.();
+        }}
       />
       <Button
         text={t('header:buttonImportProgram')}
@@ -173,18 +197,7 @@ const Header: React.FC<HeaderProps> = ({
       <Button
         text={t('header:buttonClearProgramList')}
         icon={<CgPlayListRemove />}
-        onClick={() => {
-          openModal({
-            title: t('header:buttonClearProgramList'),
-            content: t('header:clearProgramList'),
-            confirm: () => {
-              setEpgFilename('');
-              setSavedFilename('');
-              handleClearProgramList();
-              fileInputRef.current.clearFiles?.();
-            },
-          });
-        }}
+        onClick={handleClear}
       />
       <Button
         text={t('header:buttonStartDateTime')}

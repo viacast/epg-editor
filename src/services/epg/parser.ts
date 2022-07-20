@@ -137,7 +137,7 @@ export default class EPGParser {
   static async parseFile(file: File): Promise<Program[]> {
     const content = await readFileAsync(file);
     try {
-      return this.parseCsv(content);
+      return this.parseCsv(content.trim());
     } catch (error) {
       if (error instanceof InvalidFile) {
         return this.parseXml(content);
