@@ -139,7 +139,7 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                         <CustomWidthTooltip
                           title={
                             <>
-                              {id !== 'rating' && id !== 'position' && value}
+                              {id !== 'rating' && value}
                               {id === 'rating' && (
                                 <Message>
                                   {t(`parental-guidance:rating_${program[id]}`)}
