@@ -63,8 +63,8 @@ const ratings = {
 export interface MenuProps {
   hasChanges: boolean;
   programs: EntityMap<Program>;
-  selectedProgramId: string;
-  setSelectedProgramId: (id: string) => void;
+  selectedProgramId: Set<string>;
+  setSelectedProgramId: React.Dispatch<React.SetStateAction<Set<string>>>;
   setHasChanges: (programId: boolean) => void;
   onSaveProgram: (program: Program) => void;
   handleRemoveProgram: (programId: string) => void;
@@ -82,7 +82,7 @@ const Menu: React.FC<MenuProps> = ({
   const { t } = useTranslation();
 
   const { openModal } = useModalProvider();
-  const program = programs.get(selectedProgramId);
+  const program = programs.get(selectedProgramId[0]);
   const [newProgram, setNewProgram] = useState<Program>(
     program ? structuredClone(program) : new Program(),
   );
@@ -337,7 +337,7 @@ const Menu: React.FC<MenuProps> = ({
                 text={t('menu:cancel')}
                 icon={<CgClose />}
                 onClick={() => {
-                  setSelectedProgramId('');
+                  setSelectedProgramId(new Set());
                   setHasChanges(false);
                 }}
               />

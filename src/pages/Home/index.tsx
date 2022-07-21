@@ -15,7 +15,9 @@ import {
 import Header from './Header';
 
 const Home: React.FC = () => {
-  const [selectedProgramId, setSelectedProgramId] = useState('');
+  const [selectedProgramId, setSelectedProgramId] = useState<Set<string>>(
+    new Set(),
+  );
   const [hasChanges, setHasChanges] = useState(false);
   const programTableRef = useRef<ProgramTableRefProps>({});
   const [savedPrograms, setSavedPrograms] = useLocalStorage(
@@ -45,12 +47,12 @@ const Home: React.FC = () => {
       startDateTime,
     });
     setPrograms(p => p.add(addedProgram).clone());
-    setSelectedProgramId(addedProgram.id);
+    setSelectedProgramId(p => p.add(addedProgram.id));
     setTimeout(() => programTableRef.current.scrollToSelected?.(), 100);
   }, [programs]);
 
   const handleClearProgramList = useCallback(() => {
-    setSelectedProgramId('');
+    setSelectedProgramId(new Set());
     setPrograms(new EntityMap<Program>());
   }, []);
 
@@ -60,7 +62,7 @@ const Home: React.FC = () => {
         <Header
           programs={programs}
           setNewPrograms={newPrograms => {
-            setSelectedProgramId('');
+            setSelectedProgramId(new Set());
             setPrograms(newPrograms);
           }}
           handleAddProgram={handleAddProgram}
@@ -70,7 +72,7 @@ const Home: React.FC = () => {
       <TableMenuContainer>
         <TableContainer
           className="epg-table-menu-content"
-          width={selectedProgramId === '' ? '100%' : 'calc(100% - 535px)'}
+          width={selectedProgramId.size === 1 ? 'calc(100% - 535px)' : '100%'}
         >
           <ProgramTable
             forwardRef={programTableRef}
@@ -82,7 +84,7 @@ const Home: React.FC = () => {
         </TableContainer>
         <MenuContainer
           className="epg-table-menu-content"
-          width={selectedProgramId === '' ? '0px' : '500px'}
+          width={selectedProgramId.size === 1 ? '500px' : '0px'}
         >
           <Menu
             hasChanges={hasChanges}
@@ -98,15 +100,18 @@ const Home: React.FC = () => {
               setPrograms(p => {
                 const size = p.toArray().length;
                 const index = p.indexOf(programId);
+                const idList: Set<string> = new Set();
                 if (size === 1) {
                   // was the only program on the list
-                  setSelectedProgramId('');
+                  setSelectedProgramId(new Set());
                 } else if (index === size - 1) {
                   // was the last program on the list
-                  setSelectedProgramId(p.at(index - 1)?.id ?? '');
+                  idList.add(p.at(index - 1)?.id ?? '');
+                  setSelectedProgramId(idList);
                 } else {
                   // all other cases
-                  setSelectedProgramId(p.at(index + 1)?.id ?? '');
+                  idList.add(p.at(index + 1)?.id ?? '');
+                  setSelectedProgramId(idList);
                 }
                 return p.remove(programId).clone();
               });

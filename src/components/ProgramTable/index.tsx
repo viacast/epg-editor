@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { TableBody, TableHead } from '@mui/material';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
@@ -26,6 +26,7 @@ import {
   StyledTableRow,
   StyledText,
   IconRating,
+  Checkbox,
   Message,
 } from './styles';
 import programTableColumns from './programTableColumns';
@@ -46,8 +47,8 @@ export interface ProgramTableRefProps {
 export interface ProgramTableProps {
   forwardRef?: React.MutableRefObject<ProgramTableRefProps>;
   programs: EntityMap<Program>;
-  selectedProgramId: string;
-  setSelectedProgramId: (programId: string) => void;
+  selectedProgramId: Set<string>;
+  setSelectedProgramId: React.Dispatch<React.SetStateAction<Set<string>>>;
   setPrograms: React.Dispatch<React.SetStateAction<EntityMap<Program>>>;
 }
 
@@ -63,6 +64,17 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
   const scrollToSelected = useScrollIntoView({
     ref: selectedRowRef,
   });
+  const [show, setShow] = useState(false);
+  const idList: Set<string> = new Set();
+
+  useEffect(() => {
+    console.log(selectedProgramId);
+    if (selectedProgramId.size === 0) {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
+  }, [setShow, selectedProgramId]);
 
   if (forwardRef?.current) {
     // eslint-disable-next-line no-param-reassign
@@ -77,7 +89,11 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
             <StyledTableRow>
               {programTableColumns.map(({ id, align, minWidth }) => (
                 <StyledTableCell key={id} align={align} style={{ minWidth }}>
-                  {t(`program-table:columnLabel_${id}`)}
+                  {id === 'marker' ? (
+                    <Checkbox className="show" />
+                  ) : (
+                    t(`program-table:columnLabel_${id}`)
+                  )}
                 </StyledTableCell>
               ))}
             </StyledTableRow>
@@ -87,17 +103,18 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
               return (
                 <StyledTableRow
                   onClick={() => {
-                    setSelectedProgramId(program.id);
+                    idList.add(program.id);
+                    setSelectedProgramId(idList);
                   }}
                   ref={
-                    selectedProgramId === program.id
+                    selectedProgramId.has(program.id)
                       ? selectedRowRef
                       : undefined
                   }
                   role="checkbox"
                   tabIndex={-1}
                   key={program.id}
-                  selected={selectedProgramId === program.id}
+                  selected={selectedProgramId.has(program.id)}
                 >
                   {programTableColumns.map(({ id, align, format }) => {
                     let value: Program[keyof Program] | JSX.Element =
@@ -128,6 +145,9 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                         />
                       );
                     }
+                    if (id === 'marker') {
+                      value = '';
+                    }
                     if (format === 'dateTime') {
                       value = formatDateTime(value as Date);
                     }
@@ -150,6 +170,25 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                           arrow
                         >
                           <StyledText>
+                            {id === 'marker' && (
+                              <Checkbox
+                                onClick={e => {
+                                  e.stopPropagation();
+                                  if (selectedProgramId.has(program.id)) {
+                                    setSelectedProgramId(p => {
+                                      p.delete(program.id);
+                                      return new Set(p);
+                                    });
+                                  } else {
+                                    setSelectedProgramId(p => {
+                                      p.add(program.id);
+                                      return new Set(p);
+                                    });
+                                  }
+                                }}
+                                className={show ? 'show' : ''}
+                              />
+                            )}
                             {id === 'position' && (
                               <>
                                 <HiPlus
@@ -167,12 +206,11 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                                       duration: 3600,
                                       startDateTime,
                                     });
-                                    setPrograms(
-                                      programs
-                                        .add(addedProgram, program.id)
-                                        .clone(),
+                                    setPrograms(p =>
+                                      p.add(addedProgram, program.id).clone(),
                                     );
-                                    setSelectedProgramId(addedProgram.id);
+                                    idList.add(addedProgram.id);
+                                    setSelectedProgramId(idList);
                                   }}
                                 />
                                 <div>

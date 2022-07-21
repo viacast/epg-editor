@@ -75,7 +75,7 @@ export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
     margin-right: 10px;
     height: 30px;
   }
-  svg {
+  svg, input {
     z-index: 50;
     display: none;
     margin-right: 10px;
@@ -85,8 +85,11 @@ export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
       opacity: .5;
     }
   }
+  .show {
+    display: inline-flex;
+  }
   &:hover {
-    svg {
+    svg, input {
       display: inline-flex;
     }
   }
@@ -99,6 +102,10 @@ export const StyledText = styled.span<{ maxWidth?: string }>`
   overflow: hidden;
   text-overflow: ellipsis;
   user-select: none;
+`;
+
+export const Checkbox = styled.input.attrs({ type: 'checkbox' })`
+  background-color: var(--color-neutral-5);
 `;
 
 export const IconRating = styled.img`
