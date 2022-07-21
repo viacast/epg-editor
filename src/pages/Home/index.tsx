@@ -59,7 +59,7 @@ const Home: React.FC = () => {
       <HeaderContainer>
         <Header
           programs={programs}
-          setPrograms={newPrograms => {
+          setNewPrograms={newPrograms => {
             setSelectedProgramId('');
             setPrograms(newPrograms);
           }}
@@ -76,6 +76,7 @@ const Home: React.FC = () => {
             forwardRef={programTableRef}
             setSelectedProgramId={setSelectedProgramId}
             selectedProgramId={selectedProgramId}
+            setPrograms={setPrograms}
             programs={programs}
           />
         </TableContainer>

@@ -8,7 +8,7 @@ export interface ProgramTableColumn {
 }
 
 export default [
-  { id: 'position', minWidth: 90, align: 'center' },
+  { id: 'position', minWidth: 90 },
   {
     id: 'startDateTime',
     minWidth: 190,
