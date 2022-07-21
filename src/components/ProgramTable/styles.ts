@@ -81,6 +81,9 @@ export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
     margin-right: 10px;
     color: var(--color-neutral-2);
     vertical-align: middle;
+    &:active {
+      opacity: .5;
+    }
   }
   &:hover {
     svg {

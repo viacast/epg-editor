@@ -27,14 +27,14 @@ import {
 
 export interface HeaderProps {
   programs: EntityMap<Program>;
-  setPrograms: (programs: EntityMap<Program>) => void;
+  setNewPrograms: (programs: EntityMap<Program>) => void;
   handleAddProgram: () => void;
   handleClearProgramList: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
   programs,
-  setPrograms,
+  setNewPrograms,
   handleAddProgram,
   handleClearProgramList,
 }) => {
@@ -82,7 +82,7 @@ const Header: React.FC<HeaderProps> = ({
       }
       const newPrograms = await EPGParser.parseFile(files[0]);
       if (!programCount) {
-        setPrograms(new EntityMap(newPrograms));
+        setNewPrograms(new EntityMap(newPrograms));
         setEpgFilename(files[0].name);
         setSavedFilename(files[0].name);
         return;
@@ -91,7 +91,7 @@ const Header: React.FC<HeaderProps> = ({
         title: t('header:titleOverwrite'),
         content: t('header:overwriteProgramList'),
         confirm: () => {
-          setPrograms(new EntityMap(newPrograms));
+          setNewPrograms(new EntityMap(newPrograms));
           setEpgFilename(files[0].name);
           setSavedFilename(files[0].name);
         },
@@ -102,7 +102,7 @@ const Header: React.FC<HeaderProps> = ({
       openModal,
       t,
       notifyInvalidFile,
-      setPrograms,
+      setNewPrograms,
       setSavedFilename,
     ],
   );
@@ -197,7 +197,7 @@ const Header: React.FC<HeaderProps> = ({
               const adjustedPrograms = EPGValidator.adjustDateTimes(
                 programs.toArray(),
               );
-              setPrograms(new EntityMap(adjustedPrograms));
+              setNewPrograms(new EntityMap(adjustedPrograms));
             },
           });
         }}

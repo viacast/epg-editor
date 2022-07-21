@@ -48,6 +48,7 @@ export interface ProgramTableProps {
   programs: EntityMap<Program>;
   selectedProgramId: string;
   setSelectedProgramId: (programId: string) => void;
+  setPrograms: React.Dispatch<React.SetStateAction<EntityMap<Program>>>;
 }
 
 const ProgramTable: React.FC<ProgramTableProps> = ({
@@ -55,6 +56,7 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
   programs,
   selectedProgramId,
   setSelectedProgramId,
+  setPrograms,
 }) => {
   const { t } = useTranslation();
   const selectedRowRef = useRef<HTMLTableRowElement>(null);
@@ -84,6 +86,9 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
             {programs.toArray().map((program, i) => {
               return (
                 <StyledTableRow
+                  onClick={() => {
+                    setSelectedProgramId(program.id);
+                  }}
                   ref={
                     selectedProgramId === program.id
                       ? selectedRowRef
@@ -130,19 +135,11 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                       value = secondsToHms(value as number);
                     }
                     return (
-                      <StyledTableCell
-                        key={id}
-                        align={align}
-                        onClick={() => {
-                          if (id !== 'position') {
-                            setSelectedProgramId(program.id);
-                          }
-                        }}
-                      >
+                      <StyledTableCell key={id} align={align}>
                         <CustomWidthTooltip
                           title={
                             <>
-                              {id !== 'rating' && value}
+                              {id !== 'rating' && id !== 'position' && value}
                               {id === 'rating' && (
                                 <Message>
                                   {t(`parental-guidance:rating_${program[id]}`)}
@@ -157,26 +154,44 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                               <>
                                 <HiPlus
                                   size="15px"
-                                  onClick={() => {
-                                    console.log('add');
-                                    programs
-                                      .add(new Program(), program.id)
-                                      .clone();
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    const prog = programs.toArray();
+                                    const previousProgram =
+                                      prog[prog.indexOf(program) - 1];
+                                    const startDateTime = addToDate(
+                                      previousProgram.startDateTime,
+                                      previousProgram.duration,
+                                    );
+                                    const addedProgram = new Program({
+                                      duration: 3600,
+                                      startDateTime,
+                                    });
+                                    setPrograms(
+                                      programs
+                                        .add(addedProgram, program.id)
+                                        .clone(),
+                                    );
+                                    setSelectedProgramId(addedProgram.id);
                                   }}
                                 />
                                 <div>
                                   <MdKeyboardArrowUp
                                     size="15px"
-                                    onClick={() => {
-                                      console.log('up');
-                                      programs.moveRelative(program.id, -1);
+                                    onClick={e => {
+                                      e.stopPropagation();
+                                      setPrograms(p =>
+                                        p.moveRelative(program.id, -1).clone(),
+                                      );
                                     }}
                                   />
                                   <MdKeyboardArrowDown
                                     size="15px"
-                                    onClick={() => {
-                                      console.log('down');
-                                      programs.moveRelative(program.id, 1);
+                                    onClick={e => {
+                                      e.stopPropagation();
+                                      setPrograms(p =>
+                                        p.moveRelative(program.id, 1).clone(),
+                                      );
                                     }}
                                   />
                                 </div>
