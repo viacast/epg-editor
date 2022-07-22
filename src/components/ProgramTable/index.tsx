@@ -317,13 +317,17 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                                       setPrograms(p =>
                                         p.moveRelative(program.id, -1).clone(),
                                       );
-                                      // eslint-disable-next-line prefer-spread
-                                      const c: boolean[] = Array.apply(
-                                        null,
-                                        Array(programs.toArray().length),
-                                      ).map(Boolean.prototype.valueOf, false);
-                                      c.splice(i - 1, 1, true);
-                                      setCheck(c);
+                                      if (i > 0) {
+                                        check.splice(i - 1, 1, true);
+                                      }
+                                      if (
+                                        !selectedProgramId.has(
+                                          programs.toArray()[i].id,
+                                        )
+                                      ) {
+                                        check.splice(i, 1, false);
+                                      }
+                                      setCheck(check);
                                     }}
                                   />
                                   <MdKeyboardArrowDown
@@ -333,13 +337,15 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                                       setPrograms(p =>
                                         p.moveRelative(program.id, 1).clone(),
                                       );
-                                      // eslint-disable-next-line prefer-spread
-                                      const c: boolean[] = Array.apply(
-                                        null,
-                                        Array(programs.toArray().length),
-                                      ).map(Boolean.prototype.valueOf, false);
-                                      c.splice(i + 1, 1, true);
-                                      setCheck(c);
+                                      check.splice(i + 1, 1, true);
+                                      if (
+                                        !selectedProgramId.has(
+                                          programs.toArray()[i].id,
+                                        )
+                                      ) {
+                                        check.splice(i, 1, false);
+                                      }
+                                      setCheck(check);
                                     }}
                                   />
                                 </div>
