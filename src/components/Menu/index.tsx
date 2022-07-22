@@ -82,7 +82,7 @@ const Menu: React.FC<MenuProps> = ({
   const { t } = useTranslation();
 
   const { openModal } = useModalProvider();
-  const program = programs.get(selectedProgramId[0]);
+  const program = programs.get(Array.from(selectedProgramId)[0]);
   const [newProgram, setNewProgram] = useState<Program>(
     program ? structuredClone(program) : new Program(),
   );
