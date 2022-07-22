@@ -273,16 +273,28 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                                   onClick={e => {
                                     e.stopPropagation();
                                     const prog = programs.toArray();
-                                    const previousProgram =
-                                      prog[prog.indexOf(program) - 1];
-                                    const startDateTime = addToDate(
-                                      previousProgram.startDateTime,
-                                      previousProgram.duration,
-                                    );
-                                    const addedProgram = new Program({
-                                      duration: 3600,
-                                      startDateTime,
-                                    });
+                                    const prevProg = prog.indexOf(program) - 1;
+                                    let addedProgram = new Program();
+                                    if (prevProg === -1) {
+                                      const startDateTime = addToDate(
+                                        program.startDateTime,
+                                        -3600,
+                                      );
+                                      addedProgram = new Program({
+                                        duration: 3600,
+                                        startDateTime,
+                                      });
+                                    } else {
+                                      const previousProgram = prog[prevProg];
+                                      const startDateTime = addToDate(
+                                        previousProgram.startDateTime,
+                                        previousProgram.duration,
+                                      );
+                                      addedProgram = new Program({
+                                        duration: 3600,
+                                        startDateTime,
+                                      });
+                                    }
                                     setPrograms(p =>
                                       p.add(addedProgram, program.id).clone(),
                                     );
