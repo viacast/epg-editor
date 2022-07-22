@@ -117,8 +117,10 @@ export default class EntityMap<EntityType> {
     } else {
       target = this.keys.indexOf(entityKey) + step;
     }
-    this.keys.splice(this.keys.indexOf(entityKey), 1);
-    this.keys.splice(target, 0, entityKey);
+    if (target > -1 && target <= this.keys.length) {
+      this.keys.splice(this.keys.indexOf(entityKey), 1);
+      this.keys.splice(target, 0, entityKey);
+    }
     return this;
   }
 }
