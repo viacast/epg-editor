@@ -89,6 +89,11 @@ export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
     svg {
       display: inline-flex;
     }
+    svg {
+      &:hover {
+        opacity: .5;
+      }
+    }
   }
 `;
 
