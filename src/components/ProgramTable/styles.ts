@@ -63,6 +63,7 @@ export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
   &.${tableRowClasses.root} {
     background-color: var(--color-neutral-6);
     border: 4px solid white;
+    user-select: none;
     ${({ selected }) =>
       selected
         ? `background-color: var(--color-primary-2); :hover { background-color: var(--color-primary-2); }`
@@ -84,6 +85,7 @@ export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
     &:active {
       opacity: .5;
     }
+    cursor: pointer;
   }
   .show {
     display: inline-flex;
