@@ -76,8 +76,48 @@ export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
     margin-right: 10px;
     height: 30px;
   }
+  
+  input[type="checkbox"] {
+    position: relative;
+    margin-inline: 5px;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    color: var(--color-neutral-1);
+    border: 1px solid var(--color-neutral-3);
+    border-radius: 4px;
+    appearance: none;
+    outline: 0;
+    cursor: pointer;
+    transition: background 175ms cubic-bezier(0.1, 0.1, 0.25, 1);
+    &::before {
+      position: absolute;
+      content: '';
+      display: block;
+      top: 3.5px;
+      left: 6px;
+      width: 4px;
+      height: 7px;
+      border-style: solid;
+      border-color: var(--color-neutral-2);
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      opacity: 0;
+    }
+    &:checked {
+      color: var(--color-neutral-2);
+      border-color: var(--color-neutral-2);
+      background: trasparent;
+      &::before {
+        opacity: 1;
+      }
+      ~ label::before {
+        clip-path: polygon(0 0, 0 0, 0% 100%, 0 100%);
+      }
+    }
+  }
+  
   svg, input {
-    z-index: 50;
     display: none;
     margin-right: 10px;
     color: var(--color-neutral-2);
@@ -112,7 +152,6 @@ export const StyledText = styled.span<{ maxWidth?: string }>`
 `;
 
 export const Checkbox = styled.input.attrs({ type: 'checkbox' })`
-  background-color: var(--color-neutral-5);
   margin-left: 2px;
 `;
 
