@@ -106,6 +106,7 @@ export const StyledText = styled.span<{ maxWidth?: string }>`
 
 export const Checkbox = styled.input.attrs({ type: 'checkbox' })`
   background-color: var(--color-neutral-5);
+  margin-left: 2px;
 `;
 
 export const IconRating = styled.img`

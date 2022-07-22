@@ -9,7 +9,7 @@ export interface ProgramTableColumn {
 
 export default [
   { id: 'marker', minWidth: 50 },
-  { id: 'position', minWidth: 110 },
+  { id: 'position', minWidth: 130, align: 'center' },
   {
     id: 'startDateTime',
     minWidth: 190,
