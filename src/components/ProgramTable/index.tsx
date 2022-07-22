@@ -79,6 +79,17 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
 
   useEffect(() => {
     if (selectedProgramId.size === 0) {
+      // eslint-disable-next-line prefer-spread
+      const c: boolean[] = Array.apply(
+        null,
+        Array(programs.toArray().length),
+      ).map(Boolean.prototype.valueOf, false);
+      setCheck(c);
+    }
+  }, [setShow, selectedProgramId, programs]);
+
+  useEffect(() => {
+    if (selectedProgramId.size === 0) {
       setShow(false);
     } else {
       setShow(true);
@@ -277,6 +288,13 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                                     );
                                     idList.add(addedProgram.id);
                                     setSelectedProgramId(idList);
+                                    // eslint-disable-next-line prefer-spread
+                                    const c: boolean[] = Array.apply(
+                                      null,
+                                      Array(programs.toArray().length),
+                                    ).map(Boolean.prototype.valueOf, false);
+                                    c.splice(i, 1, true);
+                                    setCheck(c);
                                   }}
                                 />
                                 <div>
@@ -287,6 +305,13 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                                       setPrograms(p =>
                                         p.moveRelative(program.id, -1).clone(),
                                       );
+                                      // eslint-disable-next-line prefer-spread
+                                      const c: boolean[] = Array.apply(
+                                        null,
+                                        Array(programs.toArray().length),
+                                      ).map(Boolean.prototype.valueOf, false);
+                                      c.splice(i - 1, 1, true);
+                                      setCheck(c);
                                     }}
                                   />
                                   <MdKeyboardArrowDown
@@ -296,6 +321,13 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                                       setPrograms(p =>
                                         p.moveRelative(program.id, 1).clone(),
                                       );
+                                      // eslint-disable-next-line prefer-spread
+                                      const c: boolean[] = Array.apply(
+                                        null,
+                                        Array(programs.toArray().length),
+                                      ).map(Boolean.prototype.valueOf, false);
+                                      c.splice(i + 1, 1, true);
+                                      setCheck(c);
                                     }}
                                   />
                                 </div>
