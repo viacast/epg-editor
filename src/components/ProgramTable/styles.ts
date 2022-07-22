@@ -38,7 +38,9 @@ export const StyledTableCell = styledmui(TableCell)`
     overflow: hidden;
     color: var(--color-neutral-2);
     border-bottom: none;
-    text-overflow: ellipsis;
+    &:not(:first-child) {
+      text-overflow: ellipsis;
+    }
   }
   &:last-child td,
   &:last-child th {
