@@ -68,26 +68,6 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
 
   const idList: Set<string> = new Set();
 
-  // eslint-disable-next-line prefer-spread
-  const checkedList: boolean[] = Array.apply(
-    null,
-    Array(programs.toArray().length),
-  ).map(Boolean.prototype.valueOf, false);
-
-  const [check, setCheck] = useState(checkedList);
-  const [checkall, setCheckAll] = useState(false);
-
-  useEffect(() => {
-    if (selectedProgramId.size === 0) {
-      // eslint-disable-next-line prefer-spread
-      const c: boolean[] = Array.apply(
-        null,
-        Array(programs.toArray().length),
-      ).map(Boolean.prototype.valueOf, false);
-      setCheck(c);
-    }
-  }, [setShow, selectedProgramId, programs]);
-
   useEffect(() => {
     if (selectedProgramId.size === 0) {
       setShow(false);
@@ -115,13 +95,6 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                       onClick={() => {
                         setSelectedProgramId(p => {
                           if (p.size === programs.toArray().length) {
-                            // eslint-disable-next-line prefer-spread
-                            const c: boolean[] = Array.apply(
-                              null,
-                              Array(programs.toArray().length),
-                            ).map(Boolean.prototype.valueOf, false);
-                            setCheck(c);
-                            setCheckAll(false);
                             return new Set();
                           }
                           const idsList: string[] = [];
@@ -130,17 +103,12 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                             idsList.push(ref);
                             return idsList;
                           });
-                          // eslint-disable-next-line prefer-spread
-                          const c: boolean[] = Array.apply(
-                            null,
-                            Array(programs.toArray().length),
-                          ).map(Boolean.prototype.valueOf, true);
-                          setCheck(c);
-                          setCheckAll(true);
                           return new Set(idsList);
                         });
                       }}
-                      checked={checkall}
+                      checked={
+                        programs.toArray().length === selectedProgramId.size
+                      }
                     />
                   ) : (
                     t(`program-table:columnLabel_${id}`)
@@ -156,13 +124,6 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                   onClick={() => {
                     idList.add(program.id);
                     setSelectedProgramId(idList);
-                    // eslint-disable-next-line prefer-spread
-                    const c: boolean[] = Array.apply(
-                      null,
-                      Array(programs.toArray().length),
-                    ).map(Boolean.prototype.valueOf, false);
-                    c.splice(i, 1, true);
-                    setCheck(c);
                   }}
                   ref={
                     selectedProgramId.has(program.id)
@@ -230,40 +191,22 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                           <StyledText>
                             {id === 'marker' && (
                               <Checkbox
-                                id={`epg-checkbox-${program.id}`}
                                 onClick={e => {
                                   e.stopPropagation();
                                   if (selectedProgramId.has(program.id)) {
                                     setSelectedProgramId(p => {
                                       p.delete(program.id);
-                                      check.splice(
-                                        programs.toArray().indexOf(program),
-                                        1,
-                                        false,
-                                      );
-                                      setCheck(check);
-                                      if (checkall) {
-                                        setCheckAll(false);
-                                      }
                                       return new Set(p);
                                     });
                                   } else {
                                     setSelectedProgramId(p => {
                                       p.add(program.id);
-                                      check.splice(
-                                        programs.toArray().indexOf(program),
-                                        1,
-                                        true,
-                                      );
-                                      setCheck(check);
                                       return new Set(p);
                                     });
                                   }
                                 }}
                                 className={show ? 'show' : ''}
-                                checked={
-                                  check[programs.toArray().indexOf(program)]
-                                }
+                                checked={selectedProgramId.has(program.id)}
                               />
                             )}
                             {id === 'position' && (
@@ -300,13 +243,6 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                                     );
                                     idList.add(addedProgram.id);
                                     setSelectedProgramId(idList);
-                                    // eslint-disable-next-line prefer-spread
-                                    const c: boolean[] = Array.apply(
-                                      null,
-                                      Array(programs.toArray().length),
-                                    ).map(Boolean.prototype.valueOf, false);
-                                    c.splice(i, 1, true);
-                                    setCheck(c);
                                   }}
                                 />
                                 <div>
@@ -317,17 +253,6 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                                       setPrograms(p =>
                                         p.moveRelative(program.id, -1).clone(),
                                       );
-                                      if (i > 0) {
-                                        check.splice(i - 1, 1, true);
-                                      }
-                                      if (
-                                        !selectedProgramId.has(
-                                          programs.toArray()[i].id,
-                                        )
-                                      ) {
-                                        check.splice(i, 1, false);
-                                      }
-                                      setCheck(check);
                                     }}
                                   />
                                   <MdKeyboardArrowDown
@@ -337,15 +262,6 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                                       setPrograms(p =>
                                         p.moveRelative(program.id, 1).clone(),
                                       );
-                                      check.splice(i + 1, 1, true);
-                                      if (
-                                        !selectedProgramId.has(
-                                          programs.toArray()[i].id,
-                                        )
-                                      ) {
-                                        check.splice(i, 1, false);
-                                      }
-                                      setCheck(check);
                                     }}
                                   />
                                 </div>
