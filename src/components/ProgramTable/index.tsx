@@ -150,6 +150,7 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                       null,
                       Array(programs.toArray().length),
                     ).map(Boolean.prototype.valueOf, false);
+                    c.splice(i, 1, true);
                     setCheck(c);
                   }}
                   ref={
