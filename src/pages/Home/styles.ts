@@ -23,7 +23,7 @@ export const TableMenuContainer = styled.div`
   flex: 1;
   flex-direction: row;
   width: 100%;
-  min-width: 1112px;
+  min-width: 1410px;
   min-height: 500px;
   padding-top: 20px;
   padding-left: 30px;
