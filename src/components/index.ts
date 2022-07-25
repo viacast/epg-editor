@@ -11,6 +11,7 @@ import Select from './Select';
 import DatePicker from './Pickers/DatePicker';
 import TimePicker from './Pickers/TimePicker';
 import DurationPicker from './Pickers/DurationPicker';
+import Tooltip from './Tooltip';
 
 export {
   Button,
@@ -26,6 +27,7 @@ export {
   DatePicker,
   TimePicker,
   DurationPicker,
+  Tooltip,
 };
 
 export type {
