@@ -68,33 +68,33 @@ export const StyledTableRow = styledmui(TableRow)<{ selected?: boolean }>`
         ? `background-color: var(--color-primary-2); :hover { background-color: var(--color-primary-2); }`
         : `:hover { background-color: var(--color-primary-5); }`};
   }
-  div {
-    display: inline-flex;
-    flex-direction: column;
-    vertical-align: middle;
-    margin-right: 10px;
-    height: 30px;
+  &:hover {
+    svg {
+      display: inline-flex;
+      &:hover {
+        opacity: 0.5;
+      }
+    }
   }
+`;
+
+export const AddReorderIconsContainer = styled.div`
+  display: inline-block;
+
   svg {
-    z-index: 50;
     display: none;
     margin-right: 10px;
     color: var(--color-neutral-2);
     vertical-align: middle;
-    &:active {
-      opacity: .5;
-    }
   }
-  &:hover {
-    svg {
-      display: inline-flex;
-    }
-    svg {
-      &:hover {
-        opacity: .5;
-      }
-    }
-  }
+`;
+
+export const ReorderIconsContainer = styled.div`
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: middle;
+  margin-right: 10px;
+  height: 30px;
 `;
 
 export const StyledText = styled.span<{ maxWidth?: string }>`

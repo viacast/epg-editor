@@ -27,6 +27,8 @@ import {
   StyledText,
   IconRating,
   Message,
+  ReorderIconsContainer,
+  AddReorderIconsContainer,
 } from './styles';
 import programTableColumns from './programTableColumns';
 
@@ -122,10 +124,15 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                         R18: IconR18,
                       };
                       value = (
-                        <IconRating
-                          src={ratings[program[id]]}
-                          alt={program[id]}
-                        />
+                        <>
+                          <IconRating
+                            src={ratings[program[id]]}
+                            alt={program[id]}
+                          />
+                          <Message>
+                            {t(`parental-guidance:rating_${program[id]}`)}
+                          </Message>
+                        </>
                       );
                     }
                     if (format === 'dateTime') {
@@ -136,75 +143,60 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                     }
                     return (
                       <StyledTableCell key={id} align={align}>
-                        <CustomWidthTooltip
-                          title={
-                            <>
-                              {id !== 'rating' && value}
-                              {id === 'rating' && (
-                                <Message>
-                                  {t(`parental-guidance:rating_${program[id]}`)}
-                                </Message>
-                              )}
-                            </>
-                          }
-                          arrow
-                        >
-                          <StyledText>
-                            {id === 'position' && (
-                              <>
-                                <HiPlus
+                        <StyledText>
+                          {id === 'position' && (
+                            <AddReorderIconsContainer>
+                              <HiPlus
+                                size="15px"
+                                onClick={e => {
+                                  e.stopPropagation();
+                                  const newProgram = new Program({
+                                    duration: 3600,
+                                    startDateTime: program.startDateTime,
+                                  });
+                                  setPrograms(
+                                    programs
+                                      .add(newProgram, program.id)
+                                      .clone(),
+                                  );
+                                  setSelectedProgramId(newProgram.id);
+                                }}
+                              />
+                              <ReorderIconsContainer>
+                                <MdKeyboardArrowUp
                                   size="15px"
                                   onClick={e => {
                                     e.stopPropagation();
-                                    const prog = programs.toArray();
-                                    const previousProgram =
-                                      prog[prog.indexOf(program) - 1];
-                                    const startDateTime = addToDate(
-                                      previousProgram.startDateTime,
-                                      previousProgram.duration,
+                                    setPrograms(p =>
+                                      p.moveRelative(program.id, -1).clone(),
                                     );
-                                    const addedProgram = new Program({
-                                      duration: 3600,
-                                      startDateTime,
-                                    });
-                                    setPrograms(
-                                      programs
-                                        .add(addedProgram, program.id)
-                                        .clone(),
-                                    );
-                                    setSelectedProgramId(addedProgram.id);
                                   }}
                                 />
-                                <div>
-                                  <MdKeyboardArrowUp
-                                    size="15px"
-                                    onClick={e => {
-                                      e.stopPropagation();
-                                      setPrograms(p =>
-                                        p.moveRelative(program.id, -1).clone(),
-                                      );
-                                    }}
-                                  />
-                                  <MdKeyboardArrowDown
-                                    size="15px"
-                                    onClick={e => {
-                                      e.stopPropagation();
-                                      setPrograms(p =>
-                                        p.moveRelative(program.id, 1).clone(),
-                                      );
-                                    }}
-                                  />
-                                </div>
-                              </>
-                            )}
-                            {value}
-                            {id === 'rating' && (
+                                <MdKeyboardArrowDown
+                                  size="15px"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    setPrograms(p =>
+                                      p.moveRelative(program.id, 1).clone(),
+                                    );
+                                  }}
+                                />
+                              </ReorderIconsContainer>
+                            </AddReorderIconsContainer>
+                          )}
+                          <CustomWidthTooltip
+                            title={
                               <Message>
-                                {t(`parental-guidance:rating_${program[id]}`)}
+                                {id !== 'rating' && value}
+                                {id === 'rating' &&
+                                  t(`parental-guidance:rating_${program[id]}`)}
                               </Message>
-                            )}
-                          </StyledText>
-                        </CustomWidthTooltip>
+                            }
+                            arrow
+                          >
+                            <span>{value}</span>
+                          </CustomWidthTooltip>
+                        </StyledText>
                       </StyledTableCell>
                     );
                   })}
