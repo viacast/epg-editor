@@ -10,9 +10,7 @@ if (container) {
   const root = createRoot(container);
   root.render(
     <React.StrictMode>
-      <React.Suspense fallback={<div />}>
-        <App />
-      </React.Suspense>
+      <App />
     </React.StrictMode>,
   );
 }

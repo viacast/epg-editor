@@ -49,12 +49,10 @@ export default createGlobalStyle`
     outline: 0;
     font-family: 'Nunito', Arial, Helvetica, sans-serif;
     font-size: 16px;
-    /* color: var(--color-neutral-3); */
   }
 
   body {
-    background: var(--color-neutral-1);
-    /* color: #fff; */
+    background-color: var(--color-neutral-1);
     -webkit-font-smoothing: antialiased;
   }
 
