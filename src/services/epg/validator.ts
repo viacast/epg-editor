@@ -84,15 +84,20 @@ export default class EPGValidator {
   }
 
   static adjustDateTimes(programs: Program[]): Program[] {
+    const adjusted: Program[] = [];
     programs.forEach((p, i) => {
-      if (i === programs.length - 1) {
+      if (!i) {
+        adjusted.push(new Program({ ...p }));
         return;
       }
-      const { startDateTime, duration } = programs[i];
-      const endTime = addToDate(startDateTime, duration);
-      // eslint-disable-next-line no-param-reassign
-      programs[i + 1].startDateTime = endTime;
+      const { startDateTime, duration } = adjusted[i - 1];
+      adjusted.push(
+        new Program({
+          ...p,
+          startDateTime: addToDate(startDateTime, duration),
+        }),
+      );
     });
-    return programs;
+    return adjusted;
   }
 }
