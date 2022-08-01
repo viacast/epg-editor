@@ -1,6 +1,6 @@
 import { XMLBuilder } from 'fast-xml-parser';
 import { formatDateTime, addToDate, secondsToHms } from 'utils';
-import Program from './program';
+import Program, { ProgramRating } from './program';
 
 interface Programme {
   title: {
@@ -108,6 +108,7 @@ export default class EPGBuilder {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static buildCsv(programs: Program[]): string {
     const rate = {
+      RSC: '0xf1',
       RL: '0xf1',
       R10: '0xf2',
       R12: '0xf3',
@@ -181,7 +182,7 @@ export default class EPGBuilder {
         '',
         `"${p.title}"`,
         '"BRA"',
-        `"${rate[p.rating]}"`,
+        `"${rate[p.rating ?? ProgramRating.RSC]}"`,
         '0',
         '0',
         '0',
