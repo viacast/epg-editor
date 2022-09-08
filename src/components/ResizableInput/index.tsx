@@ -22,7 +22,7 @@ const ResizableInput: React.FC<ResizableInputProps> = ({
 
   return (
     <StyledInput
-      onKeyDown={(e: KeyboardEvent) => {
+      onKeyDown={(e: KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.ctrlKey && e.key === 'Enter') {
           onCtrlEnter?.(internalValue);
         }

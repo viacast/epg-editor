@@ -1,0 +1,14 @@
+{
+  "error_one": "{{count}} Erro",
+  "warning_one": "{{count}} Aviso",
+  "info_one": "{{count}} Informação",
+  "error_other": "{{count}} Erros",
+  "warning_other": "{{count}} Avisos",
+  "info_other": "{{count}} Informações",
+  "emptyText": "Esse campo não pode ser vazio!",
+  "noRating": "A classificação não deve ser indefinida!",
+  "pastStartTime": "Início esperado em tempo futuro!",
+  "futureStartTime": "Início deveria ser tão distante?",
+  "gapBetween": "Não de haver intervalo entre programas na lista!",
+  "noDuration": "A duração não pode ser zero!"
+}
