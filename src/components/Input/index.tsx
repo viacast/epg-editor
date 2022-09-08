@@ -40,7 +40,7 @@ const Input: React.FC<InputProps> = ({
   return (
     <StyledPaper width={width} height={height} className="epg-input">
       <StyledInput
-        onKeyDown={(e: KeyboardEvent) => {
+        onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
           if (e.ctrlKey && e.key === 'Enter') {
             onCtrlEnter?.(internalValue);
           }

@@ -1,0 +1,15 @@
+
+{
+  "error_one": "{{count}} Error",
+  "warning_one": "{{count}} Warn",
+  "info_one": "{{count}} Info",
+  "error_other": "{{count}} Errors",
+  "warning_other": "{{count}} Warns",
+  "info_other": "{{count}} Infos",
+  "emptyText": "This field cannot be empty!",
+  "noRating": "Rating should not be undefined!",
+  "pastStartTime": "Begin is usually in future!",
+  "futureStartTime": "Begin should be this far?",
+  "gapBetween": "Must be no gap in the list!",
+  "noDuration": "Duration cannot be zero!"
+}

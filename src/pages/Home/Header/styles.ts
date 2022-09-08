@@ -47,3 +47,18 @@ export const ExportOptions = styled.div<{ display: string }>`
     margin-bottom: 5px;
   }
 `;
+
+export const Alerts = styled.div<{ display: string }>`
+  margin-left: 5px;
+  display: ${({ display }) => display || 'none'};
+`;
+
+export const AlertsGroup = styled.div`
+  margin-left: 10px;
+  display: flex;
+  button {
+    font-size: 16px;
+    font-family: Nunito, sans-serif;
+    color: var(--color-neutral-3);
+  }
+`;

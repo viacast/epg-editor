@@ -3,7 +3,7 @@ import FileInput, { FileInputProps, FileInputRefProps } from './FileInput';
 import Input, { InputProps } from './Input';
 import ModalDialog from './ModalDialog';
 import ResizableInput, { ResizableInputProps } from './ResizableInput';
-import ProgramTable, { ProgramTableRefProps } from './ProgramTable';
+import VTable from './VTable';
 import Menu from './Menu';
 import ToastContainer from './ToastContainer';
 import Text from './Text';
@@ -19,7 +19,6 @@ export {
   ModalDialog,
   ResizableInput,
   FileInput,
-  ProgramTable,
   Menu,
   ToastContainer,
   Text,
@@ -28,6 +27,7 @@ export {
   TimePicker,
   DurationPicker,
   Tooltip,
+  VTable,
 };
 
 export type {
@@ -36,5 +36,4 @@ export type {
   ResizableInputProps,
   FileInputProps,
   FileInputRefProps,
-  ProgramTableRefProps,
 };

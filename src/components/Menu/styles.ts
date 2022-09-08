@@ -114,6 +114,9 @@ export const ContentContainer = styled.div`
   padding-right: 29px;
   overflow-x: hidden;
   overflow-y: auto;
+  .epg-duration-box {
+    position: absolute;
+  }
 `;
 
 export const BottomContainer = styled.div`
@@ -198,4 +201,22 @@ export const HelpContainer = styled.div`
   input {
     text-align: center;
   }
+`;
+
+export const GroupAlert = styled.div`
+  display: inline-block;
+  max-height: 24px;
+  vertical-align: middle;
+  svg {
+    vertical-align: top;
+  }
+`;
+
+export const Message = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: Nunito, sans-serif;
+  font-size: 14px;
+  vertical-align: middle;
 `;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CgClose, CgTimer, CgTrash } from 'react-icons/cg';
+import { CgClose, CgTrash } from 'react-icons/cg';
 import { VscDiscard } from 'react-icons/vsc';
 import { AiOutlineSave, AiOutlineClockCircle } from 'react-icons/ai';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -9,7 +9,6 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { format } from 'date-fns';
 import { Box, ClickAwayListener } from '@mui/material';
 import structuredClone from '@ungap/structured-clone';
-
 import {
   Text,
   Button,
@@ -21,7 +20,6 @@ import {
   DurationPicker,
 } from 'components';
 import { Program, ProgramRating } from 'services/epg';
-import { EntityMap } from 'utils';
 import SC from 'assets/icons/ratings/SC.svg';
 import CL from 'assets/icons/ratings/RL.svg';
 import C10 from 'assets/icons/ratings/R10.svg';
@@ -29,7 +27,6 @@ import C12 from 'assets/icons/ratings/R12.svg';
 import C14 from 'assets/icons/ratings/R14.svg';
 import C16 from 'assets/icons/ratings/R16.svg';
 import C18 from 'assets/icons/ratings/R18.svg';
-
 import { useModalProvider } from 'providers/ModalProvider';
 import {
   BottomContainer,
@@ -62,80 +59,69 @@ const ratings = {
 
 export interface MenuProps {
   hasChanges: boolean;
-  programs: EntityMap<Program>;
-  selectedProgramId: string;
-  setSelectedProgramId: (id: string) => void;
+  width: number;
+  selectedProgram: Program;
+  setWidth: (val: number) => void;
+  setSelectedProgramId: React.Dispatch<React.SetStateAction<Set<string>>>;
   setHasChanges: (programId: boolean) => void;
   onSaveProgram: (program: Program) => void;
   handleRemoveProgram: (programId: string) => void;
+  setToggleClass: (tclass: boolean) => void;
 }
 
 const Menu: React.FC<MenuProps> = ({
   hasChanges,
-  programs,
-  selectedProgramId,
+  width,
+  selectedProgram,
+  setWidth,
   setSelectedProgramId,
   setHasChanges,
   onSaveProgram,
   handleRemoveProgram,
+  setToggleClass,
 }) => {
   const { t } = useTranslation();
 
   const { openModal } = useModalProvider();
-  const program = programs.get(selectedProgramId);
   const [newProgram, setNewProgram] = useState<Program>(
-    program ? structuredClone(program) : new Program(),
+    selectedProgram ? structuredClone(selectedProgram) : new Program(),
   );
   const [openTime, setOpenTime] = useState(false);
-  const [openDuration, setOpenDuration] = useState(false);
   const [dateTime, setDateTime] = useState(new Date());
-  const [duration, setDuration] = useState(0);
-  const [formattedDuration, setFormattedDuration] = useState('00:00:00');
-
   const stHour = format(dateTime, 'HH:mm:ss');
 
   useEffect(() => {
     setDateTime(newProgram?.startDateTime);
-    setDuration(newProgram?.duration);
-    const num = duration;
-    let hours = 0;
-    let minutes = Math.floor(num / 60);
-    if (minutes >= 60) {
-      hours = Math.floor(minutes / 60);
-      minutes %= 60;
-    }
-    const seconds = num % 60;
-    const d = new Date();
-    d.setHours(hours, minutes, seconds);
-    setFormattedDuration(format(d, 'HH:mm:ss'));
-  }, [duration, newProgram]);
+  }, [newProgram]);
 
   useEffect(() => {
-    setNewProgram(program ? structuredClone(program) : new Program());
-  }, [program, selectedProgramId]);
+    setNewProgram(
+      selectedProgram ? structuredClone(selectedProgram) : new Program(),
+    );
+  }, [selectedProgram]);
 
   return (
     <MenuContainer>
       <Toolbar>
         <ToolbarText>
           <p>{t('menu:edit')}:</p>
-          <p>{program?.title}</p>
+          <p>{selectedProgram?.title}</p>
         </ToolbarText>
         <ActionButtons display={hasChanges ? 'block' : 'none'}>
           <VscDiscard
             id="menu-button-discard"
             size="20px"
             onClick={() => {
-              if (!program) {
+              if (!selectedProgram) {
                 return;
               }
               openModal({
                 title: t('menu:discardProgramTitle'),
                 content: t('menu:discardProgramMessage', {
-                  programTitle: program.title,
+                  programTitle: selectedProgram.title,
                 }),
                 confirm: () => {
-                  setNewProgram(program);
+                  setNewProgram(selectedProgram);
                   setHasChanges(false);
                 },
               });
@@ -145,16 +131,16 @@ const Menu: React.FC<MenuProps> = ({
             id="menu-button-remove"
             size="20px"
             onClick={() => {
-              if (!program) {
+              if (!selectedProgram) {
                 return;
               }
               openModal({
                 title: t('menu:deleteProgramTitle'),
                 content: t('menu:deleteProgramMessage', {
-                  programTitle: program.title,
+                  programTitle: selectedProgram.title,
                 }),
                 confirm: () => {
-                  handleRemoveProgram(program.id);
+                  handleRemoveProgram(selectedProgram.id);
                 },
               });
             }}
@@ -288,46 +274,14 @@ const Menu: React.FC<MenuProps> = ({
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:duration')}
                   </Text>
-                  <ClickAwayListener
-                    mouseEvent="onMouseDown"
-                    touchEvent="onTouchStart"
-                    onClickAway={() => setOpenDuration(false)}
-                  >
-                    <Box>
-                      <HelpContainer>
-                        <StyledInput variant="outlined">
-                          <OutlinedInput
-                            className="epg-time"
-                            value={formattedDuration}
-                            endAdornment={
-                              <InputAdornment position="end">
-                                <IconButton
-                                  onClick={() => setOpenDuration(prev => !prev)}
-                                  aria-label="toggle password visibility"
-                                  edge="end"
-                                >
-                                  <CgTimer />
-                                </IconButton>
-                              </InputAdornment>
-                            }
-                          />
-                        </StyledInput>
-                      </HelpContainer>
-                      {openDuration ? (
-                        <DurationPicker
-                          duration={newProgram?.duration ?? 0}
-                          onDurationChange={newDuration => {
-                            setNewProgram(p => ({
-                              ...p,
-                              duration: newDuration,
-                            }));
-                            setHasChanges(true);
-                          }}
-                          setDuration={setDuration}
-                        />
-                      ) : null}
-                    </Box>
-                  </ClickAwayListener>
+                  <DurationPicker
+                    value={newProgram?.duration ?? 0}
+                    // eslint-disable-next-line no-shadow
+                    onSubmit={duration => {
+                      setNewProgram(p => ({ ...p, duration }));
+                      setHasChanges(true);
+                    }}
+                  />
                 </FormColumn>
                 <FormColumn />
               </FormRow>
@@ -337,8 +291,10 @@ const Menu: React.FC<MenuProps> = ({
                 text={t('menu:cancel')}
                 icon={<CgClose />}
                 onClick={() => {
-                  setSelectedProgramId('');
+                  setSelectedProgramId(new Set());
                   setHasChanges(false);
+                  setWidth(width + 540);
+                  setToggleClass(false);
                 }}
               />
               <Button
@@ -357,5 +313,4 @@ const Menu: React.FC<MenuProps> = ({
     </MenuContainer>
   );
 };
-
 export default Menu;

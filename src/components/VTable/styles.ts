@@ -1,0 +1,41 @@
+import styled from 'styled-components';
+
+export const IconRating = styled.img`
+  float: left;
+  margin-right: 14px;
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const Message = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+`;
+
+export const RowElement = styled.div``;
+
+export const AddToList = styled.div`
+  display: none;
+`;
+
+export const Checkbox = styled.input.attrs({ type: 'checkbox' })`
+  margin-left: 2px;
+  min-width: 20px;
+`;
+
+export const AlertsGroup = styled.div`
+  min-width: 30px;
+  max-width: 30px;
+`;
+
+export const Alerts = styled.div<{ display: string }>`
+  margin-left: 2px;
+  margin-right: 2px;
+  display: ${({ display }) => display || 'none'};
+`;
