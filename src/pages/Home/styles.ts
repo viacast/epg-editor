@@ -152,8 +152,11 @@ export const TableContainer = styled.div<{ width?: string }>`
   }
 `;
 
-export const MenuContainer = styled.div<{ width?: string }>`
+export const MenuContainer = styled.div<{ width?: string; tp?: string }>`
   width: ${({ width }) => width || '0px'};
+  transition-property: ${({ tp }) => tp || 'width'};
+  transition-duration: 0s;
+  transition-delay: 0.1s;
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;

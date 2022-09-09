@@ -120,9 +120,9 @@ const Home: React.FC = () => {
     <Container>
       <HeaderContainer>
         <Header
-          programs={programs}
           width={width}
           setWidth={setWidth}
+          programs={programs}
           setNewPrograms={newPrograms => {
             setSelectedProgramId(new Set());
             setToggleClass(false);
@@ -155,8 +155,11 @@ const Home: React.FC = () => {
         <MenuContainer
           className="epg-table-menu-content"
           width={selectedProgramId.size !== 1 ? '0px' : '500px'}
+          tp={toggleClass ? 'width' : 'none'}
         >
           <Menu
+            width={width}
+            setWidth={setWidth}
             programs={programs}
             hasChanges={hasChanges}
             setHasChanges={setHasChanges}
@@ -190,8 +193,6 @@ const Home: React.FC = () => {
               });
             }}
             setToggleClass={setToggleClass}
-            width={width}
-            setWidth={setWidth}
           />
         </MenuContainer>
       </TableMenuContainer>
