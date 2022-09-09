@@ -18,8 +18,9 @@ import {
   DatePicker,
   TimePicker,
   DurationPicker,
+  Tooltip,
 } from 'components';
-import { Program, ProgramRating } from 'services/epg';
+import { Program, ProgramRating, EPGValidator } from 'services/epg';
 import SC from 'assets/icons/ratings/SC.svg';
 import CL from 'assets/icons/ratings/RL.svg';
 import C10 from 'assets/icons/ratings/R10.svg';
@@ -28,6 +29,9 @@ import C14 from 'assets/icons/ratings/R14.svg';
 import C16 from 'assets/icons/ratings/R16.svg';
 import C18 from 'assets/icons/ratings/R18.svg';
 import { useModalProvider } from 'providers/ModalProvider';
+import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
+import { RiAlertFill } from 'react-icons/ri';
+import EntityMap from 'utils/entityMap';
 import {
   BottomContainer,
   ButtonContainer,
@@ -45,6 +49,8 @@ import {
   HelpContainer,
   ToolbarText,
   ActionButtons,
+  GroupAlert,
+  Message,
 } from './styles';
 
 const ratings = {
@@ -58,6 +64,7 @@ const ratings = {
 };
 
 export interface MenuProps {
+  programs: EntityMap<Program>;
   hasChanges: boolean;
   width: number;
   selectedProgram: Program;
@@ -70,6 +77,7 @@ export interface MenuProps {
 }
 
 const Menu: React.FC<MenuProps> = ({
+  programs,
   hasChanges,
   width,
   selectedProgram,
@@ -98,6 +106,20 @@ const Menu: React.FC<MenuProps> = ({
     setNewProgram(
       selectedProgram ? structuredClone(selectedProgram) : new Program(),
     );
+  }, [selectedProgram]);
+
+  const [alerts, setAlerts] = useState({
+    title: false,
+    description: false,
+    duration: false,
+    rating: false,
+    past: false,
+    future: false,
+    gap: false,
+  });
+
+  useEffect(() => {
+    setAlerts(EPGValidator.menuAlert(programs.toArray(), selectedProgram));
   }, [selectedProgram]);
 
   return (
@@ -153,6 +175,17 @@ const Menu: React.FC<MenuProps> = ({
             <Form>
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:title')}
+                {alerts.title && (
+                  <Tooltip
+                    arrow
+                    title={<Message>{t('alert:emptyText')}</Message>}
+                  >
+                    <GroupAlert>
+                      &nbsp;
+                      <IoIosAlert size="16px" color="var(--color-system-1)" />
+                    </GroupAlert>
+                  </Tooltip>
+                )}
               </Text>
               <Input
                 height="45px"
@@ -165,6 +198,17 @@ const Menu: React.FC<MenuProps> = ({
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:description')}
+                {alerts.description && (
+                  <Tooltip
+                    arrow
+                    title={<Message>{t('alert:emptyText')}</Message>}
+                  >
+                    <GroupAlert>
+                      &nbsp;
+                      <IoIosAlert size="16px" color="var(--color-system-1)" />
+                    </GroupAlert>
+                  </Tooltip>
+                )}
               </Text>
               <ResizableInput
                 value={newProgram?.description}
@@ -176,6 +220,22 @@ const Menu: React.FC<MenuProps> = ({
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:parentalRating')}
+                {alerts.rating && (
+                  <GroupAlert>
+                    <Tooltip
+                      arrow
+                      title={<Message>{t('alert:noRating')}</Message>}
+                    >
+                      <GroupAlert>
+                        &nbsp;
+                        <RiAlertFill
+                          size="16px"
+                          color="var(--color-system-2)"
+                        />
+                      </GroupAlert>
+                    </Tooltip>
+                  </GroupAlert>
+                )}
               </Text>
               <SelectRateContainer>
                 <Select
@@ -205,6 +265,42 @@ const Menu: React.FC<MenuProps> = ({
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:startDate')}
+                    {alerts.past && (
+                      <GroupAlert>
+                        <Tooltip
+                          arrow
+                          title={<Message>{t('alert:pastStartTime')}</Message>}
+                        >
+                          <GroupAlert>
+                            &nbsp;
+                            <RiAlertFill
+                              size="16px"
+                              color="var(--color-system-2)"
+                            />
+                          </GroupAlert>
+                        </Tooltip>
+                      </GroupAlert>
+                    )}
+                    {alerts.future && (
+                      <GroupAlert>
+                        <Tooltip
+                          arrow
+                          title={
+                            <Message color="var(--color-neutral-3)">
+                              {t('alert:futureStartTime')}
+                            </Message>
+                          }
+                        >
+                          <GroupAlert>
+                            &nbsp;
+                            <IoIosInformationCircle
+                              size="16px"
+                              color="var(--color-neutral-3)"
+                            />
+                          </GroupAlert>
+                        </Tooltip>
+                      </GroupAlert>
+                    )}
                   </Text>
                   <DatePicker
                     date={newProgram?.startDateTime ?? new Date()}
@@ -223,6 +319,22 @@ const Menu: React.FC<MenuProps> = ({
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:startTime')}
+                    {alerts.gap && (
+                      <GroupAlert>
+                        <Tooltip
+                          arrow
+                          title={<Message>{t('alert:gapBetween')}</Message>}
+                        >
+                          <GroupAlert>
+                            &nbsp;
+                            <IoIosAlert
+                              size="16px"
+                              color="var(--color-system-1)"
+                            />
+                          </GroupAlert>
+                        </Tooltip>
+                      </GroupAlert>
+                    )}
                   </Text>
                   <ClickAwayListener
                     mouseEvent="onMouseDown"
@@ -273,6 +385,22 @@ const Menu: React.FC<MenuProps> = ({
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:duration')}
+                    {alerts.duration && (
+                      <GroupAlert>
+                        <Tooltip
+                          arrow
+                          title={<Message>{t('alert:noDuration')}</Message>}
+                        >
+                          <GroupAlert>
+                            &nbsp;
+                            <IoIosAlert
+                              size="16px"
+                              color="var(--color-system-1)"
+                            />
+                          </GroupAlert>
+                        </Tooltip>
+                      </GroupAlert>
+                    )}
                   </Text>
                   <DurationPicker
                     value={newProgram?.duration ?? 0}

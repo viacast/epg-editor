@@ -21,7 +21,10 @@ export async function readFileAsync(
   const { promise, resolve, reject } = promisify<string>();
   reader.onload = async e => {
     const content = e.target?.result;
-    if (content?.toString().includes('�') && retry) {
+    if (
+      (retry && content?.toString().includes('�')) ||
+      content?.toString().includes('ï¿½')
+    ) {
       if (encoding === 'utf8') {
         resolve(await readFileAsync(file, 'iso8859-1', false));
         return;

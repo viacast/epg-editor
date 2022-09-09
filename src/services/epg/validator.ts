@@ -66,91 +66,87 @@ export default class EPGValidator {
     programs: EntityMap<Program>,
     messages: Record<string, EPGValidationMessages>,
   ) {
-    let a = 0;
-    let b = 0;
-    let c = 0;
-    let d = 0;
-    let e = 0;
-    let f = 0;
-    let g = 0;
+    const alerts = {
+      title: 0,
+      description: 0,
+      duration: 0,
+      rating: 0,
+      past: 0,
+      future: 0,
+      gap: 0,
+    };
     programs.toArray().forEach(p => {
-      messages[p.id].ERROR.map(m => {
+      messages[p.id].ERROR.forEach(m => {
         if (m === 'EMPTY_TITLE') {
-          a += 1;
+          alerts.title += 1;
         }
         if (m === 'EMPTY_DESCRIPTION') {
-          b += 1;
+          alerts.description += 1;
         }
         if (m === 'INVALID_DURATION') {
-          c += 1;
+          alerts.duration += 1;
         }
         if (m === 'TIME_GAP') {
-          g += 1;
+          alerts.gap += 1;
         }
-        return [a, b, c, g];
       });
-      messages[p.id].WARN.map(m => {
+      messages[p.id].WARN.forEach(m => {
         if (m === 'NO_PARENTAL_RATING') {
-          d += 1;
+          alerts.rating += 1;
         }
         if (m === 'PAST_START_DATE') {
-          f += 1;
+          alerts.past += 1;
         }
-        return [d, f];
       });
-      messages[p.id].INFO.map(m => {
+      messages[p.id].INFO.forEach(m => {
         if (m === 'FAR_START_DATE') {
-          e += 1;
+          alerts.future += 1;
         }
-        return e;
       });
-      return [a, b, c, d, e, f, g];
     });
-    return [a, b, c, d, e, f, g];
+    return alerts;
   }
 
-  static menuAlert(
-    selectedProgram: Program,
-    messages: Record<string, EPGValidationMessages>,
-  ) {
-    let a = false;
-    let b = false;
-    let c = false;
-    let d = false;
-    let e = false;
-    let f = false;
-    let g = false;
-    messages[selectedProgram.id].ERROR.map(m => {
-      if (m === 'EMPTY_TITLE') {
-        a = true;
-      }
-      if (m === 'EMPTY_DESCRIPTION') {
-        b = true;
-      }
-      if (m === 'INVALID_DURATION') {
-        c = true;
-      }
-      if (m === 'TIME_GAP') {
-        g = true;
-      }
-      return [a, b, c, g];
-    });
-    messages[selectedProgram.id].WARN.map(m => {
-      if (m === 'NO_PARENTAL_RATING') {
-        d = true;
-      }
-      if (m === 'PAST_START_DATE') {
-        f = true;
-      }
-      return [d, f];
-    });
-    messages[selectedProgram.id].INFO.map(m => {
-      if (m === 'FAR_START_DATE') {
-        e = true;
-      }
-      return e;
-    });
-    return [a, b, c, d, e, f, g];
+  static menuAlert(programs: Program[], selectedProgram: Program) {
+    const alerts = {
+      title: false,
+      description: false,
+      duration: false,
+      rating: false,
+      past: false,
+      future: false,
+      gap: false,
+    };
+    if (selectedProgram.title === '') {
+      alerts.title = true;
+    }
+    if (selectedProgram.description === '') {
+      alerts.description = true;
+    }
+    if (selectedProgram.duration <= 0) {
+      alerts.duration = true;
+    }
+    if (selectedProgram.rating === ProgramRating.RSC) {
+      alerts.rating = true;
+    }
+    if (selectedProgram.startDateTime < new Date()) {
+      alerts.past = true;
+    }
+    if (selectedProgram.startDateTime >= addToDate(new Date(), 2592000)) {
+      // the start time is 30 days far from now
+      alerts.future = true;
+    }
+    if (
+      programs.indexOf(selectedProgram) > 0 &&
+      selectedProgram.startDateTime.getTime() !==
+        addToDate(
+          programs[programs.indexOf(selectedProgram) - 1].startDateTime,
+          programs[programs.indexOf(selectedProgram) - 1].duration,
+        ).getTime()
+    ) {
+      alerts.gap = true;
+    }
+    return alerts;
   }
 
   static validate(programs: Program[]): Record<string, EPGValidationMessages> {

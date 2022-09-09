@@ -11,29 +11,38 @@ import { BsClockHistory } from 'react-icons/bs';
 import FileSaver from 'file-saver';
 
 import { EPGParser, Program, EPGBuilder, EPGValidator } from 'services/epg';
-import { Button, FileInput, FileInputRefProps } from 'components';
+import { Button, FileInput, FileInputRefProps, Tooltip } from 'components';
 import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
 import { EntityMap } from 'utils';
 import { format } from 'date-fns';
 import { useModalProvider } from 'providers/ModalProvider';
 import { toast } from 'react-toastify';
+import { IconButton } from '@mui/material';
+import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
+import { RiAlertFill } from 'react-icons/ri';
 import {
   HeaderContainer,
   MenuOptions,
   ExportOptions,
   Select,
   Text,
+  Alerts,
+  AlertsGroup,
 } from './styles';
 
 export interface HeaderProps {
+  width: number;
   programs: EntityMap<Program>;
+  setWidth: (val: number) => void;
   setNewPrograms: (programs: EntityMap<Program>) => void;
   handleAddProgram: () => void;
   handleClearProgramList: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
+  width,
   programs,
+  setWidth,
   setNewPrograms,
   handleAddProgram,
   handleClearProgramList,
@@ -128,6 +137,37 @@ const Header: React.FC<HeaderProps> = ({
     });
   }, [handleClearProgramList, openModal, setSavedFilename, t]);
 
+  const [alertList, setAlertList] = useState({
+    INFO: 0,
+    WARN: 0,
+    ERROR: 0,
+  });
+
+  useEffect(() => {
+    const aux = EPGValidator.countMessages(
+      EPGValidator.validate(programs.toArray()),
+    );
+    setAlertList(aux);
+  }, [programs]);
+
+  const [alert, setAlert] = useState({
+    title: 0,
+    description: 0,
+    duration: 0,
+    rating: 0,
+    past: 0,
+    future: 0,
+    gap: 0,
+  });
+
+  useEffect(() => {
+    const aux = EPGValidator.countAlerts(
+      programs,
+      EPGValidator.validate(programs.toArray()),
+    );
+    setAlert(aux);
+  }, [programs]);
+
   useClickOutside(exportOptionsRef, () => setOpen(false));
 
   return (
@@ -211,6 +251,7 @@ const Header: React.FC<HeaderProps> = ({
                 programs.toArray(),
               );
               setNewPrograms(new EntityMap(adjustedPrograms));
+              setWidth(width + 540);
             },
           });
         }}
@@ -224,6 +265,69 @@ const Header: React.FC<HeaderProps> = ({
         <option value="pt">Portugues</option>
         <option value="en">English</option>
       </Select>
+      <AlertsGroup>
+        <Alerts display={alertList.ERROR > 0 ? 'block' : 'none'}>
+          <Tooltip
+            arrow
+            title={
+              <>
+                {alert.title} {t('alert:emptyText')} <br />
+                {alert.description} {t('alert:emptyText')} <br />
+                {alert.duration} {t('alert:noDuration')} <br />
+                {alert.gap} {t('alert:gapBetween')} <br />
+              </>
+            }
+          >
+            <IconButton>
+              {t('alert:error', {
+                count: alertList.ERROR,
+              })}
+              &nbsp;
+              <IoIosAlert size="28px" color="var(--color-system-1)" />
+            </IconButton>
+          </Tooltip>
+        </Alerts>
+        <Alerts display={alertList.WARN > 0 ? 'block' : 'none'}>
+          <Tooltip
+            arrow
+            title={
+              <>
+                {alert.rating} {t('alert:noRating')} <br />
+                {alert.past} {t('alert:pastStartTime')} <br />
+              </>
+            }
+          >
+            <IconButton>
+              {t('alert:warning', {
+                count: alertList.WARN,
+              })}
+              &nbsp;
+              <RiAlertFill size="28px" color="var(--color-system-2)" />
+            </IconButton>
+          </Tooltip>
+        </Alerts>
+        <Alerts display={alertList.INFO > 0 ? 'block' : 'none'}>
+          <Tooltip
+            arrow
+            title={
+              <>
+                {alert.future} {t('alert:futureStartTime')}
+              </>
+            }
+          >
+            <IconButton>
+              {t('alert:info', {
+                count: alertList.INFO,
+              })}
+              &nbsp;
+              <IoIosInformationCircle
+                size="28px"
+                color="var(--color-neutral-3)"
+              />
+            </IconButton>
+          </Tooltip>
+        </Alerts>
+      </AlertsGroup>
     </HeaderContainer>
   );
 };
