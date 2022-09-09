@@ -121,6 +121,8 @@ const Home: React.FC = () => {
       <HeaderContainer>
         <Header
           programs={programs}
+          width={width}
+          setWidth={setWidth}
           setNewPrograms={newPrograms => {
             setSelectedProgramId(new Set());
             setToggleClass(false);
@@ -155,6 +157,7 @@ const Home: React.FC = () => {
           width={selectedProgramId.size !== 1 ? '0px' : '500px'}
         >
           <Menu
+            programs={programs}
             hasChanges={hasChanges}
             setHasChanges={setHasChanges}
             setSelectedProgramId={setSelectedProgramId}

@@ -18,6 +18,7 @@ i18next
       'parental-guidance',
       'menu',
       'modal',
+      'alert',
     ],
     defaultNS: 'general',
     interpolation: {
