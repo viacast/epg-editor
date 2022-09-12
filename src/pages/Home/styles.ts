@@ -92,6 +92,9 @@ export const TableContainer = styled.div<{ width?: string }>`
     overflow: hidden;
     text-overflow: ellipsis;
     user-select: none;
+    div {
+      padding-top: 2.5px;
+    }
   }
   .ReactVirtualized__Table {
     border-collapse: collapse;
@@ -125,19 +128,19 @@ export const TableContainer = styled.div<{ width?: string }>`
     text-align: center;
   }
   .ReactVirtualized__Table__row:hover {
-    box-shadow: 20px 20px 20px var(--color-primary-2),
-      20px 20px 20px var(--color-primary-2),
-      inset 20px 20px 20px var(--color-primary-2),
-      inset -20px -20px 20px var(--color-primary-2);
+    box-shadow: 50px 50px 50px var(--color-primary-2),
+      50px 50px 50px var(--color-primary-2),
+      inset 50px 50px 50px var(--color-primary-2),
+      inset -50px -50px 50px var(--color-primary-2);
     .epg-add-to-list {
       display: block;
     }
   }
   .active {
-    box-shadow: 20px 20px 20px var(--color-primary-2),
-      20px 20px 20px var(--color-primary-2),
-      inset 20px 20px 20px var(--color-primary-2),
-      inset -20px -20px 20px var(--color-primary-2);
+    box-shadow: 50px 50px 50px var(--color-primary-2),
+      50px 50px 50px var(--color-primary-2),
+      inset 50px 50px 50px var(--color-primary-2),
+      inset -50px -50px 50px var(--color-primary-2);
   }
   .ReactVirtualized__Table__rowColumn {
     border-radius: 4px;
@@ -149,6 +152,26 @@ export const TableContainer = styled.div<{ width?: string }>`
   }
   .container {
     /* max-width: 995px !important; */
+  }
+  // Row Content size
+  .ReactVirtualized__Table__rowColumn[aria-colindex='1'] {
+    min-width: 50px !important;
+    max-width: 50px !important;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis !important;
+  }
+  .ReactVirtualized__Table__rowColumn[aria-colindex='2'] {
+    min-width: 200px !important;
+    max-width: 200px !important;
+  }
+  .ReactVirtualized__Table__rowColumn[aria-colindex='3'] {
+    min-width: 200px !important;
+    max-width: 200px !important;
+  }
+  .ReactVirtualized__Table__rowColumn[aria-colindex='4'] {
+    min-width: 100px !important;
+    max-width: 100px !important;
   }
 `;
 

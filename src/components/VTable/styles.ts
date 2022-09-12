@@ -22,6 +22,16 @@ export const RowElement = styled.div``;
 
 export const AddToList = styled.div`
   display: none;
+  svg {
+    color: var(--color-neutral-2);
+    width: 15px;
+    height: 50px;
+    position: relative;
+    margin-left: 15px;
+    vertical-align: middle;
+    z-index: 3;
+    cursor: pointer;
+  }
 `;
 
 export const Checkbox = styled.input.attrs({ type: 'checkbox' })`
