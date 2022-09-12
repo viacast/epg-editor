@@ -34,6 +34,8 @@ import {
   Checkbox,
   Alerts,
   AlertsGroup,
+  LoaderContainer,
+  Text,
 } from './styles';
 
 export interface ProgramTableProps {
@@ -538,20 +540,15 @@ const VTable: React.FC<ProgramTableProps> = ({
                 }}
                 // eslint-disable-next-line react/no-unstable-nested-components
                 noRowsRenderer={() => (
-                  <div
-                    style={{
-                      display: 'flex',
-                      height: '100%',
-                      width: '100%',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backgroundColor: 'transparent',
-                    }}
+                  <LoaderContainer
+                    display={
+                      localStorage.getItem('current-filename') ? 'flex' : 'none'
+                    }
                   >
-                    <h1>Waiting file to render</h1>
+                    <Text>Waiting file to render</Text>
                     &emsp;
                     <BeatLoader color="var(--color-neutral-3)" />
-                  </div>
+                  </LoaderContainer>
                 )}
               >
                 <Column
