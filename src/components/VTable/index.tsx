@@ -179,11 +179,13 @@ const VTable: React.FC<ProgramTableProps> = ({
 
   useEffect(() => {
     if (flag) {
-      items.splice(0, items.length);
-      setItems(items);
-      setPrograms(new EntityMap<Program>(adjustPosition(items)));
+      setItems(item => {
+        const newItem = item.splice(0, item.length);
+        setPrograms(new EntityMap<Program>(adjustPosition(newItem)));
+        return newItem;
+      });
     }
-  }, [flag]);
+  }, [flag, setPrograms]);
 
   useEffect(() => {
     items.splice(0, items.length);
@@ -450,15 +452,6 @@ const VTable: React.FC<ProgramTableProps> = ({
                     }
                     setSelectedProgramId(p => p.add(newProgram.id));
                   }}
-                  style={{
-                    color: 'var(--color-neutral-2)',
-                    width: '15px',
-                    height: '50px',
-                    position: 'relative',
-                    marginLeft: '15px',
-                    zIndex: '3',
-                    cursor: 'pointer',
-                  }}
                 />
               </AddToList>
               {virtualizedRowProps.columns}
@@ -494,7 +487,7 @@ const VTable: React.FC<ProgramTableProps> = ({
               style={getItemStyle(
                 {
                   margin: 0,
-                  border: '5px solid var(--color-neutral-5)',
+                  border: '3px solid var(--color-neutral-5)',
                   maxWidth: '100%',
                   textAlign: 'left',
                 },
@@ -518,6 +511,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                 rowCount={items.length}
                 width={width}
                 height={height}
+                header
                 headerHeight={60}
                 rowHeight={45}
                 rowGetter={({ index }) => items[index]}
@@ -579,67 +573,67 @@ const VTable: React.FC<ProgramTableProps> = ({
                           programs.toArray().length === selectedProgramId.size
                         }
                       />
-                      <span style={{ paddingLeft: '15px' }}>#</span>
+                      <span style={{ paddingLeft: '35px' }}>#</span>
                     </>
                   }
                   key="position"
                   dataKey="position"
-                  flexGrow={2}
-                  minWidth={30}
-                  width={50}
-                  maxWidth={70}
+                  flexGrow={3}
+                  minWidth={90}
+                  width={90}
+                  maxWidth={90}
                 />
                 <Column
                   label={t(`program-table:columnLabel_startDateTime`)}
                   dataKey="startDateTime"
                   key="startDateTime"
-                  flexGrow={2}
-                  minWidth={80}
-                  width={190}
-                  maxWidth={220}
+                  flexGrow={3}
+                  minWidth={200}
+                  width={200}
+                  maxWidth={200}
                 />
                 <Column
                   label={t(`program-table:columnLabel_endDateTime`)}
                   key="endDateTime"
                   dataKey="endDateTime"
-                  flexGrow={2}
-                  minWidth={80}
-                  width={190}
-                  maxWidth={220}
+                  flexGrow={3}
+                  minWidth={200}
+                  width={200}
+                  maxWidth={200}
                 />
                 <Column
                   label={t(`program-table:columnLabel_duration`)}
                   dataKey="duration"
                   key="duration"
-                  flexGrow={2}
-                  minWidth={30}
-                  width={60}
-                  maxWidth={140}
+                  flexGrow={3}
+                  minWidth={85}
+                  width={85}
+                  maxWidth={85}
                 />
                 <Column
                   label={t(`program-table:columnLabel_title`)}
                   dataKey="title"
                   key="title"
-                  flexGrow={2}
-                  minWidth={130}
-                  width={340}
-                  maxWidth={420}
+                  flexGrow={3}
+                  minWidth={150}
+                  width={300}
+                  maxWidth={300}
                 />
                 <Column
                   label={t(`program-table:columnLabel_rating`)}
                   key="rating"
                   dataKey="rating"
-                  flexGrow={2}
-                  minWidth={170}
-                  width={170}
-                  maxWidth={270}
+                  flexGrow={3}
+                  minWidth={230}
+                  width={230}
+                  maxWidth={230}
                 />
                 <Column
                   className="container"
                   label={t(`program-table:columnLabel_description`)}
                   dataKey="description"
                   key="description"
-                  flexGrow={2}
+                  flexGrow={3}
                   minWidth={100}
                   width={705}
                 />
