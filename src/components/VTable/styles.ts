@@ -39,3 +39,14 @@ export const Alerts = styled.div<{ display: string }>`
   margin-right: 2px;
   display: ${({ display }) => display || 'none'};
 `;
+
+export const LoaderContainer = styled.div<{ display: string }>`
+  display: ${({ display }) => display || 'none'};
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+`;
+
+export const Text = styled.h1``;
