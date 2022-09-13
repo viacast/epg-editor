@@ -58,5 +58,3 @@ export const LoaderContainer = styled.div<{ display: string }>`
   justify-content: center;
   background-color: transparent;
 `;
-
-export const Text = styled.h1``;

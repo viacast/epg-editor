@@ -44,8 +44,6 @@ const Home: React.FC = () => {
     return Math.ceil(1.042 * val - 205.35);
   };
 
-  const [flag, setFlag] = useState(false);
-
   const [width, setWidth] = useState(dimension.width - 60);
   const [height, setHeight] = useState(heightVariance(dimension.height));
 
@@ -112,7 +110,7 @@ const Home: React.FC = () => {
 
   const handleClearProgramList = useCallback(() => {
     setSelectedProgramId(new Set());
-    setFlag(true);
+    setPrograms(new EntityMap<Program>());
     setSavedPrograms([] as Program[]);
   }, [setSavedPrograms]);
 
@@ -123,11 +121,12 @@ const Home: React.FC = () => {
           width={width}
           setWidth={setWidth}
           programs={programs}
+          selectedProgramId={selectedProgramId}
           setNewPrograms={newPrograms => {
             setSelectedProgramId(new Set());
             setToggleClass(false);
+            setSavedPrograms(newPrograms.toArray());
             setPrograms(newPrograms);
-            setFlag(false);
           }}
           handleAddProgram={handleAddProgram}
           handleClearProgramList={handleClearProgramList}
@@ -149,7 +148,6 @@ const Home: React.FC = () => {
             setWidth={setWidth}
             height={height}
             setSelectedProgram={setSelectedProgram}
-            flag={flag}
           />
         </TableContainer>
         <MenuContainer
