@@ -90,14 +90,6 @@ const VTable: React.FC<ProgramTableProps> = ({
     setAlerts(EPGValidator.validate(programs.toArray()));
   }, [programs]);
 
-  useEffect(() => {
-    if (!toggleClass && !selectedProgramId.size) {
-      Array.from(document.querySelectorAll('.active')).forEach(el =>
-        el.classList.remove('active'),
-      );
-    }
-  }, [toggleClass, selectedProgramId]);
-
   const onDragEnd = useCallback(
     result => {
       if (!result.destination) {
@@ -166,57 +158,38 @@ const VTable: React.FC<ProgramTableProps> = ({
       >
         {(provided, snapshot) => (
           <TableRow
+            key={program.id}
             hover
             onClick={e => {
-              if (e.ctrlKey) {
-                if (selectedProgramId.has(program.id)) {
-                  selectedProgramId.delete(program.id);
-                  document
-                    .getElementById(program.id)
-                    ?.classList.remove('active');
-                } else {
-                  selectedProgramId.add(program.id);
-                  document.getElementById(program.id)?.classList.add('active');
+              setSelectedProgramId(s => {
+                const newSelectedProgramId = new Set(s);
+                if (!e.ctrlKey) {
+                  newSelectedProgramId.clear();
                 }
-                if (selectedProgramId.size === 1) {
+                if (newSelectedProgramId.has(program.id)) {
+                  newSelectedProgramId.delete(program.id);
+                } else {
+                  newSelectedProgramId.add(program.id);
+                }
+                if (newSelectedProgramId.size === 1) {
                   setToggleClass(true);
                 } else {
                   setToggleClass(false);
                 }
-                setSelectedProgramId(selectedProgramId);
-              } else if (!e.ctrlKey) {
-                if (selectedProgramId.has(program.id)) {
-                  selectedProgramId.delete(program.id);
-                  document
-                    .getElementById(program.id)
-                    ?.classList.remove('active');
-                } else {
-                  selectedProgramId.clear();
-                  selectedProgramId.add(program.id);
-                  Array.from(document.querySelectorAll('.active')).forEach(el =>
-                    el.classList.remove('active'),
-                  );
-                  document.getElementById(program.id)?.classList.add('active');
-                  setSelectedProgram(programs.get(program.id) ?? new Program());
-                }
-                if (selectedProgramId.size === 1) {
-                  setToggleClass(true);
-                } else {
-                  setToggleClass(false);
-                }
-                setSelectedProgramId(selectedProgramId);
-              }
+                return newSelectedProgramId;
+              });
             }}
           >
             <RowElement
-              id={program.id}
               ref={provided.innerRef}
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...provided.draggableProps}
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...provided.dragHandleProps}
               key={virtualizedRowProps.key}
-              className={virtualizedRowProps.className}
+              className={`${virtualizedRowProps.className} ${
+                selectedProgramId.has(program.id) ? 'active' : ''
+              }`}
               style={getItemStyle(
                 virtualizedRowProps.style,
                 snapshot.isDragging,
@@ -224,25 +197,23 @@ const VTable: React.FC<ProgramTableProps> = ({
               )}
             >
               <Checkbox
+                readOnly
                 onClick={e => {
                   e.stopPropagation();
-                  if (selectedProgramId.has(program.id)) {
-                    selectedProgramId.delete(program.id);
-                    document
-                      .getElementById(program.id)
-                      ?.classList.remove('active');
-                  } else {
-                    selectedProgramId.add(program.id);
-                    document
-                      .getElementById(program.id)
-                      ?.classList.add('active');
-                  }
-                  if (selectedProgramId.size === 1) {
-                    setToggleClass(true);
-                  } else {
-                    setToggleClass(false);
-                  }
-                  setSelectedProgramId(selectedProgramId);
+                  setSelectedProgramId(s => {
+                    const newSelectedProgramId = new Set(s);
+                    if (newSelectedProgramId.has(program.id)) {
+                      newSelectedProgramId.delete(program.id);
+                    } else {
+                      newSelectedProgramId.add(program.id);
+                    }
+                    if (newSelectedProgramId.size === 1) {
+                      setToggleClass(true);
+                    } else {
+                      setToggleClass(false);
+                    }
+                    return newSelectedProgramId;
+                  });
                 }}
                 checked={selectedProgramId.has(program.id)}
               />{' '}
@@ -370,12 +341,6 @@ const VTable: React.FC<ProgramTableProps> = ({
                   }
                 }}
                 rowRenderer={getRowRender}
-                onRowsRendered={() => {
-                  const array: string[] = Array.from(selectedProgramId);
-                  array.forEach(a => {
-                    document.getElementById(a)?.classList.add('active');
-                  });
-                }}
                 // eslint-disable-next-line react/no-unstable-nested-components
                 noRowsRenderer={() => (
                   <LoaderContainer
@@ -391,24 +356,16 @@ const VTable: React.FC<ProgramTableProps> = ({
                   label={
                     <>
                       <Checkbox
+                        readOnly
                         onClick={() => {
                           setToggleClass(false);
                           setSelectedProgramId(p => {
                             if (p.size === programs.toArray().length) {
                               return new Set();
                             }
-                            const idsList: string[] = [];
-                            programs.toArray().forEach(prog => {
-                              const ref = prog.id;
-                              idsList.push(ref);
-                              return idsList;
-                            });
-                            Array.from(
-                              document.querySelectorAll(
-                                '.ReactVirtualized__Table__row',
-                              ),
-                            ).forEach(el => el.classList.add('active'));
-                            return new Set(idsList);
+                            return new Set(
+                              programs.toArray().map(program => program.id),
+                            );
                           });
                         }}
                         checked={

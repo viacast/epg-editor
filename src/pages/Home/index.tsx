@@ -32,6 +32,10 @@ const Home: React.FC = () => {
   );
 
   useEffect(() => {
+    setSelectedProgram(programs.get(Array.from(selectedProgramId)[0]));
+  }, [selectedProgramId]);
+
+  useEffect(() => {
     if (programs.toArray().length !== 0) {
       setSavedPrograms(programs.toArray());
     }
@@ -175,17 +179,14 @@ const Home: React.FC = () => {
                 if (size === 1) {
                   // was the only program on the list
                   setSelectedProgramId(new Set());
-                  setSelectedProgram(new Program());
                 } else if (index === size - 1) {
                   // was the last program on the list
                   idList.add(p.at(index - 1)?.id ?? '');
                   setSelectedProgramId(idList);
-                  setSelectedProgram(programs.get(Array.from(idList)[0]));
                 } else {
                   // all other cases
                   idList.add(p.at(index + 1)?.id ?? '');
                   setSelectedProgramId(idList);
-                  setSelectedProgram(programs.get(Array.from(idList)[0]));
                 }
                 return p.remove(programId).clone();
               });
