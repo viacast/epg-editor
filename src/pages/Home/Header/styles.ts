@@ -10,13 +10,13 @@ export const HeaderContainer = styled.div`
   }
 
   .epg-input {
-    width: 270px;
+    min-width: 270px;
     height: 44px;
   }
 `;
 
 export const Text = styled.div`
-  width: 188px;
+  min-width: 188px;
   padding: 10px 0;
   font-size: 20px;
   text-align: center;
@@ -25,7 +25,9 @@ export const Text = styled.div`
 export const Select = styled.select`
   padding: 5px 5px 5px 5px;
   border-radius: 2px;
-  height: 100%;
+  min-width: 122px;
+  min-height: 44px;
+  max-height: 44px;
   border: none;
   font-size: 20px;
   cursor: pointer;
