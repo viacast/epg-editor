@@ -17,7 +17,7 @@ export const TableMenuContainer = styled.div`
   flex-direction: row;
   width: 100%;
   height: 100%;
-  min-width: 1415px;
+  min-width: 1410px;
   min-height: 500px;
   padding-top: 20px;
   padding-left: 30px;
@@ -34,6 +34,7 @@ export const TableContainer = styled.div<{ width?: string }>`
   background-color: var(--color-neutral-5);
   border-radius: 4px;
   height: 100%;
+  min-width: 1110px;
   width: ${({ width }) => width || '100%'};
   body,
   input,
@@ -155,6 +156,7 @@ export const TableContainer = styled.div<{ width?: string }>`
   }
   // Row Content size
   .ReactVirtualized__Table__rowColumn[aria-colindex='1'] {
+    text-align: center !important;
     min-width: 50px !important;
     max-width: 50px !important;
     white-space: normal;
@@ -162,16 +164,27 @@ export const TableContainer = styled.div<{ width?: string }>`
     text-overflow: ellipsis !important;
   }
   .ReactVirtualized__Table__rowColumn[aria-colindex='2'] {
-    min-width: 200px !important;
+    text-align: center !important;
+    min-width: 170px !important;
     max-width: 200px !important;
   }
   .ReactVirtualized__Table__rowColumn[aria-colindex='3'] {
-    min-width: 200px !important;
+    text-align: center !important;
+    min-width: 170px !important;
     max-width: 200px !important;
   }
   .ReactVirtualized__Table__rowColumn[aria-colindex='4'] {
-    min-width: 100px !important;
-    max-width: 100px !important;
+    text-align: center !important;
+    min-width: 95px !important;
+    max-width: 110px !important;
+  }
+  .ReactVirtualized__Table__rowColumn[aria-colindex='5'] {
+    padding-left: 10px;
+    min-width: 150px !important;
+    max-width: 300px !important;
+  }
+  .ReactVirtualized__Table__rowColumn[aria-colindex='7'] {
+    min-width: 110px !important;
   }
 `;
 

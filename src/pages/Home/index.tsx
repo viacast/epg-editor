@@ -71,8 +71,8 @@ const Home: React.FC = () => {
       }
     }
     if (toggleClass === true) {
-      if (dimension.width - 600 <= 815) {
-        setWidth(815);
+      if (dimension.width - 600 <= 1098) {
+        setWidth(1098);
       } else {
         setWidth(dimension.width - 600);
       }
@@ -178,7 +178,10 @@ const Home: React.FC = () => {
                 const idList: Set<string> = new Set();
                 if (size === 1) {
                   // was the only program on the list
-                  setSelectedProgramId(new Set());
+                  handleClearProgramList(); // just clear table
+                  setWidth(
+                    dimension.width - 60 <= 1350 ? 1350 : dimension.width - 60,
+                  ); // force menu container to close
                 } else if (index === size - 1) {
                   // was the last program on the list
                   idList.add(p.at(index - 1)?.id ?? '');

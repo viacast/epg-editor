@@ -70,10 +70,10 @@ export interface MenuProps {
   selectedProgram: Program;
   setWidth: (val: number) => void;
   setSelectedProgramId: React.Dispatch<React.SetStateAction<Set<string>>>;
-  setHasChanges: (programId: boolean) => void;
-  onSaveProgram: (program: Program) => void;
-  handleRemoveProgram: (programId: string) => void;
-  setToggleClass: (tclass: boolean) => void;
+  setHasChanges: (val: boolean) => void;
+  onSaveProgram: (val: Program) => void;
+  handleRemoveProgram: (val: string) => void;
+  setToggleClass: (val: boolean) => void;
 }
 
 const Menu: React.FC<MenuProps> = ({

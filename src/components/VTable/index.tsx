@@ -389,7 +389,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                   dataKey="startDateTime"
                   key="startDateTime"
                   flexGrow={3}
-                  minWidth={190}
+                  minWidth={170}
                   width={190}
                   maxWidth={190}
                 />
@@ -398,7 +398,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                   key="endDateTime"
                   dataKey="endDateTime"
                   flexGrow={3}
-                  minWidth={190}
+                  minWidth={170}
                   width={190}
                   maxWidth={190}
                 />
@@ -407,7 +407,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                   dataKey="duration"
                   key="duration"
                   flexGrow={3}
-                  minWidth={110}
+                  minWidth={85}
                   width={110}
                   maxWidth={110}
                 />
@@ -435,7 +435,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                   dataKey="description"
                   key="description"
                   flexGrow={3}
-                  minWidth={515}
+                  minWidth={150}
                   width={705}
                 />
               </Table>
