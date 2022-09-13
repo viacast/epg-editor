@@ -33,6 +33,7 @@ import {
 export interface HeaderProps {
   width: number;
   programs: EntityMap<Program>;
+  selectedProgramId: Set<string>;
   setWidth: (val: number) => void;
   setNewPrograms: (programs: EntityMap<Program>) => void;
   handleAddProgram: () => void;
@@ -42,6 +43,7 @@ export interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({
   width,
   programs,
+  selectedProgramId,
   setWidth,
   setNewPrograms,
   handleAddProgram,
@@ -108,7 +110,6 @@ const Header: React.FC<HeaderProps> = ({
         title: t('header:titleOverwrite'),
         content: t('header:overwriteProgramList'),
         confirm: () => {
-          setNewPrograms(new EntityMap(newPrograms));
           setEpgFilename(file.name);
           setSavedFilename(file.name);
         },
@@ -251,7 +252,9 @@ const Header: React.FC<HeaderProps> = ({
                 programs.toArray(),
               );
               setNewPrograms(new EntityMap(adjustedPrograms));
-              setWidth(width + 540);
+              if (selectedProgramId.size === 1) {
+                setWidth(width + 540);
+              }
             },
           });
         }}
