@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 import { Table, Column, AutoSizer } from 'react-virtualized';
 import 'react-virtualized/styles.css';
-import { Program, ProgramRating } from 'services/epg';
-import {
-  addToDate,
-  EntityMap,
-  formatDateTime,
-  hmsToSeconds,
-  parseDate,
-  secondsToHms,
-} from 'utils';
+import { EPGValidator, Program } from 'services/epg';
+import { addToDate, EntityMap, formatDateTime, secondsToHms } from 'utils';
 
 import IconSC from 'assets/icons/ratings/SC.svg';
 import IconRL from 'assets/icons/ratings/RL.svg';
@@ -20,12 +13,14 @@ import IconR12 from 'assets/icons/ratings/R12.svg';
 import IconR14 from 'assets/icons/ratings/R14.svg';
 import IconR16 from 'assets/icons/ratings/R16.svg';
 import IconR18 from 'assets/icons/ratings/R18.svg';
+
 import { IconButton, TableRow } from '@mui/material';
 import { HiPlus } from 'react-icons/hi';
+import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
 
 import { BeatLoader } from 'react-spinners';
-import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
 import { RiAlertFill } from 'react-icons/ri';
+import { EPGValidationMessages } from 'services/epg/validator';
 import {
   IconRating,
   Message,
@@ -35,11 +30,9 @@ import {
   Alerts,
   AlertsGroup,
   LoaderContainer,
-  Text,
 } from './styles';
 
 export interface ProgramTableProps {
-  flag: boolean;
   width: number;
   height: number;
   programs: EntityMap<Program>;
@@ -52,53 +45,19 @@ export interface ProgramTableProps {
   setSelectedProgram: (val: Program) => void;
 }
 
-const reorder = (
-  list: {
-    position: string;
-    startDateTime: string;
-    endDateTime: string;
-    duration: string;
-    title: string;
-    rating: string;
-    description: string;
-  }[],
-  startIndex: number,
-  endIndex: number,
-) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  const adjusted: {
-    position: string;
-    startDateTime: string;
-    endDateTime: string;
-    duration: string;
-    title: string;
-    rating: string;
-    description: string;
-  }[] = [];
-  result.forEach((p, i) => {
-    adjusted.push({
-      ...p,
-      position: `${i + 1}`,
-    });
-  });
-
-  return adjusted;
-};
+const getItemStyle = (style, isDragging, draggableStyle) => ({
+  position: 'relative',
+  userSelect: 'none',
+  textAlign: 'left',
+  color: 'var(--color-neutral-2)',
+  fontFamily: 'Nunito, sans-serif',
+  background: isDragging ? 'var(--color-primary-2)' : 'var(--color-neutral-6)',
+  cursor: isDragging ? 'grabbing' : 'grab',
+  ...draggableStyle,
+  ...style,
+});
 
 const rowCache = {};
-
-const ratings = {
-  RSC: ProgramRating.RSC,
-  RL: ProgramRating.RL,
-  R10: ProgramRating.R10,
-  R12: ProgramRating.R12,
-  R14: ProgramRating.R14,
-  R16: ProgramRating.R16,
-  R18: ProgramRating.R18,
-};
 
 const rate = {
   RSC: IconSC,
@@ -111,7 +70,6 @@ const rate = {
 };
 
 const VTable: React.FC<ProgramTableProps> = ({
-  flag,
   width,
   height,
   programs,
@@ -124,114 +82,49 @@ const VTable: React.FC<ProgramTableProps> = ({
   setSelectedProgram,
 }) => {
   const { t } = useTranslation();
-
-  const getItemStyle = (style, isDragging, draggableStyle) => ({
-    position: 'relative',
-    userSelect: 'none',
-    textAlign: 'left',
-    color: 'var(--color-neutral-2)',
-    fontFamily: 'Nunito, sans-serif',
-    background: isDragging
-      ? 'var(--color-primary-2)'
-      : 'var(--color-neutral-6)',
-    cursor: isDragging ? 'grabbing' : 'grab',
-    ...draggableStyle,
-    ...style,
-  });
-
-  const adjustPosition = (
-    items: {
-      position: string;
-      startDateTime: string;
-      endDateTime: string;
-      duration: string;
-      title: string;
-      rating: string;
-      description: string;
-    }[],
-  ): Program[] => {
-    const adjusted: Program[] = [];
-    items.forEach(p => {
-      adjusted.push(
-        new Program({
-          startDateTime: parseDate(p.startDateTime),
-          duration: hmsToSeconds(p.duration),
-          title: p.title,
-          rating: ratings[p.rating],
-          description: p.description,
-        }),
-      );
-    });
-    return adjusted;
-  };
-
-  const Progams: {
-    position: string;
-    startDateTime: string;
-    endDateTime: string;
-    duration: string;
-    title: string;
-    rating: string;
-    description: string;
-  }[] = [];
-
-  const [items, setItems] = useState(Progams);
+  const [alerts, setAlerts] = useState<Record<string, EPGValidationMessages>>(
+    {},
+  );
 
   useEffect(() => {
-    if (flag) {
-      setItems(item => {
-        const newItem = item.splice(0, item.length);
-        setPrograms(new EntityMap<Program>(adjustPosition(newItem)));
-        return newItem;
-      });
-    }
-  }, [flag, setPrograms]);
+    setAlerts(EPGValidator.validate(programs.toArray()));
+  }, [programs]);
 
   useEffect(() => {
-    items.splice(0, items.length);
-    setItems(items);
-    if (programs.toArray().length > 0) {
-      programs.toArray().map((p, index) => {
-        const aux = {
-          position: `${index + 1}`,
-          startDateTime: formatDateTime(p.startDateTime),
-          endDateTime: formatDateTime(addToDate(p.startDateTime, p.duration)),
-          duration: secondsToHms(p.duration),
-          title: p.title,
-          rating: p.rating,
-          description: p.description,
-        };
-        return items.push(aux);
-      });
-      setItems(items);
-    }
-  }, [items, programs]);
-
-  useEffect(() => {
-    if (toggleClass === false && selectedProgramId.size === 0) {
+    if (!toggleClass && !selectedProgramId.size) {
       Array.from(document.querySelectorAll('.active')).forEach(el =>
         el.classList.remove('active'),
       );
     }
   }, [toggleClass, selectedProgramId]);
 
-  const onDragEnd = result => {
-    if (!result.destination) {
-      return;
-    }
-
-    const newItems = reorder(
-      items,
-      result.source.index,
-      result.destination.index,
-    );
-
-    setItems(newItems);
-    setPrograms(new EntityMap<Program>(adjustPosition(newItems)));
-  };
+  const onDragEnd = useCallback(
+    result => {
+      if (!result.destination) {
+        return;
+      }
+      setPrograms(p => {
+        let sourceKey = p.at(result.source.index)?.id;
+        let targetKey = p.at(result.destination.index)?.id;
+        if (result.source.index < result.destination.index) {
+          sourceKey = p.at(result.source.index)?.id;
+          targetKey = p.at(result.destination.index + 1)?.id;
+        }
+        if (!sourceKey || !targetKey) {
+          return p;
+        }
+        return p.moveTo(sourceKey, targetKey).clone();
+      });
+    },
+    [setPrograms],
+  );
 
   const getRowRender = virtualizedRowProps => {
-    const item = items[virtualizedRowProps.index];
+    const program = programs.at(virtualizedRowProps.index);
+
+    if (!program) {
+      return null;
+    }
 
     rowCache[virtualizedRowProps.index] = virtualizedRowProps;
     // eslint-disable-next-line no-param-reassign
@@ -248,57 +141,75 @@ const VTable: React.FC<ProgramTableProps> = ({
         </Message>
       </div>
     );
+
+    let showError = false;
+    let showWarn = false;
+    let showInfo = false;
+
+    if (alerts[program.id].ERROR.length) {
+      showError = true;
+    }
+
+    if (!showError && alerts[program.id].WARN.length) {
+      showWarn = true;
+    }
+
+    if (!showWarn && alerts[program.id].INFO.length) {
+      showInfo = true;
+    }
+
     return (
       <Draggable
-        draggableId={item.position}
+        draggableId={program.id}
         index={virtualizedRowProps.index}
-        key={item.position}
+        key={program.id}
       >
         {(provided, snapshot) => (
           <TableRow
             hover
             onClick={e => {
-              const ref: string =
-                programs.toArray()[Number(item.position) - 1].id;
-              const aux = selectedProgramId;
               if (e.ctrlKey) {
-                if (selectedProgramId.has(ref)) {
-                  aux.delete(ref);
-                  document.getElementById(ref)?.classList.remove('active');
+                if (selectedProgramId.has(program.id)) {
+                  selectedProgramId.delete(program.id);
+                  document
+                    .getElementById(program.id)
+                    ?.classList.remove('active');
                 } else {
-                  aux.add(ref);
-                  document.getElementById(ref)?.classList.add('active');
+                  selectedProgramId.add(program.id);
+                  document.getElementById(program.id)?.classList.add('active');
                 }
-                if (aux.size === 1) {
+                if (selectedProgramId.size === 1) {
                   setToggleClass(true);
                 } else {
                   setToggleClass(false);
                 }
-                setSelectedProgramId(aux);
+                setSelectedProgramId(selectedProgramId);
               } else if (!e.ctrlKey) {
-                if (selectedProgramId.has(ref)) {
-                  aux.delete(ref);
-                  document.getElementById(ref)?.classList.remove('active');
+                if (selectedProgramId.has(program.id)) {
+                  selectedProgramId.delete(program.id);
+                  document
+                    .getElementById(program.id)
+                    ?.classList.remove('active');
                 } else {
-                  aux.clear();
-                  aux.add(ref);
+                  selectedProgramId.clear();
+                  selectedProgramId.add(program.id);
                   Array.from(document.querySelectorAll('.active')).forEach(el =>
                     el.classList.remove('active'),
                   );
-                  document.getElementById(ref)?.classList.add('active');
-                  setSelectedProgram(programs.get(ref) ?? new Program());
+                  document.getElementById(program.id)?.classList.add('active');
+                  setSelectedProgram(programs.get(program.id) ?? new Program());
                 }
-                if (aux.size === 1) {
+                if (selectedProgramId.size === 1) {
                   setToggleClass(true);
                 } else {
                   setToggleClass(false);
                 }
-                setSelectedProgramId(aux);
+                setSelectedProgramId(selectedProgramId);
               }
             }}
           >
             <RowElement
-              id={programs.toArray()[Number(item.position) - 1].id}
+              id={program.id}
               ref={provided.innerRef}
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...provided.draggableProps}
@@ -315,117 +226,38 @@ const VTable: React.FC<ProgramTableProps> = ({
               <Checkbox
                 onClick={e => {
                   e.stopPropagation();
-                  const ref: string =
-                    programs.toArray()[Number(item.position) - 1].id;
-                  const aux = selectedProgramId;
-                  if (selectedProgramId.has(ref)) {
-                    aux.delete(ref);
-                    document.getElementById(ref)?.classList.remove('active');
+                  if (selectedProgramId.has(program.id)) {
+                    selectedProgramId.delete(program.id);
+                    document
+                      .getElementById(program.id)
+                      ?.classList.remove('active');
                   } else {
-                    aux.add(ref);
-                    document.getElementById(ref)?.classList.add('active');
+                    selectedProgramId.add(program.id);
+                    document
+                      .getElementById(program.id)
+                      ?.classList.add('active');
                   }
-                  if (aux.size === 1) {
+                  if (selectedProgramId.size === 1) {
                     setToggleClass(true);
                   } else {
                     setToggleClass(false);
                   }
-                  setSelectedProgramId(aux);
+                  setSelectedProgramId(selectedProgramId);
                 }}
-                checked={selectedProgramId.has(
-                  programs.toArray()[Number(item.position) - 1].id,
-                )}
+                checked={selectedProgramId.has(program.id)}
               />{' '}
               <AlertsGroup>
-                <Alerts
-                  display={
-                    item.title === '' ||
-                    item.description === '' ||
-                    item.duration === '0' ||
-                    (Number(item.position) > 1 &&
-                      new Date(
-                        programs.toArray()[Number(item.position)].startDateTime,
-                      ).getTime() !==
-                        addToDate(
-                          new Date(
-                            programs.toArray()[
-                              Number(item.position) - 1
-                            ].startDateTime,
-                          ),
-                          Number(
-                            programs.toArray()[Number(item.position) - 1]
-                              .duration,
-                          ),
-                        ).getTime())
-                      ? 'block'
-                      : 'none'
-                  }
-                >
+                <Alerts display={showError ? 'block' : 'none'}>
                   <IconButton>
                     <IoIosAlert size="20px" color="var(--color-system-1)" />
                   </IconButton>
                 </Alerts>
-                <Alerts
-                  display={
-                    item.title !== '' &&
-                    item.description !== '' &&
-                    item.duration !== '0' &&
-                    new Date(
-                      programs.toArray()[Number(item.position)].startDateTime,
-                    ).getTime() ===
-                      addToDate(
-                        new Date(
-                          programs.toArray()[
-                            Number(item.position) - 1
-                          ].startDateTime,
-                        ),
-                        Number(
-                          programs.toArray()[Number(item.position) - 1]
-                            .duration,
-                        ),
-                      ).getTime() &&
-                    (item.rating === ProgramRating.RSC ||
-                      new Date(
-                        programs.toArray()[Number(item.position)].startDateTime,
-                      ) < new Date())
-                      ? 'block'
-                      : 'none'
-                  }
-                >
+                <Alerts display={showWarn ? 'block' : 'none'}>
                   <IconButton>
                     <RiAlertFill size="20px" color="var(--color-system-2)" />
                   </IconButton>
                 </Alerts>
-                <Alerts
-                  display={
-                    item.title !== '' &&
-                    item.description !== '' &&
-                    item.duration !== '0' &&
-                    new Date(
-                      programs.toArray()[Number(item.position)].startDateTime,
-                    ).getTime() ===
-                      addToDate(
-                        new Date(
-                          programs.toArray()[
-                            Number(item.position) - 1
-                          ].startDateTime,
-                        ),
-                        Number(
-                          programs.toArray()[Number(item.position) - 1]
-                            .duration,
-                        ),
-                      ).getTime() &&
-                    item.rating !== ProgramRating.RSC &&
-                    new Date(
-                      programs.toArray()[Number(item.position)].startDateTime,
-                    ) > new Date() &&
-                    new Date(
-                      programs.toArray()[Number(item.position)].startDateTime,
-                    ) >= addToDate(new Date(), 2592000)
-                      ? 'block'
-                      : 'none'
-                  }
-                >
+                <Alerts display={showInfo ? 'block' : 'none'}>
                   <IconButton>
                     <IoIosInformationCircle
                       size="20px"
@@ -438,13 +270,11 @@ const VTable: React.FC<ProgramTableProps> = ({
                 <HiPlus
                   onClick={e => {
                     e.stopPropagation();
-                    const ref: Program =
-                      programs.toArray()[Number(item.position) - 1];
                     const newProgram = new Program({
                       duration: 3600,
-                      startDateTime: ref.startDateTime,
+                      startDateTime: program.startDateTime,
                     });
-                    setPrograms(p => p.add(newProgram, ref.id).clone());
+                    setPrograms(p => p.add(newProgram, program.id).clone());
                     if (width - 540 <= 815) {
                       setWidth(815);
                     } else {
@@ -508,13 +338,27 @@ const VTable: React.FC<ProgramTableProps> = ({
                 rowIdKey="position"
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...provided.droppableProps}
-                rowCount={items.length}
+                rowCount={programs.count}
                 width={width}
                 height={height}
                 header
                 headerHeight={60}
                 rowHeight={45}
-                rowGetter={({ index }) => items[index]}
+                rowGetter={({ index }) => {
+                  const p = programs.at(index);
+                  if (!p) {
+                    return {};
+                  }
+                  return {
+                    ...p,
+                    position: `${index + 1}`,
+                    startDateTime: formatDateTime(p.startDateTime),
+                    endDateTime: formatDateTime(
+                      addToDate(p.startDateTime, p.duration),
+                    ),
+                    duration: secondsToHms(p.duration),
+                  };
+                }}
                 ref={ref => {
                   if (ref) {
                     const whatHasMyLifeComeTo = document.getElementsByClassName(
@@ -539,8 +383,6 @@ const VTable: React.FC<ProgramTableProps> = ({
                       localStorage.getItem('current-filename') ? 'flex' : 'none'
                     }
                   >
-                    <Text>Waiting file to render</Text>
-                    &emsp;
                     <BeatLoader color="var(--color-neutral-3)" />
                   </LoaderContainer>
                 )}
@@ -570,6 +412,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                           });
                         }}
                         checked={
+                          programs.toArray().length > 0 &&
                           programs.toArray().length === selectedProgramId.size
                         }
                       />
