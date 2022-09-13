@@ -27,9 +27,7 @@ const Home: React.FC = () => {
     new EntityMap<Program>(savedPrograms?.map(p => new Program(p))),
   );
 
-  const [selectedProgram, setSelectedProgram] = useState(
-    programs.get(Array.from(selectedProgramId)[0]),
-  );
+  const [selectedProgram, setSelectedProgram] = useState<Program>();
 
   useEffect(() => {
     setSelectedProgram(programs.get(Array.from(selectedProgramId)[0]));
@@ -97,7 +95,12 @@ const Home: React.FC = () => {
     });
     setPrograms(p => p.add(addedProgram).clone());
     setTimeout(() => {
-      setSelectedProgramId(p => p.add(addedProgram.id));
+      setSelectedProgramId(s => {
+        const newSelectedProgramId = new Set(s);
+        newSelectedProgramId.clear();
+        newSelectedProgramId.add(addedProgram.id);
+        return newSelectedProgramId;
+      });
       if (dimension.width - 600 <= 815) {
         setWidth(815);
       } else {
@@ -122,8 +125,6 @@ const Home: React.FC = () => {
     <Container>
       <HeaderContainer>
         <Header
-          width={width}
-          setWidth={setWidth}
           programs={programs}
           selectedProgramId={selectedProgramId}
           setNewPrograms={newPrograms => {
@@ -132,6 +133,8 @@ const Home: React.FC = () => {
             setSavedPrograms(newPrograms.toArray());
             setPrograms(newPrograms);
           }}
+          width={width}
+          setWidth={setWidth}
           handleAddProgram={handleAddProgram}
           handleClearProgramList={handleClearProgramList}
         />
@@ -142,13 +145,12 @@ const Home: React.FC = () => {
           width={selectedProgramId.size !== 1 ? '100%' : 'calc(100% - 535px)'}
         >
           <VTable
+            programs={programs}
+            setPrograms={setPrograms}
             selectedProgramId={selectedProgramId}
             setSelectedProgramId={setSelectedProgramId}
-            setPrograms={setPrograms}
-            programs={programs}
             setToggleClass={setToggleClass}
             width={width}
-            setWidth={setWidth}
             height={height}
           />
         </TableContainer>
