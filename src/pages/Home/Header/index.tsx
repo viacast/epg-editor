@@ -110,6 +110,7 @@ const Header: React.FC<HeaderProps> = ({
         title: t('header:titleOverwrite'),
         content: t('header:overwriteProgramList'),
         confirm: () => {
+          setNewPrograms(new EntityMap(newPrograms));
           setEpgFilename(file.name);
           setSavedFilename(file.name);
         },

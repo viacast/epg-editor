@@ -37,7 +37,6 @@ export interface ProgramTableProps {
   height: number;
   programs: EntityMap<Program>;
   selectedProgramId: Set<string>;
-  setWidth: (val: number) => void;
   setPrograms: React.Dispatch<React.SetStateAction<EntityMap<Program>>>;
   setSelectedProgramId: React.Dispatch<React.SetStateAction<Set<string>>>;
   setToggleClass: (val: boolean) => void;
@@ -72,7 +71,6 @@ const VTable: React.FC<ProgramTableProps> = ({
   height,
   programs,
   selectedProgramId,
-  setWidth,
   setPrograms,
   setToggleClass,
   setSelectedProgramId,
@@ -134,15 +132,15 @@ const VTable: React.FC<ProgramTableProps> = ({
     let showWarn = false;
     let showInfo = false;
 
-    if (alerts[program.id].ERROR.length) {
+    if (alerts[program.id]?.ERROR.length) {
       showError = true;
     }
 
-    if (!showError && alerts[program.id].WARN.length) {
+    if (!showError && alerts[program.id]?.WARN.length) {
       showWarn = true;
     }
 
-    if (!showWarn && alerts[program.id].INFO.length) {
+    if (!showWarn && alerts[program.id]?.INFO.length) {
       showInfo = true;
     }
 
@@ -237,17 +235,24 @@ const VTable: React.FC<ProgramTableProps> = ({
                 <HiPlus
                   onClick={e => {
                     e.stopPropagation();
+                    let startDateTime = new Date();
+                    if (programs.toArray().indexOf(program) === 0) {
+                      startDateTime = addToDate(program.startDateTime, -3600);
+                    } else {
+                      startDateTime = program.startDateTime;
+                    }
                     const newProgram = new Program({
                       duration: 3600,
-                      startDateTime: program.startDateTime,
+                      startDateTime,
                     });
                     setPrograms(p => p.add(newProgram, program.id).clone());
-                    if (width - 540 <= 815) {
-                      setWidth(815);
-                    } else {
-                      setWidth(width - 540);
-                    }
-                    setSelectedProgramId(p => p.add(newProgram.id));
+                    setToggleClass(true);
+                    setSelectedProgramId(s => {
+                      const newSelectedProgramId = new Set(s);
+                      newSelectedProgramId.clear();
+                      newSelectedProgramId.add(newProgram.id);
+                      return newSelectedProgramId;
+                    });
                   }}
                 />
               </AddToList>
@@ -384,27 +389,27 @@ const VTable: React.FC<ProgramTableProps> = ({
                   dataKey="startDateTime"
                   key="startDateTime"
                   flexGrow={3}
-                  minWidth={200}
-                  width={200}
-                  maxWidth={200}
+                  minWidth={190}
+                  width={190}
+                  maxWidth={190}
                 />
                 <Column
                   label={t(`program-table:columnLabel_endDateTime`)}
                   key="endDateTime"
                   dataKey="endDateTime"
                   flexGrow={3}
-                  minWidth={200}
-                  width={200}
-                  maxWidth={200}
+                  minWidth={190}
+                  width={190}
+                  maxWidth={190}
                 />
                 <Column
                   label={t(`program-table:columnLabel_duration`)}
                   dataKey="duration"
                   key="duration"
                   flexGrow={3}
-                  minWidth={85}
-                  width={85}
-                  maxWidth={85}
+                  minWidth={110}
+                  width={110}
+                  maxWidth={110}
                 />
                 <Column
                   label={t(`program-table:columnLabel_title`)}
@@ -430,7 +435,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                   dataKey="description"
                   key="description"
                   flexGrow={3}
-                  minWidth={100}
+                  minWidth={515}
                   width={705}
                 />
               </Table>
