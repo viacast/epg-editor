@@ -146,12 +146,10 @@ const Home: React.FC = () => {
             setSelectedProgramId={setSelectedProgramId}
             setPrograms={setPrograms}
             programs={programs}
-            toggleClass={toggleClass}
             setToggleClass={setToggleClass}
             width={width}
             setWidth={setWidth}
             height={height}
-            setSelectedProgram={setSelectedProgram}
           />
         </TableContainer>
         <MenuContainer

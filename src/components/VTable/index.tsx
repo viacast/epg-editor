@@ -37,12 +37,10 @@ export interface ProgramTableProps {
   height: number;
   programs: EntityMap<Program>;
   selectedProgramId: Set<string>;
-  toggleClass: boolean;
   setWidth: (val: number) => void;
   setPrograms: React.Dispatch<React.SetStateAction<EntityMap<Program>>>;
   setSelectedProgramId: React.Dispatch<React.SetStateAction<Set<string>>>;
   setToggleClass: (val: boolean) => void;
-  setSelectedProgram: (val: Program) => void;
 }
 
 const getItemStyle = (style, isDragging, draggableStyle) => ({
@@ -74,12 +72,10 @@ const VTable: React.FC<ProgramTableProps> = ({
   height,
   programs,
   selectedProgramId,
-  toggleClass,
   setWidth,
   setPrograms,
   setToggleClass,
   setSelectedProgramId,
-  setSelectedProgram,
 }) => {
   const { t } = useTranslation();
   const [alerts, setAlerts] = useState<Record<string, EPGValidationMessages>>(
