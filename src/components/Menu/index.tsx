@@ -178,7 +178,7 @@ const Menu: React.FC<MenuProps> = ({
                 {alerts.title && (
                   <Tooltip
                     arrow
-                    title={<Message>{t('alert:emptyText')}</Message>}
+                    title={<Message>{t('alert:noTitle')}</Message>}
                   >
                     <GroupAlert>
                       &nbsp;
@@ -201,7 +201,7 @@ const Menu: React.FC<MenuProps> = ({
                 {alerts.description && (
                   <Tooltip
                     arrow
-                    title={<Message>{t('alert:emptyText')}</Message>}
+                    title={<Message>{t('alert:noDescription')}</Message>}
                   >
                     <GroupAlert>
                       &nbsp;
