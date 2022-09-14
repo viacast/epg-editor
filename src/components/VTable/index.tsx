@@ -87,7 +87,9 @@ const VTable: React.FC<ProgramTableProps> = ({
     document.addEventListener('keydown', (e: KeyboardEvent) => {
       if (e.key === 'Delete') {
         openModal({
-          title: t('header:titleDeleteProgram'),
+          title: t('header:titleDeleteProgram', {
+            count: selectedProgramId.size,
+          }),
           content: t('header:deleteProgramFromList'),
           confirm: () => {
             Array.from(selectedProgramId).forEach(pid => {
@@ -179,6 +181,9 @@ const VTable: React.FC<ProgramTableProps> = ({
                 const newSelectedProgramId = new Set(s);
                 if (!e.ctrlKey) {
                   newSelectedProgramId.clear();
+                }
+                if (e.shiftKey) {
+                  console.log('hi');
                 }
                 if (newSelectedProgramId.has(program.id)) {
                   newSelectedProgramId.delete(program.id);

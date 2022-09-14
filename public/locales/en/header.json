@@ -10,7 +10,8 @@
   "overwriteProgramList": "Are you sure you want to overwrite the program list?",
   "alertInvalidFile": "This file format is not valid. Try a '.csv' or '.xml' file instead.",
   "adjustStartDateTime": "Are you sure you want to recalculate the start dates for all programs?",
-  "titleDeleteProgram": "Delete",
+  "titleDeleteProgram_one": "Delete {{count}} program",
+  "titleDeleteProgram_other": "Delete {{count}} programs",
   "titleOverwrite": "Overwrite",
   "labelProgram" : "Programs: {{count}}"
 }
