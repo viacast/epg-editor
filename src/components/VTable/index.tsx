@@ -21,6 +21,7 @@ import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
 import { BeatLoader } from 'react-spinners';
 import { RiAlertFill } from 'react-icons/ri';
 import { EPGValidationMessages } from 'services/epg/validator';
+import { useModalProvider } from 'providers/ModalProvider';
 import {
   IconRating,
   Message,
@@ -79,6 +80,25 @@ const VTable: React.FC<ProgramTableProps> = ({
   const [alerts, setAlerts] = useState<Record<string, EPGValidationMessages>>(
     {},
   );
+  const { openModal } = useModalProvider();
+
+  // Delete all selected programs
+  useEffect(() => {
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Delete') {
+        openModal({
+          title: t('header:titleDeleteProgram'),
+          content: t('header:deleteProgramFromList'),
+          confirm: () => {
+            Array.from(selectedProgramId).forEach(pid => {
+              selectedProgramId.delete(pid);
+              setPrograms(p => p.remove(pid).clone());
+            });
+          },
+        });
+      }
+    });
+  }, [openModal, selectedProgramId, setPrograms, t]);
 
   useEffect(() => {
     setAlerts(EPGValidator.validate(programs.toArray()));
