@@ -18,7 +18,7 @@ export const Message = styled.div`
   vertical-align: middle;
 `;
 
-export const RowElement = styled.div``;
+export const RowElement = styled.td``;
 
 export const AddToList = styled.div`
   display: none;
@@ -45,9 +45,8 @@ export const AlertsGroup = styled.div`
 `;
 
 export const Alerts = styled.div<{ display: string }>`
-  margin-left: 2px;
-  margin-right: 2px;
   display: ${({ display }) => display || 'none'};
+  margin-inline: 2px;
 `;
 
 export const LoaderContainer = styled.div<{ display: string }>`
