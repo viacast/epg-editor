@@ -81,6 +81,13 @@ const VTable: React.FC<ProgramTableProps> = ({
     {},
   );
   const { openModal } = useModalProvider();
+  const [firstProg, setFirstProg] = useState(Array.from(selectedProgramId)[0]);
+
+  useEffect(() => {
+    if (selectedProgramId.size === 1) {
+      setFirstProg(Array.from(selectedProgramId)[0]);
+    }
+  }, [selectedProgramId]);
 
   // Delete all selected programs
   useEffect(() => {
@@ -162,7 +169,7 @@ const VTable: React.FC<ProgramTableProps> = ({
       showWarn = true;
     }
 
-    if (!showWarn && alerts[program.id]?.INFO.length) {
+    if (!showError && !showWarn && alerts[program.id]?.INFO.length) {
       showInfo = true;
     }
 
@@ -182,13 +189,36 @@ const VTable: React.FC<ProgramTableProps> = ({
                 if (!e.ctrlKey) {
                   newSelectedProgramId.clear();
                 }
-                if (e.shiftKey) {
-                  console.log('hi');
-                }
                 if (newSelectedProgramId.has(program.id)) {
                   newSelectedProgramId.delete(program.id);
                 } else {
                   newSelectedProgramId.add(program.id);
+                }
+                if (e.shiftKey) {
+                  if (s.size !== 0) {
+                    let startSelection = 0;
+                    let endSelection = 0;
+                    const lastProg: string = program.id;
+                    newSelectedProgramId.add(program.id);
+                    if (
+                      programs.indexOf(firstProg) < programs.indexOf(lastProg)
+                    ) {
+                      startSelection = programs.indexOf(firstProg);
+                      endSelection = programs.indexOf(lastProg);
+                    } else {
+                      startSelection = programs.indexOf(lastProg);
+                      endSelection = programs.indexOf(firstProg);
+                    }
+                    programs.toArray().forEach((p, i) => {
+                      if (
+                        i >= startSelection &&
+                        i <= endSelection &&
+                        !newSelectedProgramId.has(p.id)
+                      ) {
+                        newSelectedProgramId.add(p.id);
+                      }
+                    });
+                  }
                 }
                 if (newSelectedProgramId.size === 1) {
                   setToggleClass(true);

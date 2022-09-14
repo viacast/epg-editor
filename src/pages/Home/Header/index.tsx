@@ -7,9 +7,13 @@ import {
   FaFileCsv,
   FaFileExport,
 } from 'react-icons/fa';
-import { BsClockHistory } from 'react-icons/bs';
+import {
+  BsCheck,
+  BsClockHistory,
+  BsGearFill,
+  BsTranslate,
+} from 'react-icons/bs';
 import FileSaver from 'file-saver';
-
 import { EPGParser, Program, EPGBuilder, EPGValidator } from 'services/epg';
 import { Button, FileInput, FileInputRefProps, Tooltip } from 'components';
 import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
@@ -20,14 +24,20 @@ import { toast } from 'react-toastify';
 import { IconButton } from '@mui/material';
 import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
 import { RiAlertFill } from 'react-icons/ri';
+import { MdKeyboardArrowRight } from 'react-icons/md';
 import {
   HeaderContainer,
   MenuOptions,
   ExportOptions,
-  Select,
   Text,
+  Message,
   Alerts,
   AlertsGroup,
+  ContainerSettings,
+  Settings,
+  ContainerTranslation,
+  Translation,
+  Languages,
 } from './styles';
 
 export interface HeaderProps {
@@ -50,9 +60,10 @@ const Header: React.FC<HeaderProps> = ({
   handleClearProgramList,
 }) => {
   const { t, i18n } = useTranslation();
-  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
   const [programCount, setProgramCount] = useState(0);
   const [open, setOpen] = useState(false);
+  const [displaySettings, setDisplaySettings] = useState(false);
+  const [displayTranslation, setDisplayTranslation] = useState(false);
   const [savedFilename, setSavedFilename] = useLocalStorage(
     LocalStorageKeys.CURRENT_FILENAME,
     '',
@@ -73,15 +84,6 @@ const Header: React.FC<HeaderProps> = ({
   useEffect(() => {
     setProgramCount(programs.count);
   }, [programs.count]);
-
-  const handleChange = useCallback(
-    evt => {
-      const { value } = evt.target;
-      setCurrentLanguage(value);
-      i18n.changeLanguage(value);
-    },
-    [i18n],
-  );
 
   const handleFileUpload = useCallback(
     async files => {
@@ -260,25 +262,69 @@ const Header: React.FC<HeaderProps> = ({
           });
         }}
       />
+      <>
+        <ContainerSettings animate={displaySettings ? 'rotate' : 'backRotate'}>
+          <IconButton
+            className="epg-settings-gear"
+            onClick={() => {
+              setDisplaySettings(!displaySettings);
+              if (displayTranslation) {
+                setDisplayTranslation(!displayTranslation);
+              }
+            }}
+          >
+            <BsGearFill size="28px" color="var(--color-neutral-3)" />
+          </IconButton>
+          <Settings
+            display={displaySettings ? 'block' : 'none'}
+            onClick={() => setDisplayTranslation(!displayTranslation)}
+          >
+            <IconButton>
+              <BsTranslate /> &nbsp; {t('header:epgLanguage')} &emsp;{' '}
+              <MdKeyboardArrowRight />
+            </IconButton>
+          </Settings>
+        </ContainerSettings>
+        <ContainerTranslation>
+          <Translation display={displayTranslation ? 'block' : 'none'}>
+            <Languages onClick={() => i18n.changeLanguage('pt')}>
+              {t('header:languagePt')}&nbsp;🇧🇷{' '}
+              <BsCheck
+                display={i18n.language === 'pt' ? 'inline-block' : 'none'}
+              />
+            </Languages>
+            <Languages onClick={() => i18n.changeLanguage('en')}>
+              {t('header:languageEn')}&nbsp;🇺🇸{' '}
+              <BsCheck
+                display={i18n.language === 'en' ? 'inline-block' : 'none'}
+              />
+            </Languages>
+          </Translation>
+        </ContainerTranslation>
+      </>
       <Text>
         {t('header:labelProgram', {
           count: programCount,
         })}
       </Text>
-      <Select onChange={handleChange} value={currentLanguage}>
-        <option value="pt">Portugues</option>
-        <option value="en">English</option>
-      </Select>
       <AlertsGroup>
         <Alerts display={alertList.ERROR > 0 ? 'block' : 'none'}>
           <Tooltip
             arrow
             title={
               <>
-                {alert.title} {t('alert:emptyText')} <br />
-                {alert.description} {t('alert:emptyText')} <br />
-                {alert.duration} {t('alert:noDuration')} <br />
-                {alert.gap} {t('alert:gapBetween')} <br />
+                <Message display={alert.title ? 'block' : 'none'}>
+                  {t('alert:noTitle')} ({alert.title})
+                </Message>
+                <Message display={alert.description ? 'block' : 'none'}>
+                  {t('alert:noDescription')} ({alert.description})
+                </Message>
+                <Message display={alert.duration ? 'block' : 'none'}>
+                  {t('alert:noDuration')} ({alert.duration})
+                </Message>
+                <Message display={alert.gap ? 'block' : 'none'}>
+                  {t('alert:gapBetween')} ({alert.gap})
+                </Message>
               </>
             }
           >
@@ -287,7 +333,7 @@ const Header: React.FC<HeaderProps> = ({
                 count: alertList.ERROR,
               })}
               &nbsp;
-              <IoIosAlert size="28px" color="var(--color-system-1)" />
+              <IoIosAlert size="16px" color="var(--color-system-1)" />
             </IconButton>
           </Tooltip>
         </Alerts>
@@ -296,8 +342,12 @@ const Header: React.FC<HeaderProps> = ({
             arrow
             title={
               <>
-                {alert.rating} {t('alert:noRating')} <br />
-                {alert.past} {t('alert:pastStartTime')} <br />
+                <Message display={alert.rating ? 'block' : 'none'}>
+                  {t('alert:noRating')} ({alert.rating})
+                </Message>
+                <Message display={alert.past ? 'block' : 'none'}>
+                  {t('alert:pastStartTime')} ({alert.past})
+                </Message>
               </>
             }
           >
@@ -306,7 +356,7 @@ const Header: React.FC<HeaderProps> = ({
                 count: alertList.WARN,
               })}
               &nbsp;
-              <RiAlertFill size="28px" color="var(--color-system-2)" />
+              <RiAlertFill size="16px" color="var(--color-system-2)" />
             </IconButton>
           </Tooltip>
         </Alerts>
@@ -314,9 +364,9 @@ const Header: React.FC<HeaderProps> = ({
           <Tooltip
             arrow
             title={
-              <>
-                {alert.future} {t('alert:futureStartTime')}
-              </>
+              <Message display={alert.future ? 'block' : 'none'}>
+                {t('alert:futureStartTime')} ({alert.future})
+              </Message>
             }
           >
             <IconButton>
@@ -325,7 +375,7 @@ const Header: React.FC<HeaderProps> = ({
               })}
               &nbsp;
               <IoIosInformationCircle
-                size="28px"
+                size="16px"
                 color="var(--color-neutral-3)"
               />
             </IconButton>
