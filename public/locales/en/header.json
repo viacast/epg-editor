@@ -6,9 +6,11 @@
   "buttonClearProgramList": "Clear",
   "buttonStartDateTime": "Adjust",
   "clearProgramList": "Are you sure you want to clear the program list?",
+  "deleteProgramFromList": "Are you sure you want to delete this programs from the list?",
   "overwriteProgramList": "Are you sure you want to overwrite the program list?",
   "alertInvalidFile": "This file format is not valid. Try a '.csv' or '.xml' file instead.",
   "adjustStartDateTime": "Are you sure you want to recalculate the start dates for all programs?",
+  "titleDeleteProgram": "Delete",
   "titleOverwrite": "Overwrite",
   "labelProgram" : "Programs: {{count}}"
 }
