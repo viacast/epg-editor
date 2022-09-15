@@ -102,24 +102,11 @@ export default class EntityMap<EntityType> {
     return this;
   }
 
-  moveRelative(
-    entityKey: string,
-    step: number | 'start' | 'end',
-  ): EntityMap<EntityType> {
+  moveEnd(entityKey: string): EntityMap<EntityType> {
     if (!this.entities[entityKey]) {
       throw new EntityNotFound(`Entity with key '${entityKey}' not found`);
     }
-    let target: number;
-    if (step === 'start') {
-      target = 0;
-    } else if (step === 'end') {
-      target = this.keys.length;
-    } else {
-      target = Math.max(
-        0,
-        Math.min(this.keys.length - 1, this.keys.indexOf(entityKey) + step),
-      );
-    }
+    const target: number = this.keys.length;
     this.keys.splice(this.keys.indexOf(entityKey), 1);
     this.keys.splice(target, 0, entityKey);
     return this;
