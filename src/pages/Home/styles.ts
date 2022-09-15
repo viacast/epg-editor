@@ -17,7 +17,7 @@ export const TableMenuContainer = styled.div`
   flex-direction: row;
   width: 100%;
   height: 100%;
-  min-width: 1410px;
+  min-width: 1160px;
   min-height: 500px;
   padding-top: 20px;
   padding-left: 30px;
@@ -31,10 +31,12 @@ export const TableMenuContainer = styled.div`
 `;
 
 export const TableContainer = styled.div<{ width?: string }>`
+  overflow-x: auto;
+  overflow-y: hidden;
   background-color: var(--color-neutral-5);
   border-radius: 4px;
   height: 100%;
-  min-width: 1110px;
+  min-width: 590px;
   width: ${({ width }) => width || '100%'};
   body,
   input,
