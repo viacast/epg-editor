@@ -6,6 +6,7 @@ import {
 } from '@mui/x-date-pickers';
 import Stack from '@mui/material/Stack';
 import { ptBR, es, enUS } from 'date-fns/locale';
+import i18n from 'services/i18n';
 import { StyledInput } from './styles';
 
 export interface DatePickerProps {
@@ -15,7 +16,7 @@ export interface DatePickerProps {
 
 const DatePicker: React.FC<DatePickerProps> = ({ date, onDateChange }) => {
   const [value, setValue] = useState(date);
-  const aux = localStorage.getItem('i18nextLng');
+  const aux = i18n.language;
   let lang;
 
   if (aux) {
