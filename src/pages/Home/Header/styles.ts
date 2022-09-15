@@ -60,7 +60,7 @@ export const Alerts = styled.div<{ display: string }>`
 
 export const AlertsGroup = styled.div`
   display: flex;
-  padding-left: 21px;
+  padding-left: 25px;
 `;
 
 export const Configurations = styled.div`

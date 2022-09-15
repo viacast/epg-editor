@@ -63,16 +63,16 @@ const Home: React.FC = () => {
   const [toggleClass, setToggleClass] = useState(false);
 
   useEffect(() => {
-    if (toggleClass === false) {
-      if (dimension.width - 60 <= 1350) {
-        setWidth(1350);
+    if (!toggleClass) {
+      if (dimension.width - 60 <= 1100) {
+        setWidth(1100);
       } else {
         setWidth(dimension.width - 60);
       }
     }
-    if (toggleClass === true) {
-      if (dimension.width - 600 <= 1098) {
-        setWidth(1098);
+    if (toggleClass) {
+      if (dimension.width - 600 <= 590) {
+        setWidth(590);
       } else {
         setWidth(dimension.width - 600);
       }
@@ -101,8 +101,8 @@ const Home: React.FC = () => {
         newSelectedProgramId.add(addedProgram.id);
         return newSelectedProgramId;
       });
-      if (dimension.width - 600 <= 815) {
-        setWidth(815);
+      if (dimension.width - 600 <= 590) {
+        setWidth(590);
       } else {
         setWidth(dimension.width - 600);
       }
@@ -156,7 +156,14 @@ const Home: React.FC = () => {
         </TableContainer>
         <MenuContainer
           className="epg-table-menu-content"
-          width={selectedProgramId.size !== 1 ? '0px' : '500px'}
+          width={
+            // eslint-disable-next-line no-nested-ternary
+            selectedProgramId.size === 1
+              ? dimension.width < 1160
+                ? '480px'
+                : '500px'
+              : '0px'
+          }
           tp={toggleClass ? 'width' : 'none'}
         >
           <Menu
@@ -180,7 +187,7 @@ const Home: React.FC = () => {
                   // was the only program on the list
                   handleClearProgramList(); // just clear table
                   setWidth(
-                    dimension.width - 60 <= 1350 ? 1350 : dimension.width - 60,
+                    dimension.width - 60 <= 1160 ? 1160 : dimension.width - 60,
                   ); // force menu container to close
                 } else if (index === size - 1) {
                   // was the last program on the list
