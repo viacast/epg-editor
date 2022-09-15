@@ -31,7 +31,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     setSelectedProgram(programs.get(Array.from(selectedProgramId)[0]));
-  }, [selectedProgramId]);
+  }, [programs, selectedProgramId]);
 
   useEffect(() => {
     if (programs.toArray().length !== 0) {

@@ -120,7 +120,7 @@ const Menu: React.FC<MenuProps> = ({
 
   useEffect(() => {
     setAlerts(EPGValidator.menuAlert(programs.toArray(), selectedProgram));
-  }, [selectedProgram]);
+  }, [programs, selectedProgram]);
 
   return (
     <MenuContainer>
