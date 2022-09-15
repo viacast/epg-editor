@@ -13,8 +13,8 @@
   "titleDeleteProgram_one": "Deletar {{count}} programa",
   "titleDeleteProgram_other": "Deletar {{count}} programas",
   "titleOverwrite": "Sobrescrever",
-  "labelProgram" : "Programas: {{count}}",
-  "epgLanguage": "Idioma", 
-  "languagePt": "Português",
-  "languageEn": "Inglês"
+  "programCount" : "Programas: {{count}}",
+  "settingsLanguage": "Idioma", 
+  "settingsLanguage_pt": "Português",
+  "settingsLanguage_en": "Inglês"
 }

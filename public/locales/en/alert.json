@@ -1,16 +1,16 @@
 
 {
-  "error_one": "{{count}} Error",
-  "warning_one": "{{count}} Warn",
-  "info_one": "{{count}} Info",
-  "error_other": "{{count}} Errors",
-  "warning_other": "{{count}} Warns",
-  "info_other": "{{count}} Infos",
-  "noTitle": "Title field cannot be empty!",
-  "noDescription": "Description field cannot be empty!",
-  "noRating": "Rating should not be undefined!",
-  "pastStartTime": "Begin is usually in future!",
-  "futureStartTime": "Begin should be this far?",
-  "gapBetween": "Must be no gap in the list!",
-  "noDuration": "Duration cannot be zero!"
+  "error_one": "{{count}} error",
+  "error_other": "{{count}} errors",
+  "warning_one": "{{count}} warning",
+  "warning_other": "{{count}} warnings",
+  "info_one": "{{count}} info",
+  "info_other": "{{count}} infos",
+  "noTitle": "Title cannot be empty.",
+  "noDescription": "Description cannot be empty.",
+  "noRating": "Program should have a rating.",
+  "pastStartTime": "Start time is usually in the future.",
+  "futureStartTime": "Start time is usually not that far away.",
+  "gapBetween": "Start time does not coincide with last end time.",
+  "noDuration": "Duration cannot be zero."
 }
