@@ -304,6 +304,7 @@ const Header: React.FC<HeaderProps> = ({
               <FlagCheck>
                 {flag}
                 <BsCheck
+                  className="epg-language-check"
                   display={i18n.language === code ? 'inline-block' : 'none'}
                 />
               </FlagCheck>
