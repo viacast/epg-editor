@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+export const ParentalGuidanceCells = styled.div``;
+
 export const IconRating = styled.img`
   float: left;
   margin-right: 14px;

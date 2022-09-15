@@ -23,6 +23,7 @@ import { RiAlertFill } from 'react-icons/ri';
 import { EPGValidationMessages } from 'services/epg/validator';
 import { useModalProvider } from 'providers/ModalProvider';
 import {
+  ParentalGuidanceCells,
   IconRating,
   Message,
   RowElement,
@@ -149,7 +150,12 @@ const VTable: React.FC<ProgramTableProps> = ({
     rowCache[virtualizedRowProps.index] = virtualizedRowProps;
     // eslint-disable-next-line no-param-reassign
     virtualizedRowProps.columns[5] = (
-      <div className="epg-pg">
+      <ParentalGuidanceCells
+        className="epg-pg"
+        title={t(
+          `parental-guidance:rating_${virtualizedRowProps.columns[5].props.title}`,
+        )}
+      >
         <IconRating
           src={rate[virtualizedRowProps.columns[5].props.title]}
           alt={virtualizedRowProps.columns[5].props.title}
@@ -159,7 +165,7 @@ const VTable: React.FC<ProgramTableProps> = ({
             `parental-guidance:rating_${virtualizedRowProps.columns[5].props.title}`,
           )}
         </Message>
-      </div>
+      </ParentalGuidanceCells>
     );
 
     let showError = false;
