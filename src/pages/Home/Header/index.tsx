@@ -33,12 +33,13 @@ import {
   Message,
   Alerts,
   AlertsGroup,
+  Configurations,
   ContainerSettings,
   Settings,
   SettingsOption,
-  ContainerTranslation,
   Translation,
   Languages,
+  FlagCheck,
 } from './styles';
 
 export interface HeaderProps {
@@ -73,6 +74,7 @@ const Header: React.FC<HeaderProps> = ({
 
   const fileInputRef = useRef<FileInputRefProps>({});
   const exportOptionsRef = useRef<HTMLDivElement>(null);
+  const ConfigurationsRef = useRef<HTMLDivElement>(null);
 
   const { openModal } = useModalProvider();
   const notifyInvalidFile = useCallback(() => {
@@ -174,6 +176,10 @@ const Header: React.FC<HeaderProps> = ({
   }, [programs]);
 
   useClickOutside(exportOptionsRef, () => setOpen(false));
+  useClickOutside(ConfigurationsRef, () => {
+    setDisplaySettings(false);
+    setDisplayTranslation(false);
+  });
 
   return (
     <HeaderContainer className="no-user-select">
@@ -263,7 +269,7 @@ const Header: React.FC<HeaderProps> = ({
           });
         }}
       />
-      <>
+      <Configurations ref={ConfigurationsRef}>
         <ContainerSettings animate={displaySettings ? 'rotate' : 'backRotate'}>
           <IconButton
             className="epg-settings-gear"
@@ -282,27 +288,34 @@ const Header: React.FC<HeaderProps> = ({
           >
             <SettingsOption>
               <BsTranslate /> &nbsp; {t('header:epgLanguage')} &nbsp;{' '}
-              <MdKeyboardArrowRight size="16px" />
+              <MdKeyboardArrowRight
+                className="epg-language-arrow"
+                size="16px"
+              />
             </SettingsOption>
           </Settings>
         </ContainerSettings>
-        <ContainerTranslation>
-          <Translation display={displayTranslation ? 'block' : 'none'}>
-            <Languages onClick={() => i18n.changeLanguage('pt')}>
-              {t('header:languagePt')}&nbsp;🇧🇷{' '}
+        <Translation display={displayTranslation ? 'block' : 'none'}>
+          <Languages onClick={() => i18n.changeLanguage('pt')}>
+            {t('header:languagePt')}
+            <FlagCheck>
+              🇧🇷{' '}
               <BsCheck
                 display={i18n.language === 'pt' ? 'inline-block' : 'none'}
               />
-            </Languages>
-            <Languages onClick={() => i18n.changeLanguage('en')}>
-              {t('header:languageEn')}&nbsp;🇺🇸{' '}
+            </FlagCheck>
+          </Languages>
+          <Languages onClick={() => i18n.changeLanguage('en')}>
+            {t('header:languageEn')}
+            <FlagCheck>
+              🇺🇸{' '}
               <BsCheck
                 display={i18n.language === 'en' ? 'inline-block' : 'none'}
               />
-            </Languages>
-          </Translation>
-        </ContainerTranslation>
-      </>
+            </FlagCheck>
+          </Languages>
+        </Translation>
+      </Configurations>
       <Text>
         {t('header:labelProgram', {
           count: programCount,
