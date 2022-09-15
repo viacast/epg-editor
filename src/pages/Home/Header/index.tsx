@@ -339,9 +339,7 @@ const Header: React.FC<HeaderProps> = ({
             }
           >
             <IconButton>
-              {t('alert:error', {
-                count: alertList.ERROR,
-              })}
+              {alertList.ERROR}
               &nbsp;
               <IoIosAlert size="16px" color="var(--color-system-1)" />
             </IconButton>
@@ -362,9 +360,7 @@ const Header: React.FC<HeaderProps> = ({
             }
           >
             <IconButton>
-              {t('alert:warning', {
-                count: alertList.WARN,
-              })}
+              {alertList.WARN}
               &nbsp;
               <RiAlertFill size="16px" color="var(--color-system-2)" />
             </IconButton>
@@ -380,9 +376,7 @@ const Header: React.FC<HeaderProps> = ({
             }
           >
             <IconButton>
-              {t('alert:info', {
-                count: alertList.INFO,
-              })}
+              {alertList.INFO}
               &nbsp;
               <IoIosInformationCircle
                 size="16px"
