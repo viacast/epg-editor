@@ -16,8 +16,8 @@ export const HeaderContainer = styled.div`
 `;
 
 export const Text = styled.div`
-  min-width: 188px;
-  padding: 10px 0;
+  min-width: 168px;
+  padding-block: 10px;
   font-size: 20px;
   text-align: center;
 `;
@@ -60,6 +60,7 @@ export const Alerts = styled.div<{ display: string }>`
 
 export const AlertsGroup = styled.div`
   display: flex;
+  padding-left: 21px;
 `;
 
 export const Configurations = styled.div`
@@ -67,7 +68,7 @@ export const Configurations = styled.div`
 `;
 
 export const ContainerSettings = styled.div<{ animate: string }>`
-  margin-left: 25px;
+  margin-inline: 25px;
   .epg-settings-gear {
     animation: ${({ animate }) => animate || 'none'} 0.325s;
   }
@@ -150,8 +151,7 @@ export const Translation = styled.div<{ display: string }>`
 export const LanguageContainer = styled.div`
   width: 100%;
   height: 44px;
-  padding-left: 10px;
-  padding-block: 10px;
+  padding: 10px;
   border-radius: 2px;
   background-color: var(--color-neutral-1);
   :hover {
@@ -159,10 +159,16 @@ export const LanguageContainer = styled.div`
     color: var(--color-neutral-4);
     background-color: var(--color-neutral-6);
   }
+  line-height: 1.5;
 `;
 
 export const FlagCheck = styled.div`
   position: relative;
   float: right;
-  width: 50px;
+  width: 42px;
+  .epg-language-check {
+    vertical-align: middle;
+    margin-bottom: 2.5px;
+    margin-left: 5px;
+  }
 `;
