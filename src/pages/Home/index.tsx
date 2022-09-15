@@ -51,9 +51,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const measure = heightVariance(dimension.height);
-    if (measure > 831) {
-      setHeight(831);
-    } else if (measure < 430) {
+    if (measure < 430) {
       setHeight(430);
     } else {
       setHeight(measure);
