@@ -127,9 +127,10 @@ export const StyledInputs = muistyled(TextField)`
 
 export const StyledFooter = muistyled(Box)`
   position: relative;
+  float: right;
   bottom: -17px;
+  margin-right: 23px;
   padding-inline: auto;
-  margin-left: 195px;
   & > :not(style) { 
     m: 1;
     width: '2ch'
@@ -138,7 +139,7 @@ export const StyledFooter = muistyled(Box)`
 
 export const SetyledButton = muistyled(Button)`
   color: var(--color-primary-2);
-  left: -25px;
+  float: right; 
   font-size: 18px;
   maxWidth: 96px;
   & .MuiButtonBase-root {

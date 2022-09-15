@@ -73,5 +73,17 @@ export function leadingZeros(str: string): string {
     }
     return `0${str}`;
   }
+  if (str.length > 2) {
+    return str.slice(0, 2);
+  }
+  return str;
+}
+
+// adapted from https://aguidehub.com/blog/mui-textfield-set-max-length/
+export function isNum(str: string): string {
+  const regex = /^[0-9\b]+$/;
+  if (str === '' || regex.test(str)) {
+    return str.slice(0, 2);
+  }
   return str;
 }

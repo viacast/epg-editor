@@ -2,7 +2,12 @@ import * as React from 'react';
 import { ClickAwayListener } from '@mui/material';
 import { IoIosTimer } from 'react-icons/io';
 import { useTranslation } from 'react-i18next';
-import { leadingZeros, secondsToHms, hmsToSeconds } from 'utils/formatting';
+import {
+  leadingZeros,
+  secondsToHms,
+  hmsToSeconds,
+  isNum,
+} from 'utils/formatting';
 import { useWindowSize } from 'hooks';
 import {
   StyledContainer,
@@ -41,35 +46,35 @@ const DurationPicker: React.FC<DurationPickerProps> = ({ value, onSubmit }) => {
     setOpen(prev => !prev);
   };
 
-  const handleClickAway = () => {
-    setOpen(false);
-  };
-
   const [hours, setHours] = React.useState('');
   const [minutes, setMinutes] = React.useState('');
   const [seconds, setSeconds] = React.useState('');
+
+  const [tmpStorageHours, setTmpStorageHours] = React.useState('');
+  const [tmpStorageMinutes, setTmpStorageMinutes] = React.useState('');
+  const [tmpStorageSeconds, setTmpStorageSeconds] = React.useState('');
 
   React.useEffect(() => {
     if (value) {
       setHours(secondsToHms(value).slice(0, 2));
       setMinutes(secondsToHms(value).slice(3, 5));
       setSeconds(secondsToHms(value).slice(6, 8));
+      setTmpStorageHours(secondsToHms(value).slice(0, 2));
+      setTmpStorageMinutes(secondsToHms(value).slice(3, 5));
+      setTmpStorageSeconds(secondsToHms(value).slice(6, 8));
     }
-  }, [value]);
-
-  const [originalValue, setOriginalValue] = React.useState('');
-
-  React.useEffect(() => {
-    if (value) {
-      setOriginalValue(secondsToHms(value));
+    if (open) {
+      setTmpStorageHours(secondsToHms(value).slice(0, 2));
+      setTmpStorageMinutes(secondsToHms(value).slice(3, 5));
+      setTmpStorageSeconds(secondsToHms(value).slice(6, 8));
     }
-  }, [value]);
+  }, [value, open]);
 
   return (
     <ClickAwayListener
       mouseEvent="onMouseDown"
       touchEvent="onTouchStart"
-      onClickAway={handleClickAway}
+      onClickAway={() => setOpen(false)}
     >
       <StyledContainer>
         <StyledInputStack id="epg-duration-input-ref">
@@ -91,11 +96,16 @@ const DurationPicker: React.FC<DurationPickerProps> = ({ value, onSubmit }) => {
               <StyledTitle>{`${t('menu:duration')} [hh:mm:ss]`}</StyledTitle>
               <StyledGroups>
                 <StyledInputs
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      setHours(tmpStorageHours);
+                    }
+                  }}
                   variant="outlined"
                   type="number"
                   name="hours"
-                  value={leadingZeros(hours)}
-                  onChange={e => setHours(e.target.value)}
+                  value={isNum(tmpStorageHours)}
+                  onChange={e => setTmpStorageHours(e.target.value)}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -103,11 +113,20 @@ const DurationPicker: React.FC<DurationPickerProps> = ({ value, onSubmit }) => {
                 />
                 <SvgComponent />
                 <StyledInputs
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      setMinutes(tmpStorageMinutes);
+                    }
+                  }}
                   variant="outlined"
                   type="number"
                   name="minutes"
-                  value={leadingZeros(minutes)}
-                  onChange={e => setMinutes(e.target.value)}
+                  value={
+                    Number(isNum(tmpStorageMinutes)) > 59
+                      ? isNum(tmpStorageMinutes).slice(0, 1)
+                      : isNum(tmpStorageMinutes)
+                  }
+                  onChange={e => setTmpStorageMinutes(e.target.value)}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -115,11 +134,20 @@ const DurationPicker: React.FC<DurationPickerProps> = ({ value, onSubmit }) => {
                 />
                 <SvgComponent />
                 <StyledInputs
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      setSeconds(tmpStorageSeconds);
+                    }
+                  }}
                   variant="outlined"
                   type="number"
                   name="seconds"
-                  value={leadingZeros(seconds)}
-                  onChange={e => setSeconds(e.target.value)}
+                  value={
+                    Number(isNum(tmpStorageSeconds)) > 59
+                      ? isNum(tmpStorageSeconds).slice(0, 1)
+                      : isNum(tmpStorageSeconds)
+                  }
+                  onChange={e => setTmpStorageSeconds(e.target.value)}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -131,21 +159,23 @@ const DurationPicker: React.FC<DurationPickerProps> = ({ value, onSubmit }) => {
               <SetyledButton
                 variant="text"
                 onClick={() => {
-                  setHours(originalValue.slice(0, 2));
-                  setMinutes(originalValue.slice(3, 5));
-                  setSeconds(originalValue.slice(6, 8));
+                  const formData = `${hours}:${minutes}:${seconds}`;
+                  onSubmit(hmsToSeconds(formData));
+
+                  setHours(tmpStorageHours);
+                  setMinutes(tmpStorageMinutes);
+                  setSeconds(tmpStorageSeconds);
                 }}
               >
-                {t('menu:cancel')}
+                OK
               </SetyledButton>
               <SetyledButton
                 variant="text"
                 onClick={() => {
-                  const formData = `${hours}:${minutes}:${seconds}`;
-                  onSubmit(hmsToSeconds(formData));
+                  handleClick();
                 }}
               >
-                {t('menu:save')}
+                {t('menu:cancel')}
               </SetyledButton>
             </StyledFooter>
           </StyledBoxStack>
