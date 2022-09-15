@@ -400,9 +400,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                 // eslint-disable-next-line react/no-unstable-nested-components
                 noRowsRenderer={() => (
                   <LoaderContainer
-                    display={
-                      localStorage.getItem('current-filename') ? 'flex' : 'none'
-                    }
+                    display={programs.count !== 0 ? 'flex' : 'none'}
                   >
                     <BeatLoader color="var(--color-neutral-3)" />
                   </LoaderContainer>
