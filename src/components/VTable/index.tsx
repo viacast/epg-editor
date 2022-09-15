@@ -119,14 +119,19 @@ const VTable: React.FC<ProgramTableProps> = ({
         return;
       }
       setPrograms(p => {
-        let sourceKey = p.at(result.source.index)?.id;
+        const sourceKey = p.at(result.source.index)?.id;
         let targetKey = p.at(result.destination.index)?.id;
-        if (result.source.index < result.destination.index) {
-          sourceKey = p.at(result.source.index)?.id;
+        if (
+          result.destination.index > result.source.index &&
+          result.destination.index < p.count - 1
+        ) {
           targetKey = p.at(result.destination.index + 1)?.id;
         }
         if (!sourceKey || !targetKey) {
           return p;
+        }
+        if (result.destination.index === p.count - 1) {
+          return p.moveEnd(sourceKey).clone();
         }
         return p.moveTo(sourceKey, targetKey).clone();
       });
