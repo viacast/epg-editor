@@ -2,7 +2,7 @@ import { TextareaAutosize, styled } from '@mui/material';
 
 // eslint-disable-next-line import/prefer-default-export
 export const StyledInput = styled(TextareaAutosize)`
-  min-width: 442px;
+  min-width: 432px;
   max-width: 442px;
   min-height: 130px;
   max-height: 270px;
