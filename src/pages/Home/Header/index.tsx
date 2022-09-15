@@ -35,6 +35,7 @@ import {
   AlertsGroup,
   ContainerSettings,
   Settings,
+  SettingsOption,
   ContainerTranslation,
   Translation,
   Languages,
@@ -279,10 +280,10 @@ const Header: React.FC<HeaderProps> = ({
             display={displaySettings ? 'block' : 'none'}
             onClick={() => setDisplayTranslation(!displayTranslation)}
           >
-            <IconButton>
-              <BsTranslate /> &nbsp; {t('header:epgLanguage')} &emsp;{' '}
-              <MdKeyboardArrowRight />
-            </IconButton>
+            <SettingsOption>
+              <BsTranslate /> &nbsp; {t('header:epgLanguage')} &nbsp;{' '}
+              <MdKeyboardArrowRight size="16px" />
+            </SettingsOption>
           </Settings>
         </ContainerSettings>
         <ContainerTranslation>

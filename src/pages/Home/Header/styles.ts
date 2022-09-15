@@ -90,14 +90,29 @@ export const Settings = styled.div<{ display: string }>`
   border: 2px solid var(--color-neutral-3);
   border-radius: 4px;
   display: ${({ display }) => display || 'none'};
+  animation: rotateMenu 1s ease-in-out forwards;
+  transform-origin: top center;
+  @keyframes rotateMenu {
+    0% {
+      transform: rotateX(-90deg);
+    }
+    70% {
+      transform: rotateX(20deg);
+    }
+    100% {
+      transform: rotateX(0deg);
+    }
+  }
   position: absolute;
   z-index: 3;
   padding-inline: 10px;
   padding-top: 4px;
-  min-width: 174px;
+  width: 174px;
   height: 48px;
   vertical-align: middle;
-  button {
+  div {
+    width: 150px;
+    padding-block: 8px;
     color: var(--color-neutral-3);
     font-size: 18px;
     font-family: Nunito, sans-serif;
@@ -108,7 +123,7 @@ export const Settings = styled.div<{ display: string }>`
   :hover {
     cursor: pointer;
     background-color: var(--color-neutral-6);
-    button {
+    div {
       color: var(--color-neutral-4);
       svg {
         color: var(--color-neutral-4);
@@ -116,6 +131,8 @@ export const Settings = styled.div<{ display: string }>`
     }
   }
 `;
+
+export const SettingsOption = styled.div``;
 
 export const ContainerTranslation = styled.div``;
 
