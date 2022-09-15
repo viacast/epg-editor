@@ -14,17 +14,19 @@ import {
   BsTranslate,
 } from 'react-icons/bs';
 import FileSaver from 'file-saver';
-import { EPGParser, Program, EPGBuilder, EPGValidator } from 'services/epg';
-import { Button, FileInput, FileInputRefProps, Tooltip } from 'components';
-import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
-import { EntityMap } from 'utils';
 import { format } from 'date-fns';
-import { useModalProvider } from 'providers/ModalProvider';
 import { toast } from 'react-toastify';
 import { IconButton } from '@mui/material';
 import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
 import { RiAlertFill } from 'react-icons/ri';
 import { MdKeyboardArrowRight } from 'react-icons/md';
+
+import { EPGParser, Program, EPGBuilder, EPGValidator } from 'services/epg';
+import { AVAILABLE_LANGUAGES } from 'services/i18n';
+import { Button, FileInput, FileInputRefProps, Tooltip } from 'components';
+import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
+import { EntityMap } from 'utils';
+import { useModalProvider } from 'providers/ModalProvider';
 import {
   HeaderContainer,
   MenuOptions,
@@ -38,7 +40,7 @@ import {
   Settings,
   SettingsOption,
   Translation,
-  Languages,
+  LanguageContainer,
   FlagCheck,
 } from './styles';
 
@@ -287,7 +289,7 @@ const Header: React.FC<HeaderProps> = ({
             onClick={() => setDisplayTranslation(!displayTranslation)}
           >
             <SettingsOption>
-              <BsTranslate /> &nbsp; {t('header:epgLanguage')} &nbsp;{' '}
+              <BsTranslate /> &nbsp; {t('header:settingsLanguage')} &nbsp;{' '}
               <MdKeyboardArrowRight
                 className="epg-language-arrow"
                 size="16px"
@@ -296,28 +298,21 @@ const Header: React.FC<HeaderProps> = ({
           </Settings>
         </ContainerSettings>
         <Translation display={displayTranslation ? 'block' : 'none'}>
-          <Languages onClick={() => i18n.changeLanguage('pt')}>
-            {t('header:languagePt')}
-            <FlagCheck>
-              🇧🇷{' '}
-              <BsCheck
-                display={i18n.language === 'pt' ? 'inline-block' : 'none'}
-              />
-            </FlagCheck>
-          </Languages>
-          <Languages onClick={() => i18n.changeLanguage('en')}>
-            {t('header:languageEn')}
-            <FlagCheck>
-              🇺🇸{' '}
-              <BsCheck
-                display={i18n.language === 'en' ? 'inline-block' : 'none'}
-              />
-            </FlagCheck>
-          </Languages>
+          {AVAILABLE_LANGUAGES.map(({ code, flag }) => (
+            <LanguageContainer onClick={() => i18n.changeLanguage(code)}>
+              {t(`header:settingsLanguage_${code}`)}
+              <FlagCheck>
+                {flag}
+                <BsCheck
+                  display={i18n.language === code ? 'inline-block' : 'none'}
+                />
+              </FlagCheck>
+            </LanguageContainer>
+          ))}
         </Translation>
       </Configurations>
       <Text>
-        {t('header:labelProgram', {
+        {t('header:programCount', {
           count: programCount,
         })}
       </Text>

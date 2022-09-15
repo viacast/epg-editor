@@ -147,7 +147,7 @@ export const Translation = styled.div<{ display: string }>`
   }
 `;
 
-export const Languages = styled.div`
+export const LanguageContainer = styled.div`
   width: 100%;
   height: 44px;
   padding-left: 10px;
