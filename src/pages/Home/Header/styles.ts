@@ -16,7 +16,7 @@ export const HeaderContainer = styled.div`
 `;
 
 export const Text = styled.div`
-  min-width: 168px;
+  min-width: 132px;
   padding-block: 10px;
   font-size: 20px;
   text-align: center;
