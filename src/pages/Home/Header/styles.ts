@@ -62,10 +62,14 @@ export const AlertsGroup = styled.div`
   display: flex;
 `;
 
+export const Configurations = styled.div`
+  width: 100%;
+`;
+
 export const ContainerSettings = styled.div<{ animate: string }>`
   margin-left: 25px;
   .epg-settings-gear {
-    animation: ${({ animate }) => animate || 'rotate'} 0.75s;
+    animation: ${({ animate }) => animate || 'none'} 0.325s;
   }
   @keyframes rotate {
     0% {
@@ -90,19 +94,6 @@ export const Settings = styled.div<{ display: string }>`
   border: 2px solid var(--color-neutral-3);
   border-radius: 4px;
   display: ${({ display }) => display || 'none'};
-  animation: rotateMenu 1s ease-in-out forwards;
-  transform-origin: top center;
-  @keyframes rotateMenu {
-    0% {
-      transform: rotateX(-90deg);
-    }
-    70% {
-      transform: rotateX(20deg);
-    }
-    100% {
-      transform: rotateX(0deg);
-    }
-  }
   position: absolute;
   z-index: 3;
   padding-inline: 10px;
@@ -132,20 +123,24 @@ export const Settings = styled.div<{ display: string }>`
   }
 `;
 
-export const SettingsOption = styled.div``;
-
-export const ContainerTranslation = styled.div``;
+export const SettingsOption = styled.div`
+  .epg-language-arrow {
+    vertical-align: middle;
+    position: relative;
+    float: right;
+    margin-block: 2px;
+  }
+`;
 
 export const Translation = styled.div<{ display: string }>`
+  position: fixed;
+  z-index: 3;
+  min-width: 174px;
+  margin-left: 204px;
   background-color: var(--color-neutral-1);
   border: 2px solid var(--color-neutral-3);
   border-radius: 4px;
   display: ${({ display }) => display || 'none'};
-  position: fixed;
-  z-index: 3;
-  min-width: 174px;
-  margin-top: 44px;
-  margin-left: 134px;
   :hover {
     cursor: pointer;
     display: block;
@@ -164,4 +159,10 @@ export const Languages = styled.div`
     color: var(--color-neutral-4);
     background-color: var(--color-neutral-6);
   }
+`;
+
+export const FlagCheck = styled.div`
+  position: relative;
+  float: right;
+  width: 50px;
 `;
