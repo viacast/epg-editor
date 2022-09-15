@@ -1,10 +1,4 @@
 {
-  "error_one": "{{count}} erro",
-  "error_other": "{{count}} erros",
-  "warning_one": "{{count}} aviso",
-  "warning_other": "{{count}} avisos",
-  "info_one": "{{count}} informação",
-  "info_other": "{{count}} informações",
   "noTitle": "Título não pode ser vazio.",
   "noDescription": "Descrição não pode ser vazia.",
   "noRating": "Programa deve ter uma classificação.",

@@ -1,11 +1,5 @@
 
 {
-  "error_one": "{{count}} error",
-  "error_other": "{{count}} errors",
-  "warning_one": "{{count}} warning",
-  "warning_other": "{{count}} warnings",
-  "info_one": "{{count}} info",
-  "info_other": "{{count}} infos",
   "noTitle": "Title cannot be empty.",
   "noDescription": "Description cannot be empty.",
   "noRating": "Program should have a rating.",
