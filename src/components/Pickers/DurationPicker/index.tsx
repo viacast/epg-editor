@@ -2,12 +2,7 @@ import * as React from 'react';
 import { ClickAwayListener } from '@mui/material';
 import { IoIosTimer } from 'react-icons/io';
 import { useTranslation } from 'react-i18next';
-import {
-  leadingZeros,
-  secondsToHms,
-  hmsToSeconds,
-  isNum,
-} from 'utils/formatting';
+import { leadingZeros, hmsToSeconds, isNum } from 'utils/formatting';
 import { useWindowSize } from 'hooks';
 import {
   StyledContainer,
@@ -56,17 +51,25 @@ const DurationPicker: React.FC<DurationPickerProps> = ({ value, onSubmit }) => {
 
   React.useEffect(() => {
     if (value) {
-      setHours(secondsToHms(value).slice(0, 2));
-      setMinutes(secondsToHms(value).slice(3, 5));
-      setSeconds(secondsToHms(value).slice(6, 8));
-      setTmpStorageHours(secondsToHms(value).slice(0, 2));
-      setTmpStorageMinutes(secondsToHms(value).slice(3, 5));
-      setTmpStorageSeconds(secondsToHms(value).slice(6, 8));
+      setHours(leadingZeros(String(Math.floor(value / 3600))));
+      setMinutes(leadingZeros(String(Math.floor((value % 3600) / 60))));
+      setSeconds(leadingZeros(String(Math.floor((value % 3600) % 60))));
+      setTmpStorageHours(leadingZeros(String(Math.floor(value / 3600))));
+      setTmpStorageMinutes(
+        leadingZeros(String(Math.floor((value % 3600) / 60))),
+      );
+      setTmpStorageSeconds(
+        leadingZeros(String(Math.floor((value % 3600) % 60))),
+      );
     }
     if (open) {
-      setTmpStorageHours(secondsToHms(value).slice(0, 2));
-      setTmpStorageMinutes(secondsToHms(value).slice(3, 5));
-      setTmpStorageSeconds(secondsToHms(value).slice(6, 8));
+      setTmpStorageHours(leadingZeros(String(Math.floor(value / 3600))));
+      setTmpStorageMinutes(
+        leadingZeros(String(Math.floor((value % 3600) / 60))),
+      );
+      setTmpStorageSeconds(
+        leadingZeros(String(Math.floor((value % 3600) % 60))),
+      );
     }
   }, [value, open]);
 
@@ -90,7 +93,7 @@ const DurationPicker: React.FC<DurationPickerProps> = ({ value, onSubmit }) => {
         {open ? (
           <StyledBoxStack
             className="epg-duration-box"
-            marginTop={dimension.height > 770 ? '5px' : '-222.5px'}
+            marginTop={dimension.height > 940 ? '5px' : '-222.5px'}
           >
             <StyledInputsContainer component="form">
               <StyledTitle>{`${t('menu:duration')} [hh:mm:ss]`}</StyledTitle>

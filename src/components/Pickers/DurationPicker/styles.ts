@@ -10,7 +10,8 @@ import styled from 'styled-components';
 
 export const StyledContainer = muistyled(Box)`
   position: relative;
-  width: 206px;
+  min-width: 191px;
+
 `;
 
 export const StyledTitle = styled.div`
@@ -21,7 +22,7 @@ export const StyledTitle = styled.div`
 `;
 
 export const StyledInputStack = muistyled(Stack)`
-  width: 206px;
+  min-width: 191px;
   max-height: 42px;
   background-color: var(--color-neutral-6);
   border-radius: 4px;
@@ -30,7 +31,7 @@ export const StyledInputStack = muistyled(Stack)`
 export const StyledIconContainer = muistyled(IconButton)`
   position: absolute;
   padding-block: auto;
-  left: 165px;
+  left: calc(100% - 42px);
   svg {
     font-size: 24px;
   }
