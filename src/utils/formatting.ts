@@ -67,11 +67,11 @@ export function csvLineToArray(text: string) {
 
 // adapted from https://stackoverflow.com/questions/20684737/force-leading-zero-in-number-input
 export function leadingZeros(str: string): string {
-  if (Number(str) < 10) {
-    if (`0${str}`.length > 2) {
-      return str;
-    }
+  if (str.length === 1) {
     return `0${str}`;
+  }
+  if (str === '') {
+    return '00';
   }
   if (str.length > 2) {
     return str.slice(0, 2);
