@@ -399,11 +399,11 @@ const VTable: React.FC<ProgramTableProps> = ({
                 }}
                 ref={ref => {
                   if (ref) {
-                    const whatHasMyLifeComeTo = document.getElementsByClassName(
+                    const triggerRf = document.getElementsByClassName(
                       'ReactVirtualized__Grid ReactVirtualized__Table__Grid',
                     )[0];
-                    if (whatHasMyLifeComeTo instanceof HTMLElement) {
-                      provided.innerRef(whatHasMyLifeComeTo);
+                    if (triggerRf instanceof HTMLElement) {
+                      provided.innerRef(triggerRf);
                     }
                   }
                 }}
