@@ -41,7 +41,7 @@ import {
   SettingsOption,
   Translation,
   LanguageContainer,
-  FlagCheck,
+  Flag,
 } from './styles';
 
 export interface HeaderProps {
@@ -301,15 +301,8 @@ const Header: React.FC<HeaderProps> = ({
           {AVAILABLE_LANGUAGES.map(({ code, flag }) => (
             <LanguageContainer onClick={() => i18n.changeLanguage(code)}>
               {t(`header:settingsLanguage_${code}`)}
-              <FlagCheck>
-                {flag}
-                <BsCheck
-                  className="epg-language-check"
-                  display={
-                    i18n.resolvedLanguage === code ? 'inline-block' : 'none'
-                  }
-                />
-              </FlagCheck>
+              <BsCheck opacity={i18n.resolvedLanguage === code ? '1' : '0'} />
+              <Flag>{flag}</Flag>
             </LanguageContainer>
           ))}
         </Translation>

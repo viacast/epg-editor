@@ -16,7 +16,7 @@ export const HeaderContainer = styled.div`
 `;
 
 export const Text = styled.div`
-  min-width: 132px;
+  min-width: fit-content;
   padding-block: 10px;
   font-size: 20px;
   text-align: center;
@@ -26,7 +26,8 @@ export const Message = styled.div<{ display: string }>`
   display: ${({ display }) => display || 'none'};
   font-size: 12px;
   text-align: center;
-  padding-bottom: 5px;
+  line-height: 2;
+  padding-inline: 5px;
 `;
 
 export const MenuOptions = styled.div``;
@@ -134,7 +135,7 @@ export const SettingsOption = styled.div`
 `;
 
 export const Translation = styled.div<{ display: string }>`
-  position: fixed;
+  position: absolute;
   z-index: 3;
   min-width: 174px;
   margin-left: 204px;
@@ -149,26 +150,31 @@ export const Translation = styled.div<{ display: string }>`
 `;
 
 export const LanguageContainer = styled.div`
-  width: 100%;
+  width: 174px;
   height: 44px;
-  padding: 10px;
+  padding: 9.06px;
   border-radius: 2px;
   background-color: var(--color-neutral-1);
+  line-height: 1.5;
+  text-align: left;
   :hover {
     cursor: pointer;
     color: var(--color-neutral-4);
     background-color: var(--color-neutral-6);
   }
-  line-height: 1.5;
+  svg {
+    vertical-align: middle;
+    margin-block: 2.5px;
+    margin-inline: 2.96px;
+    float: right;
+  }
 `;
 
-export const FlagCheck = styled.div`
+export const Flag = styled.div`
   position: relative;
-  float: right;
-  width: 42px;
-  .epg-language-check {
-    vertical-align: middle;
-    margin-bottom: 2.5px;
-    margin-left: 5px;
-  }
+  float: left;
+  font-size: 16px;
+  text-align: left;
+  margin-left: 2.96px;
+  margin-right: 13px;
 `;
