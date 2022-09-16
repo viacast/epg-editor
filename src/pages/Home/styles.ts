@@ -26,7 +26,6 @@ export const TableMenuContainer = styled.div`
   .epg-table-menu-content {
     white-space: nowrap;
     min-height: 450px;
-    /* transition: width 0.15s ease-in-out; */
   }
 `;
 
@@ -38,6 +37,7 @@ export const TableContainer = styled.div<{ width?: string }>`
   height: 100%;
   min-width: 590px;
   width: ${({ width }) => width || '100%'};
+  transition: width 2s;
   body,
   input,
   button,
@@ -57,7 +57,6 @@ export const TableContainer = styled.div<{ width?: string }>`
     appearance: none;
     outline: 0;
     cursor: pointer;
-    /* transition: background 175ms cubic-bezier(0.1, 0.1, 0.25, 1); */
     &::before {
       position: absolute;
       content: '';
@@ -109,6 +108,9 @@ export const TableContainer = styled.div<{ width?: string }>`
     text-align: left;
     border-radius: 4px;
     z-index: 0;
+    div {
+      transition: width 2s;
+    }
   }
   .ReactVirtualized__Table__headerRow {
     color: var(--color-neutral-2);
@@ -149,9 +151,6 @@ export const TableContainer = styled.div<{ width?: string }>`
   .ReactVirtualized__Table__rowColumn:first-of-type {
     margin-left: 0px;
   }
-  .container {
-    /* max-width: 995px !important; */
-  }
   // Row Content size
   .ReactVirtualized__Table__rowColumn[aria-colindex='1'] {
     text-align: center !important;
@@ -186,11 +185,9 @@ export const TableContainer = styled.div<{ width?: string }>`
   }
 `;
 
-export const MenuContainer = styled.div<{ width?: string; tp?: string }>`
+export const MenuContainer = styled.div<{ width?: string }>`
   width: ${({ width }) => width || '0px'};
-  transition-property: ${({ tp }) => tp || 'width'};
-  transition-duration: 0s;
-  transition-delay: 0.1s;
+  transition: width 2s;
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;

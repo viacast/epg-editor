@@ -104,11 +104,13 @@ const Home: React.FC = () => {
       } else {
         setWidth(dimension.width - 600);
       }
+    }, 1150);
+    setTimeout(() => {
       const objDiv = document.getElementsByClassName(
         'ReactVirtualized__Grid',
       )[0];
       if (objDiv) {
-        objDiv.scrollTop = objDiv.scrollHeight;
+        objDiv.scroll({ top: objDiv.scrollHeight, behavior: 'smooth' });
       }
     }, 100);
   }, [dimension.width, programs]);
@@ -162,7 +164,6 @@ const Home: React.FC = () => {
                 : '500px'
               : '0px'
           }
-          tp={toggleClass ? 'width' : 'none'}
         >
           <Menu
             width={width}
