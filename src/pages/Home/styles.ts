@@ -37,7 +37,7 @@ export const TableContainer = styled.div<{ width?: string }>`
   height: 100%;
   min-width: 590px;
   width: ${({ width }) => width || '100%'};
-  transition: width 2s;
+  transition: width 0.5s;
   body,
   input,
   button,
@@ -109,7 +109,7 @@ export const TableContainer = styled.div<{ width?: string }>`
     border-radius: 4px;
     z-index: 0;
     div {
-      transition: width 2s;
+      transition: width 0.5s;
     }
   }
   .ReactVirtualized__Table__headerRow {
@@ -187,7 +187,7 @@ export const TableContainer = styled.div<{ width?: string }>`
 
 export const MenuContainer = styled.div<{ width?: string }>`
   width: ${({ width }) => width || '0px'};
-  transition: width 2s;
+  transition: width 0.5s;
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
