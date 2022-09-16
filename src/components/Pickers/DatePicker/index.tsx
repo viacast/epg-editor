@@ -16,7 +16,7 @@ export interface DatePickerProps {
 
 const DatePicker: React.FC<DatePickerProps> = ({ date, onDateChange }) => {
   const [value, setValue] = useState(date);
-  const aux = i18n.language;
+  const aux = i18n.resolvedLanguage;
   let lang;
 
   if (aux) {
