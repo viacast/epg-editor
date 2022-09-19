@@ -130,8 +130,8 @@ export const TableContainer = styled.div<{ width?: string }>`
     text-align: center;
   }
   .ReactVirtualized__Table__row:hover {
-    box-shadow: inset 50px 50px 50px var(--color-primary-2),
-      inset -50px -50px 50px var(--color-primary-2);
+    border: 1px solid var(--color-system-3);
+    border-radius: 4px;
     .epg-add-to-list {
       display: block;
     }
