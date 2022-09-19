@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useModalProvider } from 'providers/ModalProvider';
@@ -15,6 +15,18 @@ const ModalDialog: React.FC = () => {
   const { t } = useTranslation();
   const { modalIsOpen, modalTitle, modalContent, modalConfirm, closeModal } =
     useModalProvider();
+
+  useEffect(() => {
+    const handleEnter = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && modalIsOpen) {
+        modalConfirm();
+      }
+    };
+    window.addEventListener('keydown', handleEnter);
+    return () => {
+      window.removeEventListener('keydown', handleEnter);
+    };
+  }, [modalConfirm, modalIsOpen]);
 
   return (
     <div>
