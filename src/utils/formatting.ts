@@ -1,5 +1,11 @@
 import { format, parse } from 'date-fns';
 
+interface HMS {
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
 export function round(number: number, places = 0): number {
   const d = 10 ** places;
   return Math.round(number * d + Number.EPSILON) / d;
@@ -47,6 +53,22 @@ export function secondsToHms(seconds: number, sep = ':'): string {
   return [h, m, s].map(v => v.toString().padStart(2, '0')).join(sep);
 }
 
+export function durationToHms(duration: number): HMS {
+  const hours = Math.floor(duration / 3600);
+  const minutes = Math.floor((duration % 3600) / 60);
+  const seconds = Math.floor((duration % 3600) % 60);
+  return {
+    hours,
+    minutes,
+    seconds,
+  };
+}
+
+export function hmsToDuration(hms: HMS): number {
+  const { hours, minutes, seconds } = hms;
+  return hours * 3600 + minutes * 60 + seconds;
+}
+
 // adapted from https://stackoverflow.com/a/8497474/
 export function csvLineToArray(text: string) {
   const reValid =
@@ -63,27 +85,4 @@ export function csvLineToArray(text: string) {
   });
   if (/;\s*$/.test(text)) a.push('');
   return a;
-}
-
-// adapted from https://stackoverflow.com/questions/20684737/force-leading-zero-in-number-input
-export function leadingZeros(str: string): string {
-  if (str.length === 1) {
-    return `0${str}`;
-  }
-  if (str === '') {
-    return '00';
-  }
-  if (str.length > 2) {
-    return str.slice(0, 2);
-  }
-  return str;
-}
-
-// adapted from https://aguidehub.com/blog/mui-textfield-set-max-length/
-export function isNum(str: string): string {
-  const regex = /^[0-9\b]+$/;
-  if (str === '' || regex.test(str)) {
-    return str.slice(0, 2);
-  }
-  return str;
 }

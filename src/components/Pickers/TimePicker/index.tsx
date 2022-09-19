@@ -17,9 +17,9 @@ const TimePicker: React.FC<TimePickerProps> = ({
   const [value, setValue] = useState<Date>(time);
   const [pageHeight, setPageHeight] = useState(window.innerHeight);
   useEffect(() => {
-    function handleResize() {
+    const handleResize = () => {
       setPageHeight(window.innerHeight);
-    }
+    };
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);

@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { ClickAwayListener } from '@mui/material';
 import { IoIosTimer } from 'react-icons/io';
 import { useTranslation } from 'react-i18next';
-import { leadingZeros, hmsToSeconds, isNum } from 'utils/formatting';
+import { hmsToDuration, durationToHms, secondsToHms } from 'utils/formatting';
 import { useWindowSize } from 'hooks';
 import {
   StyledContainer,
@@ -19,7 +19,7 @@ import {
 } from './styles';
 
 export interface DurationPickerProps {
-  value: number;
+  duration: number;
   onSubmit: (value: number) => void;
 }
 
@@ -30,48 +30,47 @@ const SvgComponent = () => (
   </svg>
 );
 
-const DurationPicker: React.FC<DurationPickerProps> = ({ value, onSubmit }) => {
+const DurationPicker: React.FC<DurationPickerProps> = ({
+  duration,
+  onSubmit,
+}) => {
   const { t } = useTranslation();
-
   const dimension = useWindowSize();
-
   const [open, setOpen] = React.useState(false);
 
-  const handleClick = () => {
-    setOpen(prev => !prev);
-  };
+  const [, setSkipResetActiveField] = useState(false);
+  const [activeField, setActiveField] = useState(
+    'none' as 'none' | 'hours' | 'minutes' | 'seconds',
+  );
+  const [activeHours, setActiveHours] = useState('');
+  const [activeMinutes, setActiveMinutes] = useState('');
+  const [activeSeconds, setActiveSeconds] = useState('');
 
-  const [hours, setHours] = React.useState('');
-  const [minutes, setMinutes] = React.useState('');
-  const [seconds, setSeconds] = React.useState('');
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
 
-  const [tmpStorageHours, setTmpStorageHours] = React.useState('');
-  const [tmpStorageMinutes, setTmpStorageMinutes] = React.useState('');
-  const [tmpStorageSeconds, setTmpStorageSeconds] = React.useState('');
+  useEffect(() => {
+    setSkipResetActiveField(skip => {
+      if (!skip) {
+        setActiveField('none');
+        setActiveHours('');
+        setActiveMinutes('');
+        setActiveSeconds('');
+      }
+      return false;
+    });
 
-  React.useEffect(() => {
-    if (value) {
-      setHours(leadingZeros(String(Math.floor(value / 3600))));
-      setMinutes(leadingZeros(String(Math.floor((value % 3600) / 60))));
-      setSeconds(leadingZeros(String(Math.floor((value % 3600) % 60))));
-      setTmpStorageHours(leadingZeros(String(Math.floor(value / 3600))));
-      setTmpStorageMinutes(
-        leadingZeros(String(Math.floor((value % 3600) / 60))),
-      );
-      setTmpStorageSeconds(
-        leadingZeros(String(Math.floor((value % 3600) % 60))),
-      );
-    }
-    if (open) {
-      setTmpStorageHours(leadingZeros(String(Math.floor(value / 3600))));
-      setTmpStorageMinutes(
-        leadingZeros(String(Math.floor((value % 3600) / 60))),
-      );
-      setTmpStorageSeconds(
-        leadingZeros(String(Math.floor((value % 3600) % 60))),
-      );
-    }
-  }, [value, open]);
+    const { hours: h, minutes: m, seconds: s } = durationToHms(duration);
+    setHours(h);
+    setMinutes(m);
+    setSeconds(s);
+  }, [duration, open]);
+
+  const handleSubmit = useCallback(() => {
+    onSubmit(hmsToDuration({ hours, minutes, seconds }));
+    setOpen(false);
+  }, [hours, minutes, seconds, onSubmit]);
 
   return (
     <ClickAwayListener
@@ -81,12 +80,8 @@ const DurationPicker: React.FC<DurationPickerProps> = ({ value, onSubmit }) => {
     >
       <StyledContainer>
         <StyledInputStack id="epg-duration-input-ref">
-          <StyledInput
-            value={`${leadingZeros(hours)}:${leadingZeros(
-              minutes,
-            )}:${leadingZeros(seconds)}`}
-          />
-          <StyledIconContainer onClick={handleClick}>
+          <StyledInput value={secondsToHms(duration)} />
+          <StyledIconContainer onClick={() => setOpen(true)}>
             <IoIosTimer aria-label="toggle password visibility" />
           </StyledIconContainer>
         </StyledInputStack>
@@ -99,85 +94,110 @@ const DurationPicker: React.FC<DurationPickerProps> = ({ value, onSubmit }) => {
               <StyledTitle>{`${t('menu:duration')} [hh:mm:ss]`}</StyledTitle>
               <StyledGroups>
                 <StyledInputs
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') {
-                      setHours(tmpStorageHours);
-                    }
-                  }}
                   variant="outlined"
                   type="number"
                   name="hours"
-                  value={isNum(tmpStorageHours)}
-                  onChange={e => setTmpStorageHours(e.target.value)}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
                   InputProps={{ inputProps: { min: 0, max: 99 } }}
+                  onFocus={() => setActiveField('hours')}
+                  onBlur={() => setActiveField('none')}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      setSkipResetActiveField(true);
+                      handleSubmit();
+                    }
+                  }}
+                  value={
+                    activeField === 'hours'
+                      ? activeHours
+                      : `${hours}`.padStart(2, '0')
+                  }
+                  onChange={e => {
+                    let { value } = e.target;
+                    if (value.length > 2) {
+                      return;
+                    }
+                    if (Number(value) < 0) {
+                      value = '0';
+                    }
+                    setActiveHours(value);
+                    setHours(Number(value));
+                  }}
                 />
                 <SvgComponent />
                 <StyledInputs
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') {
-                      setMinutes(tmpStorageMinutes);
-                    }
-                  }}
                   variant="outlined"
                   type="number"
                   name="minutes"
-                  value={
-                    Number(isNum(tmpStorageMinutes)) > 59
-                      ? isNum(tmpStorageMinutes).slice(0, 1)
-                      : isNum(tmpStorageMinutes)
-                  }
-                  onChange={e => setTmpStorageMinutes(e.target.value)}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
                   InputProps={{ inputProps: { min: 0, max: 59 } }}
+                  onFocus={() => setActiveField('minutes')}
+                  onBlur={() => setActiveField('none')}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      setSkipResetActiveField(true);
+                      handleSubmit();
+                    }
+                  }}
+                  value={
+                    activeField === 'minutes'
+                      ? activeMinutes
+                      : `${minutes}`.padStart(2, '0')
+                  }
+                  onChange={e => {
+                    let { value } = e.target;
+                    if (value.length > 2) {
+                      return;
+                    }
+                    if (Number(value) < 0) {
+                      value = '0';
+                    }
+                    if (Number(value) > 59) {
+                      value = '59';
+                    }
+                    setActiveMinutes(value);
+                    setMinutes(Number(value));
+                  }}
                 />
                 <SvgComponent />
                 <StyledInputs
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') {
-                      setSeconds(tmpStorageSeconds);
-                    }
-                  }}
                   variant="outlined"
                   type="number"
                   name="seconds"
-                  value={
-                    Number(isNum(tmpStorageSeconds)) > 59
-                      ? isNum(tmpStorageSeconds).slice(0, 1)
-                      : isNum(tmpStorageSeconds)
-                  }
-                  onChange={e => setTmpStorageSeconds(e.target.value)}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
                   InputProps={{ inputProps: { min: 0, max: 59 } }}
+                  onFocus={() => setActiveField('seconds')}
+                  onBlur={() => setActiveField('none')}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      setSkipResetActiveField(true);
+                      handleSubmit();
+                    }
+                  }}
+                  value={
+                    activeField === 'seconds'
+                      ? activeSeconds
+                      : `${seconds}`.padStart(2, '0')
+                  }
+                  onChange={e => {
+                    let { value } = e.target;
+                    if (value.length > 2) {
+                      return;
+                    }
+                    if (Number(value) < 0) {
+                      value = '0';
+                    }
+                    if (Number(value) > 59) {
+                      value = '59';
+                    }
+                    setActiveSeconds(value);
+                    setSeconds(Number(value));
+                  }}
                 />
               </StyledGroups>
             </StyledInputsContainer>
             <StyledFooter component="form">
-              <SetyledButton
-                variant="text"
-                onClick={() => {
-                  const formData = `${hours}:${minutes}:${seconds}`;
-                  onSubmit(hmsToSeconds(formData));
-
-                  setHours(tmpStorageHours);
-                  setMinutes(tmpStorageMinutes);
-                  setSeconds(tmpStorageSeconds);
-                }}
-              >
+              <SetyledButton variant="text" onClick={() => handleSubmit()}>
                 OK
               </SetyledButton>
-              <SetyledButton
-                variant="text"
-                onClick={() => {
-                  handleClick();
-                }}
-              >
+              <SetyledButton variant="text" onClick={() => setOpen(false)}>
                 {t('menu:cancel')}
               </SetyledButton>
             </StyledFooter>
