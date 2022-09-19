@@ -19,6 +19,7 @@ const ModalDialog: React.FC = () => {
   useEffect(() => {
     const handleEnter = (e: KeyboardEvent) => {
       if (e.key === 'Enter' && modalIsOpen) {
+        e.preventDefault();
         modalConfirm();
       }
     };
