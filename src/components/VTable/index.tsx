@@ -328,6 +328,9 @@ const VTable: React.FC<ProgramTableProps> = ({
       if (!result.destination) {
         return;
       }
+      if (result.source.index === result.destination.index) {
+        return;
+      }
       setPrograms(p => {
         const sourceKey = p.at(result.source.index)?.id;
         let targetKey = p.at(result.destination.index)?.id;
