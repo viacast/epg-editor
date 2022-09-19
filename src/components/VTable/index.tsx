@@ -49,7 +49,7 @@ const getItemStyle = (style, isDragging, draggableStyle) => ({
   textAlign: 'left',
   color: 'var(--color-neutral-2)',
   fontFamily: 'Nunito, sans-serif',
-  background: isDragging ? 'var(--color-primary-2)' : 'var(--color-neutral-6)',
+  background: 'var(--color-neutral-6)',
   cursor: isDragging ? 'grabbing' : 'grab',
   ...draggableStyle,
   ...style,
@@ -89,6 +89,18 @@ const VTable: React.FC<ProgramTableProps> = ({
   }, [selectedProgramId]);
 
   useEffect(() => {
+    const handleDeselect = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedProgramId(new Set());
+      }
+    };
+    document.addEventListener('keydown', handleDeselect);
+    return () => {
+      document.removeEventListener('keydown', handleDeselect);
+    };
+  });
+
+  useEffect(() => {
     const handleDelete = (e: KeyboardEvent) => {
       const targetTag = (e?.target as Element).tagName.toLocaleLowerCase();
       if (
@@ -104,7 +116,21 @@ const VTable: React.FC<ProgramTableProps> = ({
           content: t('header:deleteProgramFromList'),
           confirm: () => {
             Array.from(selectedProgramId).forEach(pid => {
-              selectedProgramId.delete(pid);
+              const size = programs.toArray().length;
+              const index = programs.indexOf(pid);
+              const idList: Set<string> = new Set();
+              if (size === 1) {
+                // was the only program on the list
+                selectedProgramId.delete(pid);
+              } else if (index === size - 1) {
+                // was the last program on the list
+                idList.add(programs.at(index - 1)?.id ?? '');
+                setSelectedProgramId(idList);
+              } else {
+                // all other cases
+                idList.add(programs.at(index + 1)?.id ?? '');
+                setSelectedProgramId(idList);
+              }
               setPrograms(p => p.remove(pid).clone());
             });
           },
@@ -115,7 +141,14 @@ const VTable: React.FC<ProgramTableProps> = ({
     return () => {
       document.removeEventListener('keydown', handleDelete);
     };
-  }, [openModal, selectedProgramId, setPrograms, t]);
+  }, [
+    openModal,
+    programs,
+    selectedProgramId,
+    setPrograms,
+    setSelectedProgramId,
+    t,
+  ]);
 
   useEffect(() => {
     setAlerts(EPGValidator.validate(programs.toArray()));
