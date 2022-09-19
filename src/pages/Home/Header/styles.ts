@@ -68,10 +68,12 @@ export const Configurations = styled.div`
   width: 100%;
 `;
 
-export const ContainerSettings = styled.div<{ animate: string }>`
+export const ContainerSettings = styled.div<{
+  animation: 'none' | 'rotate' | 'backRotate';
+}>`
   margin-inline: 25px;
   .epg-settings-gear {
-    animation: ${({ animate }) => animate || 'none'} 0.325s;
+    animation: ${({ animation }) => animation} 0.325s;
   }
   @keyframes rotate {
     0% {
