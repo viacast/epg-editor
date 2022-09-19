@@ -88,10 +88,14 @@ const VTable: React.FC<ProgramTableProps> = ({
     }
   }, [selectedProgramId]);
 
-  // Delete all selected programs
   useEffect(() => {
-    document.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Delete') {
+    const handleDelete = (e: KeyboardEvent) => {
+      const targetTag = (e?.target as Element).tagName.toLocaleLowerCase();
+      if (
+        e.key === 'Delete' &&
+        targetTag !== 'input' &&
+        targetTag !== 'textarea'
+      ) {
         openModal({
           title: t('header:titleDeleteProgram', {
             count: selectedProgramId.size,
@@ -105,7 +109,11 @@ const VTable: React.FC<ProgramTableProps> = ({
           },
         });
       }
-    });
+    };
+    document.addEventListener('keydown', handleDelete);
+    return () => {
+      document.removeEventListener('keydown', handleDelete);
+    };
   }, [openModal, selectedProgramId, setPrograms, t]);
 
   useEffect(() => {
