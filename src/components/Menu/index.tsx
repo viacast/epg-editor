@@ -403,7 +403,7 @@ const Menu: React.FC<MenuProps> = ({
                     )}
                   </Text>
                   <DurationPicker
-                    value={newProgram?.duration ?? 0}
+                    duration={newProgram?.duration ?? 0}
                     // eslint-disable-next-line no-shadow
                     onSubmit={duration => {
                       setNewProgram(p => ({ ...p, duration }));
