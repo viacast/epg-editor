@@ -66,9 +66,9 @@ const ratings = {
 export interface MenuProps {
   programs: EntityMap<Program>;
   hasChanges: boolean;
-  width: number;
+  tableWidth: number;
   selectedProgram: Program;
-  setWidth: (val: number) => void;
+  setTableWidth: (val: number) => void;
   setSelectedProgramId: React.Dispatch<React.SetStateAction<Set<string>>>;
   setHasChanges: (val: boolean) => void;
   onSaveProgram: (val: Program) => void;
@@ -79,9 +79,9 @@ export interface MenuProps {
 const Menu: React.FC<MenuProps> = ({
   programs,
   hasChanges,
-  width,
+  tableWidth,
   selectedProgram,
-  setWidth,
+  setTableWidth,
   setSelectedProgramId,
   setHasChanges,
   onSaveProgram,
@@ -421,7 +421,7 @@ const Menu: React.FC<MenuProps> = ({
                 onClick={() => {
                   setSelectedProgramId(new Set());
                   setHasChanges(false);
-                  setWidth(width + 540);
+                  setTableWidth(tableWidth + 540);
                   setToggleClass(false);
                 }}
               />

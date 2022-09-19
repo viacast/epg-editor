@@ -41,41 +41,26 @@ const Home: React.FC = () => {
 
   const dimension = useWindowSize();
 
-  const heightVariance = (val: number) => {
-    // y = x * 1.042 – 205.35
-    return Math.ceil(1.042 * val - 205.35);
-  };
-
-  const [width, setWidth] = useState(dimension.width - 60);
-  const [height, setHeight] = useState(heightVariance(dimension.height));
-
-  useEffect(() => {
-    const measure = heightVariance(dimension.height);
-    if (measure < 430) {
-      setHeight(430);
-    } else {
-      setHeight(measure);
-    }
-  }, [setHeight, dimension]);
+  const [tableWidth, setTableWidth] = useState(dimension.width - 60);
 
   const [toggleClass, setToggleClass] = useState(false);
 
   useEffect(() => {
     if (!toggleClass) {
       if (dimension.width - 60 <= 1100) {
-        setWidth(1100);
+        setTableWidth(1100);
       } else {
-        setWidth(dimension.width - 60);
+        setTableWidth(dimension.width - 60);
       }
     }
     if (toggleClass) {
       if (dimension.width - 600 <= 590) {
-        setWidth(590);
+        setTableWidth(590);
       } else {
-        setWidth(dimension.width - 600);
+        setTableWidth(dimension.width - 600);
       }
     }
-  }, [setWidth, dimension, toggleClass]);
+  }, [setTableWidth, dimension, toggleClass]);
 
   const handleAddProgram = useCallback(() => {
     let startDateTime = new Date();
@@ -100,9 +85,9 @@ const Home: React.FC = () => {
         return newSelectedProgramId;
       });
       if (dimension.width - 600 <= 590) {
-        setWidth(590);
+        setTableWidth(590);
       } else {
-        setWidth(dimension.width - 600);
+        setTableWidth(dimension.width - 600);
       }
     }, 1150);
     setTimeout(() => {
@@ -133,8 +118,8 @@ const Home: React.FC = () => {
             setSavedPrograms(newPrograms.toArray());
             setPrograms(newPrograms);
           }}
-          width={width}
-          setWidth={setWidth}
+          tableWidth={tableWidth}
+          setTableWidth={setTableWidth}
           handleAddProgram={handleAddProgram}
           handleClearProgramList={handleClearProgramList}
         />
@@ -145,13 +130,12 @@ const Home: React.FC = () => {
           width={selectedProgramId.size !== 1 ? '100%' : 'calc(100% - 535px)'}
         >
           <VTable
+            startWidth={tableWidth}
             programs={programs}
             setPrograms={setPrograms}
             selectedProgramId={selectedProgramId}
             setSelectedProgramId={setSelectedProgramId}
             setToggleClass={setToggleClass}
-            width={width}
-            height={height}
           />
         </TableContainer>
         <MenuContainer
@@ -166,8 +150,8 @@ const Home: React.FC = () => {
           }
         >
           <Menu
-            width={width}
-            setWidth={setWidth}
+            tableWidth={tableWidth}
+            setTableWidth={setTableWidth}
             programs={programs}
             hasChanges={hasChanges}
             setHasChanges={setHasChanges}
@@ -185,7 +169,7 @@ const Home: React.FC = () => {
                 if (size === 1) {
                   // was the only program on the list
                   handleClearProgramList(); // just clear table
-                  setWidth(
+                  setTableWidth(
                     dimension.width - 60 <= 1160 ? 1160 : dimension.width - 60,
                   ); // force menu container to close
                 } else if (index === size - 1) {
