@@ -108,9 +108,6 @@ export const TableContainer = styled.div<{ width?: string }>`
     text-align: left;
     border-radius: 4px;
     z-index: 0;
-    div {
-      transition: width 0.5s;
-    }
   }
   .ReactVirtualized__Table__headerRow {
     color: var(--color-neutral-2);
