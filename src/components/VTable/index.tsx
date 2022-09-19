@@ -94,7 +94,8 @@ const VTable: React.FC<ProgramTableProps> = ({
       if (
         e.key === 'Delete' &&
         targetTag !== 'input' &&
-        targetTag !== 'textarea'
+        targetTag !== 'textarea' &&
+        selectedProgramId.size
       ) {
         openModal({
           title: t('header:titleDeleteProgram', {
@@ -349,185 +350,177 @@ const VTable: React.FC<ProgramTableProps> = ({
   );
 
   return (
-    <div
-      className="div-bem-legal"
-      style={{
-        outline: '1px solid red',
-        height: '100%',
-      }}
-    >
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable
-          droppableId="droppable"
-          mode="virtual"
-          renderClone={(provided, snapshot, rubric) => {
-            const virtualizedRowProps = rowCache[rubric.source.index];
-            return (
-              <RowElement
-                ref={provided.innerRef}
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable
+        droppableId="droppable"
+        mode="virtual"
+        renderClone={(provided, snapshot, rubric) => {
+          const virtualizedRowProps = rowCache[rubric.source.index];
+          return (
+            <RowElement
+              ref={provided.innerRef}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...provided.draggableProps}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...provided.dragHandleProps}
+              key={virtualizedRowProps.key}
+              className={virtualizedRowProps.className}
+              style={getItemStyle(
+                {
+                  margin: 0,
+                  border: '3px solid var(--color-neutral-5)',
+                  maxWidth: '100%',
+                  textAlign: 'left',
+                },
+                snapshot.isDragging,
+                provided.draggableProps.style,
+              )}
+            >
+              {virtualizedRowProps.columns}
+            </RowElement>
+          );
+        }}
+      >
+        {provided => (
+          <AutoSizer>
+            {({ width, height }) => (
+              <Table
+                tableId="reactVirtaualizedTable"
+                rowIdKey="position"
                 // eslint-disable-next-line react/jsx-props-no-spreading
-                {...provided.draggableProps}
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                {...provided.dragHandleProps}
-                key={virtualizedRowProps.key}
-                className={virtualizedRowProps.className}
-                style={getItemStyle(
-                  {
-                    margin: 0,
-                    border: '3px solid var(--color-neutral-5)',
-                    maxWidth: '100%',
-                    textAlign: 'left',
-                  },
-                  snapshot.isDragging,
-                  provided.draggableProps.style,
+                {...provided.droppableProps}
+                rowCount={programs.count}
+                width={width || startWidth}
+                height={height}
+                header
+                headerHeight={60}
+                rowHeight={45}
+                rowGetter={({ index }) => {
+                  const p = programs.at(index);
+                  if (!p) {
+                    return {};
+                  }
+                  return {
+                    ...p,
+                    position: `${index + 1}`,
+                    startDateTime: formatDateTime(p.startDateTime),
+                    endDateTime: formatDateTime(
+                      addToDate(p.startDateTime, p.duration),
+                    ),
+                    duration: secondsToHms(p.duration),
+                  };
+                }}
+                ref={ref => {
+                  if (ref) {
+                    const triggerRf = document.getElementsByClassName(
+                      'ReactVirtualized__Grid ReactVirtualized__Table__Grid',
+                    )[0];
+                    if (triggerRf instanceof HTMLElement) {
+                      provided.innerRef(triggerRf);
+                    }
+                  }
+                }}
+                rowRenderer={getRowRender}
+                // eslint-disable-next-line react/no-unstable-nested-components
+                noRowsRenderer={() => (
+                  <LoaderContainer
+                    display={programs.count !== 0 ? 'flex' : 'none'}
+                  >
+                    <BeatLoader color="var(--color-neutral-3)" />
+                  </LoaderContainer>
                 )}
               >
-                {virtualizedRowProps.columns}
-              </RowElement>
-            );
-          }}
-        >
-          {provided => (
-            <AutoSizer>
-              {({ width, height }) => (
-                <Table
-                  tableId="reactVirtaualizedTable"
-                  rowIdKey="position"
-                  // eslint-disable-next-line react/jsx-props-no-spreading
-                  {...provided.droppableProps}
-                  rowCount={programs.count}
-                  width={width || startWidth}
-                  height={height}
-                  header
-                  headerHeight={60}
-                  rowHeight={45}
-                  rowGetter={({ index }) => {
-                    const p = programs.at(index);
-                    if (!p) {
-                      return {};
-                    }
-                    return {
-                      ...p,
-                      position: `${index + 1}`,
-                      startDateTime: formatDateTime(p.startDateTime),
-                      endDateTime: formatDateTime(
-                        addToDate(p.startDateTime, p.duration),
-                      ),
-                      duration: secondsToHms(p.duration),
-                    };
-                  }}
-                  ref={ref => {
-                    if (ref) {
-                      const triggerRf = document.getElementsByClassName(
-                        'ReactVirtualized__Grid ReactVirtualized__Table__Grid',
-                      )[0];
-                      if (triggerRf instanceof HTMLElement) {
-                        provided.innerRef(triggerRf);
-                      }
-                    }
-                  }}
-                  rowRenderer={getRowRender}
-                  // eslint-disable-next-line react/no-unstable-nested-components
-                  noRowsRenderer={() => (
-                    <LoaderContainer
-                      display={programs.count !== 0 ? 'flex' : 'none'}
-                    >
-                      <BeatLoader color="var(--color-neutral-3)" />
-                    </LoaderContainer>
-                  )}
-                >
-                  <Column
-                    label={
-                      <>
-                        <Checkbox
-                          readOnly
-                          onClick={() => {
-                            setToggleClass(false);
-                            setSelectedProgramId(p => {
-                              if (p.size === programs.toArray().length) {
-                                return new Set();
-                              }
-                              return new Set(
-                                programs.toArray().map(program => program.id),
-                              );
-                            });
-                          }}
-                          checked={
-                            programs.toArray().length > 0 &&
-                            programs.toArray().length === selectedProgramId.size
-                          }
-                        />
-                        <span style={{ paddingLeft: '35px' }}>#</span>
-                      </>
-                    }
-                    key="position"
-                    dataKey="position"
-                    flexGrow={3}
-                    minWidth={90}
-                    width={90}
-                    maxWidth={90}
-                  />
-                  <Column
-                    label={t(`program-table:columnLabel_startDateTime`)}
-                    dataKey="startDateTime"
-                    key="startDateTime"
-                    flexGrow={3}
-                    minWidth={170}
-                    width={190}
-                    maxWidth={190}
-                  />
-                  <Column
-                    label={t(`program-table:columnLabel_endDateTime`)}
-                    key="endDateTime"
-                    dataKey="endDateTime"
-                    flexGrow={3}
-                    minWidth={170}
-                    width={190}
-                    maxWidth={190}
-                  />
-                  <Column
-                    label={t(`program-table:columnLabel_duration`)}
-                    dataKey="duration"
-                    key="duration"
-                    flexGrow={3}
-                    minWidth={85}
-                    width={110}
-                    maxWidth={110}
-                  />
-                  <Column
-                    label={t(`program-table:columnLabel_title`)}
-                    dataKey="title"
-                    key="title"
-                    flexGrow={3}
-                    minWidth={150}
-                    width={300}
-                    maxWidth={300}
-                  />
-                  <Column
-                    label={t(`program-table:columnLabel_rating`)}
-                    key="rating"
-                    dataKey="rating"
-                    flexGrow={3}
-                    minWidth={230}
-                    width={230}
-                    maxWidth={230}
-                  />
-                  <Column
-                    className="container"
-                    label={t(`program-table:columnLabel_description`)}
-                    dataKey="description"
-                    key="description"
-                    flexGrow={3}
-                    minWidth={150}
-                    width={705}
-                  />
-                </Table>
-              )}
-            </AutoSizer>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </div>
+                <Column
+                  label={
+                    <>
+                      <Checkbox
+                        readOnly
+                        onClick={() => {
+                          setToggleClass(false);
+                          setSelectedProgramId(p => {
+                            if (p.size === programs.toArray().length) {
+                              return new Set();
+                            }
+                            return new Set(
+                              programs.toArray().map(program => program.id),
+                            );
+                          });
+                        }}
+                        checked={
+                          programs.toArray().length > 0 &&
+                          programs.toArray().length === selectedProgramId.size
+                        }
+                      />
+                      <span style={{ paddingLeft: '35px' }}>#</span>
+                    </>
+                  }
+                  key="position"
+                  dataKey="position"
+                  flexGrow={3}
+                  minWidth={90}
+                  width={90}
+                  maxWidth={90}
+                />
+                <Column
+                  label={t(`program-table:columnLabel_startDateTime`)}
+                  dataKey="startDateTime"
+                  key="startDateTime"
+                  flexGrow={3}
+                  minWidth={170}
+                  width={190}
+                  maxWidth={190}
+                />
+                <Column
+                  label={t(`program-table:columnLabel_endDateTime`)}
+                  key="endDateTime"
+                  dataKey="endDateTime"
+                  flexGrow={3}
+                  minWidth={170}
+                  width={190}
+                  maxWidth={190}
+                />
+                <Column
+                  label={t(`program-table:columnLabel_duration`)}
+                  dataKey="duration"
+                  key="duration"
+                  flexGrow={3}
+                  minWidth={85}
+                  width={110}
+                  maxWidth={110}
+                />
+                <Column
+                  label={t(`program-table:columnLabel_title`)}
+                  dataKey="title"
+                  key="title"
+                  flexGrow={3}
+                  minWidth={150}
+                  width={300}
+                  maxWidth={300}
+                />
+                <Column
+                  label={t(`program-table:columnLabel_rating`)}
+                  key="rating"
+                  dataKey="rating"
+                  flexGrow={3}
+                  minWidth={230}
+                  width={230}
+                  maxWidth={230}
+                />
+                <Column
+                  className="container"
+                  label={t(`program-table:columnLabel_description`)}
+                  dataKey="description"
+                  key="description"
+                  flexGrow={3}
+                  minWidth={150}
+                  width={705}
+                />
+              </Table>
+            )}
+          </AutoSizer>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 };
 
