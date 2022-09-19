@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Menu, VTable } from 'components';
 import { Program } from 'services/epg';
@@ -15,6 +15,7 @@ import {
 import Header from './Header';
 
 const Home: React.FC = () => {
+  const dimension = useWindowSize();
   const [selectedProgramId, setSelectedProgramId] = useState<Set<string>>(
     new Set(),
   );
@@ -26,8 +27,9 @@ const Home: React.FC = () => {
   const [programs, setPrograms] = useState(
     new EntityMap<Program>(savedPrograms?.map(p => new Program(p))),
   );
-
   const [selectedProgram, setSelectedProgram] = useState<Program>();
+  const [tableWidth, setTableWidth] = useState(dimension.width - 60);
+  const [toggleClass, setToggleClass] = useState(false);
 
   useEffect(() => {
     setSelectedProgram(programs.get(Array.from(selectedProgramId)[0]));
@@ -38,12 +40,6 @@ const Home: React.FC = () => {
       setSavedPrograms(programs.toArray());
     }
   }, [programs, setSavedPrograms]);
-
-  const dimension = useWindowSize();
-
-  const [tableWidth, setTableWidth] = useState(dimension.width - 60);
-
-  const [toggleClass, setToggleClass] = useState(false);
 
   useEffect(() => {
     if (!toggleClass) {
@@ -77,19 +73,17 @@ const Home: React.FC = () => {
       startDateTime,
     });
     setPrograms(p => p.add(addedProgram).clone());
-    setTimeout(() => {
-      setSelectedProgramId(s => {
-        const newSelectedProgramId = new Set(s);
-        newSelectedProgramId.clear();
-        newSelectedProgramId.add(addedProgram.id);
-        return newSelectedProgramId;
-      });
-      if (dimension.width - 600 <= 590) {
-        setTableWidth(590);
-      } else {
-        setTableWidth(dimension.width - 600);
-      }
-    }, 1150);
+    setSelectedProgramId(s => {
+      const newSelectedProgramId = new Set(s);
+      newSelectedProgramId.clear();
+      newSelectedProgramId.add(addedProgram.id);
+      return newSelectedProgramId;
+    });
+    if (dimension.width - 600 <= 590) {
+      setTableWidth(590);
+    } else {
+      setTableWidth(dimension.width - 600);
+    }
     setTimeout(() => {
       const objDiv = document.getElementsByClassName(
         'ReactVirtualized__Grid',
