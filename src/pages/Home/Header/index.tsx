@@ -45,20 +45,20 @@ import {
 } from './styles';
 
 export interface HeaderProps {
-  width: number;
+  tableWidth: number;
   programs: EntityMap<Program>;
   selectedProgramId: Set<string>;
-  setWidth: (val: number) => void;
+  setTableWidth: (val: number) => void;
   setNewPrograms: (programs: EntityMap<Program>) => void;
   handleAddProgram: () => void;
   handleClearProgramList: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
-  width,
+  tableWidth,
   programs,
   selectedProgramId,
-  setWidth,
+  setTableWidth,
   setNewPrograms,
   handleAddProgram,
   handleClearProgramList,
@@ -66,13 +66,16 @@ const Header: React.FC<HeaderProps> = ({
   const { t, i18n } = useTranslation();
   const [programCount, setProgramCount] = useState(0);
   const [open, setOpen] = useState(false);
-  const [displaySettings, setDisplaySettings] = useState(false);
-  const [displayTranslation, setDisplayTranslation] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showTranslation, setShowTranslation] = useState(false);
   const [savedFilename, setSavedFilename] = useLocalStorage(
     LocalStorageKeys.CURRENT_FILENAME,
     '',
   );
   const [epgFilename, setEpgFilename] = useState(savedFilename || '');
+  const [settingsAnimation, setSettingsAnimation] = useState(
+    'none' as 'none' | 'rotate' | 'backRotate',
+  );
 
   const fileInputRef = useRef<FileInputRefProps>({});
   const exportOptionsRef = useRef<HTMLDivElement>(null);
@@ -179,9 +182,18 @@ const Header: React.FC<HeaderProps> = ({
 
   useClickOutside(exportOptionsRef, () => setOpen(false));
   useClickOutside(ConfigurationsRef, () => {
-    setDisplaySettings(false);
-    setDisplayTranslation(false);
+    setShowSettings(false);
+    setShowTranslation(false);
   });
+
+  useEffect(() => {
+    setSettingsAnimation(a => {
+      if (a === 'none') {
+        return 'none';
+      }
+      return showSettings ? 'rotate' : 'backRotate';
+    });
+  }, [showSettings]);
 
   return (
     <HeaderContainer className="no-user-select">
@@ -265,28 +277,27 @@ const Header: React.FC<HeaderProps> = ({
               );
               setNewPrograms(new EntityMap(adjustedPrograms));
               if (selectedProgramId.size === 1) {
-                setWidth(width + 540);
+                setTableWidth(tableWidth + 540);
               }
             },
           });
         }}
       />
       <Configurations ref={ConfigurationsRef}>
-        <ContainerSettings animate={displaySettings ? 'rotate' : 'backRotate'}>
+        <ContainerSettings animation={settingsAnimation}>
           <IconButton
             className="epg-settings-gear"
             onClick={() => {
-              setDisplaySettings(!displaySettings);
-              if (displayTranslation) {
-                setDisplayTranslation(!displayTranslation);
-              }
+              setSettingsAnimation('rotate');
+              setShowSettings(s => !s);
+              setShowTranslation(false);
             }}
           >
             <BsGearFill size="28px" color="var(--color-neutral-3)" />
           </IconButton>
           <Settings
-            display={displaySettings ? 'block' : 'none'}
-            onClick={() => setDisplayTranslation(!displayTranslation)}
+            display={showSettings ? 'block' : 'none'}
+            onClick={() => setShowTranslation(s => !s)}
           >
             <SettingsOption>
               <BsTranslate /> &nbsp; {t('header:settingsLanguage')} &nbsp;{' '}
@@ -297,7 +308,7 @@ const Header: React.FC<HeaderProps> = ({
             </SettingsOption>
           </Settings>
         </ContainerSettings>
-        <Translation display={displayTranslation ? 'block' : 'none'}>
+        <Translation display={showTranslation ? 'block' : 'none'}>
           {AVAILABLE_LANGUAGES.map(({ code, flag }) => (
             <LanguageContainer onClick={() => i18n.changeLanguage(code)}>
               {t(`header:settingsLanguage_${code}`)}
