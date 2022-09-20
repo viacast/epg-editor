@@ -71,6 +71,8 @@ export const Line = styled.div<{ display: string }>`
 `;
 
 export const AlertsGroup = styled.div`
+  display: flex;
+  position: relative;
   margin: 8px 6px 4px 14px;
 `;
 
@@ -193,6 +195,7 @@ export const Flag = styled.div`
 export const MessageBadgeContainer = styled.div`
   display: flex;
   position: absolute;
+  right: 0;
 
   span:not(:last-child) {
     margin-right: 2px;
