@@ -1,10 +1,16 @@
 
 {
-  "noTitle": "Title cannot be empty.",
-  "noDescription": "Description cannot be empty.",
-  "noRating": "Program should have a rating.",
-  "pastStartTime": "Start time is usually in the future.",
-  "futureStartTime": "Start time is usually not that far away.",
-  "gapBetween": "Start time does not coincide with last end time.",
-  "noDuration": "Duration cannot be zero."
+  "error_one": "{{count}} error",
+  "error_other": "{{count}} errors",
+  "warn_one": "{{count}} warning",
+  "warn_other": "{{count}} warnings",
+  "info_one": "{{count}} info",
+  "info_other": "{{count}} infos",
+  "message_EMPTY_TITLE": "Title cannot be empty.",
+  "message_EMPTY_DESCRIPTION": "Description cannot be empty.",
+  "message_NO_PARENTAL_RATING": "Program should have a rating.",
+  "message_PAST_START_DATE": "Start time is usually in the future.",
+  "message_FAR_START_DATE": "Start time is usually not that far away.",
+  "message_TIME_GAP": "Start time does not coincide with last end time.",
+  "message_INVALID_DURATION": "Duration cannot be zero."
 }

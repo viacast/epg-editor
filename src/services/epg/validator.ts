@@ -3,10 +3,12 @@ import Program, { ProgramRating } from './program';
 
 // eslint-disable-next-line no-shadow
 export enum EPGValidationMessageLevel {
+  ALL = 'ALL',
   INFO = 'INFO',
   WARN = 'WARN',
   ERROR = 'ERROR',
 }
+
 // eslint-disable-next-line no-shadow
 export enum EPGValidationMessageType {
   EMPTY_TITLE = 'EMPTY_TITLE',
@@ -40,71 +42,45 @@ export default class EPGValidator {
     });
     types.forEach(t => {
       messages[EPGValidationMessageTypeLevels[t]].push(t);
+      messages.ALL.push(t);
     });
     return messages;
   }
 
-  static countMessages(message: Record<string, EPGValidationMessages>) {
-    const messages = Object.values(message).map(p =>
-      Object.values(p).map(e => e.length),
-    );
-
-    const totalInfo = messages
-      .map(q => q[0])
-      .reduce((partialSum, a) => partialSum + a, 0);
-    const totalWarn = messages
-      .map(q => q[1])
-      .reduce((partialSum, a) => partialSum + a, 0);
-    const totalError = messages
-      .map(q => q[2])
-      .reduce((partialSum, a) => partialSum + a, 0);
-
-    return { INFO: totalInfo, WARN: totalWarn, ERROR: totalError };
+  static getMessageLevel(
+    message: EPGValidationMessageType,
+  ): EPGValidationMessageLevel {
+    return EPGValidationMessageTypeLevels[message];
   }
 
-  static countAlerts(
+  static countMessagesByLevel(messages: Record<string, EPGValidationMessages>) {
+    const count = {} as Record<EPGValidationMessageLevel, number>;
+    Object.values(EPGValidationMessageLevel).forEach(l => {
+      count[l] = 0;
+    });
+    Object.values(messages).forEach(m => {
+      Object.entries(m).forEach(([level, mm]) => {
+        count[level] += mm.length;
+      });
+    });
+
+    return count;
+  }
+
+  static countMessagesByType(
     programs: EntityMap<Program>,
     messages: Record<string, EPGValidationMessages>,
   ) {
-    const alerts = {
-      title: 0,
-      description: 0,
-      duration: 0,
-      rating: 0,
-      past: 0,
-      future: 0,
-      gap: 0,
-    };
+    const count = {} as Record<EPGValidationMessageType, number>;
+    Object.values(EPGValidationMessageType).forEach(l => {
+      count[l] = 0;
+    });
     programs.toArray().forEach(p => {
-      messages[p.id].ERROR.forEach(m => {
-        if (m === 'EMPTY_TITLE') {
-          alerts.title += 1;
-        }
-        if (m === 'EMPTY_DESCRIPTION') {
-          alerts.description += 1;
-        }
-        if (m === 'INVALID_DURATION') {
-          alerts.duration += 1;
-        }
-        if (m === 'TIME_GAP') {
-          alerts.gap += 1;
-        }
-      });
-      messages[p.id].WARN.forEach(m => {
-        if (m === 'NO_PARENTAL_RATING') {
-          alerts.rating += 1;
-        }
-        if (m === 'PAST_START_DATE') {
-          alerts.past += 1;
-        }
-      });
-      messages[p.id].INFO.forEach(m => {
-        if (m === 'FAR_START_DATE') {
-          alerts.future += 1;
-        }
+      messages[p.id].ALL.forEach(m => {
+        count[m] += 1;
       });
     });
-    return alerts;
+    return count;
   }
 
   static menuAlert(programs: Program[], selectedProgram: Program) {
