@@ -126,7 +126,9 @@ export const TableContainer = styled.div<{ width?: string }>`
   .ReactVirtualized__Table__row {
     max-width: 100%;
     border-inline: 6px solid var(--color-neutral-5);
-    border-top: 4px solid var(--color-neutral-5);
+    border-top: 2px solid var(--color-neutral-5);
+    border-bottom: 2px solid var(--color-neutral-5);
+
     text-align: center;
   }
   .ReactVirtualized__Table__row:hover {
