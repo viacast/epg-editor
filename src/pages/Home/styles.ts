@@ -17,7 +17,7 @@ export const TableMenuContainer = styled.div`
   flex-direction: row;
   width: 100%;
   height: 100%;
-  min-width: 1210px;
+  min-width: 1180px;
   min-height: 500px;
   padding-top: 20px;
   padding-left: 30px;
@@ -30,8 +30,7 @@ export const TableMenuContainer = styled.div`
 `;
 
 export const TableContainer = styled.div<{ width?: string }>`
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: auto;
   background-color: var(--color-neutral-5);
   border-radius: 4px;
   height: 100%;
