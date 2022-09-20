@@ -33,6 +33,9 @@ export const AddToList = styled.div`
     vertical-align: middle;
     z-index: 3;
     cursor: pointer;
+    :hover {
+      color: var(--color-neutral-3);
+    }
   }
 `;
 

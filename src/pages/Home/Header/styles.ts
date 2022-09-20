@@ -43,6 +43,11 @@ export const ContainerSettings = styled.div<{
 }>`
   .epg-settings-gear {
     animation: ${({ animation }) => animation} 0.325s;
+    svg {
+      :hover {
+        color: var(--color-neutral-2) !important;
+      }
+    }
   }
   @keyframes rotate {
     0% {
@@ -108,7 +113,7 @@ export const SettingsOption = styled.div`
 export const Translation = styled.div<{ display: string }>`
   display: ${({ display }) => display || 'none'};
   position: absolute;
-  top: 45px;
+  top: 44px;
   left: 180px;
   z-index: 3;
   min-width: 174px;
@@ -155,6 +160,12 @@ export const AlertsGroup = styled.div`
   display: flex;
   position: relative;
   margin: 8px 6px 4px 14px;
+  cursor: pointer;
+  svg {
+    :hover {
+      color: var(--color-neutral-2) !important;
+    }
+  }
 `;
 
 export const Line = styled.div<{ display: string }>`
