@@ -30,7 +30,8 @@ export const TableMenuContainer = styled.div`
 `;
 
 export const TableContainer = styled.div<{ width?: string }>`
-  overflow: auto;
+  overflow-y: hidden;
+  overflow-x: auto;
   background-color: var(--color-neutral-5);
   border-radius: 4px;
   height: 100%;
@@ -112,6 +113,7 @@ export const TableContainer = styled.div<{ width?: string }>`
     z-index: 0;
   }
   .ReactVirtualized__Table__headerRow {
+    min-width: 1210px;
     color: var(--color-neutral-2);
     border-bottom: 5px solid var(--color-neutral-1);
     border-radius: 4px;
@@ -126,6 +128,7 @@ export const TableContainer = styled.div<{ width?: string }>`
     margin-left: 0px;
   }
   .ReactVirtualized__Table__row {
+    min-width: 1210px;
     max-width: 100%;
     border-inline: 6px solid var(--color-neutral-5);
     border-top: 2px solid var(--color-neutral-5);
