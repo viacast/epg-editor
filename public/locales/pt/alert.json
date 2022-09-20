@@ -1,9 +1,15 @@
 {
-  "noTitle": "Título não pode ser vazio.",
-  "noDescription": "Descrição não pode ser vazia.",
-  "noRating": "Programa deve ter uma classificação.",
-  "pastStartTime": "Início geralmente é no futuro.",
-  "futureStartTime": "Início geralmente não é tão distante.",
-  "gapBetween": "Início não coincide com último tempo de fim.",
-  "noDuration": "Duração não pode ser zero."
+  "error_one": "{{count}} erro",
+  "error_other": "{{count}} erros",
+  "warn_one": "{{count}} aviso",
+  "warn_other": "{{count}} avisos",
+  "info_one": "{{count}} informação",
+  "info_other": "{{count}} informações",
+  "message_EMPTY_TITLE": "Título não pode ser vazio.",
+  "message_EMPTY_DESCRIPTION": "Descrição não pode ser vazia.",
+  "message_NO_PARENTAL_RATING": "Programa deve ter uma classificação.",
+  "message_PAST_START_DATE": "Início geralmente é no futuro.",
+  "message_FAR_START_DATE": "Início geralmente não é tão distante.",
+  "message_TIME_GAP": "Início não coincide com último tempo de fim.",
+  "message_INVALID_DURATION": "Duração não pode ser zero."
 }

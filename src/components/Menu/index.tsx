@@ -178,7 +178,7 @@ const Menu: React.FC<MenuProps> = ({
                 {alerts.title && (
                   <Tooltip
                     arrow
-                    title={<Message>{t('alert:noTitle')}</Message>}
+                    title={<Message>{t('alert:message_EMPTY_TITLE')}</Message>}
                   >
                     <GroupAlert>
                       &nbsp;
@@ -201,7 +201,9 @@ const Menu: React.FC<MenuProps> = ({
                 {alerts.description && (
                   <Tooltip
                     arrow
-                    title={<Message>{t('alert:noDescription')}</Message>}
+                    title={
+                      <Message>{t('alert:message_EMPTY_DESCRIPTION')}</Message>
+                    }
                   >
                     <GroupAlert>
                       &nbsp;
@@ -224,7 +226,11 @@ const Menu: React.FC<MenuProps> = ({
                   <GroupAlert>
                     <Tooltip
                       arrow
-                      title={<Message>{t('alert:noRating')}</Message>}
+                      title={
+                        <Message>
+                          {t('alert:message_NO_PARENTAL_RATING')}
+                        </Message>
+                      }
                     >
                       <GroupAlert>
                         &nbsp;
@@ -269,7 +275,11 @@ const Menu: React.FC<MenuProps> = ({
                       <GroupAlert>
                         <Tooltip
                           arrow
-                          title={<Message>{t('alert:pastStartTime')}</Message>}
+                          title={
+                            <Message>
+                              {t('alert:message_PAST_START_DATE')}
+                            </Message>
+                          }
                         >
                           <GroupAlert>
                             &nbsp;
@@ -287,7 +297,7 @@ const Menu: React.FC<MenuProps> = ({
                           arrow
                           title={
                             <Message color="var(--color-neutral-3)">
-                              {t('alert:futureStartTime')}
+                              {t('alert:message_FAR_START_DATE')}
                             </Message>
                           }
                         >
@@ -323,7 +333,9 @@ const Menu: React.FC<MenuProps> = ({
                       <GroupAlert>
                         <Tooltip
                           arrow
-                          title={<Message>{t('alert:gapBetween')}</Message>}
+                          title={
+                            <Message>{t('alert:message_TIME_GAP')}</Message>
+                          }
                         >
                           <GroupAlert>
                             &nbsp;
@@ -389,7 +401,11 @@ const Menu: React.FC<MenuProps> = ({
                       <GroupAlert>
                         <Tooltip
                           arrow
-                          title={<Message>{t('alert:noDuration')}</Message>}
+                          title={
+                            <Message>
+                              {t('alert:message_INVALID_DURATION')}
+                            </Message>
+                          }
                         >
                           <GroupAlert>
                             &nbsp;

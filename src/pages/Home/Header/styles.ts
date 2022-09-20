@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { styled as muistyled, Badge } from '@mui/material';
 
 export const HeaderContainer = styled.div`
   display: flex;
@@ -22,12 +23,29 @@ export const Text = styled.div`
   text-align: center;
 `;
 
-export const Message = styled.div<{ display: string }>`
-  display: ${({ display }) => display || 'none'};
+export const MessageType = styled.div`
+  display: flex;
+
+  font-size: 18px;
+  text-align: center;
+  line-height: 2;
+  padding-inline: 5px;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    margin-left: 7px;
+  }
+`;
+
+export const MessageText = styled.div`
+  display: flex;
   font-size: 12px;
   text-align: center;
   line-height: 2;
   padding-inline: 5px;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const MenuOptions = styled.div``;
@@ -45,23 +63,8 @@ export const ExportOptions = styled.div<{ display: string }>`
   }
 `;
 
-export const Alerts = styled.div<{ display: string }>`
-  display: ${({ display }) => display || 'none'};
-  white-space: nowrap;
-  width: fit-content;
-  vertical-align: middle;
-  padding-block: 4px;
-  button {
-    padding-block: 8px;
-    font-size: 16px;
-    font-family: Nunito, sans-serif;
-    color: var(--color-neutral-3);
-  }
-`;
-
 export const AlertsGroup = styled.div`
-  display: flex;
-  padding-left: 25px;
+  margin: 8px 6px 4px 14px;
 `;
 
 export const Configurations = styled.div`
@@ -71,7 +74,6 @@ export const Configurations = styled.div`
 export const ContainerSettings = styled.div<{
   animation: 'none' | 'rotate' | 'backRotate';
 }>`
-  margin-inline: 25px;
   .epg-settings-gear {
     animation: ${({ animation }) => animation} 0.325s;
   }
@@ -179,4 +181,29 @@ export const Flag = styled.div`
   text-align: left;
   margin-left: 2.96px;
   margin-right: 13px;
+`;
+
+export const MessageBadgeContainer = styled.div`
+  display: flex;
+  position: absolute;
+
+  span:not(:last-child) {
+    margin-right: 2px;
+  }
+`;
+
+interface BadgeProps {
+  backgroundColor: string;
+  show?: boolean;
+}
+
+export const MessageBadge = muistyled(Badge)<BadgeProps>`
+  & .MuiBadge-badge {
+    background-color: ${({ backgroundColor }) => backgroundColor || 'default'};
+    display:'inline-block';
+    position: relative;
+
+    top: -2.5px;
+    left: -4px;
+  }
 `;

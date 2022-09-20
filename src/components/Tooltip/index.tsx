@@ -10,6 +10,7 @@ const Tooltip = styled(({ className, ...props }: TooltipProps) => (
 ))({
   [`& .${tooltipClasses.tooltip}`]: {
     maxWidth: 500,
+    backgroundColor: 'rgba(88,88,88, 1)',
   },
 });
 

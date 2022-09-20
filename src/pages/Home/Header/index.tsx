@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CgPlayListAdd, CgPlayListRemove } from 'react-icons/cg';
@@ -13,13 +14,17 @@ import {
   BsGearFill,
   BsTranslate,
 } from 'react-icons/bs';
+import {
+  MdErrorOutline,
+  MdKeyboardArrowRight,
+  MdNotifications,
+  MdOutlineWarningAmber,
+} from 'react-icons/md';
+import { IoIosInformationCircleOutline } from 'react-icons/io';
 import FileSaver from 'file-saver';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
 import { IconButton } from '@mui/material';
-import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
-import { RiAlertFill } from 'react-icons/ri';
-import { MdKeyboardArrowRight } from 'react-icons/md';
 
 import { EPGParser, Program, EPGBuilder, EPGValidator } from 'services/epg';
 import { AVAILABLE_LANGUAGES } from 'services/i18n';
@@ -28,13 +33,16 @@ import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
 import { EntityMap } from 'utils';
 import { useModalProvider } from 'providers/ModalProvider';
 import {
+  EPGValidationMessageLevel,
+  EPGValidationMessageType,
+} from 'services/epg/validator';
+import { ColorPallete } from 'styles/global';
+import {
   HeaderContainer,
   MenuOptions,
   ExportOptions,
   Text,
-  Message,
-  Alerts,
-  AlertsGroup,
+  MessageType,
   Configurations,
   ContainerSettings,
   Settings,
@@ -42,6 +50,10 @@ import {
   Translation,
   LanguageContainer,
   Flag,
+  MessageBadge,
+  AlertsGroup,
+  MessageBadgeContainer,
+  MessageText,
 } from './styles';
 
 export interface HeaderProps {
@@ -149,35 +161,27 @@ const Header: React.FC<HeaderProps> = ({
     });
   }, [handleClearProgramList, openModal, setSavedFilename, t]);
 
-  const [alertList, setAlertList] = useState({
-    INFO: 0,
-    WARN: 0,
-    ERROR: 0,
-  });
+  const [alertCountByLevel, setAlertCountByLevel] = useState(
+    {} as Record<EPGValidationMessageLevel, number>,
+  );
 
   useEffect(() => {
-    const aux = EPGValidator.countMessages(
+    const count = EPGValidator.countMessagesByLevel(
       EPGValidator.validate(programs.toArray()),
     );
-    setAlertList(aux);
+    setAlertCountByLevel(count);
   }, [programs]);
 
-  const [alert, setAlert] = useState({
-    title: 0,
-    description: 0,
-    duration: 0,
-    rating: 0,
-    past: 0,
-    future: 0,
-    gap: 0,
-  });
+  const [alertCountByType, setAlertCountByType] = useState(
+    {} as Record<EPGValidationMessageType, number>,
+  );
 
   useEffect(() => {
-    const aux = EPGValidator.countAlerts(
+    const count = EPGValidator.countMessagesByType(
       programs,
       EPGValidator.validate(programs.toArray()),
     );
-    setAlert(aux);
+    setAlertCountByType(count);
   }, [programs]);
 
   useClickOutside(exportOptionsRef, () => setOpen(false));
@@ -283,6 +287,102 @@ const Header: React.FC<HeaderProps> = ({
           });
         }}
       />
+      <Tooltip
+        arrow
+        title={
+          <>
+            <Text>
+              {t('header:programCount', {
+                count: programCount,
+              })}
+            </Text>
+            <hr />
+            {alertCountByLevel.ERROR > 0 && (
+              <>
+                <MessageType>
+                  {t('alert:error', {
+                    count: alertCountByLevel.ERROR,
+                  })}
+                  <MdErrorOutline color={ColorPallete.SYSTEM_1} />
+                </MessageType>
+                {Object.entries(alertCountByType).map(([type, count]) =>
+                  EPGValidator.getMessageLevel(
+                    type as EPGValidationMessageType,
+                  ) === EPGValidationMessageLevel.ERROR && count > 0 ? (
+                    <MessageText>
+                      {t(`alert:message_${type}`)} ({count})
+                    </MessageText>
+                  ) : null,
+                )}
+              </>
+            )}
+            {alertCountByLevel.WARN > 0 && (
+              <>
+                <MessageType>
+                  {t('alert:warn', {
+                    count: alertCountByLevel.WARN,
+                  })}
+                  <MdOutlineWarningAmber color={ColorPallete.SYSTEM_2} />
+                </MessageType>
+                {Object.entries(alertCountByType).map(([type, count]) =>
+                  EPGValidator.getMessageLevel(
+                    type as EPGValidationMessageType,
+                  ) === EPGValidationMessageLevel.WARN && count > 0 ? (
+                    <MessageText>
+                      {t(`alert:message_${type}`)} ({count})
+                    </MessageText>
+                  ) : null,
+                )}
+              </>
+            )}
+            {alertCountByLevel.INFO > 0 && (
+              <>
+                <MessageType>
+                  {t('alert:info', {
+                    count: alertCountByLevel.INFO,
+                  })}
+                  <IoIosInformationCircleOutline
+                    color={ColorPallete.NEUTRAL_2}
+                  />
+                </MessageType>
+                {Object.entries(alertCountByType).map(([type, count]) =>
+                  EPGValidator.getMessageLevel(
+                    type as EPGValidationMessageType,
+                  ) === EPGValidationMessageLevel.INFO && count > 0 ? (
+                    <MessageText>
+                      {t(`alert:message_${type}`)} ({count})
+                    </MessageText>
+                  ) : null,
+                )}
+              </>
+            )}
+          </>
+        }
+      >
+        <AlertsGroup>
+          <MessageBadgeContainer>
+            {alertCountByLevel.INFO > 0 && (
+              <MessageBadge
+                variant="dot"
+                backgroundColor={ColorPallete.NEUTRAL_3}
+              />
+            )}
+            {alertCountByLevel.WARN > 0 && (
+              <MessageBadge
+                variant="dot"
+                backgroundColor={ColorPallete.SYSTEM_2}
+              />
+            )}
+            {alertCountByLevel.ERROR > 0 && (
+              <MessageBadge
+                variant="dot"
+                backgroundColor={ColorPallete.SYSTEM_1}
+              />
+            )}
+          </MessageBadgeContainer>
+          <MdNotifications size="28px" color="action" />
+        </AlertsGroup>
+      </Tooltip>
       <Configurations ref={ConfigurationsRef}>
         <ContainerSettings animation={settingsAnimation}>
           <IconButton
@@ -318,80 +418,6 @@ const Header: React.FC<HeaderProps> = ({
           ))}
         </Translation>
       </Configurations>
-      <Text>
-        {t('header:programCount', {
-          count: programCount,
-        })}
-      </Text>
-      <AlertsGroup>
-        <Alerts display={alertList.ERROR > 0 ? 'block' : 'none'}>
-          <Tooltip
-            arrow
-            title={
-              <>
-                <Message display={alert.title ? 'block' : 'none'}>
-                  {t('alert:noTitle')} ({alert.title})
-                </Message>
-                <Message display={alert.description ? 'block' : 'none'}>
-                  {t('alert:noDescription')} ({alert.description})
-                </Message>
-                <Message display={alert.duration ? 'block' : 'none'}>
-                  {t('alert:noDuration')} ({alert.duration})
-                </Message>
-                <Message display={alert.gap ? 'block' : 'none'}>
-                  {t('alert:gapBetween')} ({alert.gap})
-                </Message>
-              </>
-            }
-          >
-            <IconButton>
-              {alertList.ERROR}
-              &nbsp;
-              <IoIosAlert size="16px" color="var(--color-system-1)" />
-            </IconButton>
-          </Tooltip>
-        </Alerts>
-        <Alerts display={alertList.WARN > 0 ? 'block' : 'none'}>
-          <Tooltip
-            arrow
-            title={
-              <>
-                <Message display={alert.rating ? 'block' : 'none'}>
-                  {t('alert:noRating')} ({alert.rating})
-                </Message>
-                <Message display={alert.past ? 'block' : 'none'}>
-                  {t('alert:pastStartTime')} ({alert.past})
-                </Message>
-              </>
-            }
-          >
-            <IconButton>
-              {alertList.WARN}
-              &nbsp;
-              <RiAlertFill size="16px" color="var(--color-system-2)" />
-            </IconButton>
-          </Tooltip>
-        </Alerts>
-        <Alerts display={alertList.INFO > 0 ? 'block' : 'none'}>
-          <Tooltip
-            arrow
-            title={
-              <Message display={alert.future ? 'block' : 'none'}>
-                {t('alert:futureStartTime')} ({alert.future})
-              </Message>
-            }
-          >
-            <IconButton>
-              {alertList.INFO}
-              &nbsp;
-              <IoIosInformationCircle
-                size="16px"
-                color="var(--color-neutral-3)"
-              />
-            </IconButton>
-          </Tooltip>
-        </Alerts>
-      </AlertsGroup>
     </HeaderContainer>
   );
 };
