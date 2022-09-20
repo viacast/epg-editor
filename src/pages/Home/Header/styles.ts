@@ -63,6 +63,13 @@ export const ExportOptions = styled.div<{ display: string }>`
   }
 `;
 
+export const Line = styled.div<{ display: string }>`
+  display: ${({ display }) => display || 'none'};
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-neutral-2);
+`;
+
 export const AlertsGroup = styled.div`
   margin: 8px 6px 4px 14px;
 `;
