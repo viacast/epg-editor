@@ -160,7 +160,6 @@ export const AlertsGroup = styled.div`
   display: flex;
   position: relative;
   margin: 8px 6px 4px 14px;
-  cursor: pointer;
   svg {
     :hover {
       color: var(--color-neutral-2) !important;
