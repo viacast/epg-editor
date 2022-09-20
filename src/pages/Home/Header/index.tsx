@@ -304,7 +304,7 @@ const Header: React.FC<HeaderProps> = ({
                   {t('alert:error', {
                     count: alertCountByLevel.ERROR,
                   })}
-                  <MdErrorOutline color={ColorPallete.SYSTEM_1} />
+                  <MdErrorOutline color={ColorPallete.NEUTRAL_2} />
                 </MessageType>
                 {Object.entries(alertCountByType).map(([type, count]) =>
                   EPGValidator.getMessageLevel(
@@ -323,7 +323,7 @@ const Header: React.FC<HeaderProps> = ({
                   {t('alert:warn', {
                     count: alertCountByLevel.WARN,
                   })}
-                  <MdOutlineWarningAmber color={ColorPallete.SYSTEM_2} />
+                  <MdOutlineWarningAmber color={ColorPallete.NEUTRAL_2} />
                 </MessageType>
                 {Object.entries(alertCountByType).map(([type, count]) =>
                   EPGValidator.getMessageLevel(
