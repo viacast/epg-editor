@@ -394,7 +394,7 @@ const Header: React.FC<HeaderProps> = ({
               setShowTranslation(false);
             }}
           >
-            <BsGearFill size="28px" color="var(--color-neutral-3)" />
+            <BsGearFill size="28px" color={ColorPallete.NEUTRAL_3} />
           </IconButton>
           <Settings
             display={showSettings ? 'block' : 'none'}

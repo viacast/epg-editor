@@ -50,8 +50,8 @@ const Home: React.FC = () => {
       }
     }
     if (toggleClass) {
-      if (dimension.width - 600 <= 590) {
-        setTableWidth(590);
+      if (dimension.width - 600 <= 616) {
+        setTableWidth(616);
       } else {
         setTableWidth(dimension.width - 600);
       }
@@ -79,8 +79,8 @@ const Home: React.FC = () => {
       newSelectedProgramId.add(addedProgram.id);
       return newSelectedProgramId;
     });
-    if (dimension.width - 600 <= 590) {
-      setTableWidth(590);
+    if (dimension.width - 600 <= 616) {
+      setTableWidth(616);
     } else {
       setTableWidth(dimension.width - 600);
     }

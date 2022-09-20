@@ -17,7 +17,7 @@ export const TableMenuContainer = styled.div`
   flex-direction: row;
   width: 100%;
   height: 100%;
-  min-width: 1180px;
+  min-width: 1191px;
   min-height: 500px;
   padding-top: 20px;
   padding-left: 30px;
@@ -34,7 +34,7 @@ export const TableContainer = styled.div<{ width?: string }>`
   background-color: var(--color-neutral-5);
   border-radius: 4px;
   height: 100%;
-  min-width: 590px;
+  min-width: 621px;
   width: ${({ width }) => width || '100%'};
   transition: width 0.5s;
   body,
@@ -56,6 +56,9 @@ export const TableContainer = styled.div<{ width?: string }>`
     appearance: none;
     outline: 0;
     cursor: pointer;
+    &:hover {
+      border-color: var(--color-neutral-2);
+    }
     &::before {
       position: absolute;
       content: '';
