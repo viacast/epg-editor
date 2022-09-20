@@ -54,6 +54,7 @@ import {
   AlertsGroup,
   MessageBadgeContainer,
   MessageText,
+  Line,
 } from './styles';
 
 export interface HeaderProps {
@@ -296,7 +297,7 @@ const Header: React.FC<HeaderProps> = ({
                 count: programCount,
               })}
             </Text>
-            <hr />
+            <Line display={alertCountByLevel.ALL > 0 ? 'block' : 'none'} />
             {alertCountByLevel.ERROR > 0 && (
               <>
                 <MessageType>
