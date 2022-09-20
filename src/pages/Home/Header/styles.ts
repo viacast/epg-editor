@@ -16,38 +16,6 @@ export const HeaderContainer = styled.div`
   }
 `;
 
-export const Text = styled.div`
-  min-width: fit-content;
-  padding-block: 10px;
-  font-size: 20px;
-  text-align: center;
-`;
-
-export const MessageType = styled.div`
-  display: flex;
-
-  font-size: 18px;
-  text-align: center;
-  line-height: 2;
-  padding-inline: 5px;
-  justify-content: center;
-  align-items: center;
-
-  svg {
-    margin-left: 7px;
-  }
-`;
-
-export const MessageText = styled.div`
-  display: flex;
-  font-size: 12px;
-  text-align: center;
-  line-height: 2;
-  padding-inline: 5px;
-  justify-content: center;
-  align-items: center;
-`;
-
 export const MenuOptions = styled.div``;
 
 export const ExportOptions = styled.div<{ display: string }>`
@@ -63,20 +31,10 @@ export const ExportOptions = styled.div<{ display: string }>`
   }
 `;
 
-export const Line = styled.div<{ display: string }>`
-  display: ${({ display }) => display || 'none'};
-  width: 100%;
-  height: 1px;
-  background-color: var(--color-neutral-2);
-`;
-
-export const AlertsGroup = styled.div`
-  display: flex;
-  position: relative;
-  margin: 8px 6px 4px 14px;
-`;
-
 export const Configurations = styled.div`
+  position: relative;
+  display: flex;
+  flex: 1;
   width: 100%;
 `;
 
@@ -148,14 +106,15 @@ export const SettingsOption = styled.div`
 `;
 
 export const Translation = styled.div<{ display: string }>`
+  display: ${({ display }) => display || 'none'};
   position: absolute;
+  top: 45px;
+  left: 180px;
   z-index: 3;
   min-width: 174px;
-  margin-left: 204px;
   background-color: var(--color-neutral-1);
   border: 2px solid var(--color-neutral-3);
   border-radius: 4px;
-  display: ${({ display }) => display || 'none'};
   :hover {
     cursor: pointer;
     display: block;
@@ -190,6 +149,51 @@ export const Flag = styled.div`
   text-align: left;
   margin-left: 2.96px;
   margin-right: 13px;
+`;
+
+export const AlertsGroup = styled.div`
+  display: flex;
+  position: relative;
+  margin: 8px 6px 4px 14px;
+`;
+
+export const Line = styled.div<{ display: string }>`
+  display: ${({ display }) => display || 'none'};
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-neutral-2);
+`;
+
+export const Text = styled.div`
+  min-width: fit-content;
+  padding-block: 10px;
+  font-size: 20px;
+  text-align: center;
+`;
+
+export const MessageType = styled.div`
+  display: flex;
+
+  font-size: 18px;
+  text-align: center;
+  line-height: 2;
+  padding-inline: 5px;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    margin-left: 7px;
+  }
+`;
+
+export const MessageText = styled.div`
+  display: flex;
+  font-size: 12px;
+  text-align: center;
+  line-height: 2;
+  padding-inline: 5px;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const MessageBadgeContainer = styled.div`
