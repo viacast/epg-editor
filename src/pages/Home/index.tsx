@@ -29,7 +29,6 @@ const Home: React.FC = () => {
   );
   const [selectedProgram, setSelectedProgram] = useState<Program>();
   const [tableWidth, setTableWidth] = useState(dimension.width - 60);
-  const [toggleClass, setToggleClass] = useState(false);
 
   useEffect(() => {
     setSelectedProgram(programs.get(Array.from(selectedProgramId)[0]));
@@ -40,23 +39,6 @@ const Home: React.FC = () => {
       setSavedPrograms(programs.toArray());
     }
   }, [programs, setSavedPrograms]);
-
-  useEffect(() => {
-    if (!toggleClass) {
-      if (dimension.width - 60 <= 1210) {
-        setTableWidth(1210);
-      } else {
-        setTableWidth(dimension.width - 60);
-      }
-    }
-    if (toggleClass) {
-      if (dimension.width - 600 <= 1210) {
-        setTableWidth(1210);
-      } else {
-        setTableWidth(dimension.width - 600);
-      }
-    }
-  }, [setTableWidth, dimension, toggleClass]);
 
   const handleAddProgram = useCallback(() => {
     let startDateTime = new Date();
@@ -105,15 +87,11 @@ const Home: React.FC = () => {
       <HeaderContainer>
         <Header
           programs={programs}
-          selectedProgramId={selectedProgramId}
           setNewPrograms={newPrograms => {
             setSelectedProgramId(new Set());
-            setToggleClass(false);
             setSavedPrograms(newPrograms.toArray());
             setPrograms(newPrograms);
           }}
-          tableWidth={tableWidth}
-          setTableWidth={setTableWidth}
           handleAddProgram={handleAddProgram}
           handleClearProgramList={handleClearProgramList}
         />
@@ -129,7 +107,6 @@ const Home: React.FC = () => {
             setPrograms={setPrograms}
             selectedProgramId={selectedProgramId}
             setSelectedProgramId={setSelectedProgramId}
-            setToggleClass={setToggleClass}
           />
         </TableContainer>
         <MenuContainer
@@ -144,8 +121,6 @@ const Home: React.FC = () => {
           }
         >
           <Menu
-            tableWidth={tableWidth}
-            setTableWidth={setTableWidth}
             programs={programs}
             hasChanges={hasChanges}
             setHasChanges={setHasChanges}
@@ -178,7 +153,6 @@ const Home: React.FC = () => {
                 return p.remove(programId).clone();
               });
             }}
-            setToggleClass={setToggleClass}
           />
         </MenuContainer>
       </TableMenuContainer>

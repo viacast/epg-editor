@@ -3,8 +3,11 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 import { Table, Column, AutoSizer } from 'react-virtualized';
 import 'react-virtualized/styles.css';
-import { EPGValidator, Program } from 'services/epg';
-import { addToDate, EntityMap, formatDateTime, secondsToHms } from 'utils';
+import { IconButton, TableRow } from '@mui/material';
+import { HiPlus } from 'react-icons/hi';
+import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
+import { BeatLoader } from 'react-spinners';
+import { RiAlertFill } from 'react-icons/ri';
 
 import IconSC from 'assets/icons/ratings/SC.svg';
 import IconRL from 'assets/icons/ratings/RL.svg';
@@ -14,15 +17,18 @@ import IconR14 from 'assets/icons/ratings/R14.svg';
 import IconR16 from 'assets/icons/ratings/R16.svg';
 import IconR18 from 'assets/icons/ratings/R18.svg';
 
-import { IconButton, TableRow } from '@mui/material';
-import { HiPlus } from 'react-icons/hi';
-import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
-
-import { BeatLoader } from 'react-spinners';
-import { RiAlertFill } from 'react-icons/ri';
+import { EPGValidator, Program } from 'services/epg';
+import {
+  addToDate,
+  EntityMap,
+  formatDateTime,
+  secondsToHms,
+  ReactSetState,
+} from 'utils';
 import { EPGValidationMessagesByProgram } from 'services/epg/validator';
 import { useModalProvider } from 'providers/ModalProvider';
 import { ColorPallete } from 'styles/global';
+
 import {
   ParentalGuidanceCells,
   IconRating,
@@ -39,9 +45,8 @@ export interface ProgramTableProps {
   startWidth: number;
   programs: EntityMap<Program>;
   selectedProgramId: Set<string>;
-  setPrograms: React.Dispatch<React.SetStateAction<EntityMap<Program>>>;
-  setSelectedProgramId: React.Dispatch<React.SetStateAction<Set<string>>>;
-  setToggleClass: (val: boolean) => void;
+  setPrograms: ReactSetState<EntityMap<Program>>;
+  setSelectedProgramId: ReactSetState<Set<string>>;
 }
 
 const getItemStyle = (style, isDragging, draggableStyle) => ({
@@ -73,7 +78,6 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
   programs,
   selectedProgramId,
   setPrograms,
-  setToggleClass,
   setSelectedProgramId,
 }) => {
   const { t } = useTranslation();
@@ -247,11 +251,6 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                       });
                     }
                   }
-                  if (newSelectedProgramId.size === 1) {
-                    setToggleClass(true);
-                  } else {
-                    setToggleClass(false);
-                  }
                   return newSelectedProgramId;
                 });
               }}
@@ -282,11 +281,6 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                         newSelectedProgramId.delete(program.id);
                       } else {
                         newSelectedProgramId.add(program.id);
-                      }
-                      if (newSelectedProgramId.size === 1) {
-                        setToggleClass(true);
-                      } else {
-                        setToggleClass(false);
                       }
                       return newSelectedProgramId;
                     });
@@ -337,7 +331,6 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                         startDateTime,
                       });
                       setPrograms(p => p.add(newProgram, program.id).clone());
-                      setToggleClass(true);
                       setSelectedProgramId(s => {
                         const newSelectedProgramId = new Set(s);
                         newSelectedProgramId.clear();
@@ -361,7 +354,6 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
       selectedProgramId,
       setPrograms,
       setSelectedProgramId,
-      setToggleClass,
       t,
     ],
   );
@@ -486,7 +478,6 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                       <Checkbox
                         readOnly
                         onClick={() => {
-                          setToggleClass(false);
                           setSelectedProgramId(p => {
                             if (p.size === programs.toArray().length) {
                               return new Set();

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { hasValue } from 'utils';
+import { hasValue, ReactSetState } from 'utils';
 
 // eslint-disable-next-line no-shadow
 export enum LocalStorageKeys {
@@ -10,11 +10,7 @@ export enum LocalStorageKeys {
 export default function useLocalStorage<DataType = unknown>(
   key: LocalStorageKeys,
   defaultValue?: DataType,
-): [
-  DataType | undefined,
-  React.Dispatch<React.SetStateAction<DataType | undefined>>,
-  () => void,
-] {
+): [DataType | undefined, ReactSetState<DataType | undefined>, () => void] {
   const actualKey = `@${process.env.REACT_APP_NAME}:${key}`;
 
   const inLocalStorage = localStorage.getItem(actualKey);
