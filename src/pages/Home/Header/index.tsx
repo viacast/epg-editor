@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CgPlayListAdd, CgPlayListRemove } from 'react-icons/cg';
