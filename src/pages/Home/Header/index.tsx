@@ -58,20 +58,14 @@ import {
 } from './styles';
 
 export interface HeaderProps {
-  tableWidth: number;
   programs: EntityMap<Program>;
-  selectedProgramId: Set<string>;
-  setTableWidth: (val: number) => void;
   setNewPrograms: (programs: EntityMap<Program>) => void;
   handleAddProgram: () => void;
   handleClearProgramList: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
-  tableWidth,
   programs,
-  selectedProgramId,
-  setTableWidth,
   setNewPrograms,
   handleAddProgram,
   handleClearProgramList,
@@ -275,20 +269,17 @@ const Header: React.FC<HeaderProps> = ({
         onClick={handleClear}
       />
       <Button
-        text={t('header:buttonStartDateTime')}
+        text={t('header:buttonAdjustStartDateTime')}
         icon={<BsClockHistory />}
         onClick={() => {
           openModal({
-            title: t('header:buttonStartDateTime'),
-            content: t('header:adjustStartDateTime'),
+            title: t('header:buttonAdjustStartDateTime'),
+            content: t('header:alertAdjustStartDateTime'),
             confirm: () => {
               const adjustedPrograms = EPGValidator.adjustDateTimes(
                 programs.toArray(),
               );
               setNewPrograms(new EntityMap(adjustedPrograms));
-              if (selectedProgramId.size === 1) {
-                setTableWidth(tableWidth + 540);
-              }
             },
           });
         }}

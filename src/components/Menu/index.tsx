@@ -9,6 +9,9 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { format } from 'date-fns';
 import { Box, ClickAwayListener } from '@mui/material';
 import structuredClone from '@ungap/structured-clone';
+import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
+import { RiAlertFill } from 'react-icons/ri';
+
 import {
   Text,
   Button,
@@ -29,14 +32,13 @@ import C14 from 'assets/icons/ratings/R14.svg';
 import C16 from 'assets/icons/ratings/R16.svg';
 import C18 from 'assets/icons/ratings/R18.svg';
 import { useModalProvider } from 'providers/ModalProvider';
-import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
-import { RiAlertFill } from 'react-icons/ri';
 import EntityMap from 'utils/entityMap';
 import {
   EPGValidationMessages,
   EPGValidationMessageType,
 } from 'services/epg/validator';
 import { ColorPallete } from 'styles/global';
+import { ReactSetState } from 'utils';
 import {
   BottomContainer,
   ButtonContainer,
@@ -71,27 +73,21 @@ const ratings = {
 export interface MenuProps {
   programs: EntityMap<Program>;
   hasChanges: boolean;
-  tableWidth: number;
   selectedProgram: Program;
-  setTableWidth: (val: number) => void;
-  setSelectedProgramId: React.Dispatch<React.SetStateAction<Set<string>>>;
+  setSelectedProgramId: ReactSetState<Set<string>>;
   setHasChanges: (val: boolean) => void;
   onSaveProgram: (val: Program) => void;
   handleRemoveProgram: (val: string) => void;
-  setToggleClass: (val: boolean) => void;
 }
 
 const Menu: React.FC<MenuProps> = ({
   programs,
   hasChanges,
-  tableWidth,
   selectedProgram,
-  setTableWidth,
   setSelectedProgramId,
   setHasChanges,
   onSaveProgram,
   handleRemoveProgram,
-  setToggleClass,
 }) => {
   const { t } = useTranslation();
 
@@ -435,7 +431,6 @@ const Menu: React.FC<MenuProps> = ({
                   </Text>
                   <DurationPicker
                     duration={newProgram?.duration ?? 0}
-                    // eslint-disable-next-line no-shadow
                     onSubmit={duration => {
                       setNewProgram(p => ({ ...p, duration }));
                       setHasChanges(true);
@@ -452,8 +447,6 @@ const Menu: React.FC<MenuProps> = ({
                 onClick={() => {
                   setSelectedProgramId(new Set());
                   setHasChanges(false);
-                  setTableWidth(tableWidth + 540);
-                  setToggleClass(false);
                 }}
               />
               <Button
