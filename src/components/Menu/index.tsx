@@ -166,7 +166,7 @@ const Menu: React.FC<MenuProps> = ({
             <Form>
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:title')}
-                {programMessages.ALL?.includes(
+                {programMessages.ALL?.has(
                   EPGValidationMessageType.EMPTY_TITLE,
                 ) && (
                   <Tooltip
@@ -193,7 +193,7 @@ const Menu: React.FC<MenuProps> = ({
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:description')}
-                {programMessages.ALL?.includes(
+                {programMessages.ALL?.has(
                   EPGValidationMessageType.EMPTY_DESCRIPTION,
                 ) && (
                   <Tooltip
@@ -221,7 +221,7 @@ const Menu: React.FC<MenuProps> = ({
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:parentalRating')}
-                {programMessages.ALL?.includes(
+                {programMessages.ALL?.has(
                   EPGValidationMessageType.NO_PARENTAL_RATING,
                 ) && (
                   <MessageIconContainer>
@@ -272,7 +272,7 @@ const Menu: React.FC<MenuProps> = ({
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:startDate')}
-                    {programMessages.ALL?.includes(
+                    {programMessages.ALL?.has(
                       EPGValidationMessageType.PAST_START_DATE,
                     ) && (
                       <MessageIconContainer>
@@ -294,7 +294,7 @@ const Menu: React.FC<MenuProps> = ({
                         </Tooltip>
                       </MessageIconContainer>
                     )}
-                    {programMessages.ALL?.includes(
+                    {programMessages.ALL?.has(
                       EPGValidationMessageType.FAR_START_DATE,
                     ) && (
                       <MessageIconContainer>
@@ -334,7 +334,7 @@ const Menu: React.FC<MenuProps> = ({
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:startTime')}
-                    {programMessages.ALL?.includes(
+                    {programMessages.ALL?.has(
                       EPGValidationMessageType.TIME_GAP,
                     ) && (
                       <MessageIconContainer>
@@ -406,7 +406,7 @@ const Menu: React.FC<MenuProps> = ({
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:duration')}
-                    {programMessages.ALL?.includes(
+                    {programMessages.ALL?.has(
                       EPGValidationMessageType.INVALID_DURATION,
                     ) && (
                       <MessageIconContainer>

@@ -192,15 +192,15 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
       let showWarn = false;
       let showInfo = false;
 
-      if (messages[program.id]?.ERROR.length) {
+      if (messages[program.id]?.ERROR.size) {
         showError = true;
       }
 
-      if (!showError && messages[program.id]?.WARN.length) {
+      if (!showError && messages[program.id]?.WARN.size) {
         showWarn = true;
       }
 
-      if (!showError && !showWarn && messages[program.id]?.INFO.length) {
+      if (!showError && !showWarn && messages[program.id]?.INFO.size) {
         showInfo = true;
       }
 

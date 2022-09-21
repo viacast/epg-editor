@@ -21,7 +21,7 @@ export enum EPGValidationMessageType {
 }
 export type EPGValidationMessages = Record<
   EPGValidationMessageLevel,
-  EPGValidationMessageType[]
+  Set<EPGValidationMessageType>
 >;
 
 export type EPGValidationMessagesByProgram = Record<
@@ -44,11 +44,11 @@ export default class EPGValidator {
   ): EPGValidationMessages {
     const messages = {} as EPGValidationMessages;
     Object.values(EPGValidationMessageLevel).forEach(l => {
-      messages[l] = [];
+      messages[l] = new Set();
     });
     types.forEach(t => {
-      messages[EPGValidationMessageTypeLevels[t]].push(t);
-      messages.ALL.push(t);
+      messages[EPGValidationMessageTypeLevels[t]].add(t);
+      messages.ALL.add(t);
     });
     return messages;
   }
@@ -66,7 +66,7 @@ export default class EPGValidator {
     });
     Object.values(messages).forEach(m => {
       Object.entries(m).forEach(([level, mm]) => {
-        count[level] += mm.length;
+        count[level] += mm.size;
       });
     });
 
