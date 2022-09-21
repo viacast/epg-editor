@@ -43,15 +43,15 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     if (!toggleClass) {
-      if (dimension.width - 60 <= 1100) {
-        setTableWidth(1100);
+      if (dimension.width - 60 <= 1210) {
+        setTableWidth(1210);
       } else {
         setTableWidth(dimension.width - 60);
       }
     }
     if (toggleClass) {
-      if (dimension.width - 600 <= 616) {
-        setTableWidth(616);
+      if (dimension.width - 600 <= 1210) {
+        setTableWidth(1210);
       } else {
         setTableWidth(dimension.width - 600);
       }
@@ -79,8 +79,8 @@ const Home: React.FC = () => {
       newSelectedProgramId.add(addedProgram.id);
       return newSelectedProgramId;
     });
-    if (dimension.width - 600 <= 616) {
-      setTableWidth(616);
+    if (dimension.width - 600 <= 1210) {
+      setTableWidth(1210);
     } else {
       setTableWidth(dimension.width - 600);
     }
@@ -137,7 +137,7 @@ const Home: React.FC = () => {
           width={
             // eslint-disable-next-line no-nested-ternary
             selectedProgramId.size === 1
-              ? dimension.width < 1160
+              ? dimension.width < 1210
                 ? '480px'
                 : '500px'
               : '0px'
@@ -164,7 +164,7 @@ const Home: React.FC = () => {
                   // was the only program on the list
                   handleClearProgramList(); // just clear table
                   setTableWidth(
-                    dimension.width - 60 <= 1160 ? 1160 : dimension.width - 60,
+                    dimension.width - 60 <= 1210 ? 1210 : dimension.width - 60,
                   ); // force menu container to close
                 } else if (index === size - 1) {
                   // was the last program on the list
