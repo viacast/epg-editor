@@ -3,6 +3,7 @@ import MUITooltip, {
   TooltipProps,
   tooltipClasses,
 } from '@mui/material/Tooltip';
+import { ColorPallete } from 'styles/global';
 
 const Tooltip = styled(({ className, ...props }: TooltipProps) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -10,7 +11,10 @@ const Tooltip = styled(({ className, ...props }: TooltipProps) => (
 ))({
   [`& .${tooltipClasses.tooltip}`]: {
     maxWidth: 500,
-    backgroundColor: 'rgba(88,88,88, 1)',
+    backgroundColor: `${ColorPallete.NEUTRAL_3}ff`,
+  },
+  [`& .${tooltipClasses.arrow}`]: {
+    color: `${ColorPallete.NEUTRAL_3}ff`,
   },
 });
 
