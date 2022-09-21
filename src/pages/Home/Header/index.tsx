@@ -16,7 +16,7 @@ import {
 } from 'react-icons/bs';
 import {
   MdErrorOutline,
-  MdKeyboardArrowRight,
+  MdKeyboardArrowLeft,
   MdNotifications,
   MdOutlineWarningAmber,
 } from 'react-icons/md';
@@ -401,11 +401,8 @@ const Header: React.FC<HeaderProps> = ({
             onClick={() => setShowTranslation(s => !s)}
           >
             <SettingsOption>
-              <BsTranslate /> &nbsp; {t('header:settingsLanguage')} &nbsp;{' '}
-              <MdKeyboardArrowRight
-                className="epg-language-arrow"
-                size="16px"
-              />
+              {t('header:settingsLanguage')} &nbsp; <BsTranslate /> &nbsp;{' '}
+              <MdKeyboardArrowLeft className="epg-language-arrow" size="16px" />
             </SettingsOption>
           </Settings>
         </ContainerSettings>

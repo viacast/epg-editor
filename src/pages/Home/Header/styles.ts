@@ -73,6 +73,8 @@ export const Settings = styled.div<{ display: string }>`
   border-radius: 4px;
   display: ${({ display }) => display || 'none'};
   position: absolute;
+  left: -135px;
+  top: 50px;
   z-index: 3;
   padding-inline: 10px;
   padding-top: 4px;
@@ -80,6 +82,7 @@ export const Settings = styled.div<{ display: string }>`
   height: 48px;
   vertical-align: middle;
   div {
+    text-align: right;
     width: 150px;
     padding-block: 8px;
     color: var(--color-neutral-3);
@@ -105,7 +108,7 @@ export const SettingsOption = styled.div`
   .epg-language-arrow {
     vertical-align: middle;
     position: relative;
-    float: right;
+    float: left;
     margin-block: 2px;
   }
 `;
@@ -113,8 +116,8 @@ export const SettingsOption = styled.div`
 export const Translation = styled.div<{ display: string }>`
   display: ${({ display }) => display || 'none'};
   position: absolute;
-  top: 44px;
-  left: 180px;
+  top: 50px;
+  left: -320px;
   z-index: 3;
   min-width: 174px;
   background-color: var(--color-neutral-1);
