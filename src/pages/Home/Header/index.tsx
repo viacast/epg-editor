@@ -315,7 +315,7 @@ const Header: React.FC<HeaderProps> = ({
                   EPGValidator.getMessageLevel(
                     type as EPGValidationMessageType,
                   ) === EPGValidationMessageLevel.ERROR && count > 0 ? (
-                    <MessageText>
+                    <MessageText key={`message-${type}`}>
                       {t(`messages:message_${type}`)} ({count})
                     </MessageText>
                   ) : null,
@@ -334,7 +334,7 @@ const Header: React.FC<HeaderProps> = ({
                   EPGValidator.getMessageLevel(
                     type as EPGValidationMessageType,
                   ) === EPGValidationMessageLevel.WARN && count > 0 ? (
-                    <MessageText>
+                    <MessageText key={`message-${type}`}>
                       {t(`messages:message_${type}`)} ({count})
                     </MessageText>
                   ) : null,
@@ -355,7 +355,7 @@ const Header: React.FC<HeaderProps> = ({
                   EPGValidator.getMessageLevel(
                     type as EPGValidationMessageType,
                   ) === EPGValidationMessageLevel.INFO && count > 0 ? (
-                    <MessageText>
+                    <MessageText key={`message-${type}`}>
                       {t(`messages:message_${type}`)} ({count})
                     </MessageText>
                   ) : null,

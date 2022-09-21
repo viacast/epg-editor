@@ -395,6 +395,16 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
     [setPrograms],
   );
 
+  const renderLoading = useCallback(() => {
+    return (
+      programs.count && (
+        <LoaderContainer>
+          <BeatLoader color={ColorPallete.NEUTRAL_3} />
+        </LoaderContainer>
+      )
+    );
+  }, [programs.count]);
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable
@@ -468,15 +478,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                   }
                 }}
                 rowRenderer={getRowRender}
-                // eslint-disable-next-line react/no-unstable-nested-components
-                noRowsRenderer={() => {
-                  // eslint-disable-next-line no-unused-expressions
-                  programs.count && (
-                    <LoaderContainer>
-                      <BeatLoader color={ColorPallete.NEUTRAL_3} />
-                    </LoaderContainer>
-                  );
-                }}
+                noRowsRenderer={() => renderLoading()}
               >
                 <Column
                   label={
