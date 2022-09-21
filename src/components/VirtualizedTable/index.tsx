@@ -293,24 +293,33 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                   checked={selectedProgramId.has(program.id)}
                 />{' '}
                 <MessagesContainer>
-                  <ValidationMessage display={showError ? 'block' : 'none'}>
-                    <IconButton>
-                      <IoIosAlert size="20px" color="var(--color-system-1)" />
-                    </IconButton>
-                  </ValidationMessage>
-                  <ValidationMessage display={showWarn ? 'block' : 'none'}>
-                    <IconButton>
-                      <RiAlertFill size="20px" color="var(--color-system-2)" />
-                    </IconButton>
-                  </ValidationMessage>
-                  <ValidationMessage display={showInfo ? 'block' : 'none'}>
-                    <IconButton>
-                      <IoIosInformationCircle
-                        size="20px"
-                        color="var(--color-neutral-3)"
-                      />
-                    </IconButton>
-                  </ValidationMessage>
+                  {showError && (
+                    <ValidationMessage>
+                      <IconButton>
+                        <IoIosAlert size="20px" color="var(--color-system-1)" />
+                      </IconButton>
+                    </ValidationMessage>
+                  )}
+                  {showWarn && (
+                    <ValidationMessage>
+                      <IconButton>
+                        <RiAlertFill
+                          size="20px"
+                          color="var(--color-system-2)"
+                        />
+                      </IconButton>
+                    </ValidationMessage>
+                  )}
+                  {showInfo && (
+                    <ValidationMessage>
+                      <IconButton>
+                        <IoIosInformationCircle
+                          size="20px"
+                          color="var(--color-neutral-3)"
+                        />
+                      </IconButton>
+                    </ValidationMessage>
+                  )}
                 </MessagesContainer>
                 <AddToList className="epg-add-to-list">
                   <HiPlus
@@ -459,13 +468,14 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 }}
                 rowRenderer={getRowRender}
                 // eslint-disable-next-line react/no-unstable-nested-components
-                noRowsRenderer={() => (
-                  <LoaderContainer
-                    display={programs.count !== 0 ? 'flex' : 'none'}
-                  >
-                    <BeatLoader color="var(--color-neutral-3)" />
-                  </LoaderContainer>
-                )}
+                noRowsRenderer={() => {
+                  // eslint-disable-next-line no-unused-expressions
+                  programs.count && (
+                    <LoaderContainer>
+                      <BeatLoader color="var(--color-neutral-3)" />
+                    </LoaderContainer>
+                  );
+                }}
               >
                 <Column
                   label={

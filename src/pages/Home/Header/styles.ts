@@ -18,8 +18,7 @@ export const HeaderContainer = styled.div`
 
 export const MenuOptions = styled.div``;
 
-export const ExportOptions = styled.div<{ display: string }>`
-  display: ${({ display }) => display || 'none'};
+export const ExportOptions = styled.div`
   position: absolute;
   z-index: 3;
   padding-top: 10px;
@@ -67,11 +66,10 @@ export const ContainerSettings = styled.div<{
   }
 `;
 
-export const Settings = styled.div<{ display: string }>`
+export const Settings = styled.div`
   background-color: var(--color-neutral-1);
   border: 2px solid var(--color-neutral-3);
   border-radius: 4px;
-  display: ${({ display }) => display || 'none'};
   position: absolute;
   left: -135px;
   top: 50px;
@@ -113,8 +111,7 @@ export const SettingsOption = styled.div`
   }
 `;
 
-export const Translation = styled.div<{ display: string }>`
-  display: ${({ display }) => display || 'none'};
+export const Translation = styled.div`
   position: absolute;
   top: 50px;
   left: -320px;
@@ -170,8 +167,7 @@ export const MessagesContainer = styled.div`
   }
 `;
 
-export const Line = styled.div<{ display: string }>`
-  display: ${({ display }) => display || 'none'};
+export const Line = styled.div`
   width: 100%;
   height: 1px;
   background-color: var(--color-neutral-2);

@@ -54,13 +54,11 @@ export const MessagesContainer = styled.div`
   max-width: 30px;
 `;
 
-export const ValidationMessage = styled.div<{ display: string }>`
-  display: ${({ display }) => display || 'none'};
+export const ValidationMessage = styled.div`
   margin-inline: 2px;
 `;
 
-export const LoaderContainer = styled.div<{ display: string }>`
-  display: ${({ display }) => display || 'none'};
+export const LoaderContainer = styled.div`
   height: 100%;
   width: 100%;
   align-items: center;
