@@ -389,7 +389,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
 
   const renderLoading = useCallback(() => {
     return (
-      programs.count && (
+      programs.count > 0 && (
         <LoaderContainer>
           <BeatLoader color={ColorPallete.NEUTRAL_3} />
         </LoaderContainer>
