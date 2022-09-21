@@ -23,6 +23,12 @@ export type EPGValidationMessages = Record<
   EPGValidationMessageLevel,
   EPGValidationMessageType[]
 >;
+
+export type EPGValidationMessagesByProgram = Record<
+  string,
+  EPGValidationMessages
+>;
+
 export const EPGValidationMessageTypeLevels = {
   [EPGValidationMessageType.EMPTY_TITLE]: EPGValidationMessageLevel.ERROR,
   [EPGValidationMessageType.EMPTY_DESCRIPTION]: EPGValidationMessageLevel.ERROR,
@@ -53,7 +59,7 @@ export default class EPGValidator {
     return EPGValidationMessageTypeLevels[message];
   }
 
-  static countMessagesByLevel(messages: Record<string, EPGValidationMessages>) {
+  static countMessagesByLevel(messages: EPGValidationMessagesByProgram) {
     const count = {} as Record<EPGValidationMessageLevel, number>;
     Object.values(EPGValidationMessageLevel).forEach(l => {
       count[l] = 0;
@@ -69,7 +75,7 @@ export default class EPGValidator {
 
   static countMessagesByType(
     programs: EntityMap<Program>,
-    messages: Record<string, EPGValidationMessages>,
+    messages: EPGValidationMessagesByProgram,
   ) {
     const count = {} as Record<EPGValidationMessageType, number>;
     Object.values(EPGValidationMessageType).forEach(l => {
@@ -83,50 +89,8 @@ export default class EPGValidator {
     return count;
   }
 
-  static menuAlert(programs: Program[], selectedProgram: Program) {
-    const alerts = {
-      title: false,
-      description: false,
-      duration: false,
-      rating: false,
-      past: false,
-      future: false,
-      gap: false,
-    };
-    if (selectedProgram.title === '') {
-      alerts.title = true;
-    }
-    if (selectedProgram.description === '') {
-      alerts.description = true;
-    }
-    if (selectedProgram.duration <= 0) {
-      alerts.duration = true;
-    }
-    if (selectedProgram.rating === ProgramRating.RSC) {
-      alerts.rating = true;
-    }
-    if (selectedProgram.startDateTime < new Date()) {
-      alerts.past = true;
-    }
-    if (selectedProgram.startDateTime >= addToDate(new Date(), 2592000)) {
-      // the start time is 30 days far from now
-      alerts.future = true;
-    }
-    if (
-      programs.indexOf(selectedProgram) > 0 &&
-      selectedProgram.startDateTime.getTime() !==
-        addToDate(
-          programs[programs.indexOf(selectedProgram) - 1].startDateTime,
-          programs[programs.indexOf(selectedProgram) - 1].duration,
-        ).getTime()
-    ) {
-      alerts.gap = true;
-    }
-    return alerts;
-  }
-
-  static validate(programs: Program[]): Record<string, EPGValidationMessages> {
-    const messages: Record<string, EPGValidationMessages> = {};
+  static validate(programs: Program[]): EPGValidationMessagesByProgram {
+    const messages = {} as EPGValidationMessagesByProgram;
     programs.forEach((p, i, progs) => {
       const messageTypes: EPGValidationMessageType[] = [];
       if (p.title === '') {
@@ -145,7 +109,7 @@ export default class EPGValidator {
         messageTypes.push(EPGValidationMessageType.PAST_START_DATE);
       }
       if (p.startDateTime >= addToDate(new Date(), 2592000)) {
-        // the start time is 30 days far from now
+        // the start time is 30 days forward from now
         messageTypes.push(EPGValidationMessageType.FAR_START_DATE);
       }
       if (

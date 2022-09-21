@@ -203,7 +203,7 @@ export const HelpContainer = styled.div`
   }
 `;
 
-export const GroupAlert = styled.div`
+export const MessageIconContainer = styled.div`
   display: inline-block;
   max-height: 24px;
   vertical-align: middle;

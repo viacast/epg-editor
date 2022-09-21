@@ -49,12 +49,12 @@ export const Checkbox = styled.input.attrs({ type: 'checkbox' })`
   min-width: 20px;
 `;
 
-export const AlertsGroup = styled.div`
+export const MessagesContainer = styled.div`
   min-width: 30px;
   max-width: 30px;
 `;
 
-export const Alerts = styled.div<{ display: string }>`
+export const ValidationMessage = styled.div<{ display: string }>`
   display: ${({ display }) => display || 'none'};
   margin-inline: 2px;
 `;

@@ -33,6 +33,10 @@ import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
 import { RiAlertFill } from 'react-icons/ri';
 import EntityMap from 'utils/entityMap';
 import {
+  EPGValidationMessages,
+  EPGValidationMessageType,
+} from 'services/epg/validator';
+import {
   BottomContainer,
   ButtonContainer,
   ContentContainer,
@@ -49,7 +53,7 @@ import {
   HelpContainer,
   ToolbarText,
   ActionButtons,
-  GroupAlert,
+  MessageIconContainer,
   Message,
 } from './styles';
 
@@ -95,12 +99,9 @@ const Menu: React.FC<MenuProps> = ({
     selectedProgram ? structuredClone(selectedProgram) : new Program(),
   );
   const [openTime, setOpenTime] = useState(false);
-  const [dateTime, setDateTime] = useState(new Date());
-  const stHour = format(dateTime, 'HH:mm:ss');
-
-  useEffect(() => {
-    setDateTime(newProgram?.startDateTime);
-  }, [newProgram]);
+  const [programMessages, setProgramMessages] = useState(
+    {} as EPGValidationMessages,
+  );
 
   useEffect(() => {
     setNewProgram(
@@ -108,19 +109,10 @@ const Menu: React.FC<MenuProps> = ({
     );
   }, [selectedProgram]);
 
-  const [alerts, setAlerts] = useState({
-    title: false,
-    description: false,
-    duration: false,
-    rating: false,
-    past: false,
-    future: false,
-    gap: false,
-  });
-
   useEffect(() => {
-    setAlerts(EPGValidator.menuAlert(programs.toArray(), selectedProgram));
-  }, [programs, selectedProgram]);
+    const messages = EPGValidator.validate(programs.toArray());
+    setProgramMessages(messages[selectedProgram.id] ?? {});
+  }, [programs, selectedProgram.id]);
 
   return (
     <MenuContainer>
@@ -175,15 +167,19 @@ const Menu: React.FC<MenuProps> = ({
             <Form>
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:title')}
-                {alerts.title && (
+                {programMessages.ALL?.includes(
+                  EPGValidationMessageType.EMPTY_TITLE,
+                ) && (
                   <Tooltip
                     arrow
-                    title={<Message>{t('alert:message_EMPTY_TITLE')}</Message>}
+                    title={
+                      <Message>{t('messages:message_EMPTY_TITLE')}</Message>
+                    }
                   >
-                    <GroupAlert>
+                    <MessageIconContainer>
                       &nbsp;
                       <IoIosAlert size="16px" color="var(--color-system-1)" />
-                    </GroupAlert>
+                    </MessageIconContainer>
                   </Tooltip>
                 )}
               </Text>
@@ -198,17 +194,21 @@ const Menu: React.FC<MenuProps> = ({
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:description')}
-                {alerts.description && (
+                {programMessages.ALL?.includes(
+                  EPGValidationMessageType.EMPTY_DESCRIPTION,
+                ) && (
                   <Tooltip
                     arrow
                     title={
-                      <Message>{t('alert:message_EMPTY_DESCRIPTION')}</Message>
+                      <Message>
+                        {t('messages:message_EMPTY_DESCRIPTION')}
+                      </Message>
                     }
                   >
-                    <GroupAlert>
+                    <MessageIconContainer>
                       &nbsp;
                       <IoIosAlert size="16px" color="var(--color-system-1)" />
-                    </GroupAlert>
+                    </MessageIconContainer>
                   </Tooltip>
                 )}
               </Text>
@@ -222,25 +222,27 @@ const Menu: React.FC<MenuProps> = ({
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 {t('menu:parentalRating')}
-                {alerts.rating && (
-                  <GroupAlert>
+                {programMessages.ALL?.includes(
+                  EPGValidationMessageType.NO_PARENTAL_RATING,
+                ) && (
+                  <MessageIconContainer>
                     <Tooltip
                       arrow
                       title={
                         <Message>
-                          {t('alert:message_NO_PARENTAL_RATING')}
+                          {t('messages:message_NO_PARENTAL_RATING')}
                         </Message>
                       }
                     >
-                      <GroupAlert>
+                      <MessageIconContainer>
                         &nbsp;
                         <RiAlertFill
                           size="16px"
                           color="var(--color-system-2)"
                         />
-                      </GroupAlert>
+                      </MessageIconContainer>
                     </Tooltip>
-                  </GroupAlert>
+                  </MessageIconContainer>
                 )}
               </Text>
               <SelectRateContainer>
@@ -271,45 +273,49 @@ const Menu: React.FC<MenuProps> = ({
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:startDate')}
-                    {alerts.past && (
-                      <GroupAlert>
+                    {programMessages.ALL?.includes(
+                      EPGValidationMessageType.PAST_START_DATE,
+                    ) && (
+                      <MessageIconContainer>
                         <Tooltip
                           arrow
                           title={
                             <Message>
-                              {t('alert:message_PAST_START_DATE')}
+                              {t('messages:message_PAST_START_DATE')}
                             </Message>
                           }
                         >
-                          <GroupAlert>
+                          <MessageIconContainer>
                             &nbsp;
                             <RiAlertFill
                               size="16px"
                               color="var(--color-system-2)"
                             />
-                          </GroupAlert>
+                          </MessageIconContainer>
                         </Tooltip>
-                      </GroupAlert>
+                      </MessageIconContainer>
                     )}
-                    {alerts.future && (
-                      <GroupAlert>
+                    {programMessages.ALL?.includes(
+                      EPGValidationMessageType.FAR_START_DATE,
+                    ) && (
+                      <MessageIconContainer>
                         <Tooltip
                           arrow
                           title={
                             <Message color="var(--color-neutral-3)">
-                              {t('alert:message_FAR_START_DATE')}
+                              {t('messages:message_FAR_START_DATE')}
                             </Message>
                           }
                         >
-                          <GroupAlert>
+                          <MessageIconContainer>
                             &nbsp;
                             <IoIosInformationCircle
                               size="16px"
                               color="var(--color-neutral-3)"
                             />
-                          </GroupAlert>
+                          </MessageIconContainer>
                         </Tooltip>
-                      </GroupAlert>
+                      </MessageIconContainer>
                     )}
                   </Text>
                   <DatePicker
@@ -329,23 +335,25 @@ const Menu: React.FC<MenuProps> = ({
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:startTime')}
-                    {alerts.gap && (
-                      <GroupAlert>
+                    {programMessages.ALL?.includes(
+                      EPGValidationMessageType.TIME_GAP,
+                    ) && (
+                      <MessageIconContainer>
                         <Tooltip
                           arrow
                           title={
-                            <Message>{t('alert:message_TIME_GAP')}</Message>
+                            <Message>{t('messages:message_TIME_GAP')}</Message>
                           }
                         >
-                          <GroupAlert>
+                          <MessageIconContainer>
                             &nbsp;
                             <IoIosAlert
                               size="16px"
                               color="var(--color-system-1)"
                             />
-                          </GroupAlert>
+                          </MessageIconContainer>
                         </Tooltip>
-                      </GroupAlert>
+                      </MessageIconContainer>
                     )}
                   </Text>
                   <ClickAwayListener
@@ -358,7 +366,10 @@ const Menu: React.FC<MenuProps> = ({
                         <StyledInput variant="outlined">
                           <OutlinedInput
                             className="epg-time"
-                            value={stHour}
+                            value={format(
+                              newProgram?.startDateTime,
+                              'HH:mm:ss',
+                            )}
                             endAdornment={
                               <InputAdornment position="end">
                                 <IconButton
@@ -386,7 +397,6 @@ const Menu: React.FC<MenuProps> = ({
                             });
                             setHasChanges(true);
                           }}
-                          setTime={setDateTime}
                         />
                       ) : null}
                     </Box>
@@ -397,25 +407,27 @@ const Menu: React.FC<MenuProps> = ({
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:duration')}
-                    {alerts.duration && (
-                      <GroupAlert>
+                    {programMessages.ALL?.includes(
+                      EPGValidationMessageType.INVALID_DURATION,
+                    ) && (
+                      <MessageIconContainer>
                         <Tooltip
                           arrow
                           title={
                             <Message>
-                              {t('alert:message_INVALID_DURATION')}
+                              {t('messages:message_INVALID_DURATION')}
                             </Message>
                           }
                         >
-                          <GroupAlert>
+                          <MessageIconContainer>
                             &nbsp;
                             <IoIosAlert
                               size="16px"
                               color="var(--color-system-1)"
                             />
-                          </GroupAlert>
+                          </MessageIconContainer>
                         </Tooltip>
-                      </GroupAlert>
+                      </MessageIconContainer>
                     )}
                   </Text>
                   <DurationPicker

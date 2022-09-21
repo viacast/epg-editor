@@ -20,7 +20,7 @@ import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
 
 import { BeatLoader } from 'react-spinners';
 import { RiAlertFill } from 'react-icons/ri';
-import { EPGValidationMessages } from 'services/epg/validator';
+import { EPGValidationMessagesByProgram } from 'services/epg/validator';
 import { useModalProvider } from 'providers/ModalProvider';
 import {
   ParentalGuidanceCells,
@@ -29,8 +29,8 @@ import {
   RowElement,
   AddToList,
   Checkbox,
-  Alerts,
-  AlertsGroup,
+  ValidationMessage,
+  MessagesContainer,
   LoaderContainer,
 } from './styles';
 
@@ -67,7 +67,7 @@ const rate = {
   R18: IconR18,
 };
 
-const VTable: React.FC<ProgramTableProps> = ({
+const VirtualizedTable: React.FC<ProgramTableProps> = ({
   startWidth,
   programs,
   selectedProgramId,
@@ -76,8 +76,8 @@ const VTable: React.FC<ProgramTableProps> = ({
   setSelectedProgramId,
 }) => {
   const { t } = useTranslation();
-  const [alerts, setAlerts] = useState<Record<string, EPGValidationMessages>>(
-    {},
+  const [messages, setMessages] = useState(
+    {} as EPGValidationMessagesByProgram,
   );
   const { openModal } = useModalProvider();
   const [firstProg, setFirstProg] = useState(Array.from(selectedProgramId)[0]);
@@ -151,7 +151,7 @@ const VTable: React.FC<ProgramTableProps> = ({
   ]);
 
   useEffect(() => {
-    setAlerts(EPGValidator.validate(programs.toArray()));
+    setMessages(EPGValidator.validate(programs.toArray()));
   }, [programs]);
 
   const getRowRender = useCallback(
@@ -187,15 +187,15 @@ const VTable: React.FC<ProgramTableProps> = ({
       let showWarn = false;
       let showInfo = false;
 
-      if (alerts[program.id]?.ERROR.length) {
+      if (messages[program.id]?.ERROR.length) {
         showError = true;
       }
 
-      if (!showError && alerts[program.id]?.WARN.length) {
+      if (!showError && messages[program.id]?.WARN.length) {
         showWarn = true;
       }
 
-      if (!showError && !showWarn && alerts[program.id]?.INFO.length) {
+      if (!showError && !showWarn && messages[program.id]?.INFO.length) {
         showInfo = true;
       }
 
@@ -292,26 +292,26 @@ const VTable: React.FC<ProgramTableProps> = ({
                   }}
                   checked={selectedProgramId.has(program.id)}
                 />{' '}
-                <AlertsGroup>
-                  <Alerts display={showError ? 'block' : 'none'}>
+                <MessagesContainer>
+                  <ValidationMessage display={showError ? 'block' : 'none'}>
                     <IconButton>
                       <IoIosAlert size="20px" color="var(--color-system-1)" />
                     </IconButton>
-                  </Alerts>
-                  <Alerts display={showWarn ? 'block' : 'none'}>
+                  </ValidationMessage>
+                  <ValidationMessage display={showWarn ? 'block' : 'none'}>
                     <IconButton>
                       <RiAlertFill size="20px" color="var(--color-system-2)" />
                     </IconButton>
-                  </Alerts>
-                  <Alerts display={showInfo ? 'block' : 'none'}>
+                  </ValidationMessage>
+                  <ValidationMessage display={showInfo ? 'block' : 'none'}>
                     <IconButton>
                       <IoIosInformationCircle
                         size="20px"
                         color="var(--color-neutral-3)"
                       />
                     </IconButton>
-                  </Alerts>
-                </AlertsGroup>
+                  </ValidationMessage>
+                </MessagesContainer>
                 <AddToList className="epg-add-to-list">
                   <HiPlus
                     onClick={e => {
@@ -345,7 +345,7 @@ const VTable: React.FC<ProgramTableProps> = ({
       );
     },
     [
-      alerts,
+      messages,
       firstProg,
       programs,
       selectedProgramId,
@@ -561,4 +561,4 @@ const VTable: React.FC<ProgramTableProps> = ({
   );
 };
 
-export default VTable;
+export default VirtualizedTable;
