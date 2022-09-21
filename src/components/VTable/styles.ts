@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-export const ParentalGuidanceCells = styled.div``;
+export const ParentalGuidanceCells = styled.div`
+  width: 225.5px;
+  margin-inline: 50px;
+`;
 
 export const IconRating = styled.img`
   float: left;
@@ -18,6 +21,8 @@ export const Message = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
+  height: 24px;
+  line-height: 24px;
 `;
 
 export const RowElement = styled.td``;
