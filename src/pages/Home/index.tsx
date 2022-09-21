@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Menu, VTable } from 'components';
+import { Menu, VirtualizedTable } from 'components';
 import { Program } from 'services/epg';
 import { addToDate, EntityMap } from 'utils';
 
@@ -123,7 +123,7 @@ const Home: React.FC = () => {
           className="epg-table-menu-content"
           width={selectedProgramId.size !== 1 ? '100%' : 'calc(100% - 535px)'}
         >
-          <VTable
+          <VirtualizedTable
             startWidth={tableWidth}
             programs={programs}
             setPrograms={setPrograms}

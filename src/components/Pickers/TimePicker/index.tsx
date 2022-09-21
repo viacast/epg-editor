@@ -6,14 +6,9 @@ import { HelpContainer, StyledInput } from './styles';
 export interface TimePickerProps {
   time: Date;
   onTimeChange?: (value: Date) => void;
-  setTime: (value: Date) => void;
 }
 
-const TimePicker: React.FC<TimePickerProps> = ({
-  time,
-  onTimeChange,
-  setTime,
-}) => {
+const TimePicker: React.FC<TimePickerProps> = ({ time, onTimeChange }) => {
   const [value, setValue] = useState<Date>(time);
   const [pageHeight, setPageHeight] = useState(window.innerHeight);
   useEffect(() => {
@@ -27,11 +22,8 @@ const TimePicker: React.FC<TimePickerProps> = ({
   });
 
   useEffect(() => {
-    if (time) {
-      setValue(time);
-      setTime?.(time);
-    }
-  }, [setTime, time]);
+    setValue(time);
+  }, [time]);
 
   return (
     <HelpContainer marginTop={pageHeight <= 970 ? '-368px' : '-40px'}>

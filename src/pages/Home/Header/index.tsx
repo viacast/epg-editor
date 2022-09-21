@@ -51,7 +51,7 @@ import {
   LanguageContainer,
   Flag,
   MessageBadge,
-  AlertsGroup,
+  MessagesContainer,
   MessageBadgeContainer,
   MessageText,
   Line,
@@ -162,7 +162,7 @@ const Header: React.FC<HeaderProps> = ({
     });
   }, [handleClearProgramList, openModal, setSavedFilename, t]);
 
-  const [alertCountByLevel, setAlertCountByLevel] = useState(
+  const [messageCountByLevel, setMessageCountByLevel] = useState(
     {} as Record<EPGValidationMessageLevel, number>,
   );
 
@@ -170,10 +170,10 @@ const Header: React.FC<HeaderProps> = ({
     const count = EPGValidator.countMessagesByLevel(
       EPGValidator.validate(programs.toArray()),
     );
-    setAlertCountByLevel(count);
+    setMessageCountByLevel(count);
   }, [programs]);
 
-  const [alertCountByType, setAlertCountByType] = useState(
+  const [messageCountByType, setMessageCountByType] = useState(
     {} as Record<EPGValidationMessageType, number>,
   );
 
@@ -182,7 +182,7 @@ const Header: React.FC<HeaderProps> = ({
       programs,
       EPGValidator.validate(programs.toArray()),
     );
-    setAlertCountByType(count);
+    setMessageCountByType(count);
   }, [programs]);
 
   useClickOutside(exportOptionsRef, () => setOpen(false));
@@ -297,61 +297,61 @@ const Header: React.FC<HeaderProps> = ({
                 count: programCount,
               })}
             </Text>
-            <Line display={alertCountByLevel.ALL > 0 ? 'block' : 'none'} />
-            {alertCountByLevel.ERROR > 0 && (
+            <Line display={messageCountByLevel.ALL > 0 ? 'block' : 'none'} />
+            {messageCountByLevel.ERROR > 0 && (
               <>
                 <MessageType>
-                  {t('alert:error', {
-                    count: alertCountByLevel.ERROR,
+                  {t('messages:error', {
+                    count: messageCountByLevel.ERROR,
                   })}
                   <MdErrorOutline color={ColorPallete.NEUTRAL_2} />
                 </MessageType>
-                {Object.entries(alertCountByType).map(([type, count]) =>
+                {Object.entries(messageCountByType).map(([type, count]) =>
                   EPGValidator.getMessageLevel(
                     type as EPGValidationMessageType,
                   ) === EPGValidationMessageLevel.ERROR && count > 0 ? (
                     <MessageText>
-                      {t(`alert:message_${type}`)} ({count})
+                      {t(`messages:message_${type}`)} ({count})
                     </MessageText>
                   ) : null,
                 )}
               </>
             )}
-            {alertCountByLevel.WARN > 0 && (
+            {messageCountByLevel.WARN > 0 && (
               <>
                 <MessageType>
-                  {t('alert:warn', {
-                    count: alertCountByLevel.WARN,
+                  {t('messages:warn', {
+                    count: messageCountByLevel.WARN,
                   })}
                   <MdOutlineWarningAmber color={ColorPallete.NEUTRAL_2} />
                 </MessageType>
-                {Object.entries(alertCountByType).map(([type, count]) =>
+                {Object.entries(messageCountByType).map(([type, count]) =>
                   EPGValidator.getMessageLevel(
                     type as EPGValidationMessageType,
                   ) === EPGValidationMessageLevel.WARN && count > 0 ? (
                     <MessageText>
-                      {t(`alert:message_${type}`)} ({count})
+                      {t(`messages:message_${type}`)} ({count})
                     </MessageText>
                   ) : null,
                 )}
               </>
             )}
-            {alertCountByLevel.INFO > 0 && (
+            {messageCountByLevel.INFO > 0 && (
               <>
                 <MessageType>
-                  {t('alert:info', {
-                    count: alertCountByLevel.INFO,
+                  {t('messages:info', {
+                    count: messageCountByLevel.INFO,
                   })}
                   <IoIosInformationCircleOutline
                     color={ColorPallete.NEUTRAL_2}
                   />
                 </MessageType>
-                {Object.entries(alertCountByType).map(([type, count]) =>
+                {Object.entries(messageCountByType).map(([type, count]) =>
                   EPGValidator.getMessageLevel(
                     type as EPGValidationMessageType,
                   ) === EPGValidationMessageLevel.INFO && count > 0 ? (
                     <MessageText>
-                      {t(`alert:message_${type}`)} ({count})
+                      {t(`messages:message_${type}`)} ({count})
                     </MessageText>
                   ) : null,
                 )}
@@ -360,21 +360,21 @@ const Header: React.FC<HeaderProps> = ({
           </>
         }
       >
-        <AlertsGroup>
+        <MessagesContainer>
           <MessageBadgeContainer>
-            {alertCountByLevel.INFO > 0 && (
+            {messageCountByLevel.INFO > 0 && (
               <MessageBadge
                 variant="dot"
                 backgroundColor={ColorPallete.NEUTRAL_3}
               />
             )}
-            {alertCountByLevel.WARN > 0 && (
+            {messageCountByLevel.WARN > 0 && (
               <MessageBadge
                 variant="dot"
                 backgroundColor={ColorPallete.SYSTEM_2}
               />
             )}
-            {alertCountByLevel.ERROR > 0 && (
+            {messageCountByLevel.ERROR > 0 && (
               <MessageBadge
                 variant="dot"
                 backgroundColor={ColorPallete.SYSTEM_1}
@@ -382,7 +382,7 @@ const Header: React.FC<HeaderProps> = ({
             )}
           </MessageBadgeContainer>
           <MdNotifications size="28px" color="action" />
-        </AlertsGroup>
+        </MessagesContainer>
       </Tooltip>
       <Configurations ref={ConfigurationsRef}>
         <ContainerSettings animation={settingsAnimation}>

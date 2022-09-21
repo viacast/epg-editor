@@ -29,7 +29,7 @@ i18next
       'parental-guidance',
       'menu',
       'modal',
-      'alert',
+      'messages',
     ],
     defaultNS: 'general',
     interpolation: {

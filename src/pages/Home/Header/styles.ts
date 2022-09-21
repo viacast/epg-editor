@@ -159,7 +159,7 @@ export const Flag = styled.div`
   margin-right: 13px;
 `;
 
-export const AlertsGroup = styled.div`
+export const MessagesContainer = styled.div`
   display: flex;
   position: relative;
   margin: 8px 6px 4px 14px;
