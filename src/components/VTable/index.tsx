@@ -405,6 +405,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                 {
                   margin: 0,
                   border: '3px solid var(--color-neutral-5)',
+                  minWidth: '1210px',
                   maxWidth: '100%',
                   textAlign: 'left',
                 },

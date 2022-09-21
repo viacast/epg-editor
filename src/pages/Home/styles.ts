@@ -187,6 +187,12 @@ export const TableContainer = styled.div<{ width?: string }>`
   .ReactVirtualized__Table__rowColumn[aria-colindex='7'] {
     min-width: 110px !important;
   }
+
+  .ReactVirtualized__Grid,
+  .ReactVirtualized__Table__Grid,
+  .ReactVirtualized__Grid__innerScrollContainer {
+    min-width: 1210px !important;
+  }
 `;
 
 export const MenuContainer = styled.div<{ width?: string }>`
