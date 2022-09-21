@@ -8,13 +8,14 @@ import {
   Theme,
   useTheme,
 } from '@mui/material';
+import { ColorPallete } from 'styles/global';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const SelectProps = {
   style: {
-    backgroundColor: 'var(--color-neutral-6)',
-    color: 'var(--color-neutral-3)',
+    backgroundColor: ColorPallete.NEUTRAL_6,
+    color: ColorPallete.NEUTRAL_3,
   },
 };
 
@@ -23,8 +24,8 @@ const MenuProps = {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
       width: 370,
-      backgroundColor: 'var(--color-neutral-6)',
-      color: 'var(--color-neutral-3)',
+      backgroundColor: ColorPallete.NEUTRAL_6,
+      color: ColorPallete.NEUTRAL_3,
     },
   },
 };

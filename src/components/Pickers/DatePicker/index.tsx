@@ -6,7 +6,9 @@ import {
 } from '@mui/x-date-pickers';
 import Stack from '@mui/material/Stack';
 import { ptBR, es, enUS } from 'date-fns/locale';
+
 import i18n from 'services/i18n';
+import { ColorPallete } from 'styles/global';
 import { StyledInput } from './styles';
 
 export interface DatePickerProps {
@@ -32,20 +34,20 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, onDateChange }) => {
   const dialogStyleProps = {
     sx: {
       span: {
-        color: 'var(--color-neutral-3)',
+        color: ColorPallete.NEUTRAL_3,
       },
       '& .MuiPaper-root': {
         marginLeft: '164px',
-        backgroundColor: 'var(--color-neutral-6)',
-        color: 'var(--color-neutral-2)',
+        backgroundColor: ColorPallete.NEUTRAL_6,
+        color: ColorPallete.NEUTRAL_2,
         overflow: 'hidden',
       },
       '& .MuiButtonBase-root': {
-        backgroundColor: 'var(--color-neutral-6)',
-        color: 'var(--color-neutral-2)',
+        backgroundColor: ColorPallete.NEUTRAL_6,
+        color: ColorPallete.NEUTRAL_2,
       },
       '& .PrivatePickersSlideTransition-root': {
-        color: 'var(--color-neutral-2)',
+        color: ColorPallete.NEUTRAL_2,
       },
     },
   };
@@ -53,13 +55,13 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, onDateChange }) => {
   const inputStyleProps = {
     sx: {
       '& .MuiSvgIcon-root': {
-        color: 'var(--color-neutral-5)',
+        color: ColorPallete.NEUTRAL_5,
       },
     },
     style: {
       fontSize: '18px',
-      backgroundColor: 'var(--color-neutral-6)',
-      color: 'var(--color-neutral-3)',
+      backgroundColor: ColorPallete.NEUTRAL_6,
+      color: ColorPallete.NEUTRAL_3,
       width: '100%',
       height: 45,
     },
