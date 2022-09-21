@@ -175,7 +175,7 @@ const VTable: React.FC<ProgramTableProps> = ({
             src={rate[virtualizedRowProps.columns[5].props.title]}
             alt={virtualizedRowProps.columns[5].props.title}
           />
-          <Message>
+          <Message className="epg-pg-text">
             {t(
               `parental-guidance:rating_${virtualizedRowProps.columns[5].props.title}`,
             )}
@@ -493,7 +493,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                   }
                   key="position"
                   dataKey="position"
-                  flexGrow={3}
+                  flexGrow={1}
                   minWidth={90}
                   width={90}
                   maxWidth={90}
@@ -502,7 +502,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                   label={t(`program-table:columnLabel_startDateTime`)}
                   dataKey="startDateTime"
                   key="startDateTime"
-                  flexGrow={3}
+                  flexGrow={1}
                   minWidth={170}
                   width={190}
                   maxWidth={190}
@@ -511,7 +511,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                   label={t(`program-table:columnLabel_endDateTime`)}
                   key="endDateTime"
                   dataKey="endDateTime"
-                  flexGrow={3}
+                  flexGrow={1}
                   minWidth={170}
                   width={190}
                   maxWidth={190}
@@ -520,7 +520,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                   label={t(`program-table:columnLabel_duration`)}
                   dataKey="duration"
                   key="duration"
-                  flexGrow={3}
+                  flexGrow={1}
                   minWidth={85}
                   width={110}
                   maxWidth={110}
@@ -529,7 +529,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                   label={t(`program-table:columnLabel_title`)}
                   dataKey="title"
                   key="title"
-                  flexGrow={3}
+                  flexGrow={1}
                   minWidth={150}
                   width={300}
                   maxWidth={300}
@@ -538,7 +538,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                   label={t(`program-table:columnLabel_rating`)}
                   key="rating"
                   dataKey="rating"
-                  flexGrow={3}
+                  flexGrow={1}
                   minWidth={230}
                   width={230}
                   maxWidth={230}
@@ -548,7 +548,7 @@ const VTable: React.FC<ProgramTableProps> = ({
                   label={t(`program-table:columnLabel_description`)}
                   dataKey="description"
                   key="description"
-                  flexGrow={3}
+                  flexGrow={1}
                   minWidth={150}
                   width={705}
                 />
