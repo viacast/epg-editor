@@ -4,6 +4,7 @@ import { IoIosTimer } from 'react-icons/io';
 import { useTranslation } from 'react-i18next';
 import { hmsToDuration, durationToHms, secondsToHms } from 'utils/formatting';
 import { useWindowSize } from 'hooks';
+import { ColorPallete } from 'styles/global';
 import {
   StyledContainer,
   StyledInput,
@@ -25,8 +26,8 @@ export interface DurationPickerProps {
 
 const SvgComponent = () => (
   <svg width={12} height={80}>
-    <circle cx={6} cy={20} r={4} fill="var(--color-neutral-3)" />
-    <circle cx={6} cy={50} r={4} fill="var(--color-neutral-3)" />
+    <circle cx={6} cy={20} r={4} fill={ColorPallete.NEUTRAL_3} />
+    <circle cx={6} cy={50} r={4} fill={ColorPallete.NEUTRAL_3} />
   </svg>
 );
 

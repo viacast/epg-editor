@@ -22,6 +22,7 @@ import { BeatLoader } from 'react-spinners';
 import { RiAlertFill } from 'react-icons/ri';
 import { EPGValidationMessagesByProgram } from 'services/epg/validator';
 import { useModalProvider } from 'providers/ModalProvider';
+import { ColorPallete } from 'styles/global';
 import {
   ParentalGuidanceCells,
   IconRating,
@@ -296,7 +297,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                   {showError && (
                     <ValidationMessage>
                       <IconButton>
-                        <IoIosAlert size="20px" color="var(--color-system-1)" />
+                        <IoIosAlert size="20px" color={ColorPallete.SYSTEM_1} />
                       </IconButton>
                     </ValidationMessage>
                   )}
@@ -305,7 +306,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                       <IconButton>
                         <RiAlertFill
                           size="20px"
-                          color="var(--color-system-2)"
+                          color={ColorPallete.SYSTEM_2}
                         />
                       </IconButton>
                     </ValidationMessage>
@@ -315,7 +316,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                       <IconButton>
                         <IoIosInformationCircle
                           size="20px"
-                          color="var(--color-neutral-3)"
+                          color={ColorPallete.NEUTRAL_3}
                         />
                       </IconButton>
                     </ValidationMessage>
@@ -472,7 +473,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                   // eslint-disable-next-line no-unused-expressions
                   programs.count && (
                     <LoaderContainer>
-                      <BeatLoader color="var(--color-neutral-3)" />
+                      <BeatLoader color={ColorPallete.NEUTRAL_3} />
                     </LoaderContainer>
                   );
                 }}

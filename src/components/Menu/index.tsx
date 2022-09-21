@@ -36,6 +36,7 @@ import {
   EPGValidationMessages,
   EPGValidationMessageType,
 } from 'services/epg/validator';
+import { ColorPallete } from 'styles/global';
 import {
   BottomContainer,
   ButtonContainer,
@@ -180,7 +181,7 @@ const Menu: React.FC<MenuProps> = ({
                   >
                     <MessageIconContainer>
                       &nbsp;
-                      <IoIosAlert size="16px" color="var(--color-system-1)" />
+                      <IoIosAlert size="16px" color={ColorPallete.SYSTEM_1} />
                     </MessageIconContainer>
                   </Tooltip>
                 )}
@@ -209,7 +210,7 @@ const Menu: React.FC<MenuProps> = ({
                   >
                     <MessageIconContainer>
                       &nbsp;
-                      <IoIosAlert size="16px" color="var(--color-system-1)" />
+                      <IoIosAlert size="16px" color={ColorPallete.SYSTEM_1} />
                     </MessageIconContainer>
                   </Tooltip>
                 )}
@@ -240,7 +241,7 @@ const Menu: React.FC<MenuProps> = ({
                         &nbsp;
                         <RiAlertFill
                           size="16px"
-                          color="var(--color-system-2)"
+                          color={ColorPallete.SYSTEM_2}
                         />
                       </MessageIconContainer>
                     </Tooltip>
@@ -291,7 +292,7 @@ const Menu: React.FC<MenuProps> = ({
                             &nbsp;
                             <RiAlertFill
                               size="16px"
-                              color="var(--color-system-2)"
+                              color={ColorPallete.SYSTEM_2}
                             />
                           </MessageIconContainer>
                         </Tooltip>
@@ -304,7 +305,7 @@ const Menu: React.FC<MenuProps> = ({
                         <Tooltip
                           arrow
                           title={
-                            <Message color="var(--color-neutral-3)">
+                            <Message color={ColorPallete.NEUTRAL_3}>
                               {t('messages:message_FAR_START_DATE')}
                             </Message>
                           }
@@ -313,7 +314,7 @@ const Menu: React.FC<MenuProps> = ({
                             &nbsp;
                             <IoIosInformationCircle
                               size="16px"
-                              color="var(--color-neutral-3)"
+                              color={ColorPallete.NEUTRAL_3}
                             />
                           </MessageIconContainer>
                         </Tooltip>
@@ -351,7 +352,7 @@ const Menu: React.FC<MenuProps> = ({
                             &nbsp;
                             <IoIosAlert
                               size="16px"
-                              color="var(--color-system-1)"
+                              color={ColorPallete.SYSTEM_1}
                             />
                           </MessageIconContainer>
                         </Tooltip>
@@ -425,7 +426,7 @@ const Menu: React.FC<MenuProps> = ({
                             &nbsp;
                             <IoIosAlert
                               size="16px"
-                              color="var(--color-system-1)"
+                              color={ColorPallete.SYSTEM_1}
                             />
                           </MessageIconContainer>
                         </Tooltip>
