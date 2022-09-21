@@ -379,7 +379,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
           return p;
         }
         if (result.destination.index === p.count - 1) {
-          return p.moveEnd(sourceKey).clone();
+          return p.moveTo(sourceKey).clone();
         }
         return p.moveTo(sourceKey, targetKey).clone();
       });
