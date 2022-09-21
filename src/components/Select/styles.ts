@@ -6,6 +6,8 @@ import {
   styled as muistyled,
 } from '@mui/material';
 
+import { ColorPallete } from 'styles/global';
+
 const ITEM_HEIGHT = 50;
 const ITEM_PADDING_TOP = 8;
 
@@ -14,8 +16,8 @@ export const MenuProps = {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
       width: '250px',
-      backgroundColor: 'var(--color-neutral-6)',
-      color: 'var(--color-neutral-3)',
+      backgroundColor: ColorPallete.NEUTRAL_6,
+      color: ColorPallete.NEUTRAL_3,
     },
   },
 };
