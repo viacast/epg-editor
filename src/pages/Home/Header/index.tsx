@@ -227,37 +227,42 @@ const Header: React.FC<HeaderProps> = ({
           icon={<FaFileExport />}
           onClick={() => setOpen(!open)}
         />
-        <ExportOptions
-          ref={exportOptionsRef}
-          display={!open ? 'none' : 'block'}
-        >
-          <Button
-            text="XML"
-            icon={<FaFileCode />}
-            onClick={() => {
-              const blob = new Blob([EPGBuilder.buildXml(programs.toArray())], {
-                type: 'application/xml',
-              });
-              FileSaver.saveAs(
-                blob,
-                `EPG_${format(new Date(), 'yyyyMMdd_HHmmss')}.xml`,
-              );
-            }}
-          />
-          <Button
-            text="CSV"
-            icon={<FaFileCsv />}
-            onClick={() => {
-              const blob = new Blob([EPGBuilder.buildCsv(programs.toArray())], {
-                type: 'text/csv',
-              });
-              FileSaver.saveAs(
-                blob,
-                `EPG_${format(new Date(), 'yyyyMMdd_HHmmss')}.csv`,
-              );
-            }}
-          />
-        </ExportOptions>
+        {open && (
+          <ExportOptions ref={exportOptionsRef}>
+            <Button
+              text="XML"
+              icon={<FaFileCode />}
+              onClick={() => {
+                const blob = new Blob(
+                  [EPGBuilder.buildXml(programs.toArray())],
+                  {
+                    type: 'application/xml',
+                  },
+                );
+                FileSaver.saveAs(
+                  blob,
+                  `EPG_${format(new Date(), 'yyyyMMdd_HHmmss')}.xml`,
+                );
+              }}
+            />
+            <Button
+              text="CSV"
+              icon={<FaFileCsv />}
+              onClick={() => {
+                const blob = new Blob(
+                  [EPGBuilder.buildCsv(programs.toArray())],
+                  {
+                    type: 'text/csv',
+                  },
+                );
+                FileSaver.saveAs(
+                  blob,
+                  `EPG_${format(new Date(), 'yyyyMMdd_HHmmss')}.csv`,
+                );
+              }}
+            />
+          </ExportOptions>
+        )}
       </MenuOptions>
       <Button
         text={t('header:buttonAddProgram')}
@@ -297,7 +302,7 @@ const Header: React.FC<HeaderProps> = ({
                 count: programCount,
               })}
             </Text>
-            <Line display={messageCountByLevel.ALL > 0 ? 'block' : 'none'} />
+            {messageCountByLevel.ALL > 0 && <Line />}
             {messageCountByLevel.ERROR > 0 && (
               <>
                 <MessageType>
@@ -396,25 +401,29 @@ const Header: React.FC<HeaderProps> = ({
           >
             <BsGearFill size="28px" color={ColorPallete.NEUTRAL_3} />
           </IconButton>
-          <Settings
-            display={showSettings ? 'block' : 'none'}
-            onClick={() => setShowTranslation(s => !s)}
-          >
-            <SettingsOption>
-              {t('header:settingsLanguage')} &nbsp; <BsTranslate /> &nbsp;{' '}
-              <MdKeyboardArrowLeft className="epg-language-arrow" size="16px" />
-            </SettingsOption>
-          </Settings>
+          {showSettings && (
+            <Settings onClick={() => setShowTranslation(s => !s)}>
+              <SettingsOption>
+                {t('header:settingsLanguage')} &nbsp; <BsTranslate /> &nbsp;{' '}
+                <MdKeyboardArrowLeft
+                  className="epg-language-arrow"
+                  size="16px"
+                />
+              </SettingsOption>
+            </Settings>
+          )}
         </ContainerSettings>
-        <Translation display={showTranslation ? 'block' : 'none'}>
-          {AVAILABLE_LANGUAGES.map(({ code, flag }) => (
-            <LanguageContainer onClick={() => i18n.changeLanguage(code)}>
-              {t(`header:settingsLanguage_${code}`)}
-              <BsCheck opacity={i18n.resolvedLanguage === code ? '1' : '0'} />
-              <Flag>{flag}</Flag>
-            </LanguageContainer>
-          ))}
-        </Translation>
+        {showTranslation && (
+          <Translation>
+            {AVAILABLE_LANGUAGES.map(({ code, flag }) => (
+              <LanguageContainer onClick={() => i18n.changeLanguage(code)}>
+                {t(`header:settingsLanguage_${code}`)}
+                <BsCheck opacity={i18n.resolvedLanguage === code ? '1' : '0'} />
+                <Flag>{flag}</Flag>
+              </LanguageContainer>
+            ))}
+          </Translation>
+        )}
       </Configurations>
     </HeaderContainer>
   );

@@ -86,12 +86,11 @@ export const ToolbarText = styled.div`
   }
 `;
 
-export const ActionButtons = styled.div<{ display: string }>`
+export const ActionButtons = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   #menu-button-discard {
-    display: ${({ display }) => display || 'none'};
     color: var(--color-neutral-4);
     &:hover {
       color: white;
