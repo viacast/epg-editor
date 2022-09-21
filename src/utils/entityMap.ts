@@ -90,25 +90,20 @@ export default class EntityMap<EntityType> {
     return this;
   }
 
-  moveTo(entityKey: string, targetKey: string): EntityMap<EntityType> {
+  moveTo(entityKey: string, targetKey?: string): EntityMap<EntityType> {
     if (!this.entities[entityKey]) {
       throw new EntityNotFound(`Entity with key '${entityKey}' not found`);
     }
-    if (!this.entities[targetKey]) {
+    if (targetKey && !this.entities[targetKey]) {
       throw new EntityNotFound(`Entity with key '${targetKey}' not found`);
     }
-    this.keys.splice(this.keys.indexOf(entityKey), 1);
-    this.keys.splice(this.keys.indexOf(targetKey), 0, entityKey);
-    return this;
-  }
-
-  moveEnd(entityKey: string): EntityMap<EntityType> {
-    if (!this.entities[entityKey]) {
-      throw new EntityNotFound(`Entity with key '${entityKey}' not found`);
+    const sourceIndex = this.keys.indexOf(entityKey);
+    let targetIndex = this.keys.length;
+    if (targetKey) {
+      targetIndex = this.keys.indexOf(targetKey);
     }
-    const target: number = this.keys.length;
-    this.keys.splice(this.keys.indexOf(entityKey), 1);
-    this.keys.splice(target, 0, entityKey);
+    this.keys.splice(sourceIndex, 1);
+    this.keys.splice(targetIndex, 0, entityKey);
     return this;
   }
 }
