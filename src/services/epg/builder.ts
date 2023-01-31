@@ -97,19 +97,19 @@ export default class EPGBuilder {
     const program = {
       tv: {
         '@date': formatDateTime(new Date(), 'yyyyMMddHHmmss'),
-        channel: {
-          '@id': '59360',
-          'display-name': [
-            {
-              '#text': 'SBT - SÃO PAULO',
-              '@lang': 'pt',
-            },
-            {
-              '#text': 'SBT - SÃO PAULO',
-              '@lang': 'pt',
-            },
-          ],
-        },
+        // channel: {
+        //   '@id': '59360',
+        //   'display-name': [
+        //     {
+        //       '#text': 'SBT - SÃO PAULO',
+        //       '@lang': 'pt',
+        //     },
+        //     {
+        //       '#text': 'SBT - SÃO PAULO',
+        //       '@lang': 'pt',
+        //     },
+        //   ],
+        // },
         programme: programmeList,
       },
     };

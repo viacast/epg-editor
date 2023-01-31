@@ -264,6 +264,7 @@ const Menu: React.FC<MenuProps> = ({
                     src={
                       ratings[newProgram?.rating.toString() ?? ProgramRating.RL]
                     }
+                    title={newProgram?.rating.toString()}
                     alt="Rate Icon"
                   />
                 </IconContainer>

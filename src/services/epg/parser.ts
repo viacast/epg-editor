@@ -48,7 +48,6 @@ export default class EPGParser {
     return programs.map(program => {
       const { title } = program;
       const description: string = program.desc;
-      console.log(program.rating.value);
       const duration: number = getProgramTime(program);
 
       const rate = {
@@ -60,16 +59,18 @@ export default class EPGParser {
         '05': ProgramRating.R16,
         '06': ProgramRating.R18,
       };
-
+      function pad(str, max) {
+        return str.length < max ? pad(`0${str}`, max) : str;
+      }
       const rating: ProgramRating =
-        rate[`0${program.rating.value}`] ?? ProgramRating.RSC;
+        rate[`${pad(program.rating.value.toString(), 2)}`] ?? ProgramRating.RSC;
 
       // example -> "202206250600"
       const date = program.start;
 
       // const startDateTime = parseDate(date, 'yyyyMMddHHmm');
       const startDateTime = yyyyMMddHHmmToDuration(date);
-      console.log(title);
+
       return new Program({
         title,
         description,
