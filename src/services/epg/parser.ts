@@ -1,6 +1,12 @@
 import { XMLParser } from 'fast-xml-parser';
 
-import { csvLineToArray, InvalidFile, parseDate, readFileAsync } from 'utils';
+import {
+  csvLineToArray,
+  InvalidFile,
+  parseDate,
+  readFileAsync,
+  yyyyMMddHHmmToDuration,
+} from 'utils';
 import Program, { ProgramRating } from './program';
 
 export default class EPGParser {
@@ -41,7 +47,13 @@ export default class EPGParser {
     return programs.map(program => {
       const title: string = program.title['#text'];
       const description: string = program.desc['#text'];
-      const duration: number = Number(program.length['#text']) * 60;
+      let length = 0;
+      if (!programs[0].length) {
+        yyyyMMddHHmmToDuration(program.start, program.stop);
+      }
+      length = Number(program.length['#text']) * 60;
+      const duration: number = length;
+
       const rate = {
         '00': ProgramRating.RSC,
         '01': ProgramRating.RL,
