@@ -69,6 +69,15 @@ export function hmsToDuration(hms: HMS): number {
   return hours * 3600 + minutes * 60 + seconds;
 }
 
+export function yyyyMMddHHmmToDuration(start: string, stop: string): number {
+  const s1 = String(start);
+  const s2 = String(stop);
+  const h = Number(s2.substring(8, 10)) - Number(s1.substring(8, 10));
+  const m = Number(s2.substring(10, 12)) - Number(s1.substring(10, 12));
+  const length = hmsToDuration({ hours: h, minutes: m, seconds: 0 });
+  return length;
+}
+
 // adapted from https://stackoverflow.com/a/8497474/
 export function csvLineToArray(text: string) {
   const reValid =
