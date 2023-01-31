@@ -48,7 +48,7 @@ export default class EPGParser {
       const title: string = program.title['#text'];
       const description: string = program.desc['#text'];
       let length = 0;
-      if (!programs[0].length) {
+      if (!program.length) {
         yyyyMMddHHmmToDuration(program.start, program.stop);
       }
       length = Number(program.length['#text']) * 60;
