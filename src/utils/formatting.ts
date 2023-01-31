@@ -69,13 +69,20 @@ export function hmsToDuration(hms: HMS): number {
   return hours * 3600 + minutes * 60 + seconds;
 }
 
-export function yyyyMMddHHmmToDuration(start: string, stop: string): number {
-  const s1 = String(start);
-  const s2 = String(stop);
-  const h = Number(s2.substring(8, 10)) - Number(s1.substring(8, 10));
-  const m = Number(s2.substring(10, 12)) - Number(s1.substring(10, 12));
-  const length = hmsToDuration({ hours: h, minutes: m, seconds: 0 });
-  return length;
+export function yyyyMMddHHmmToDuration(s: string): Date {
+  const aux = String(s);
+  const y = aux.substring(0, 4);
+  const m = aux.substring(4, 6);
+  const d = aux.substring(6, 8);
+  const h = aux.substring(8, 10);
+  const mm = aux.substring(10, 12);
+  return new Date(`${y}-${m}-${d}T${h}:${mm}:00`);
+}
+
+export function getLength(start: string, stop: string): number {
+  const s1 = yyyyMMddHHmmToDuration(start).getTime();
+  const s2 = yyyyMMddHHmmToDuration(stop).getTime();
+  return Math.abs(s2 - s1) * 60000;
 }
 
 // adapted from https://stackoverflow.com/a/8497474/

@@ -5,7 +5,7 @@ import {
   InvalidFile,
   parseDate,
   readFileAsync,
-  yyyyMMddHHmmToDuration,
+  getLength,
 } from 'utils';
 import Program, { ProgramRating } from './program';
 
@@ -49,7 +49,7 @@ export default class EPGParser {
       const description: string = program.desc['#text'];
       let length = 0;
       if (!program.length) {
-        yyyyMMddHHmmToDuration(program.start, program.stop);
+        getLength(program.start, program.stop);
       }
       length = Number(program.length['#text']) * 60;
       const duration: number = length;
