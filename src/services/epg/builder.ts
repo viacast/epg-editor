@@ -44,6 +44,24 @@ export default class EPGBuilder {
     */
 
     programs.forEach(p => {
+      const aux = p.rating.slice(1);
+      let rate = '';
+      if (aux === 'SC') {
+        rate = '00';
+      } else if (aux === 'L') {
+        rate = '01';
+      } else if (aux === '10') {
+        rate = '02';
+      } else if (aux === '12') {
+        rate = '03';
+      } else if (aux === '14') {
+        rate = '04';
+      } else if (aux === '16') {
+        rate = '05';
+      } else if (aux === '18') {
+        rate = '06';
+      }
+
       programmeList.push({
         title: {
           '#text': p.title,
@@ -61,7 +79,7 @@ export default class EPGBuilder {
           '@units': 'minutes',
         },
         rating: {
-          value: p.rating.slice(1),
+          value: rate,
         },
         category: {
           '#text': '0xF',
@@ -108,13 +126,13 @@ export default class EPGBuilder {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static buildCsv(programs: Program[]): string {
     const rate = {
-      RSC: '0xf1',
-      RL: '0xf1',
-      R10: '0xf2',
-      R12: '0xf3',
-      R14: '0xf4',
-      R16: '0xf5',
-      R18: '0xf6',
+      RSC: '0x00',
+      RL: '0x01',
+      R10: '0x02',
+      R12: '0x03',
+      R14: '0x04',
+      R16: '0x05',
+      R18: '0x06',
     };
 
     /*
