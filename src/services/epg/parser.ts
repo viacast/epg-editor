@@ -5,6 +5,7 @@ import {
   InvalidFile,
   parseDate,
   readFileAsync,
+  getProgramTime,
   yyyyMMddHHmmToDuration,
 } from 'utils';
 import Program, { ProgramRating } from './program';
@@ -45,14 +46,10 @@ export default class EPGParser {
     const content = document.tv;
     const programs = content.programme;
     return programs.map(program => {
-      const title: string = program.title['#text'];
-      const description: string = program.desc['#text'];
-      let length = 0;
-      if (!program.length) {
-        yyyyMMddHHmmToDuration(program.start, program.stop);
-      }
-      length = Number(program.length['#text']) * 60;
-      const duration: number = length;
+      const { title } = program;
+      const description: string = program.desc;
+      console.log(program.rating.value);
+      const duration: number = getProgramTime(program);
 
       const rate = {
         '00': ProgramRating.RSC,
@@ -65,13 +62,14 @@ export default class EPGParser {
       };
 
       const rating: ProgramRating =
-        rate[program.rating.value] ?? ProgramRating.RSC;
+        rate[`0${program.rating.value}`] ?? ProgramRating.RSC;
 
       // example -> "202206250600"
       const date = program.start;
 
-      const startDateTime = parseDate(date, 'yyyyMMddHHmm');
-
+      // const startDateTime = parseDate(date, 'yyyyMMddHHmm');
+      const startDateTime = yyyyMMddHHmmToDuration(date);
+      console.log(title);
       return new Program({
         title,
         description,
