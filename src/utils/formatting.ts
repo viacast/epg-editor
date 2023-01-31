@@ -70,8 +70,8 @@ export function hmsToDuration(hms: HMS): number {
 }
 
 // adapted from https://stackoverflow.com/a/8497474/
-export function csvLineToArray(textT: string) {
-  const text = textT.replace(/,/g, ';');
+export function csvLineToArray(text: string) {
+  // const text = textT.replace(/","/g, '";"');
   const reValid =
     /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*(?:;\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*)*$/;
   const reValue =
