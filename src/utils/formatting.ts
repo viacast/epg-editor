@@ -79,7 +79,8 @@ export function yyyyMMddHHmmToDuration(start: string, stop: string): number {
 }
 
 // adapted from https://stackoverflow.com/a/8497474/
-export function csvLineToArray(text: string) {
+export function csvLineToArray(textT: string) {
+  const text = textT.replace(/,/g, ';');
   const reValid =
     /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*(?:;\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*)*$/;
   const reValue =
