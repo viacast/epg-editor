@@ -46,9 +46,18 @@ export default class EPGParser {
     const content = document.tv;
     const programs = content.programme;
     return programs.map(program => {
-      const { title } = program;
-      const description: string = program.desc;
-      const duration: number = getProgramTime(program);
+      let title = '';
+      let description = '';
+      let duration = 0;
+      if (program.title['#text']) {
+        title = program.title['#text'];
+        description = program.desc['#text'];
+        duration = getProgramTime(program);
+      } else {
+        title = program.title;
+        description = program.desc;
+        duration = getProgramTime(program);
+      }
 
       const rate = {
         '00': ProgramRating.RSC,
