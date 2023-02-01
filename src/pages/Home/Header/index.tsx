@@ -311,7 +311,7 @@ const Header: React.FC<HeaderProps> = ({
           openModal({
             title: t('menu:deleteProgramTitle'),
             content: t('header:deleteProgramFromList', {
-              count: programs.toArray().length,
+              count: selectedProgramId.size,
             }),
             confirm: () => {
               Array.from(selectedProgramId).forEach(pid => {
