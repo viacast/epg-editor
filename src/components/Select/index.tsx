@@ -10,15 +10,17 @@ export interface DefaultSelectProps {
   value?: string;
   setValue?: (value: string) => void;
   options: SelectOption[];
+  width: string;
 }
 
 const Select: React.FC<DefaultSelectProps> = ({
   value = '',
   setValue,
   options,
+  width,
 }) => {
   return (
-    <StyledFormControl size="medium">
+    <StyledFormControl size="medium" style={{ width }}>
       <StyledSelect
         MenuProps={MenuProps}
         value={value}

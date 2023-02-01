@@ -7,7 +7,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { format } from 'date-fns';
-import { Box, ClickAwayListener } from '@mui/material';
+import { Box, Checkbox, ClickAwayListener } from '@mui/material';
 import structuredClone from '@ungap/structured-clone';
 import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
 import { RiAlertFill } from 'react-icons/ri';
@@ -246,6 +246,7 @@ const Menu: React.FC<MenuProps> = ({
               </Text>
               <SelectRateContainer>
                 <Select
+                  width="calc(100% - 71px)"
                   value={newProgram?.rating.toString() ?? ProgramRating.RL}
                   setValue={rating => {
                     setNewProgram(p => ({
@@ -279,6 +280,94 @@ const Menu: React.FC<MenuProps> = ({
                   </IconContainer>
                 </Tooltip>
               </SelectRateContainer>
+              <FormRow>
+                <FormColumn>
+                  <br />
+                  <Text>Conteúdo</Text>
+                  <div
+                    style={{
+                      backgroundColor: 'var(--color-neutral-6)',
+                      marginTop: '5px',
+                      borderRadius: '4px',
+                      userSelect: 'none',
+                    }}
+                  >
+                    <div style={{ display: 'flex' }}>
+                      <Checkbox
+                        onClick={() => ''}
+                        checked={selectedProgram.content.includes('Drugs')}
+                      />
+                      <div
+                        style={{
+                          paddingTop: '12px',
+                          color: 'var(--color-neutral-3)',
+                          fontSize: '16px',
+                        }}
+                      >
+                        {t('menu:tagDrugs')}
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', marginTop: '-10px' }}>
+                      <Checkbox
+                        onClick={() => ''}
+                        checked={selectedProgram.content.includes('Violence')}
+                      />
+                      <div
+                        style={{
+                          paddingTop: '12px',
+                          color: 'var(--color-neutral-3)',
+                          fontSize: '16px',
+                        }}
+                      >
+                        {t('menu:tagViolence')}
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', marginTop: '-10px' }}>
+                      <Checkbox
+                        onClick={() => ''}
+                        checked={selectedProgram.content.includes('Sex')}
+                      />
+                      <div
+                        style={{
+                          paddingTop: '12px',
+                          color: 'var(--color-neutral-3)',
+                          fontSize: '16px',
+                        }}
+                      >
+                        {t('menu:tagSex')}
+                      </div>
+                    </div>
+                  </div>
+                </FormColumn>
+                <FormColumn>
+                  <br />
+                  <Text>Categoria</Text>
+                  <div style={{ marginTop: '5px' }}>
+                    <Select
+                      width="100%"
+                      value="00"
+                      setValue={() => ''}
+                      options={[
+                        { label: 'Telejornalismo', value: '00' },
+                        { label: 'Reality shows', value: '01' },
+                        { label: 'Minisséries', value: '02' },
+                        { label: 'Educação', value: '03' },
+                        { label: 'Infantil', value: '04' },
+                        { label: 'Programa de entrevistas', value: '05' },
+                        { label: 'Programa de concursos', value: '06' },
+                        { label: 'Documentários', value: '07' },
+                        { label: 'Ficção', value: '08' },
+                        { label: 'Desportivo', value: '09' },
+                        { label: 'Séries de televisão', value: '10' },
+                        { label: 'Soap operas', value: '11' },
+                        { label: 'Telenovelas', value: '12' },
+                        { label: 'Religião', value: '13' },
+                        { label: 'Musical', value: '14' },
+                      ]}
+                    />
+                  </div>
+                </FormColumn>
+              </FormRow>
               <FormRow>
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">

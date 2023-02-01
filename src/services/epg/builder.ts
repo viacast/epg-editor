@@ -1,6 +1,6 @@
 import { XMLBuilder } from 'fast-xml-parser';
 import { formatDateTime, addToDate, secondsToHms } from 'utils';
-import Program, { ProgramRating } from './program';
+import Program, { ProgramContent, ProgramRating } from './program';
 
 interface Programme {
   title: {
@@ -44,22 +44,42 @@ export default class EPGBuilder {
     */
 
     programs.forEach(p => {
-      const aux = p.rating.slice(1);
-      let rate = '';
-      if (aux === 'SC') {
-        rate = '00';
-      } else if (aux === 'L') {
-        rate = '01';
-      } else if (aux === '10') {
-        rate = '02';
-      } else if (aux === '12') {
-        rate = '03';
-      } else if (aux === '14') {
-        rate = '04';
-      } else if (aux === '16') {
-        rate = '05';
-      } else if (aux === '18') {
-        rate = '06';
+      const aux1 = p.rating.slice(1);
+      let rate = 0;
+      if (aux1 === 'SC') {
+        rate = 0;
+      } else if (aux1 === 'L') {
+        rate = 1;
+      } else if (aux1 === '10') {
+        rate = 2;
+      } else if (aux1 === '12') {
+        rate = 3;
+      } else if (aux1 === '14') {
+        rate = 4;
+      } else if (aux1 === '16') {
+        rate = 5;
+      } else if (aux1 === '18') {
+        rate = 6;
+      }
+
+      const aux2 = p.rating.slice(1);
+      let cont = 0;
+      if (aux2 === '') {
+        cont = 0;
+      } else if (aux2 === 'Drugs') {
+        cont = 1;
+      } else if (aux2 === 'Violence') {
+        cont = 2;
+      } else if (aux2 === 'Sex') {
+        cont = 3;
+      } else if (aux2 === 'Drugs and Violence') {
+        cont = 4;
+      } else if (aux2 === 'Drugs and Sex') {
+        cont = 5;
+      } else if (aux2 === 'Violence and Sex') {
+        cont = 6;
+      } else if (aux2 === 'Drugs, Violence and Sex') {
+        cont = 7;
       }
 
       programmeList.push({
@@ -79,7 +99,7 @@ export default class EPGBuilder {
           '@units': 'minutes',
         },
         rating: {
-          value: rate,
+          value: `${cont}${rate}`,
         },
         category: {
           '#text': '0xF',
@@ -126,13 +146,24 @@ export default class EPGBuilder {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static buildCsv(programs: Program[]): string {
     const rate = {
-      RSC: '0x00',
-      RL: '0x01',
-      R10: '0x02',
-      R12: '0x03',
-      R14: '0x04',
-      R16: '0x05',
-      R18: '0x06',
+      RSC: '0',
+      RL: '1',
+      R10: '2',
+      R12: '3',
+      R14: '4',
+      R16: '5',
+      R18: '6',
+    };
+
+    const contentp = {
+      '': '0',
+      Drugs: '1',
+      Violence: '2',
+      Sex: '3',
+      'Drugs and Violence': '4',
+      'Drugs and Sex': '5',
+      'Violence and Sex': '6',
+      'Drugs, Violence and Sex': '7',
     };
 
     /*
@@ -200,7 +231,9 @@ export default class EPGBuilder {
         '',
         `"${p.title}"`,
         '"BRA"',
-        `"${rate[p.rating ?? ProgramRating.RSC]}"`,
+        `0x${contentp[p.content ?? ProgramContent.F]}${
+          rate[p.rating ?? ProgramRating.RSC]
+        }`,
         '0',
         '0',
         '0',

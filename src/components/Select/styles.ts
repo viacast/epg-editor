@@ -15,16 +15,14 @@ export const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: '250px',
+      width: '200px',
       backgroundColor: ColorPallete.NEUTRAL_6,
       color: ColorPallete.NEUTRAL_3,
     },
   },
 };
 
-export const StyledFormControl = muistyled(FormControl)<FormControlProps>`
-  width: calc(100% - 71px);
-`;
+export const StyledFormControl = muistyled(FormControl)<FormControlProps>``;
 
 export const StyledSelect = muistyled(Select)<SelectProps<string>>`
   background-color: var(--color-neutral-6);

@@ -11,6 +11,18 @@ export enum ProgramRating {
   R18 = 'R18',
 }
 
+// eslint-disable-next-line no-shadow
+export enum ProgramContent {
+  F = '',
+  D = 'Drugs',
+  V = 'Violence',
+  S = 'Sex',
+  DV = 'Drugs and Violence',
+  DS = 'Drugs and Sex',
+  VS = 'Violence and Sex',
+  DVS = 'Drugs, Violence and Sex',
+}
+
 export interface IProgram {
   id?: string;
   startDateTime: Date;
@@ -18,6 +30,7 @@ export interface IProgram {
   title: string;
   description: string;
   rating: ProgramRating;
+  content: ProgramContent;
 }
 
 export default class Program implements IProgram {
@@ -33,8 +46,10 @@ export default class Program implements IProgram {
 
   public rating: ProgramRating;
 
+  public content: ProgramContent;
+
   constructor(program?: Partial<IProgram>) {
-    const { id, startDateTime, duration, title, description, rating } =
+    const { id, startDateTime, duration, title, description, rating, content } =
       program ?? {
         id: shortUUID.generate(),
         startDateTime: new Date(),
@@ -42,6 +57,7 @@ export default class Program implements IProgram {
         title: '',
         description: '',
         rating: ProgramRating.RSC,
+        content: ProgramContent.F,
       };
     this.id = id ?? shortUUID.generate();
     this.startDateTime = startDateTime ? new Date(startDateTime) : new Date();
@@ -49,5 +65,6 @@ export default class Program implements IProgram {
     this.title = title ?? '';
     this.description = description ?? '';
     this.rating = rating ?? ProgramRating.RSC;
+    this.content = content ?? ProgramContent.F;
   }
 }

@@ -8,7 +8,7 @@ import {
   getProgramTime,
   yyyyMMddHHmmToDuration,
 } from 'utils';
-import Program, { ProgramRating } from './program';
+import Program, { ProgramContent, ProgramRating } from './program';
 
 export default class EPGParser {
   static parseXml(xml: string): Program[] {
@@ -43,8 +43,8 @@ export default class EPGParser {
         </programme>
       </tv>
     */
-    const content = document.tv;
-    const programs = content.programme;
+    const data = document.tv;
+    const programs = data.programme;
     return programs.map(program => {
       let title = '';
       let description = '';
@@ -68,11 +68,33 @@ export default class EPGParser {
         '05': ProgramRating.R16,
         '06': ProgramRating.R18,
       };
+
+      const contentp = {
+        '00': '',
+        '01': 'Drugs',
+        '02': 'Violence',
+        '03': 'Sex',
+        '04': 'Drugs and Violence',
+        '05': 'Drugs and Sex',
+        '06': 'Violence and Sex',
+        '07': 'Drugs, Violence and Sex',
+      };
+
       function pad(str, max) {
         return str.length < max ? pad(`0${str}`, max) : str;
       }
-      const rating: ProgramRating =
-        rate[`${pad(program.rating.value.toString(), 2)}`] ?? ProgramRating.RSC;
+
+      const r: string = program.rating.value.toString();
+      let rating;
+      let content;
+
+      if (program.rating.value > 10) {
+        rating = rate[`${pad(r[1], 2)}`] ?? ProgramRating.RSC;
+        content = contentp[`${pad(r[0], 2)}`] ?? ProgramContent.F;
+      } else {
+        rating = rate[`${pad(r, 2)}`] ?? ProgramRating.RSC;
+        content = ProgramContent.F;
+      }
 
       // example -> "202206250600"
       const date = program.start;
@@ -85,6 +107,7 @@ export default class EPGParser {
         description,
         startDateTime,
         duration,
+        content,
         rating,
       });
     });
@@ -131,6 +154,16 @@ export default class EPGParser {
         0b0110: ProgramRating.R18,
       };
 
+      const contentp = {
+        0b0001: 'Drugs',
+        0b0010: 'Violence',
+        0b0100: 'Sex',
+        0b0011: 'Drugs and Violence',
+        0b0101: 'Drugs and Sex',
+        0b0110: 'Violence and Sex',
+        0b0111: 'Drugs, Violence and Sex',
+      };
+
       const ratingStr = p[58];
 
       const hex2bin = data =>
@@ -141,7 +174,9 @@ export default class EPGParser {
           .join('');
 
       const base = '0b';
-      const brate = base.concat(hex2bin(ratingStr));
+      const bcont = base.concat(hex2bin(`0x0${ratingStr[2]}`));
+      const content: ProgramContent = contentp[Number(bcont)];
+      const brate = base.concat(hex2bin(`0x0${ratingStr[3]}`));
       const rating: ProgramRating = rate[Number(brate)];
 
       return new Program({
@@ -149,6 +184,7 @@ export default class EPGParser {
         description,
         startDateTime,
         duration,
+        content,
         rating,
       });
     });
