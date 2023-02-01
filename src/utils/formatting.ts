@@ -94,6 +94,26 @@ export function getProgramTime(program) {
   return length;
 }
 
+export function getIconCode(s: string): string {
+  let code;
+  if (s === 'RSC') {
+    code = 'csv: 0x00\nxml: 00';
+  } else if (s === 'RL,') {
+    code = 'csv: 0x00\nxml: 00';
+  } else if (s === 'R10') {
+    code = 'csv: 0x00\nxml: 00';
+  } else if (s === 'R12') {
+    code = 'csv: 0x00\nxml: 00';
+  } else if (s === 'R14') {
+    code = 'csv: 0x00\nxml: 00';
+  } else if (s === 'R16') {
+    code = 'csv: 0x00\nxml: 00';
+  } else if (s === 'R18') {
+    code = 'csv: 0x00\nxml: 00';
+  }
+  return code;
+}
+
 // adapted from https://stackoverflow.com/a/8497474/
 export function csvLineToArray(text: string) {
   // const text = textT.replace(/","/g, '";"');

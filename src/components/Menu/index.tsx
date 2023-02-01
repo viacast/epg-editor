@@ -38,7 +38,7 @@ import {
   EPGValidationMessageType,
 } from 'services/epg/validator';
 import { ColorPallete } from 'styles/global';
-import { ReactSetState } from 'utils';
+import { getIconCode, ReactSetState } from 'utils';
 import {
   BottomContainer,
   ButtonContainer,
@@ -259,15 +259,25 @@ const Menu: React.FC<MenuProps> = ({
                     value: r.toString(),
                   }))}
                 />
-                <IconContainer>
-                  <Icon
-                    src={
-                      ratings[newProgram?.rating.toString() ?? ProgramRating.RL]
-                    }
-                    title={newProgram?.rating.toString()}
-                    alt="Rate Icon"
-                  />
-                </IconContainer>
+                <Tooltip
+                  arrow
+                  title={
+                    <Message>
+                      {getIconCode(newProgram?.rating.toString())}
+                    </Message>
+                  }
+                >
+                  <IconContainer>
+                    <Icon
+                      src={
+                        ratings[
+                          newProgram?.rating.toString() ?? ProgramRating.RL
+                        ]
+                      }
+                      alt="Rate Icon"
+                    />
+                  </IconContainer>
+                </Tooltip>
               </SelectRateContainer>
               <FormRow>
                 <FormColumn>
