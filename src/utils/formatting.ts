@@ -82,7 +82,7 @@ export function yyyyMMddHHmmToDuration(s: string): Date {
 export function getLength(start: string, stop: string): number {
   const s1 = yyyyMMddHHmmToDuration(start).getTime();
   const s2 = yyyyMMddHHmmToDuration(stop).getTime();
-  return Math.abs(s2 - s1) * 60000;
+  return Math.abs(s2 - s1) / 60000;
 }
 
 // adapted from https://stackoverflow.com/a/8497474/
