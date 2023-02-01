@@ -5,7 +5,8 @@ import {
   InvalidFile,
   parseDate,
   readFileAsync,
-  getLength,
+  getProgramTime,
+  yyyyMMddHHmmToDuration,
 } from 'utils';
 import Program, { ProgramRating } from './program';
 
@@ -16,6 +17,7 @@ export default class EPGParser {
       attributeNamePrefix: '',
       isArray: tag => tag === 'programme',
     });
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let document: Record<string, any>;
     try {
@@ -43,16 +45,19 @@ export default class EPGParser {
     */
     const content = document.tv;
     const programs = content.programme;
-
     return programs.map(program => {
-      const title: string = program.title['#text'];
-      const description: string = program.desc['#text'];
-      let length = 0;
-      if (!program.length) {
-        getLength(program.start, program.stop);
+      let title = '';
+      let description = '';
+      let duration = 0;
+      if (program.title['#text']) {
+        title = program.title['#text'];
+        description = program.desc['#text'];
+        duration = getProgramTime(program);
+      } else {
+        title = program.title;
+        description = program.desc;
+        duration = getProgramTime(program);
       }
-      length = Number(program.length['#text']) * 60;
-      const duration: number = length;
 
       const rate = {
         '00': ProgramRating.RSC,
@@ -63,14 +68,18 @@ export default class EPGParser {
         '05': ProgramRating.R16,
         '06': ProgramRating.R18,
       };
-
+      function pad(str, max) {
+        return str.length < max ? pad(`0${str}`, max) : str;
+      }
       const rating: ProgramRating =
-        rate[program.rating.value] ?? ProgramRating.RSC;
+        rate[`${pad(program.rating.value.toString(), 2)}`] ?? ProgramRating.RSC;
 
       // example -> "202206250600"
       const date = program.start;
 
-      const startDateTime = parseDate(date, 'yyyyMMddHHmm');
+      // const startDateTime = parseDate(date, 'yyyyMMddHHmm');
+      const startDateTime = yyyyMMddHHmmToDuration(date);
+
       return new Program({
         title,
         description,
@@ -90,13 +99,13 @@ export default class EPGParser {
       4015;1;2;1;20220622;165500;010000;"VALE A PENA VER DE NOVO";"Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.";0;"0x00";"0x05B3";;"0x10";"0x0603";0;1;1;7;"por";;"Estéreo";;"0x11";"0x30";"0xE0";0;2;0;1;"0x00";0;0;0;1;"0x10";0;0;0;1;"0x0008";"0x30";"0113706F72";;"Closed Caption";;;;;;;;;;2;;"VALE A PENA VER DE NOVO";"BRA";"0x03";0;0;0;0;;;;;
     */
 
-    const firstLine = csvLineToArray(lines[0]);
+    const firstLine = csvLineToArray(lines[0].replace(/,/g, ';'));
     if (!firstLine) {
       throw new InvalidFile('Invalid CSV');
     }
 
     return programs.map(prog => {
-      const p = csvLineToArray(prog);
+      const p = csvLineToArray(prog.replace(/","/g, '";"'));
       if (p?.length !== firstLine.length) {
         throw new InvalidFile('Invalid CSV');
       }

@@ -82,12 +82,21 @@ export function yyyyMMddHHmmToDuration(s: string): Date {
 export function getLength(start: string, stop: string): number {
   const s1 = yyyyMMddHHmmToDuration(start).getTime();
   const s2 = yyyyMMddHHmmToDuration(stop).getTime();
-  return Math.abs(s2 - s1) / 60000;
+  return Math.abs(s2 - s1) / 1000;
+}
+export function getProgramTime(program) {
+  let length = 0;
+  if (program.length === undefined) {
+    length = getLength(program.start, program.stop);
+  } else {
+    length = Number(program.length['#text']) * 60;
+  }
+  return length;
 }
 
 // adapted from https://stackoverflow.com/a/8497474/
-export function csvLineToArray(textT: string) {
-  const text = textT.replace(/,/g, ';');
+export function csvLineToArray(text: string) {
+  // const text = textT.replace(/","/g, '";"');
   const reValid =
     /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*(?:;\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*)*$/;
   const reValue =
