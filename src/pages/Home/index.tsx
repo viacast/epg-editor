@@ -94,6 +94,10 @@ const Home: React.FC = () => {
           }}
           handleAddProgram={handleAddProgram}
           handleClearProgramList={handleClearProgramList}
+          setPrograms={setPrograms}
+          selectedProgram={selectedProgram!}
+          selectedProgramId={selectedProgramId}
+          setSelectedProgramId={setSelectedProgramId}
         />
       </HeaderContainer>
       <TableMenuContainer>

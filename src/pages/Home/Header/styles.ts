@@ -11,7 +11,8 @@ export const HeaderContainer = styled.div`
   }
 
   .epg-input {
-    min-width: 270px;
+    min-width: 235px;
+    max-width: 270px;
     height: 44px;
   }
 `;
@@ -213,6 +214,21 @@ export const MessageBadgeContainer = styled.div`
   span:not(:last-child) {
     margin-right: 2px;
   }
+`;
+
+export const Popover = styled.div<{ display: string; left: string }>`
+  position: absolute;
+  display: ${({ display }) => display || 'none'};
+  z-index: 2;
+  top: 105px;
+  left: ${({ left }) => left || '750px'};
+  width: 140px;
+  height: 65px;
+  padding: 5px;
+  border-radius: 4px;
+  color: var(--color-neutral-2);
+  background-color: var(--color-neutral-3);
+  text-align: center;
 `;
 
 interface BadgeProps {

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CgPlayListAdd, CgPlayListRemove } from 'react-icons/cg';
+import { CgPlayListAdd, CgPlayListRemove, CgTrash } from 'react-icons/cg';
 import {
   FaDownload,
   FaFileCode,
@@ -29,7 +29,7 @@ import { EPGParser, Program, EPGBuilder, EPGValidator } from 'services/epg';
 import { AVAILABLE_LANGUAGES } from 'services/i18n';
 import { Button, FileInput, FileInputRefProps, Tooltip } from 'components';
 import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
-import { EntityMap } from 'utils';
+import { EntityMap, ReactSetState } from 'utils';
 import { useModalProvider } from 'providers/ModalProvider';
 import {
   EPGValidationMessageLevel,
@@ -54,6 +54,7 @@ import {
   MessageBadgeContainer,
   MessageText,
   Line,
+  Popover,
 } from './styles';
 
 export interface HeaderProps {
@@ -61,6 +62,10 @@ export interface HeaderProps {
   setNewPrograms: (programs: EntityMap<Program>) => void;
   handleAddProgram: () => void;
   handleClearProgramList: () => void;
+  setPrograms: ReactSetState<EntityMap<Program>>;
+  selectedProgram: Program;
+  selectedProgramId: Set<string>;
+  setSelectedProgramId: (s: Set<string>) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -68,6 +73,10 @@ const Header: React.FC<HeaderProps> = ({
   setNewPrograms,
   handleAddProgram,
   handleClearProgramList,
+  setPrograms,
+  selectedProgram,
+  selectedProgramId,
+  setSelectedProgramId,
 }) => {
   const { t, i18n } = useTranslation();
   const [programCount, setProgramCount] = useState(0);
@@ -193,6 +202,26 @@ const Header: React.FC<HeaderProps> = ({
     });
   }, [showSettings]);
 
+  const [anchorEl1, setAnchorEl1] = React.useState(null);
+  const [anchorEl2, setAnchorEl2] = React.useState(null);
+
+  const handlePopoverOpen1 = event => {
+    setAnchorEl1(event.currentTarget);
+  };
+  const handlePopoverOpen2 = event => {
+    setAnchorEl2(event.currentTarget);
+  };
+
+  const handlePopoverClose1 = () => {
+    setAnchorEl1(null);
+  };
+  const handlePopoverClose2 = () => {
+    setAnchorEl2(null);
+  };
+
+  const openPopover1 = Boolean(anchorEl1);
+  const openPopover2 = Boolean(anchorEl2);
+
   return (
     <HeaderContainer className="no-user-select">
       <FileInput
@@ -262,27 +291,72 @@ const Header: React.FC<HeaderProps> = ({
         icon={<CgPlayListAdd />}
         onClick={handleAddProgram}
       />
+      <div onMouseEnter={handlePopoverOpen1} onMouseLeave={handlePopoverClose1}>
+        <Button
+          text={t('header:buttonClearProgramList')}
+          icon={<CgPlayListRemove />}
+          onClick={handleClear}
+        />
+      </div>
+      <Popover left="750px" display={openPopover1 ? 'block' : 'none'}>
+        {t('header:clearProgramListPopover')}
+      </Popover>
       <Button
-        text={t('header:buttonClearProgramList')}
-        icon={<CgPlayListRemove />}
-        onClick={handleClear}
-      />
-      <Button
-        text={t('header:buttonAdjustStartDateTime')}
-        icon={<BsClockHistory />}
+        text={t('header:buttonDeleteSelectedProgram')}
+        icon={<CgTrash />}
         onClick={() => {
+          if (!selectedProgram) {
+            return;
+          }
           openModal({
-            title: t('header:buttonAdjustStartDateTime'),
-            content: t('header:alertAdjustStartDateTime'),
+            title: t('menu:deleteProgramTitle'),
+            content: t('header:deleteProgramFromList', {
+              count: programs.toArray().length,
+            }),
             confirm: () => {
-              const adjustedPrograms = EPGValidator.adjustDateTimes(
-                programs.toArray(),
-              );
-              setNewPrograms(new EntityMap(adjustedPrograms));
+              Array.from(selectedProgramId).forEach(pid => {
+                const size = programs.toArray().length;
+                const index = programs.indexOf(pid);
+                const idList: Set<string> = new Set();
+                if (size === 1) {
+                  // was the only program on the list
+                  selectedProgramId.delete(pid);
+                } else if (index === size - 1) {
+                  // was the last program on the list
+                  idList.add(programs.at(index - 1)?.id ?? '');
+                  setSelectedProgramId(idList);
+                } else {
+                  // all other cases
+                  idList.add(programs.at(index + 1)?.id ?? '');
+                  setSelectedProgramId(idList);
+                }
+                setPrograms(p => p.remove(pid).clone());
+              });
             },
           });
         }}
       />
+      <div onMouseEnter={handlePopoverOpen2} onMouseLeave={handlePopoverClose2}>
+        <Button
+          text={t('header:buttonAdjustStartDateTime')}
+          icon={<BsClockHistory />}
+          onClick={() => {
+            openModal({
+              title: t('header:buttonAdjustStartDateTime'),
+              content: t('header:alertAdjustStartDateTime'),
+              confirm: () => {
+                const adjustedPrograms = EPGValidator.adjustDateTimes(
+                  programs.toArray(),
+                );
+                setNewPrograms(new EntityMap(adjustedPrograms));
+              },
+            });
+          }}
+        />
+      </div>
+      <Popover left="1060px" display={openPopover2 ? 'block' : 'none'}>
+        {t('header:adjustStartDateTimePopover')}
+      </Popover>
       <Tooltip
         arrow
         title={
