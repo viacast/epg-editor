@@ -1,3 +1,9 @@
+# Changelog
+* Added delete button on top bar
+* Added tooltip to describe adjust button and clear button.
+* Preventing list from tilt to the side when the '+' sign appears.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
