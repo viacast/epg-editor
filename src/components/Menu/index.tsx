@@ -118,8 +118,8 @@ const Menu: React.FC<MenuProps> = ({
           <p>{t('menu:edit')}:</p>
           <p>{selectedProgram?.title}</p>
         </ToolbarText>
-        {hasChanges && (
-          <ActionButtons>
+        <ActionButtons>
+          {hasChanges && (
             <VscDiscard
               id="menu-button-discard"
               size="20px"
@@ -127,38 +127,38 @@ const Menu: React.FC<MenuProps> = ({
                 if (!selectedProgram) {
                   return;
                 }
-                openModal({
-                  title: t('menu:discardProgramTitle'),
-                  content: t('menu:discardProgramMessage', {
-                    programTitle: selectedProgram.title,
-                  }),
-                  confirm: () => {
-                    setNewProgram(selectedProgram);
-                    setHasChanges(false);
-                  },
-                });
+                // openModal({
+                //   title: t('menu:discardProgramTitle'),
+                //   content: t('menu:discardProgramMessage', {
+                //     programTitle: selectedProgram.title,
+                //   }),
+                //   confirm: () => {
+                setNewProgram(selectedProgram);
+                setHasChanges(false);
+                //   },
+                // });
               }}
             />
-            <CgTrash
-              id="menu-button-remove"
-              size="20px"
-              onClick={() => {
-                if (!selectedProgram) {
-                  return;
-                }
-                openModal({
-                  title: t('menu:deleteProgramTitle'),
-                  content: t('menu:deleteProgramMessage', {
-                    programTitle: selectedProgram.title,
-                  }),
-                  confirm: () => {
-                    handleRemoveProgram(selectedProgram.id);
-                  },
-                });
-              }}
-            />
-          </ActionButtons>
-        )}
+          )}
+          <CgTrash
+            id="menu-button-remove"
+            size="20px"
+            onClick={() => {
+              if (!selectedProgram) {
+                return;
+              }
+              openModal({
+                title: t('menu:deleteProgramTitle'),
+                content: t('menu:deleteProgramMessage', {
+                  programTitle: selectedProgram.title,
+                }),
+                confirm: () => {
+                  handleRemoveProgram(selectedProgram.id);
+                },
+              });
+            }}
+          />
+        </ActionButtons>
       </Toolbar>
       <ContentContainer>
         <BottomContainer>
