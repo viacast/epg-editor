@@ -1,4 +1,5 @@
 import { format, parse } from 'date-fns';
+import { ProgramContent } from 'services/epg/program';
 
 interface HMS {
   hours: number;
@@ -112,6 +113,53 @@ export function getIconCode(s: string): string {
     code = 'csv: 0x00\nxml: 00';
   }
   return code;
+}
+
+export function boolToPC(c: Array<boolean>): ProgramContent {
+  const c1 = c[0];
+  const c2 = c[1];
+  const c3 = c[2];
+
+  let array = '';
+
+  if (c1) {
+    array += 'Drugs';
+  }
+  if (c2) {
+    array += 'Violence';
+  }
+  if (c3) {
+    array += 'Sex';
+  }
+
+  let result;
+
+  if (array === '') {
+    result = ProgramContent.F;
+  }
+  if (array === 'Drugs') {
+    result = ProgramContent.D;
+  }
+  if (array === 'Violence') {
+    result = ProgramContent.V;
+  }
+  if (array === 'Sex') {
+    result = ProgramContent.S;
+  }
+  if (array === 'DrugsViolence') {
+    result = ProgramContent.DV;
+  }
+  if (array === 'DrugsSex') {
+    result = ProgramContent.DS;
+  }
+  if (array === 'ViolenceSex') {
+    result = ProgramContent.VS;
+  }
+  if (array === 'DrugsViolenceSex') {
+    result = ProgramContent.DVS;
+  }
+
+  return result;
 }
 
 // adapted from https://stackoverflow.com/a/8497474/

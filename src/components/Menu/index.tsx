@@ -38,7 +38,7 @@ import {
   EPGValidationMessageType,
 } from 'services/epg/validator';
 import { ColorPallete } from 'styles/global';
-import { getIconCode, ReactSetState } from 'utils';
+import { boolToPC, getIconCode, ReactSetState } from 'utils';
 import {
   BottomContainer,
   ButtonContainer,
@@ -110,6 +110,24 @@ const Menu: React.FC<MenuProps> = ({
     const messages = EPGValidator.validate(programs.toArray());
     setProgramMessages(messages[selectedProgram.id] ?? {});
   }, [programs, selectedProgram.id]);
+
+  const [contents, setContents] = useState([false, false, false]);
+
+  useEffect(() => {
+    let c1 = false;
+    let c2 = false;
+    let c3 = false;
+    if (selectedProgram.content.includes('Drugs')) {
+      c1 = true;
+    }
+    if (selectedProgram.content.includes('Violence')) {
+      c2 = true;
+    }
+    if (selectedProgram.content.includes('Sex')) {
+      c3 = true;
+    }
+    setContents([c1, c2, c3]);
+  }, [selectedProgram]);
 
   return (
     <MenuContainer>
@@ -294,8 +312,17 @@ const Menu: React.FC<MenuProps> = ({
                   >
                     <div style={{ display: 'flex' }}>
                       <Checkbox
-                        onClick={() => ''}
-                        checked={selectedProgram.content.includes('Drugs')}
+                        onClick={() => {
+                          const newContents = [...contents];
+                          newContents[0] = !contents[0];
+                          setContents(newContents);
+                          setNewProgram(p => ({
+                            ...p,
+                            content: boolToPC(newContents),
+                          }));
+                          setHasChanges(true);
+                        }}
+                        checked={contents[0]}
                       />
                       <div
                         style={{
@@ -309,8 +336,17 @@ const Menu: React.FC<MenuProps> = ({
                     </div>
                     <div style={{ display: 'flex', marginTop: '-10px' }}>
                       <Checkbox
-                        onClick={() => ''}
-                        checked={selectedProgram.content.includes('Violence')}
+                        onClick={() => {
+                          const newContents = [...contents];
+                          newContents[1] = !contents[1];
+                          setContents(newContents);
+                          setNewProgram(p => ({
+                            ...p,
+                            content: boolToPC(newContents),
+                          }));
+                          setHasChanges(true);
+                        }}
+                        checked={contents[1]}
                       />
                       <div
                         style={{
@@ -324,8 +360,17 @@ const Menu: React.FC<MenuProps> = ({
                     </div>
                     <div style={{ display: 'flex', marginTop: '-10px' }}>
                       <Checkbox
-                        onClick={() => ''}
-                        checked={selectedProgram.content.includes('Sex')}
+                        onClick={() => {
+                          const newContents = [...contents];
+                          newContents[2] = !contents[2];
+                          setContents(newContents);
+                          setNewProgram(p => ({
+                            ...p,
+                            content: boolToPC(newContents),
+                          }));
+                          setHasChanges(true);
+                        }}
+                        checked={contents[2]}
                       />
                       <div
                         style={{
