@@ -267,7 +267,7 @@ export default class EPGBuilder {
         '',
         '',
         '',
-        `${categoryp[p.category ?? ProgramCategory['0xF']]}`,
+        `${categoryp[p.category ?? ProgramCategory['0xF']]}0`,
         '"0xE0"',
         '0',
         '2',

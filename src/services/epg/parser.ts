@@ -216,9 +216,13 @@ export default class EPGParser {
         '0xF': 'Outros',
       };
 
-      const category = categoryp[p[35].slice(0, -1)];
+      let cat = p[35];
+      if (cat === '0') {
+        cat += '0';
+      }
+      const category = categoryp[cat];
 
-      const ratingStr = p[58];
+      const ratingStr = p[69];
 
       const hex2bin = data =>
         data
