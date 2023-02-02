@@ -8,7 +8,11 @@ import {
   getProgramTime,
   yyyyMMddHHmmToDuration,
 } from 'utils';
-import Program, { ProgramContent, ProgramRating } from './program';
+import Program, {
+  ProgramCategory,
+  ProgramContent,
+  ProgramRating,
+} from './program';
 
 export default class EPGParser {
   static parseXml(xml: string): Program[] {
@@ -80,6 +84,34 @@ export default class EPGParser {
         '07': 'Drugs, Violence and Sex',
       };
 
+      const categoryp = {
+        '0x0': 'Jornalismo',
+        '0x1': 'Esporte',
+        '0x2': 'Educativo',
+        '0x3': 'Novela',
+        '0x4': 'Minissérie',
+        '0x5': 'Série/seriado',
+        '0x6': 'Variedade',
+        '0x7': 'Reality show',
+        '0x8': 'Informação',
+        '0x9': 'Humorístico',
+        '0xA': 'Infantil',
+        '0xB': 'Erótico',
+        '0xC': 'Filme',
+        '0xD': 'Sorteio, televendas, premiação',
+        '0xE': 'Debate/entrevista',
+        '0xF': 'Outros',
+      };
+
+      let cat = program.category.toString(16);
+      if (cat === '0') {
+        cat += '0';
+      }
+
+      const aux: string = cat.slice(0, -1).toUpperCase();
+
+      const category = categoryp[`0x${aux}`] ?? ProgramCategory['0xF'];
+
       function pad(str, max) {
         return str.length < max ? pad(`0${str}`, max) : str;
       }
@@ -109,6 +141,7 @@ export default class EPGParser {
         duration,
         content,
         rating,
+        category,
       });
     });
   }
@@ -164,6 +197,27 @@ export default class EPGParser {
         0b0111: 'Drugs, Violence and Sex',
       };
 
+      const categoryp = {
+        '0x0': 'Jornalismo',
+        '0x1': 'Esporte',
+        '0x2': 'Educativo',
+        '0x3': 'Novela',
+        '0x4': 'Minissérie',
+        '0x5': 'Série/seriado',
+        '0x6': 'Variedade',
+        '0x7': 'Reality show',
+        '0x8': 'Informação',
+        '0x9': 'Humorístico',
+        '0xA': 'Infantil',
+        '0xB': 'Erótico',
+        '0xC': 'Filme',
+        '0xD': 'Sorteio, televendas, premiação',
+        '0xE': 'Debate/entrevista',
+        '0xF': 'Outros',
+      };
+
+      const category = categoryp[p[35].slice(0, -1)];
+
       const ratingStr = p[58];
 
       const hex2bin = data =>
@@ -186,6 +240,7 @@ export default class EPGParser {
         duration,
         content,
         rating,
+        category,
       });
     });
   }

@@ -39,6 +39,7 @@ import {
 } from 'services/epg/validator';
 import { ColorPallete } from 'styles/global';
 import { boolToPC, getIconCode, ReactSetState } from 'utils';
+import { ProgramCategory } from 'services/epg/program';
 import {
   BottomContainer,
   ButtonContainer,
@@ -390,25 +391,21 @@ const Menu: React.FC<MenuProps> = ({
                   <div style={{ marginTop: '5px' }}>
                     <Select
                       width="100%"
-                      value="00"
-                      setValue={() => ''}
-                      options={[
-                        { label: 'Telejornalismo', value: '00' },
-                        { label: 'Reality shows', value: '01' },
-                        { label: 'Minisséries', value: '02' },
-                        { label: 'Educação', value: '03' },
-                        { label: 'Infantil', value: '04' },
-                        { label: 'Programa de entrevistas', value: '05' },
-                        { label: 'Programa de concursos', value: '06' },
-                        { label: 'Documentários', value: '07' },
-                        { label: 'Ficção', value: '08' },
-                        { label: 'Desportivo', value: '09' },
-                        { label: 'Séries de televisão', value: '10' },
-                        { label: 'Soap operas', value: '11' },
-                        { label: 'Telenovelas', value: '12' },
-                        { label: 'Religião', value: '13' },
-                        { label: 'Musical', value: '14' },
-                      ]}
+                      value={
+                        newProgram?.category.toString() ??
+                        ProgramCategory['0x0']
+                      }
+                      setValue={category => {
+                        setNewProgram(p => ({
+                          ...p,
+                          category: category as ProgramCategory,
+                        }));
+                        setHasChanges(true);
+                      }}
+                      options={Object.values(ProgramCategory).map(c => ({
+                        label: c,
+                        value: c.toString(),
+                      }))}
                     />
                   </div>
                 </FormColumn>
