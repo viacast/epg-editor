@@ -220,7 +220,7 @@ export default class EPGParser {
       if (cat === '0') {
         cat += '0';
       }
-      const category = categoryp[cat];
+      const category = categoryp[cat.slice(0, -1)];
 
       const ratingStr = p[69];
 
