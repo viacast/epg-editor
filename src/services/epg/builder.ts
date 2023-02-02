@@ -62,7 +62,7 @@ export default class EPGBuilder {
         rate = 6;
       }
 
-      const aux2 = p.rating.slice(1);
+      const aux2 = p.content;
       let cont = 0;
       if (aux2 === '') {
         cont = 0;
