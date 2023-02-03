@@ -82,35 +82,35 @@ const Home: React.FC = () => {
     setSavedPrograms([] as Program[]);
   }, [setSavedPrograms]);
 
-  const totalSize = programs.toArray().length;
-  const date1 = programs.toArray()[0].startDateTime;
-  const date2 = programs.toArray()[totalSize - 1].startDateTime;
-  const diffTime = Math.abs(date2.getTime() - date1.getTime());
-  const diffSec = diffTime / 1000;
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const twidth = useWindowSize().width - 80;
+  // const totalSize = programs.toArray().length;
+  // const date1 = programs.toArray()[0].startDateTime;
+  // const date2 = programs.toArray()[totalSize - 1].startDateTime;
+  // const diffTime = Math.abs(date2.getTime() - date1.getTime());
+  // const diffSec = diffTime / 1000;
+  // // eslint-disable-next-line react-hooks/rules-of-hooks
+  // const twidth = useWindowSize().width - 80;
 
-  const [now, setNow] = useState(0);
+  // const [now, setNow] = useState(0);
 
-  let aux = -1;
-  const setCursorPosition = () =>
-    programs.toArray().forEach(p => {
-      const progSize = p.duration;
-      const dim = progSize / diffSec;
-      const w = twidth * dim;
-      if (p.startDateTime <= new Date()) {
-        aux += w;
-      }
-      setNow(aux);
-    });
+  // let aux = 0;
+  // const setCursorPosition = () =>
+  //   programs.toArray().forEach(p => {
+  //     const progSize = p.duration;
+  //     const dim = progSize / diffSec;
+  //     const w = twidth * dim;
+  //     if (p.startDateTime <= new Date()) {
+  //       aux += w;
+  //     }
+  //     setNow(aux);
+  //   });
 
-  useEffect(() => {
-    setCursorPosition();
-  }, []);
+  // useEffect(() => {
+  //   setCursorPosition();
+  // }, []);
 
-  setTimeout(() => {
-    setCursorPosition();
-  }, 1000);
+  // setTimeout(() => {
+  //   setCursorPosition();
+  // }, 1000);
 
   return (
     <Container>
@@ -130,7 +130,7 @@ const Home: React.FC = () => {
           setSelectedProgramId={setSelectedProgramId}
         />
       </HeaderContainer>
-      <div
+      {/* <div
         style={{
           width: 'calc(100% - 60px)',
           height: '80px',
@@ -169,7 +169,7 @@ const Home: React.FC = () => {
             />
           );
         })}
-      </div>
+      </div> */}
       <TableMenuContainer>
         <TableContainer
           className="epg-table-menu-content"

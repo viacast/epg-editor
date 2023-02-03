@@ -85,6 +85,11 @@ export function getLength(start: string, stop: string): number {
   const s2 = yyyyMMddHHmmToDuration(stop).getTime();
   return Math.abs(s2 - s1) / 1000;
 }
+
+// export function getInterval(start: Date, now: Date): number {
+//   const diff = now.getTime() - start.getTime();
+// }
+
 export function getProgramTime(program) {
   let length = 0;
   if (program.length === undefined) {

@@ -90,6 +90,40 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
   const { openModal } = useModalProvider();
   const [firstProg, setFirstProg] = useState(Array.from(selectedProgramId)[0]);
 
+  const [now, setNow] = useState(0);
+  const [current, setCurrent] = useState(new Date());
+
+  let aux = -1;
+  const setCursorPosition = () =>
+    programs.toArray().forEach(p => {
+      if (p.startDateTime <= new Date()) {
+        aux += 1;
+      }
+      setNow(aux);
+    });
+
+  useEffect(() => {
+    setCursorPosition();
+    setCurrent(new Date());
+  }, []);
+
+  setTimeout(() => {
+    setCursorPosition();
+    setCurrent(new Date());
+  }, 1000);
+
+  const end =
+    addToDate(
+      programs.toArray()[now].startDateTime,
+      programs.toArray()[now].duration,
+    ).getTime() / 1000;
+  const diff = Math.abs(end - current.getTime() / 1000); // time left to end program
+  const length = programs.toArray()[now].duration;
+  const partRowSize = (1 - diff / length) * 45; // size of part of a row
+  const entireRowSize = 45 * now; // Size of entire rows
+  const tableHeight = `${entireRowSize + partRowSize}px`;
+  console.log(partRowSize / 45);
+
   useEffect(() => {
     if (selectedProgramId.size === 1) {
       setFirstProg(Array.from(selectedProgramId)[0]);
@@ -260,6 +294,16 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                   provided.draggableProps.style,
                 )}
               >
+                <div
+                  style={{
+                    position: 'fixed',
+                    top: tableHeight,
+                    zIndex: '2',
+                    width: '100%',
+                    height: '3px',
+                    backgroundColor: 'var(--color-system-1)',
+                  }}
+                />
                 <Checkbox
                   readOnly
                   onClick={e => {
