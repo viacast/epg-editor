@@ -82,6 +82,36 @@ const Home: React.FC = () => {
     setSavedPrograms([] as Program[]);
   }, [setSavedPrograms]);
 
+  const totalSize = programs.toArray().length;
+  const date1 = programs.toArray()[0].startDateTime;
+  const date2 = programs.toArray()[totalSize - 1].startDateTime;
+  const diffTime = Math.abs(date2.getTime() - date1.getTime());
+  const diffSec = diffTime / 1000;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const twidth = useWindowSize().width - 80;
+
+  const [now, setNow] = useState(0);
+
+  let aux = -1;
+  const setCursorPosition = () =>
+    programs.toArray().forEach(p => {
+      const progSize = p.duration;
+      const dim = progSize / diffSec;
+      const w = twidth * dim;
+      if (p.startDateTime <= new Date()) {
+        aux += w;
+      }
+      setNow(aux);
+    });
+
+  useEffect(() => {
+    setCursorPosition();
+  }, []);
+
+  setTimeout(() => {
+    setCursorPosition();
+  }, 1000);
+
   return (
     <Container>
       <HeaderContainer>
@@ -100,6 +130,46 @@ const Home: React.FC = () => {
           setSelectedProgramId={setSelectedProgramId}
         />
       </HeaderContainer>
+      <div
+        style={{
+          width: 'calc(100% - 60px)',
+          height: '80px',
+          marginTop: '20px',
+          marginLeft: '30px',
+          paddingLeft: '2.5px',
+          borderRadius: '4px',
+          backgroundColor: 'var(--color-neutral-5)',
+        }}
+      >
+        <div
+          style={{
+            position: 'fixed',
+            left: `${now}px`,
+            zIndex: '2',
+            width: '4px',
+            height: '80px',
+            backgroundColor: 'var(--color-system-1)',
+          }}
+        />
+        {programs.toArray().map(p => {
+          const progSize = p.duration;
+          const dim = progSize / diffSec;
+          const w = `${String(twidth * dim)}px`;
+          return (
+            <div
+              style={{
+                display: 'inline-block',
+                width: w,
+                height: '75px',
+                marginTop: '2.5px',
+                border: '1px solid var(--color-neutral-6)',
+                borderRadius: '2px',
+                backgroundColor: 'var(--color-system-3)',
+              }}
+            />
+          );
+        })}
+      </div>
       <TableMenuContainer>
         <TableContainer
           className="epg-table-menu-content"

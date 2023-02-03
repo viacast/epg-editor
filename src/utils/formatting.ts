@@ -268,7 +268,6 @@ export function optionsArray(s: string): SelectOption[] {
       { label: 'Outros', value: 'Outros' },
     );
   }
-  console.log(array);
   return array;
 }
 
