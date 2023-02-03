@@ -287,7 +287,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                   }}
                   checked={selectedProgramId.has(program.id)}
                 />{' '}
-                <MessagesContainer>
+                {/* <MessagesContainer>
                   {showError && (
                     <ValidationMessage>
                       <IconButton>
@@ -315,7 +315,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                       </IconButton>
                     </ValidationMessage>
                   )}
-                </MessagesContainer>
+                </MessagesContainer> */}
                 <AddToList className="epg-add-to-list">
                   <HiPlus
                     onClick={e => {
