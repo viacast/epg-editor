@@ -25,7 +25,10 @@ import {
   secondsToHms,
   ReactSetState,
 } from 'utils';
-import { EPGValidationMessagesByProgram } from 'services/epg/validator';
+import {
+  EPGValidationMessagesByProgram,
+  EPGValidationMessageType,
+} from 'services/epg/validator';
 import { useModalProvider } from 'providers/ModalProvider';
 import { ColorPallete } from 'styles/global';
 
@@ -167,6 +170,8 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
         return null;
       }
 
+      const validators = Array.from(messages[program.id]?.ALL);
+
       rowCache[virtualizedRowProps.index] = virtualizedRowProps;
       // eslint-disable-next-line no-param-reassign
       virtualizedRowProps.columns[5] = (
@@ -187,22 +192,6 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
           </Message>
         </ParentalGuidanceCells>
       );
-
-      let showError = false;
-      let showWarn = false;
-      let showInfo = false;
-
-      if (messages[program.id]?.ERROR.size) {
-        showError = true;
-      }
-
-      if (!showError && messages[program.id]?.WARN.size) {
-        showWarn = true;
-      }
-
-      if (!showError && !showWarn && messages[program.id]?.INFO.size) {
-        showInfo = true;
-      }
 
       return (
         <Draggable
@@ -286,36 +275,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                     });
                   }}
                   checked={selectedProgramId.has(program.id)}
-                />{' '}
-                {/* <MessagesContainer>
-                  {showError && (
-                    <ValidationMessage>
-                      <IconButton>
-                        <IoIosAlert size="20px" color={ColorPallete.SYSTEM_1} />
-                      </IconButton>
-                    </ValidationMessage>
-                  )}
-                  {showWarn && (
-                    <ValidationMessage>
-                      <IconButton>
-                        <RiAlertFill
-                          size="20px"
-                          color={ColorPallete.SYSTEM_2}
-                        />
-                      </IconButton>
-                    </ValidationMessage>
-                  )}
-                  {showInfo && (
-                    <ValidationMessage>
-                      <IconButton>
-                        <IoIosInformationCircle
-                          size="20px"
-                          color={ColorPallete.NEUTRAL_3}
-                        />
-                      </IconButton>
-                    </ValidationMessage>
-                  )}
-                </MessagesContainer> */}
+                />
                 <AddToList className="epg-add-to-list">
                   <HiPlus
                     onClick={e => {
@@ -340,7 +300,145 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                     }}
                   />
                 </AddToList>
-                {virtualizedRowProps.columns}
+                {virtualizedRowProps.columns.map((cell, index) => {
+                  let rowCell;
+                  if (index === 0) {
+                    rowCell = cell;
+                  } else if (index === 1) {
+                    rowCell = (
+                      <>
+                        <MessagesContainer>
+                          {validators.includes(
+                            EPGValidationMessageType.PAST_START_DATE,
+                          ) && (
+                            <ValidationMessage>
+                              <IconButton>
+                                <RiAlertFill
+                                  size="20px"
+                                  color={ColorPallete.SYSTEM_2}
+                                />
+                              </IconButton>
+                            </ValidationMessage>
+                          )}
+                          {validators.includes(
+                            EPGValidationMessageType.FAR_START_DATE,
+                          ) && (
+                            <ValidationMessage>
+                              <IconButton>
+                                <IoIosInformationCircle
+                                  size="20px"
+                                  color={ColorPallete.NEUTRAL_3}
+                                />
+                              </IconButton>
+                            </ValidationMessage>
+                          )}
+                        </MessagesContainer>
+                        {cell}
+                      </>
+                    );
+                  } else if (index === 2) {
+                    rowCell = (
+                      <>
+                        <MessagesContainer>
+                          {validators.includes(
+                            EPGValidationMessageType.TIME_GAP,
+                          ) && (
+                            <ValidationMessage>
+                              <IconButton>
+                                <IoIosAlert
+                                  size="20px"
+                                  color={ColorPallete.SYSTEM_1}
+                                />
+                              </IconButton>
+                            </ValidationMessage>
+                          )}
+                        </MessagesContainer>
+                        {cell}
+                      </>
+                    );
+                  } else if (index === 3) {
+                    rowCell = (
+                      <>
+                        <MessagesContainer>
+                          {validators.includes(
+                            EPGValidationMessageType.INVALID_DURATION,
+                          ) && (
+                            <ValidationMessage>
+                              <IconButton>
+                                <IoIosAlert
+                                  size="20px"
+                                  color={ColorPallete.SYSTEM_1}
+                                />
+                              </IconButton>
+                            </ValidationMessage>
+                          )}
+                        </MessagesContainer>
+                        {cell}
+                      </>
+                    );
+                  } else if (index === 4) {
+                    rowCell = (
+                      <>
+                        <MessagesContainer>
+                          {validators.includes(
+                            EPGValidationMessageType.EMPTY_TITLE,
+                          ) && (
+                            <ValidationMessage>
+                              <IconButton>
+                                <IoIosAlert
+                                  size="20px"
+                                  color={ColorPallete.SYSTEM_1}
+                                />
+                              </IconButton>
+                            </ValidationMessage>
+                          )}
+                        </MessagesContainer>
+                        {cell}
+                      </>
+                    );
+                  } else if (index === 5) {
+                    rowCell = (
+                      <>
+                        <MessagesContainer>
+                          {validators.includes(
+                            EPGValidationMessageType.NO_PARENTAL_RATING,
+                          ) && (
+                            <ValidationMessage>
+                              <IconButton>
+                                <RiAlertFill
+                                  size="20px"
+                                  color={ColorPallete.SYSTEM_2}
+                                />
+                              </IconButton>
+                            </ValidationMessage>
+                          )}
+                        </MessagesContainer>
+                        {cell}
+                      </>
+                    );
+                  } else if (index === 6) {
+                    rowCell = (
+                      <>
+                        <MessagesContainer>
+                          {validators.includes(
+                            EPGValidationMessageType.EMPTY_DESCRIPTION,
+                          ) && (
+                            <ValidationMessage>
+                              <IconButton>
+                                <IoIosAlert
+                                  size="20px"
+                                  color={ColorPallete.SYSTEM_1}
+                                />
+                              </IconButton>
+                            </ValidationMessage>
+                          )}
+                        </MessagesContainer>
+                        {cell}
+                      </>
+                    );
+                  }
+                  return rowCell;
+                })}
               </RowElement>
             </TableRow>
           )}
