@@ -38,7 +38,7 @@ import {
   EPGValidationMessageType,
 } from 'services/epg/validator';
 import { ColorPallete } from 'styles/global';
-import { boolToPC, getIconCode, ReactSetState } from 'utils';
+import { boolToPC, getIconCode, optionsArray, ReactSetState } from 'utils';
 import { ProgramCategory } from 'services/epg/program';
 import {
   BottomContainer,
@@ -309,6 +309,8 @@ const Menu: React.FC<MenuProps> = ({
                       marginTop: '5px',
                       borderRadius: '4px',
                       userSelect: 'none',
+                      height: '117px',
+                      width: '135px',
                     }}
                   >
                     <div style={{ display: 'flex' }}>
@@ -387,10 +389,10 @@ const Menu: React.FC<MenuProps> = ({
                 </FormColumn>
                 <FormColumn>
                   <br />
-                  <Text>Categoria</Text>
+                  <Text>Categoria (Gênero / Sub-gênero)</Text>
                   <div style={{ marginTop: '5px' }}>
                     <Select
-                      width="100%"
+                      width="270px"
                       value={
                         newProgram?.category.toString() ??
                         ProgramCategory['0x0']
@@ -406,6 +408,23 @@ const Menu: React.FC<MenuProps> = ({
                         label: c,
                         value: c.toString(),
                       }))}
+                    />
+                  </div>
+                  <div style={{ marginTop: '5px' }}>
+                    <Select
+                      width="270px"
+                      value={newProgram?.subcategory.toString() ?? 'Outros'}
+                      setValue={subcategory => {
+                        setNewProgram(p => ({
+                          ...p,
+                          subcategory,
+                        }));
+                        setHasChanges(true);
+                      }}
+                      options={optionsArray(
+                        newProgram?.category.toString() ??
+                          ProgramCategory['0x0'],
+                      )}
                     />
                   </div>
                 </FormColumn>

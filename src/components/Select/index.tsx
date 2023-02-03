@@ -29,7 +29,13 @@ const Select: React.FC<DefaultSelectProps> = ({
         }}
       >
         {options.map(({ label, value: optionValue }) => (
-          <MenuItem key={optionValue} value={optionValue}>
+          <MenuItem
+            key={optionValue}
+            value={optionValue}
+            style={{
+              whiteSpace: 'normal',
+            }}
+          >
             {label}
           </MenuItem>
         ))}

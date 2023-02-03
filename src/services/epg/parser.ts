@@ -103,14 +103,59 @@ export default class EPGParser {
         '0xF': 'Outros',
       };
 
-      let cat = program.category.toString(16);
-      if (cat === '0') {
-        cat += '0';
+      const subcat = {
+        '0x00': 'Telejornais',
+        '0x01': 'Reportagem',
+        '0x02': 'Documentário',
+        '0x03': 'Biografia',
+        '0x10': 'Esporte',
+        '0x20': 'Educativo',
+        '0x30': 'Novela',
+        '0x40': 'Minissérie',
+        '0x50': 'Série',
+        '0x60': 'Auditório',
+        '0x61': 'Show',
+        '0x62': 'Musical',
+        '0x63': 'Making of',
+        '0x64': 'Feminino',
+        '0x65': 'Game Show',
+        '0x70': 'Reality show',
+        '0x80': 'Culinária',
+        '0x81': 'Moda',
+        '0x82': 'Rural',
+        '0x83': 'Saúde',
+        '0x84': 'Turismo',
+        '0x90': 'Humorístico',
+        '0xA0': 'Infantil',
+        '0xB0': 'Erótico',
+        '0xC0': 'Filme',
+        '0xD0': 'Sorteio',
+        '0xD1': 'Televendas',
+        '0xD2': 'Premiação',
+        '0xE0': 'Debate',
+        '0xE1': 'Entrevista',
+        '0xF0': 'Desenho adulto',
+        '0xF1': 'Interativo',
+        '0xF2': 'Político',
+        '0xF3': 'Religioso',
+        '0xFF': 'Outros',
+      };
+
+      let hex = program.category;
+      if (typeof hex === 'object') {
+        hex = program.category['#text'].toString(16).toUpperCase();
+      } else {
+        hex = program.category.toString(16).toUpperCase();
       }
 
-      const aux: string = cat.slice(0, -1).toUpperCase();
+      if (hex.length === 1) {
+        hex += '0';
+      }
 
-      const category = categoryp[`0x${aux}`] ?? ProgramCategory['0xF'];
+      const category =
+        categoryp[`0x${hex.slice(0, -1)}`] ?? ProgramCategory['0xF'];
+
+      const subcategory = subcat[`0x${hex}`] ?? 'Outros';
 
       function pad(str, max) {
         return str.length < max ? pad(`0${str}`, max) : str;
@@ -142,6 +187,7 @@ export default class EPGParser {
         content,
         rating,
         category,
+        subcategory,
       });
     });
   }
@@ -216,11 +262,46 @@ export default class EPGParser {
         '0xF': 'Outros',
       };
 
-      let cat = p[35];
-      if (cat === '0') {
-        cat += '0';
-      }
-      const category = categoryp[cat.slice(0, -1)];
+      const subcat = {
+        '0x00': 'Telejornais',
+        '0x01': 'Reportagem',
+        '0x02': 'Documentário',
+        '0x03': 'Biografia',
+        '0x10': 'Esporte',
+        '0x20': 'Educativo',
+        '0x30': 'Novela',
+        '0x40': 'Minissérie',
+        '0x50': 'Série',
+        '0x60': 'Auditório',
+        '0x61': 'Show',
+        '0x62': 'Musical',
+        '0x63': 'Making of',
+        '0x64': 'Feminino',
+        '0x65': 'Game Show',
+        '0x70': 'Reality show',
+        '0x80': 'Culinária',
+        '0x81': 'Moda',
+        '0x82': 'Rural',
+        '0x83': 'Saúde',
+        '0x84': 'Turismo',
+        '0x90': 'Humorístico',
+        '0xA0': 'Infantil',
+        '0xB0': 'Erótico',
+        '0xC0': 'Filme',
+        '0xD0': 'Sorteio',
+        '0xD1': 'Televendas',
+        '0xD2': 'Premiação',
+        '0xE0': 'Debate',
+        '0xE1': 'Entrevista',
+        '0xF0': 'Desenho adulto',
+        '0xF1': 'Interativo',
+        '0xF2': 'Político',
+        '0xF3': 'Religioso',
+        '0xFF': 'Outros',
+      };
+
+      const category = categoryp[p[35].slice(0, -1)];
+      const subcategory = subcat[p[35]] ?? 'Outros';
 
       const ratingStr = p[69];
 
@@ -245,6 +326,7 @@ export default class EPGParser {
         content,
         rating,
         category,
+        subcategory,
       });
     });
   }

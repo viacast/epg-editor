@@ -271,8 +271,9 @@ const Header: React.FC<HeaderProps> = ({
               text="CSV"
               icon={<FaFileCsv />}
               onClick={() => {
+                const BOM = new Uint8Array([0xef, 0xbb, 0xbf]);
                 const blob = new Blob(
-                  [EPGBuilder.buildCsv(programs.toArray())],
+                  [BOM, EPGBuilder.buildCsv(programs.toArray())],
                   {
                     type: 'text/csv',
                   },

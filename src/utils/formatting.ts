@@ -162,6 +162,116 @@ export function boolToPC(c: Array<boolean>): ProgramContent {
   return result;
 }
 
+interface SelectOption {
+  label: string;
+  value: string;
+}
+
+export function optionsArray(s: string): SelectOption[] {
+  const array: SelectOption[] = [];
+  if (s === 'Jornalismo') {
+    array.push(
+      { label: 'Telejornais', value: 'Telejornais' },
+      { label: 'Reportagem', value: 'Reportagem' },
+      { label: 'Documentário', value: 'Documentário' },
+      { label: 'Biografia', value: 'Biografia' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Esporte') {
+    array.push(
+      { label: 'Esporte', value: 'Esporte' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Educativo') {
+    array.push(
+      { label: 'Educativo', value: 'Educativo' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Novela') {
+    array.push(
+      { label: 'Novela', value: 'Novela' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Minissérie') {
+    array.push(
+      { label: 'Minissérie', value: 'Minissérie' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Série/seriado') {
+    array.push(
+      { label: 'Série', value: 'Série' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Variedade') {
+    array.push(
+      { label: 'Auditório', value: 'Auditório' },
+      { label: 'Show', value: 'Show' },
+      { label: 'Musical', value: 'Musical' },
+      { label: 'Making of', value: 'Making of' },
+      { label: 'Feminino', value: 'Feminino' },
+      { label: 'Game Show', value: 'Game Show' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Reality show') {
+    array.push(
+      { label: 'Reality show', value: 'Reality show' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Informação') {
+    array.push(
+      { label: 'Culinária', value: 'Culinária' },
+      { label: 'Moda', value: 'Moda' },
+      { label: 'Rural', value: 'Rural' },
+      { label: 'Saúde', value: 'Saúde' },
+      { label: 'Turismo', value: 'Turismo' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Humorístico') {
+    array.push(
+      { label: 'Humorístico', value: 'Humorístico' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Infantil') {
+    array.push(
+      { label: 'Infantil', value: 'Infantil' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Erótico') {
+    array.push(
+      { label: 'Erótico', value: 'Erótico' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Filme') {
+    array.push(
+      { label: 'Filme', value: 'Filme' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Sorteio, televendas, premiação') {
+    array.push(
+      { label: 'Sorteio', value: 'Sorteio' },
+      { label: 'Televendas', value: 'Televendas' },
+      { label: 'Premiação', value: 'Premiação' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Debate/entrevista') {
+    array.push(
+      { label: 'Debate', value: 'Debate' },
+      { label: 'Entrevista', value: 'Entrevista' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else {
+    array.push(
+      { label: 'Desenho adulto', value: 'Desenho adulto' },
+      { label: 'Interativo', value: 'Interativo' },
+      { label: 'Político', value: 'Político' },
+      { label: 'Religioso', value: 'Religioso' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  }
+  console.log(array);
+  return array;
+}
+
 // adapted from https://stackoverflow.com/a/8497474/
 export function csvLineToArray(text: string) {
   // const text = textT.replace(/","/g, '";"');
