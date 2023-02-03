@@ -105,6 +105,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
   useEffect(() => {
     setCursorPosition();
     setCurrent(new Date());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   setTimeout(() => {
@@ -122,7 +123,6 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
   const partRowSize = (1 - diff / length) * 45; // size of part of a row
   const entireRowSize = 45 * now; // Size of entire rows
   const tableHeight = `${entireRowSize + partRowSize}px`;
-  console.log(partRowSize / 45);
 
   useEffect(() => {
     if (selectedProgramId.size === 1) {
@@ -490,13 +490,14 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
       );
     },
     [
-      messages,
-      firstProg,
       programs,
-      selectedProgramId,
-      setPrograms,
-      setSelectedProgramId,
+      messages,
       t,
+      selectedProgramId,
+      tableHeight,
+      setSelectedProgramId,
+      firstProg,
+      setPrograms,
     ],
   );
 
