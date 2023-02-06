@@ -193,7 +193,7 @@ export default class EPGParser {
   }
 
   static parseCsv(csv: string): Program[] {
-    const lines = csvLineToArray(csv)!;
+    const lines = csvLineToArray(csv);
     // const lines = csv.split('\n');
     const programs = lines.slice(1);
 
