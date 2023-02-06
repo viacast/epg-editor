@@ -193,7 +193,8 @@ export default class EPGParser {
   }
 
   static parseCsv(csv: string): Program[] {
-    const lines = csv.split('\n');
+    const lines = csvLineToArray(csv)!;
+    // const lines = csv.split('\n');
     const programs = lines.slice(1);
 
     /*
@@ -201,18 +202,17 @@ export default class EPGParser {
       4015;1;2;1;20220622;165500;010000;"VALE A PENA VER DE NOVO";"Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.";0;"0x00";"0x05B3";;"0x10";"0x0603";0;1;1;7;"por";;"Estéreo";;"0x11";"0x30";"0xE0";0;2;0;1;"0x00";0;0;0;1;"0x10";0;0;0;1;"0x0008";"0x30";"0113706F72";;"Closed Caption";;;;;;;;;;2;;"VALE A PENA VER DE NOVO";"BRA";"0x03";0;0;0;0;;;;;
     */
 
-    const firstLine = csvLineToArray(lines[0].replace(/,/g, ';'));
+    const firstLine = lines[0];
     if (!firstLine) {
       throw new InvalidFile('Invalid CSV');
     }
 
     return programs.map(prog => {
-      const p = csvLineToArray(prog.replace(/","/g, '";"'));
-      if (p?.length !== firstLine.length) {
+      if (prog.length !== firstLine.length) {
         throw new InvalidFile('Invalid CSV');
       }
 
-      const [dateStr, timeStr, durationStr] = p.slice(4);
+      const [dateStr, timeStr, durationStr] = prog.slice(4);
 
       const startDateTime = parseDate(dateStr + timeStr, 'yyyyMMddHHmmss');
 
@@ -221,8 +221,8 @@ export default class EPGParser {
       const sec = Number(durationStr.substring(4, 6));
       const duration = h * 3600 + min * 60 + sec;
 
-      const title = p[7].replace(/['"]+/g, '');
-      const description = p[8].replace(/['"]+/g, '');
+      const title = prog[7].replace(/['"]+/g, '');
+      const description = prog[8].replace(/['"]+/g, '');
 
       const rate = {
         0b0001: ProgramRating.RL,
@@ -300,10 +300,20 @@ export default class EPGParser {
         '0xFF': 'Outros',
       };
 
-      const category = categoryp[p[35].slice(0, -1)];
-      const subcategory = subcat[p[35]] ?? 'Outros';
+      const category =
+        categoryp[
+          prog[
+            firstLine.indexOf('content_nibble_level_1 + content_nibble_level_2')
+          ].slice(0, -1)
+        ];
+      const subcategory =
+        subcat[
+          prog[
+            firstLine.indexOf('content_nibble_level_1 + content_nibble_level_2')
+          ]
+        ] ?? 'Outros';
 
-      const ratingStr = p[69];
+      const ratingStr = prog[firstLine.indexOf('rating')];
 
       const hex2bin = data =>
         data

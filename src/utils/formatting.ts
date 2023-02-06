@@ -1,5 +1,6 @@
 import { format, parse } from 'date-fns';
 import { ProgramContent } from 'services/epg/program';
+import papaparse from 'papaparse';
 
 interface HMS {
   hours: number;
@@ -277,20 +278,22 @@ export function optionsArray(s: string): SelectOption[] {
 }
 
 // adapted from https://stackoverflow.com/a/8497474/
-export function csvLineToArray(text: string) {
+export function csvLineToArray(rawText: string) {
   // const text = textT.replace(/","/g, '";"');
-  const reValid =
-    /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*(?:;\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*)*$/;
-  const reValue =
-    /(?!\s*$)\s*(?:'([^'\\]*(?:\\[\S\s][^'\\]*)*)'|"([^"\\]*(?:\\[\S\s][^"\\]*)*)"|([^;'"\s\\]*(?:\s+[^;'"\s\\]+)*))\s*(?:;|$)/g;
-  if (!reValid.test(text)) return null;
-  const a: string[] = [];
-  text.replace(reValue, (m0, m1, m2, m3) => {
-    if (m1 !== undefined) a.push(m1.replace(/\\'/g, "'"));
-    else if (m2 !== undefined) a.push(m2.replace(/\\"/g, '"'));
-    else if (m3 !== undefined) a.push(m3);
-    return '';
-  });
-  if (/;\s*$/.test(text)) a.push('');
-  return a;
+  return papaparse.parse(rawText).data;
+  // console.log(text);
+  // const reValid =
+  //   /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*(?:;\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*)*$/;
+  // const reValue =
+  //   /(?!\s*$)\s*(?:'([^'\\]*(?:\\[\S\s][^'\\]*)*)'|"([^"\\]*(?:\\[\S\s][^"\\]*)*)"|([^;'"\s\\]*(?:\s+[^;'"\s\\]+)*))\s*(?:;|$)/g;
+  // if (!reValid.test(text)) return null;
+  // const a: string[] = [];
+  // text.replace(reValue, (m0, m1, m2, m3) => {
+  //   if (m1 !== undefined) a.push(m1.replace(/\\'/g, "'"));
+  //   else if (m2 !== undefined) a.push(m2.replace(/\\"/g, '"'));
+  //   else if (m3 !== undefined) a.push(m3);
+  //   return '';
+  // });
+  // if (/;\s*$/.test(text)) a.push('');
+  // return a;
 }

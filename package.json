@@ -41,6 +41,7 @@
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-http-backend": "^1.4.0",
     "material-duration-picker": "^1.4.4",
+    "papaparse": "^5.3.2",
     "polished": "^4.2.2",
     "react": "^18.1.0",
     "react-beautiful-dnd": "^13.1.1",
