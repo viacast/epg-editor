@@ -147,27 +147,24 @@ export default class EPGParser {
   }
 
   static parseCsv(csv: string): Program[] {
-    const lines = csv.split('\n');
+    const lines = csvLineToArray(csv);
+    // const lines = csv.split('\n');
     const programs = lines.slice(1);
 
     /*
       "Event ID";"Audio number";"Copy control number";"Data contents number";"Broadcast starting date";"Broadcast starting time";"Duration";"Program title";"Program content";"Free CA mode";"video Component tag";"Stream_content + video component type";"Vido text";"audio component tag 1";"Steam content + audio component type 1";"audio multilingual flag 1";"audio main component flag 1";"audio quality indicator 1";"audio sampling rate 1";"main language code 1";"secondary language code 1";"audio text1 1";"audio text2 1";"audio stream type 1";"content_nibble_level_1 + content_nibble_level_2";"user_nibble";"degital recording control data all";"APS control all";"maximum bit rate all";"digital copy control type all";"digital copy component tag 1";"digital recording control data 1";"APS control 1";"maximum bit rate 1";"digital copy control type 1";"digital copy component tag 2";"digital recording control data 2";"APS control 2";"maximum bit rate 2";"digital copy control type 2";"data Component ID1";"entry component1";"selector byte1";"component ref1";"data contents text1";"group type";"Common service id";"Common event id";"series id";"repear label";"program patterm";"expire data";"episode number";"last episode number";"series name char";"extended_item_descriptor_char";"extended_item_char";"Country Code";"rating";"Image constration token";"Retention mode";" Retention state";" Encryption mode";" linkage transport stream id";" linkage original network id";" linkage service id";" linkage type";" any"
       4015;1;2;1;20220622;165500;010000;"VALE A PENA VER DE NOVO";"Belíssima. A trama aborda o universo da beleza e da obrigação de colocar a aparência à frente de tudo.";0;"0x00";"0x05B3";;"0x10";"0x0603";0;1;1;7;"por";;"Estéreo";;"0x11";"0x30";"0xE0";0;2;0;1;"0x00";0;0;0;1;"0x10";0;0;0;1;"0x0008";"0x30";"0113706F72";;"Closed Caption";;;;;;;;;;2;;"VALE A PENA VER DE NOVO";"BRA";"0x03";0;0;0;0;;;;;
     */
-
-    const firstLine = csvLineToArray(lines[0].replace(/,/g, ';'));
+    const firstLine = lines[0];
+    console.log();
     if (!firstLine) {
       throw new InvalidFile('Invalid CSV');
     }
-
-    return programs.map(prog => {
-      const p = csvLineToArray(prog.replace(/","/g, '";"'));
-      if (p?.length !== firstLine.length) {
+    return programs.map((prog, index) => {
+      if (prog.length !== firstLine.length) {
         throw new InvalidFile('Invalid CSV');
       }
-
-      const [dateStr, timeStr, durationStr] = p.slice(4);
-
+      const [dateStr, timeStr, durationStr] = prog.slice(4);
       const startDateTime = parseDate(dateStr + timeStr, 'yyyyMMddHHmmss');
 
       const h = Number(durationStr.substring(0, 2));
@@ -175,8 +172,8 @@ export default class EPGParser {
       const sec = Number(durationStr.substring(4, 6));
       const duration = h * 3600 + min * 60 + sec;
 
-      const title = p[7].replace(/['"]+/g, '');
-      const description = p[8].replace(/['"]+/g, '');
+      const title = prog[7].replace(/['"]+/g, '');
+      const description = prog[8].replace(/['"]+/g, '');
 
       const rate = {
         0b0001: ProgramRating.RL,
@@ -216,13 +213,13 @@ export default class EPGParser {
         '0xF': 'Outros',
       };
 
-      let cat = p[35];
+      let cat = prog[35];
       if (cat === '0') {
         cat += '0';
       }
       const category = categoryp[cat.slice(0, -1)];
 
-      const ratingStr = p[69];
+      const ratingStr = prog[firstLine.indexOf('rating')];
 
       const hex2bin = data =>
         data
