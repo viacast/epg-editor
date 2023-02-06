@@ -52,6 +52,7 @@ export interface IProgram {
   rating: ProgramRating;
   content: ProgramContent;
   category: ProgramCategory;
+  subcategory: string;
 }
 
 export default class Program implements IProgram {
@@ -71,6 +72,8 @@ export default class Program implements IProgram {
 
   public category: ProgramCategory;
 
+  public subcategory: string;
+
   constructor(program?: Partial<IProgram>) {
     const {
       id,
@@ -81,6 +84,7 @@ export default class Program implements IProgram {
       rating,
       content,
       category,
+      subcategory,
     } = program ?? {
       id: shortUUID.generate(),
       startDateTime: new Date(),
@@ -90,6 +94,7 @@ export default class Program implements IProgram {
       rating: ProgramRating.RSC,
       content: ProgramContent.F,
       category: ProgramCategory['0xF'],
+      subcategory: 'Outros',
     };
     this.id = id ?? shortUUID.generate();
     this.startDateTime = startDateTime ? new Date(startDateTime) : new Date();
@@ -99,5 +104,6 @@ export default class Program implements IProgram {
     this.rating = rating ?? ProgramRating.RSC;
     this.content = content ?? ProgramContent.F;
     this.category = category ?? ProgramCategory['0xF'];
+    this.subcategory = subcategory ?? 'Outros';
   }
 }
