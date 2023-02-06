@@ -316,7 +316,7 @@ const Header: React.FC<HeaderProps> = ({
         </div>
         <Popover
           top="110px"
-          left="750px"
+          left="735px"
           display={anchorEl[0] && !open2 ? 'block' : 'none'}
         >
           {t('header:clearPopover')}
@@ -429,7 +429,7 @@ const Header: React.FC<HeaderProps> = ({
       </div>
       <Popover
         top="105px"
-        left="1060px"
+        left="1035px"
         display={anchorEl[2] ? 'block' : 'none'}
       >
         {t('header:adjustStartDateTimePopover')}
@@ -454,7 +454,7 @@ const Header: React.FC<HeaderProps> = ({
       </div>
       <Popover
         top="105px"
-        left="1212px"
+        left="1185px"
         display={anchorEl[3] ? 'block' : 'none'}
       >
         {t('header:scrollDownPopover')}
