@@ -102,12 +102,6 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
       setNow(aux);
     });
 
-  useEffect(() => {
-    setCursorPosition();
-    setCurrent(new Date());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   setTimeout(() => {
     setCursorPosition();
     setCurrent(new Date());
