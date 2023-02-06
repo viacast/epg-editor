@@ -168,11 +168,11 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
     virtualizedRowProps => {
       const program = programs.at(virtualizedRowProps.index);
 
-      if (!program) {
+      if (!program || !messages) {
         return null;
       }
 
-      const validators = Array.from(messages[program.id]?.ALL);
+      const validators = Array.from(messages[program.id].ALL);
 
       rowCache[virtualizedRowProps.index] = virtualizedRowProps;
       // eslint-disable-next-line no-param-reassign
