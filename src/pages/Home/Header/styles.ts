@@ -19,7 +19,7 @@ export const HeaderContainer = styled.div`
 
 export const MenuOptions = styled.div``;
 
-export const ExportOptions = styled.div`
+export const HiddenOptionsMenu = styled.div`
   position: absolute;
   z-index: 3;
   padding-top: 10px;
@@ -216,11 +216,15 @@ export const MessageBadgeContainer = styled.div`
   }
 `;
 
-export const Popover = styled.div<{ display: string; left: string }>`
+export const Popover = styled.div<{
+  display: string;
+  top: string;
+  left: string;
+}>`
   position: absolute;
   display: ${({ display }) => display || 'none'};
   z-index: 2;
-  top: 105px;
+  top: ${({ top }) => top || '105px'};
   left: ${({ left }) => left || '750px'};
   width: 140px;
   height: 65px;

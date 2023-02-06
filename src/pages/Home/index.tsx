@@ -30,6 +30,45 @@ const Home: React.FC = () => {
   const [selectedProgram, setSelectedProgram] = useState<Program>();
   const [tableWidth, setTableWidth] = useState(dimension.width - 60);
 
+  const [now, setNow] = useState(0);
+  const [current, setCurrent] = useState(new Date());
+  const [playedProgramId, setPlayedProgramId] = useState<Set<string>>(
+    new Set(),
+  );
+
+  let aux = -1;
+  const setCursorPosition = () =>
+    programs.toArray().forEach(p => {
+      if (p.startDateTime <= new Date()) {
+        aux += 1;
+      }
+      setNow(aux);
+    });
+
+  setTimeout(() => {
+    setCursorPosition();
+    setCurrent(new Date());
+  }, 1000);
+
+  const end =
+    addToDate(
+      programs.toArray()[now].startDateTime,
+      programs.toArray()[now].duration,
+    ).getTime() / 1000;
+  const diff = Math.abs(end - current.getTime() / 1000); // time left to end program
+  const length = programs.toArray()[now].duration;
+  const partRowSize = (1 - diff / length) * 45; // size of part of a row
+  const entireRowSize = 45 * now; // Size of entire rows
+  const tableHeight = entireRowSize + partRowSize;
+
+  useEffect(() => {
+    let j = 0;
+    while (j < now) {
+      setPlayedProgramId(playedProgramId.add(programs.toArray()[j].id));
+      j += 1;
+    }
+  }, [now, playedProgramId, programs]);
+
   useEffect(() => {
     setSelectedProgram(programs.get(Array.from(selectedProgramId)[0]));
   }, [programs, selectedProgramId]);
@@ -82,36 +121,6 @@ const Home: React.FC = () => {
     setSavedPrograms([] as Program[]);
   }, [setSavedPrograms]);
 
-  // const totalSize = programs.toArray().length;
-  // const date1 = programs.toArray()[0].startDateTime;
-  // const date2 = programs.toArray()[totalSize - 1].startDateTime;
-  // const diffTime = Math.abs(date2.getTime() - date1.getTime());
-  // const diffSec = diffTime / 1000;
-  // // eslint-disable-next-line react-hooks/rules-of-hooks
-  // const twidth = useWindowSize().width - 80;
-
-  // const [now, setNow] = useState(0);
-
-  // let aux = 0;
-  // const setCursorPosition = () =>
-  //   programs.toArray().forEach(p => {
-  //     const progSize = p.duration;
-  //     const dim = progSize / diffSec;
-  //     const w = twidth * dim;
-  //     if (p.startDateTime <= new Date()) {
-  //       aux += w;
-  //     }
-  //     setNow(aux);
-  //   });
-
-  // useEffect(() => {
-  //   setCursorPosition();
-  // }, []);
-
-  // setTimeout(() => {
-  //   setCursorPosition();
-  // }, 1000);
-
   return (
     <Container>
       <HeaderContainer>
@@ -124,6 +133,9 @@ const Home: React.FC = () => {
           }}
           handleAddProgram={handleAddProgram}
           handleClearProgramList={handleClearProgramList}
+          tableHeight={tableHeight}
+          playedProgramId={playedProgramId}
+          setPlayedProgramId={setPlayedProgramId}
           setPrograms={setPrograms}
           selectedProgram={selectedProgram!}
           selectedProgramId={selectedProgramId}
@@ -177,6 +189,7 @@ const Home: React.FC = () => {
         >
           <VirtualizedTable
             startWidth={tableWidth}
+            tableHeight={tableHeight}
             programs={programs}
             setPrograms={setPrograms}
             selectedProgramId={selectedProgramId}

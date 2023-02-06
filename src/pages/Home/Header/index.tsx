@@ -20,6 +20,8 @@ import {
   MdOutlineWarningAmber,
 } from 'react-icons/md';
 import { IoIosInformationCircleOutline } from 'react-icons/io';
+import { HiOutlineChevronDoubleDown } from 'react-icons/hi';
+import { AiOutlineClear, AiOutlineInsertRowBelow } from 'react-icons/ai';
 import FileSaver from 'file-saver';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
@@ -39,7 +41,7 @@ import { ColorPallete } from 'styles/global';
 import {
   HeaderContainer,
   MenuOptions,
-  ExportOptions,
+  HiddenOptionsMenu,
   Text,
   MessageType,
   Configurations,
@@ -66,6 +68,9 @@ export interface HeaderProps {
   selectedProgram: Program;
   selectedProgramId: Set<string>;
   setSelectedProgramId: (s: Set<string>) => void;
+  tableHeight: number;
+  playedProgramId: Set<string>;
+  setPlayedProgramId: (s: Set<string>) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -77,10 +82,14 @@ const Header: React.FC<HeaderProps> = ({
   selectedProgram,
   selectedProgramId,
   setSelectedProgramId,
+  tableHeight,
+  playedProgramId,
+  setPlayedProgramId,
 }) => {
   const { t, i18n } = useTranslation();
   const [programCount, setProgramCount] = useState(0);
-  const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
+  const [open2, setOpen2] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showTranslation, setShowTranslation] = useState(false);
   const [savedFilename, setSavedFilename] = useLocalStorage(
@@ -93,7 +102,8 @@ const Header: React.FC<HeaderProps> = ({
   );
 
   const fileInputRef = useRef<FileInputRefProps>({});
-  const exportOptionsRef = useRef<HTMLDivElement>(null);
+  const exportOptionsRef1 = useRef<HTMLDivElement>(null);
+  const exportOptionsRef2 = useRef<HTMLDivElement>(null);
   const ConfigurationsRef = useRef<HTMLDivElement>(null);
 
   const { openModal } = useModalProvider();
@@ -187,7 +197,8 @@ const Header: React.FC<HeaderProps> = ({
     setMessageCountByType(count);
   }, [programs]);
 
-  useClickOutside(exportOptionsRef, () => setOpen(false));
+  useClickOutside(exportOptionsRef1, () => setOpen1(false));
+  useClickOutside(exportOptionsRef2, () => setOpen2(false));
   useClickOutside(ConfigurationsRef, () => {
     setShowSettings(false);
     setShowTranslation(false);
@@ -202,25 +213,28 @@ const Header: React.FC<HeaderProps> = ({
     });
   }, [showSettings]);
 
-  const [anchorEl1, setAnchorEl1] = React.useState(null);
-  const [anchorEl2, setAnchorEl2] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState([false, false, false, false, false]);
 
-  const handlePopoverOpen1 = event => {
-    setAnchorEl1(event.currentTarget);
+  const handlePopover1 = () => {
+    anchorEl[0] = !anchorEl[0];
+    setAnchorEl(anchorEl);
   };
-  const handlePopoverOpen2 = event => {
-    setAnchorEl2(event.currentTarget);
+  const handlePopover2 = () => {
+    anchorEl[1] = !anchorEl[1];
+    setAnchorEl(anchorEl);
   };
-
-  const handlePopoverClose1 = () => {
-    setAnchorEl1(null);
+  const handlePopover3 = () => {
+    anchorEl[2] = !anchorEl[2];
+    setAnchorEl(anchorEl);
   };
-  const handlePopoverClose2 = () => {
-    setAnchorEl2(null);
+  const handlePopover4 = () => {
+    anchorEl[3] = !anchorEl[3];
+    setAnchorEl(anchorEl);
   };
-
-  const openPopover1 = Boolean(anchorEl1);
-  const openPopover2 = Boolean(anchorEl2);
+  const handlePopover5 = () => {
+    anchorEl[4] = !anchorEl[4];
+    setAnchorEl(anchorEl);
+  };
 
   return (
     <HeaderContainer className="no-user-select">
@@ -247,10 +261,10 @@ const Header: React.FC<HeaderProps> = ({
         <Button
           text={t('header:buttonExportProgram')}
           icon={<FaFileExport />}
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen1(!open1)}
         />
-        {open && (
-          <ExportOptions ref={exportOptionsRef}>
+        {open1 && (
+          <HiddenOptionsMenu ref={exportOptionsRef1}>
             <Button
               text="XML"
               icon={<FaFileCode />}
@@ -284,7 +298,7 @@ const Header: React.FC<HeaderProps> = ({
                 );
               }}
             />
-          </ExportOptions>
+          </HiddenOptionsMenu>
         )}
       </MenuOptions>
       <Button
@@ -292,16 +306,74 @@ const Header: React.FC<HeaderProps> = ({
         icon={<CgPlayListAdd />}
         onClick={handleAddProgram}
       />
-      <div onMouseEnter={handlePopoverOpen1} onMouseLeave={handlePopoverClose1}>
-        <Button
-          text={t('header:buttonClearProgramList')}
-          icon={<CgPlayListRemove />}
-          onClick={handleClear}
-        />
-      </div>
-      <Popover left="750px" display={openPopover1 ? 'block' : 'none'}>
-        {t('header:clearProgramListPopover')}
-      </Popover>
+      <MenuOptions>
+        <div onMouseEnter={handlePopover1} onMouseLeave={handlePopover1}>
+          <Button
+            text={t('header:buttonClear')}
+            icon={<AiOutlineClear />}
+            onClick={() => setOpen2(!open2)}
+          />
+        </div>
+        <Popover
+          top="110px"
+          left="750px"
+          display={anchorEl[0] && !open2 ? 'block' : 'none'}
+        >
+          {t('header:clearPopover')}
+        </Popover>
+        {open2 && (
+          <HiddenOptionsMenu ref={exportOptionsRef2}>
+            <div onMouseEnter={handlePopover2} onMouseLeave={handlePopover2}>
+              <Button
+                text={t('header:buttonClearProgramList')}
+                icon={<CgPlayListRemove />}
+                onClick={handleClear}
+              />
+            </div>
+            <Popover
+              top="110px"
+              left="15px"
+              display={anchorEl[1] ? 'block' : 'none'}
+            >
+              {t('header:clearProgramListPopover')}
+            </Popover>
+            <div onMouseEnter={handlePopover5} onMouseLeave={handlePopover5}>
+              <Button
+                text={t('header:buttonWipe')}
+                icon={<AiOutlineInsertRowBelow />}
+                onClick={() => {
+                  if (!playedProgramId) {
+                    return;
+                  }
+                  openModal({
+                    title: t('menu:deleteProgramTitle'),
+                    content: t('header:deleteProgramFromList', {
+                      count: playedProgramId.size,
+                    }),
+                    confirm: () => {
+                      Array.from(playedProgramId).forEach(pid => {
+                        const index = programs.indexOf(pid);
+                        const idList: Set<string> = new Set();
+                        idList.add(programs.at(index + 1)?.id ?? '');
+                        setPlayedProgramId(idList);
+                        setPrograms(p => p.remove(pid).clone());
+                      });
+                    },
+                  });
+                }}
+              />
+            </div>
+            <Popover
+              top="110px"
+              className="epg-button-menu"
+              left="15px"
+              display={anchorEl[4] ? 'block' : 'none'}
+            >
+              {t('header:wipePopover')}
+            </Popover>
+          </HiddenOptionsMenu>
+        )}
+      </MenuOptions>
       <Button
         text={t('header:buttonDeleteSelectedProgram')}
         icon={<CgTrash />}
@@ -337,7 +409,7 @@ const Header: React.FC<HeaderProps> = ({
           });
         }}
       />
-      <div onMouseEnter={handlePopoverOpen2} onMouseLeave={handlePopoverClose2}>
+      <div onMouseEnter={handlePopover3} onMouseLeave={handlePopover3}>
         <Button
           text={t('header:buttonAdjustStartDateTime')}
           icon={<BsClockHistory />}
@@ -355,8 +427,37 @@ const Header: React.FC<HeaderProps> = ({
           }}
         />
       </div>
-      <Popover left="1060px" display={openPopover2 ? 'block' : 'none'}>
+      <Popover
+        top="105px"
+        left="1060px"
+        display={anchorEl[2] ? 'block' : 'none'}
+      >
         {t('header:adjustStartDateTimePopover')}
+      </Popover>
+      <div onMouseEnter={handlePopover4} onMouseLeave={handlePopover4}>
+        <Button
+          text={t('header:buttonScrollDown')}
+          icon={<HiOutlineChevronDoubleDown />}
+          onClick={() => {
+            const objDiv = document.getElementsByClassName(
+              'ReactVirtualized__Grid',
+            )[0];
+            if (objDiv) {
+              objDiv.scrollTo({
+                top: tableHeight,
+                left: 0,
+                behavior: 'smooth',
+              });
+            }
+          }}
+        />
+      </div>
+      <Popover
+        top="105px"
+        left="1212px"
+        display={anchorEl[3] ? 'block' : 'none'}
+      >
+        {t('header:scrollDownPopover')}
       </Popover>
       <Tooltip
         arrow

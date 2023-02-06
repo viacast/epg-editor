@@ -46,6 +46,7 @@ import {
 
 export interface ProgramTableProps {
   startWidth: number;
+  tableHeight: number;
   programs: EntityMap<Program>;
   selectedProgramId: Set<string>;
   setPrograms: ReactSetState<EntityMap<Program>>;
@@ -78,6 +79,7 @@ const rate = {
 
 const VirtualizedTable: React.FC<ProgramTableProps> = ({
   startWidth,
+  tableHeight,
   programs,
   selectedProgramId,
   setPrograms,
@@ -89,34 +91,6 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
   );
   const { openModal } = useModalProvider();
   const [firstProg, setFirstProg] = useState(Array.from(selectedProgramId)[0]);
-
-  const [now, setNow] = useState(0);
-  const [current, setCurrent] = useState(new Date());
-
-  let aux = -1;
-  const setCursorPosition = () =>
-    programs.toArray().forEach(p => {
-      if (p.startDateTime <= new Date()) {
-        aux += 1;
-      }
-      setNow(aux);
-    });
-
-  setTimeout(() => {
-    setCursorPosition();
-    setCurrent(new Date());
-  }, 1000);
-
-  const end =
-    addToDate(
-      programs.toArray()[now].startDateTime,
-      programs.toArray()[now].duration,
-    ).getTime() / 1000;
-  const diff = Math.abs(end - current.getTime() / 1000); // time left to end program
-  const length = programs.toArray()[now].duration;
-  const partRowSize = (1 - diff / length) * 45; // size of part of a row
-  const entireRowSize = 45 * now; // Size of entire rows
-  const tableHeight = `${entireRowSize + partRowSize}px`;
 
   useEffect(() => {
     if (selectedProgramId.size === 1) {
@@ -231,6 +205,13 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
             <TableRow
               key={program.id}
               hover
+              style={{
+                opacity: validators.includes(
+                  EPGValidationMessageType.PAST_START_DATE,
+                )
+                  ? 0.5
+                  : 1,
+              }}
               onClick={e => {
                 setSelectedProgramId(s => {
                   const newSelectedProgramId = new Set(s);
@@ -291,7 +272,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 <div
                   style={{
                     position: 'fixed',
-                    top: tableHeight,
+                    top: `${tableHeight}px`,
                     zIndex: '2',
                     width: '100%',
                     height: '3px',
@@ -346,18 +327,6 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                     rowCell = (
                       <>
                         <MessagesContainer>
-                          {validators.includes(
-                            EPGValidationMessageType.PAST_START_DATE,
-                          ) && (
-                            <ValidationMessage>
-                              <IconButton>
-                                <RiAlertFill
-                                  size="20px"
-                                  color={ColorPallete.SYSTEM_2}
-                                />
-                              </IconButton>
-                            </ValidationMessage>
-                          )}
                           {validators.includes(
                             EPGValidationMessageType.FAR_START_DATE,
                           ) && (
