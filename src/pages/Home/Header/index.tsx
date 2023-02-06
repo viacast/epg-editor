@@ -65,7 +65,7 @@ export interface HeaderProps {
   handleAddProgram: () => void;
   handleClearProgramList: () => void;
   setPrograms: ReactSetState<EntityMap<Program>>;
-  selectedProgram: Program;
+  selectedProgram: Program | undefined;
   selectedProgramId: Set<string>;
   setSelectedProgramId: (s: Set<string>) => void;
   tableHeight: number;

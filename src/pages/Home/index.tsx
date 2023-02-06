@@ -137,7 +137,7 @@ const Home: React.FC = () => {
           playedProgramId={playedProgramId}
           setPlayedProgramId={setPlayedProgramId}
           setPrograms={setPrograms}
-          selectedProgram={selectedProgram!}
+          selectedProgram={selectedProgram}
           selectedProgramId={selectedProgramId}
           setSelectedProgramId={setSelectedProgramId}
         />
