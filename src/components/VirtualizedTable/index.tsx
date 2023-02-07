@@ -217,7 +217,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
     virtualizedRowProps => {
       const program = phantomRows.at(virtualizedRowProps.index);
 
-      if (!program || !messages) {
+      if (!program || !messages || !messages[program.id]) {
         return null;
       }
 

@@ -343,6 +343,10 @@ export default class EPGParser {
 
   static async parseFile(file: File): Promise<Program[]> {
     const content = await readFileAsync(file);
+    if (content.indexOf('programme') > 0) {
+      // its a xml file
+      return this.parseXml(content);
+    }
     try {
       return this.parseCsv(content.trim());
     } catch (error) {
