@@ -7,7 +7,7 @@ import { IconButton, TableRow } from '@mui/material';
 import { HiPlus } from 'react-icons/hi';
 import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
 import { BeatLoader } from 'react-spinners';
-import { RiAlertFill } from 'react-icons/ri';
+import { RiAlertFill, RiDeleteRow } from 'react-icons/ri';
 
 import IconSC from 'assets/icons/ratings/SC.svg';
 import IconRL from 'assets/icons/ratings/RL.svg';
@@ -174,19 +174,19 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
           content: t('header:deleteProgramFromList'),
           confirm: () => {
             Array.from(selectedProgramId).forEach(pid => {
-              const size = phantomRows.toArray().length;
-              const index = phantomRows.indexOf(pid);
+              const size = programs.toArray().length;
+              const index = programs.indexOf(pid);
               const idList: Set<string> = new Set();
               if (size === 1) {
                 // was the only program on the list
                 selectedProgramId.delete(pid);
               } else if (index === size - 1) {
                 // was the last program on the list
-                idList.add(phantomRows.at(index - 1)?.id ?? '');
+                idList.add(programs.at(index - 1)?.id ?? '');
                 setSelectedProgramId(idList);
               } else {
                 // all other cases
-                idList.add(phantomRows.at(index + 1)?.id ?? '');
+                idList.add(programs.at(index + 1)?.id ?? '');
                 setSelectedProgramId(idList);
               }
               setPrograms(p => p.remove(pid).clone());
@@ -210,12 +210,12 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
   ]);
 
   useEffect(() => {
-    setMessages(EPGValidator.validate(phantomRows.toArray()));
+    setMessages(EPGValidator.validate(programs.toArray()));
   }, [phantomRows, programs]);
 
   const getRowRender = useCallback(
     virtualizedRowProps => {
-      const program = phantomRows.at(virtualizedRowProps.index);
+      const program = programs.at(virtualizedRowProps.index);
 
       if (!program || !messages || !messages[program.id]) {
         return null;
@@ -279,16 +279,15 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                       const lastProg: string = program.id;
                       newSelectedProgramId.add(program.id);
                       if (
-                        phantomRows.indexOf(firstProg) <
-                        phantomRows.indexOf(lastProg)
+                        programs.indexOf(firstProg) < programs.indexOf(lastProg)
                       ) {
-                        startSelection = phantomRows.indexOf(firstProg);
-                        endSelection = phantomRows.indexOf(lastProg);
+                        startSelection = programs.indexOf(firstProg);
+                        endSelection = programs.indexOf(lastProg);
                       } else {
-                        startSelection = phantomRows.indexOf(lastProg);
-                        endSelection = phantomRows.indexOf(firstProg);
+                        startSelection = programs.indexOf(lastProg);
+                        endSelection = programs.indexOf(firstProg);
                       }
-                      phantomRows.toArray().forEach((p, i) => {
+                      programs.toArray().forEach((p, i) => {
                         if (
                           i >= startSelection &&
                           i <= endSelection &&
@@ -324,7 +323,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                   style={{
                     position: 'fixed',
                     top: `${
-                      tableHeight + (phantomId.size - phantomCount) * 45
+                      tableHeight // + (phantomId.size - phantomCount) * 45
                     }px`,
                     zIndex: '2',
                     width: '100%',
@@ -332,14 +331,19 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                     backgroundColor: 'var(--color-system-1)',
                   }}
                 />
-                <p
+                <div className="vl">
+                  <div className="plus">
+                    <RiDeleteRow />
+                  </div>
+                </div>
+                {/* <p
                   style={{
                     marginLeft: '5px',
                     display: phantomId.has(program.id) ? 'block' : 'none',
                   }}
                 >
                   FILL GAP
-                </p>
+                </p> */}
                 <Checkbox
                   readOnly
                   onClick={e => {
@@ -361,7 +365,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                     onClick={e => {
                       e.stopPropagation();
                       let startDateTime = new Date();
-                      if (phantomRows.toArray().indexOf(program) === 0) {
+                      if (programs.toArray().indexOf(program) === 0) {
                         startDateTime = addToDate(program.startDateTime, -3600);
                       } else {
                         startDateTime = program.startDateTime;
@@ -558,13 +562,13 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
 
   const renderLoading = useCallback(() => {
     return (
-      phantomRows.count > 0 && (
+      programs.count > 0 && (
         <LoaderContainer>
           <BeatLoader color={ColorPallete.NEUTRAL_3} />
         </LoaderContainer>
       )
     );
-  }, [phantomRows.count]);
+  }, [programs.count]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -607,14 +611,14 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 rowIdKey="position"
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...provided.droppableProps}
-                rowCount={phantomRows.count}
+                rowCount={programs.count}
                 width={width || startWidth}
                 height={height}
                 header
                 headerHeight={60}
                 rowHeight={45}
                 rowGetter={({ index }) => {
-                  const p = phantomRows.at(index);
+                  const p = programs.at(index);
                   if (!p) {
                     return {};
                   }
@@ -648,18 +652,17 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                         readOnly
                         onClick={() => {
                           setSelectedProgramId(p => {
-                            if (p.size === phantomRows.toArray().length) {
+                            if (p.size === programs.toArray().length) {
                               return new Set();
                             }
                             return new Set(
-                              phantomRows.toArray().map(program => program.id),
+                              programs.toArray().map(program => program.id),
                             );
                           });
                         }}
                         checked={
-                          phantomRows.toArray().length > 0 &&
-                          phantomRows.toArray().length ===
-                            selectedProgramId.size
+                          programs.toArray().length > 0 &&
+                          programs.toArray().length === selectedProgramId.size
                         }
                       />
                       <span style={{ paddingLeft: '35px' }}>#</span>

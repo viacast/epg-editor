@@ -25,7 +25,26 @@ export const Message = styled.div`
   line-height: 24px;
 `;
 
-export const RowElement = styled.td``;
+export const RowElement = styled.td`
+  .vl {
+    position: fixed;
+    top: 1035px;
+    z-index: 2;
+    width: 100%;
+    height: 3px;
+    background-color: var(--color-system-2);
+  }
+  .plus {
+    position: fixed;
+    top: 1023px;
+    left: calc(50% - 25px);
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: var(--color-system-2);
+    padding: 5px;
+  }
+`;
 
 export const AddToList = styled.div`
   display: none;
