@@ -92,6 +92,56 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
   const { openModal } = useModalProvider();
   const [firstProg, setFirstProg] = useState(Array.from(selectedProgramId)[0]);
 
+  // position: `${index + 2}`,
+  // startDateTime2: formatDateTime(p.startDateTime),
+
+  // 2nd table
+
+  // newobject{
+  //   index
+  // }
+
+  // if (endDateTime1 != startDateTime2){
+  //   dateTime(start = end1; duration= date2 -date1);
+  // }
+
+  useEffect(() => {
+    programs.toArray().map((p, i) => {
+      const term = formatDateTime(addToDate(p.startDateTime, p.duration));
+      const next = programs.toArray()[i + 1];
+
+      if (!next) {
+        return null;
+      }
+
+      const init = formatDateTime(next.startDateTime);
+
+      if (term !== init) {
+        // eslint-disable-next-line no-console
+        console.log(`Between ${i + 1} and ${i + 2}`);
+        // let startDateTime = new Date();
+        // if (programs.toArray().indexOf(prog) === 0) {
+        //   startDateTime = addToDate(prog.startDateTime, -3600);
+        // } else {
+        //   startDateTime = prog.startDateTime;
+        // }
+        // const newProgram = new Program({
+        //   duration: 3600,
+        //   startDateTime,
+        // });
+        // setPrograms(p => p.add(newProgram, next.id).clone());
+        // setSelectedProgramId(s => {
+        //   const newSelectedProgramId = new Set(s);
+        //   newSelectedProgramId.clear();
+        //   newSelectedProgramId.add(newProgram.id);
+        //   return newSelectedProgramId;
+        // });
+      }
+
+      return null;
+    });
+  }, [programs]);
+
   useEffect(() => {
     if (selectedProgramId.size === 1) {
       setFirstProg(Array.from(selectedProgramId)[0]);
