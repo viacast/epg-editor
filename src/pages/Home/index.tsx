@@ -49,22 +49,27 @@ const Home: React.FC = () => {
     setCursorPosition();
     setCurrent(new Date());
   }, 1000);
-  console.log(programs.toArray()[now]);
-  const end =
-    addToDate(
-      programs.toArray()[now].startDateTime,
-      programs.toArray()[now].duration,
-    ).getTime() / 1000;
-  const diff = Math.abs(end - current.getTime() / 1000); // time left to end program
-  const length = programs.toArray()[now].duration;
-  const partRowSize = (1 - diff / length) * 45; // size of part of a row
-  const entireRowSize = 45 * now; // Size of entire rows
-  const tableHeight = entireRowSize + partRowSize;
+
+  const plyaing = programs.toArray()[now]; // currently playing program
+  let tableHeight = 0; // distance between the top of table body and the timeline
+  if (plyaing) {
+    const end: number = addToDate(
+      plyaing.startDateTime,
+      plyaing.duration,
+    ).getTime();
+    const diff: number = Math.abs((end - current.getTime()) / 1000); // time left to end program
+    const length: number = plyaing.duration;
+    const partRowSize: number = (1 - diff / length) * 45; // size of part of a row
+    const entireRowSize: number = 45 * now; // Size of entire rows
+    tableHeight = entireRowSize + partRowSize;
+  }
 
   useEffect(() => {
     let j = 0;
     while (j < now) {
-      setPlayedProgramId(playedProgramId.add(programs.toArray()[j].id));
+      if (programs) {
+        setPlayedProgramId(playedProgramId.add(programs.toArray()[j].id));
+      }
       j += 1;
     }
   }, [now, playedProgramId, programs]);
