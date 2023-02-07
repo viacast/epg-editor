@@ -49,7 +49,7 @@ const Home: React.FC = () => {
     setCursorPosition();
     setCurrent(new Date());
   }, 1000);
-
+  console.log(programs.toArray()[now]);
   const end =
     addToDate(
       programs.toArray()[now].startDateTime,
