@@ -334,6 +334,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 <div className="vl">
                   <div className="plus">
                     <RiDeleteRow />
+                    &nbsp; FILL GAP
                   </div>
                 </div>
                 {/* <p

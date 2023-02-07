@@ -36,11 +36,15 @@ export const RowElement = styled.td`
   }
   .plus {
     position: fixed;
+    font-weight: bold;
+    vertical-align: top;
+    cursor: pointer;
+    z-index: 3;
     top: 1023px;
-    left: calc(50% - 25px);
-    width: 25px;
+    left: calc(50% - 59px);
+    width: fit-content;
     height: 25px;
-    border-radius: 50%;
+    border-radius: 5px;
     background-color: var(--color-system-2);
     padding: 5px;
   }
