@@ -98,6 +98,8 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
 
   const [phantomId, setPahtomId] = useState<Set<string>>(new Set());
 
+  const [phantomCount, setPhantomCount] = useState(0);
+
   useEffect(() => {
     programs.toArray().forEach((p, i) => {
       const term = formatDateTime(addToDate(p.startDateTime, p.duration));
@@ -129,8 +131,12 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
         }
       }
     });
-    // eslint-disable-next-line no-console
-    console.log(phantomId);
+    Array.from(phantomId).forEach(p => {
+      const prog = phantomRows.get(p);
+      if (prog && prog.startDateTime > new Date()) {
+        setPhantomCount(c => c + 1);
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [programs]);
 
@@ -168,19 +174,19 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
           content: t('header:deleteProgramFromList'),
           confirm: () => {
             Array.from(selectedProgramId).forEach(pid => {
-              const size = programs.toArray().length;
-              const index = programs.indexOf(pid);
+              const size = phantomRows.toArray().length;
+              const index = phantomRows.indexOf(pid);
               const idList: Set<string> = new Set();
               if (size === 1) {
                 // was the only program on the list
                 selectedProgramId.delete(pid);
               } else if (index === size - 1) {
                 // was the last program on the list
-                idList.add(programs.at(index - 1)?.id ?? '');
+                idList.add(phantomRows.at(index - 1)?.id ?? '');
                 setSelectedProgramId(idList);
               } else {
                 // all other cases
-                idList.add(programs.at(index + 1)?.id ?? '');
+                idList.add(phantomRows.at(index + 1)?.id ?? '');
                 setSelectedProgramId(idList);
               }
               setPrograms(p => p.remove(pid).clone());
@@ -195,6 +201,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
     };
   }, [
     openModal,
+    phantomRows,
     programs,
     selectedProgramId,
     setPrograms,
@@ -203,12 +210,12 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
   ]);
 
   useEffect(() => {
-    setMessages(EPGValidator.validate(programs.toArray()));
-  }, [programs]);
+    setMessages(EPGValidator.validate(phantomRows.toArray()));
+  }, [phantomRows, programs]);
 
   const getRowRender = useCallback(
     virtualizedRowProps => {
-      const program = programs.at(virtualizedRowProps.index);
+      const program = phantomRows.at(virtualizedRowProps.index);
 
       if (!program || !messages) {
         return null;
@@ -272,15 +279,16 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                       const lastProg: string = program.id;
                       newSelectedProgramId.add(program.id);
                       if (
-                        programs.indexOf(firstProg) < programs.indexOf(lastProg)
+                        phantomRows.indexOf(firstProg) <
+                        phantomRows.indexOf(lastProg)
                       ) {
-                        startSelection = programs.indexOf(firstProg);
-                        endSelection = programs.indexOf(lastProg);
+                        startSelection = phantomRows.indexOf(firstProg);
+                        endSelection = phantomRows.indexOf(lastProg);
                       } else {
-                        startSelection = programs.indexOf(lastProg);
-                        endSelection = programs.indexOf(firstProg);
+                        startSelection = phantomRows.indexOf(lastProg);
+                        endSelection = phantomRows.indexOf(firstProg);
                       }
-                      programs.toArray().forEach((p, i) => {
+                      phantomRows.toArray().forEach((p, i) => {
                         if (
                           i >= startSelection &&
                           i <= endSelection &&
@@ -304,7 +312,8 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 key={virtualizedRowProps.key}
                 className={`${virtualizedRowProps.className} ${
                   selectedProgramId.has(program.id) ? 'active' : ''
-                }`}
+                }
+                  ${phantomId.has(program.id) ? 'phantom' : ''}`}
                 style={getItemStyle(
                   virtualizedRowProps.style,
                   snapshot.isDragging,
@@ -314,13 +323,23 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 <div
                   style={{
                     position: 'fixed',
-                    top: `${tableHeight}px`,
+                    top: `${
+                      tableHeight + (phantomId.size - phantomCount) * 45
+                    }px`,
                     zIndex: '2',
                     width: '100%',
                     height: '3px',
                     backgroundColor: 'var(--color-system-1)',
                   }}
                 />
+                <p
+                  style={{
+                    marginLeft: '5px',
+                    display: phantomId.has(program.id) ? 'block' : 'none',
+                  }}
+                >
+                  FILL GAP
+                </p>
                 <Checkbox
                   readOnly
                   onClick={e => {
@@ -342,7 +361,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                     onClick={e => {
                       e.stopPropagation();
                       let startDateTime = new Date();
-                      if (programs.toArray().indexOf(program) === 0) {
+                      if (phantomRows.toArray().indexOf(program) === 0) {
                         startDateTime = addToDate(program.startDateTime, -3600);
                       } else {
                         startDateTime = program.startDateTime;
@@ -495,11 +514,13 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
       );
     },
     [
-      programs,
+      phantomRows,
       messages,
       t,
       selectedProgramId,
+      phantomId,
       tableHeight,
+      phantomCount,
       setSelectedProgramId,
       firstProg,
       setPrograms,
@@ -537,13 +558,13 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
 
   const renderLoading = useCallback(() => {
     return (
-      programs.count > 0 && (
+      phantomRows.count > 0 && (
         <LoaderContainer>
           <BeatLoader color={ColorPallete.NEUTRAL_3} />
         </LoaderContainer>
       )
     );
-  }, [programs.count]);
+  }, [phantomRows.count]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -586,14 +607,14 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 rowIdKey="position"
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...provided.droppableProps}
-                rowCount={programs.count}
+                rowCount={phantomRows.count}
                 width={width || startWidth}
                 height={height}
                 header
                 headerHeight={60}
                 rowHeight={45}
                 rowGetter={({ index }) => {
-                  const p = programs.at(index);
+                  const p = phantomRows.at(index);
                   if (!p) {
                     return {};
                   }
@@ -627,17 +648,18 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                         readOnly
                         onClick={() => {
                           setSelectedProgramId(p => {
-                            if (p.size === programs.toArray().length) {
+                            if (p.size === phantomRows.toArray().length) {
                               return new Set();
                             }
                             return new Set(
-                              programs.toArray().map(program => program.id),
+                              phantomRows.toArray().map(program => program.id),
                             );
                           });
                         }}
                         checked={
-                          programs.toArray().length > 0 &&
-                          programs.toArray().length === selectedProgramId.size
+                          phantomRows.toArray().length > 0 &&
+                          phantomRows.toArray().length ===
+                            selectedProgramId.size
                         }
                       />
                       <span style={{ paddingLeft: '35px' }}>#</span>

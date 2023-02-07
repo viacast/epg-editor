@@ -152,6 +152,14 @@ export const TableContainer = styled.div<{ width?: string }>`
     box-shadow: inset 50px 50px 50px var(--color-primary-2),
       inset -50px -50px 50px var(--color-primary-2);
   }
+  .phantom {
+    box-shadow: inset 50px 50px 50px var(--color-neutral-3),
+      inset -50px -50px 50px var(--color-neutral-3);
+    div,
+    input {
+      visibility: hidden;
+    }
+  }
   .ReactVirtualized__Table__rowColumn {
     border-radius: 4px;
     padding: 6px;
