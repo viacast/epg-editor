@@ -92,54 +92,46 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
   const { openModal } = useModalProvider();
   const [firstProg, setFirstProg] = useState(Array.from(selectedProgramId)[0]);
 
-  // position: `${index + 2}`,
-  // startDateTime2: formatDateTime(p.startDateTime),
+  const [phantomRows, setPhantomRows] = useState(
+    new EntityMap<Program>(programs.toArray().map(p => new Program(p))),
+  );
 
-  // 2nd table
-
-  // newobject{
-  //   index
-  // }
-
-  // if (endDateTime1 != startDateTime2){
-  //   dateTime(start = end1; duration= date2 -date1);
-  // }
+  const [phantomId, setPahtomId] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    programs.toArray().map((p, i) => {
+    programs.toArray().forEach((p, i) => {
       const term = formatDateTime(addToDate(p.startDateTime, p.duration));
       const next = programs.toArray()[i + 1];
 
-      if (!next) {
-        return null;
+      if (next) {
+        const init = formatDateTime(next.startDateTime);
+
+        if (term !== init) {
+          // eslint-disable-next-line no-console
+          console.log(`Between ${i + 1} and ${i + 2}`);
+          const startDateTime = addToDate(p.startDateTime, p.duration);
+          const duration =
+            (next.startDateTime.getTime() - startDateTime.getTime()) / 1000;
+          const newProgram = new Program({
+            duration,
+            startDateTime,
+          });
+          setPhantomRows(() => {
+            const auxpr: EntityMap<Program> = phantomRows;
+            auxpr.add(newProgram, next.id).clone();
+            return auxpr;
+          });
+          setPahtomId(() => {
+            const newProgramId = phantomId;
+            newProgramId.add(newProgram.id);
+            return newProgramId;
+          });
+        }
       }
-
-      const init = formatDateTime(next.startDateTime);
-
-      if (term !== init) {
-        // eslint-disable-next-line no-console
-        console.log(`Between ${i + 1} and ${i + 2}`);
-        // let startDateTime = new Date();
-        // if (programs.toArray().indexOf(prog) === 0) {
-        //   startDateTime = addToDate(prog.startDateTime, -3600);
-        // } else {
-        //   startDateTime = prog.startDateTime;
-        // }
-        // const newProgram = new Program({
-        //   duration: 3600,
-        //   startDateTime,
-        // });
-        // setPrograms(p => p.add(newProgram, next.id).clone());
-        // setSelectedProgramId(s => {
-        //   const newSelectedProgramId = new Set(s);
-        //   newSelectedProgramId.clear();
-        //   newSelectedProgramId.add(newProgram.id);
-        //   return newSelectedProgramId;
-        // });
-      }
-
-      return null;
     });
+    // eslint-disable-next-line no-console
+    console.log(phantomId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [programs]);
 
   useEffect(() => {
