@@ -198,11 +198,11 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
         <Draggable
           draggableId={program.id}
           index={virtualizedRowProps.index}
-          key={program.id}
+          key={`epg-draggable-element-${program.id}`}
         >
           {(provided, snapshot) => (
             <TableRow
-              key={program.id}
+              key={`epg-table-row-${program.id}`}
               hover
               style={{
                 opacity: validators.includes(
@@ -258,7 +258,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 {...provided.draggableProps}
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...provided.dragHandleProps}
-                key={virtualizedRowProps.key}
+                key={`epg-draggable-row-${virtualizedRowProps.key}`}
                 className={`${virtualizedRowProps.className} ${
                   selectedProgramId.has(program.id) ? 'active' : ''
                 }`}
@@ -516,7 +516,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
               {...provided.draggableProps}
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...provided.dragHandleProps}
-              key={virtualizedRowProps.key}
+              key={`epg-droppable-row-${virtualizedRowProps.key}`}
               className={virtualizedRowProps.className}
               style={getItemStyle(
                 {

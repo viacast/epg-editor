@@ -534,22 +534,13 @@ const Header: React.FC<HeaderProps> = ({
         <MessagesContainer>
           <MessageBadgeContainer>
             {messageCountByLevel.INFO > 0 && (
-              <MessageBadge
-                variant="dot"
-                backgroundColor={ColorPallete.NEUTRAL_3}
-              />
+              <MessageBadge variant="dot" background={ColorPallete.NEUTRAL_3} />
             )}
             {messageCountByLevel.WARN > 0 && (
-              <MessageBadge
-                variant="dot"
-                backgroundColor={ColorPallete.SYSTEM_2}
-              />
+              <MessageBadge variant="dot" background={ColorPallete.SYSTEM_2} />
             )}
             {messageCountByLevel.ERROR > 0 && (
-              <MessageBadge
-                variant="dot"
-                backgroundColor={ColorPallete.SYSTEM_1}
-              />
+              <MessageBadge variant="dot" background={ColorPallete.SYSTEM_1} />
             )}
           </MessageBadgeContainer>
           <MdNotifications size="28px" color="action" />

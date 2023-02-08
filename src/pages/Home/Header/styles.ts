@@ -236,13 +236,13 @@ export const Popover = styled.div<{
 `;
 
 interface BadgeProps {
-  backgroundColor: string;
+  background: string;
   show?: boolean;
 }
 
 export const MessageBadge = muistyled(Badge)<BadgeProps>`
   & .MuiBadge-badge {
-    background-color: ${({ backgroundColor }) => backgroundColor || 'default'};
+    background-color: ${({ background }) => background || 'default'};
     display:'inline-block';
     position: relative;
 
