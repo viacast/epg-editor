@@ -50,15 +50,18 @@ const Home: React.FC = () => {
     setCurrent(new Date());
   }, 1000);
 
-  const plyaing = programs.toArray()[now]; // currently playing program
+  const playing = programs.toArray()[now]; // currently playing program
   let tableHeight = 0; // distance between the top of table body and the timeline
-  if (plyaing) {
+  if (playing) {
     const end: number = addToDate(
-      plyaing.startDateTime,
-      plyaing.duration,
+      playing.startDateTime,
+      playing.duration,
     ).getTime();
-    const diff: number = Math.abs((end - current.getTime()) / 1000); // time left to end program
-    const length: number = plyaing.duration;
+    let diff = 0; // time left to end program
+    if (end >= current.getTime()) {
+      diff = Math.abs((end - current.getTime()) / 1000);
+    }
+    const length: number = playing.duration;
     const partRowSize: number = (1 - diff / length) * 45; // size of part of a row
     const entireRowSize: number = 45 * now; // Size of entire rows
     tableHeight = entireRowSize + partRowSize;
