@@ -134,6 +134,11 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
             gapsIndex.add(i + 1);
             return gapsIndex;
           });
+        } else if (term === init && gapsIndex.has(i + 1)) {
+          setGapsIndex(() => {
+            gapsIndex.delete(i + 1);
+            return gapsIndex;
+          });
         }
       }
     });
