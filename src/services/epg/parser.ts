@@ -312,7 +312,6 @@ export default class EPGParser {
             firstLine.indexOf('content_nibble_level_1 + content_nibble_level_2')
           ]
         ] ?? 'Outros';
-
       const ratingStr = prog[firstLine.indexOf('rating')];
 
       const hex2bin = data =>
@@ -348,6 +347,7 @@ export default class EPGParser {
       return this.parseXml(content);
     }
     try {
+      console.log('is csv');
       return this.parseCsv(content.trim());
     } catch (error) {
       if (error instanceof InvalidFile) {

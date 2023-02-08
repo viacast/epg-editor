@@ -67,7 +67,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     let j = 0;
     while (j < now) {
-      if (programs) {
+      if (programs && programs.toArray()[j]) {
         setPlayedProgramId(playedProgramId.add(programs.toArray()[j].id));
       }
       j += 1;
