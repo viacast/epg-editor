@@ -28,7 +28,6 @@ export const Message = styled.div`
 export const RowElement = styled.td`
   .vl {
     position: fixed;
-    top: 1035px;
     z-index: 2;
     width: 100%;
     height: 3px;
@@ -40,7 +39,7 @@ export const RowElement = styled.td`
     vertical-align: top;
     cursor: pointer;
     z-index: 3;
-    top: 1023px;
+    margin-top: -12px;
     left: calc(50% - 59px);
     width: fit-content;
     height: 25px;

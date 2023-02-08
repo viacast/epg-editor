@@ -32,6 +32,8 @@ import {
 import { useModalProvider } from 'providers/ModalProvider';
 import { ColorPallete } from 'styles/global';
 
+import { Tooltip } from 'components';
+
 import {
   ParentalGuidanceCells,
   IconRating,
@@ -92,13 +94,13 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
   const { openModal } = useModalProvider();
   const [firstProg, setFirstProg] = useState(Array.from(selectedProgramId)[0]);
 
-  const [phantomRows, setPhantomRows] = useState(
-    new EntityMap<Program>(programs.toArray().map(p => new Program(p))),
-  );
+  // const [phantomRows, setPhantomRows] = useState(
+  //   new EntityMap<Program>(programs.toArray().map(p => new Program(p))),
+  // );
 
-  const [phantomId, setPahtomId] = useState<Set<string>>(new Set());
+  // const [phantomId, setPahtomId] = useState<Set<string>>(new Set());
 
-  const [phantomCount, setPhantomCount] = useState(0);
+  const [gapsIndex, setGapsIndex] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     programs.toArray().forEach((p, i) => {
@@ -110,31 +112,29 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
 
         if (term !== init) {
           // eslint-disable-next-line no-console
-          console.log(`Between ${i + 1} and ${i + 2}`);
-          const startDateTime = addToDate(p.startDateTime, p.duration);
-          const duration =
-            (next.startDateTime.getTime() - startDateTime.getTime()) / 1000;
-          const newProgram = new Program({
-            duration,
-            startDateTime,
-          });
-          setPhantomRows(() => {
-            const auxpr: EntityMap<Program> = phantomRows;
-            auxpr.add(newProgram, next.id).clone();
-            return auxpr;
-          });
-          setPahtomId(() => {
-            const newProgramId = phantomId;
-            newProgramId.add(newProgram.id);
-            return newProgramId;
+          // console.log(`Between ${i + 1} and ${i + 2}`);
+          // const startDateTime = addToDate(p.startDateTime, p.duration);
+          // const duration =
+          //   (next.startDateTime.getTime() - startDateTime.getTime()) / 1000;
+          // const newProgram = new Program({
+          //   duration,
+          //   startDateTime,
+          // });
+          // setPhantomRows(() => {
+          //   const auxpr: EntityMap<Program> = phantomRows;
+          //   auxpr.add(newProgram, next.id).clone();
+          //   return auxpr;
+          // });
+          // setPahtomId(() => {
+          //   const newProgramId = phantomId;
+          //   newProgramId.add(newProgram.id);
+          //   return newProgramId;
+          // });
+          setGapsIndex(() => {
+            gapsIndex.add(i + 1);
+            return gapsIndex;
           });
         }
-      }
-    });
-    Array.from(phantomId).forEach(p => {
-      const prog = phantomRows.get(p);
-      if (prog && prog.startDateTime > new Date()) {
-        setPhantomCount(c => c + 1);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -201,7 +201,6 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
     };
   }, [
     openModal,
-    phantomRows,
     programs,
     selectedProgramId,
     setPrograms,
@@ -211,7 +210,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
 
   useEffect(() => {
     setMessages(EPGValidator.validate(programs.toArray()));
-  }, [phantomRows, programs]);
+  }, [programs]);
 
   const getRowRender = useCallback(
     virtualizedRowProps => {
@@ -311,8 +310,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 key={virtualizedRowProps.key}
                 className={`${virtualizedRowProps.className} ${
                   selectedProgramId.has(program.id) ? 'active' : ''
-                }
-                  ${phantomId.has(program.id) ? 'phantom' : ''}`}
+                }`} // ${phantomId.has(program.id) ? 'phantom' : ''}
                 style={getItemStyle(
                   virtualizedRowProps.style,
                   snapshot.isDragging,
@@ -322,29 +320,55 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 <div
                   style={{
                     position: 'fixed',
-                    top: `${
-                      tableHeight // + (phantomId.size - phantomCount) * 45
-                    }px`,
+                    top: `${tableHeight}px`,
                     zIndex: '2',
                     width: '100%',
                     height: '3px',
                     backgroundColor: 'var(--color-system-1)',
                   }}
                 />
-                <div className="vl">
-                  <div className="plus">
-                    <RiDeleteRow />
-                    &nbsp; FILL GAP
-                  </div>
-                </div>
-                {/* <p
-                  style={{
-                    marginLeft: '5px',
-                    display: phantomId.has(program.id) ? 'block' : 'none',
-                  }}
-                >
-                  FILL GAP
-                </p> */}
+                {Array.from(gapsIndex).map(gap => {
+                  return (
+                    <div className="vl" style={{ top: `${45 * gap}px` }}>
+                      <Tooltip title={`There's a gap between programs`}>
+                        <div
+                          className="plus"
+                          role="button"
+                          onClick={e => {
+                            e.stopPropagation();
+                            const prog1 =
+                              programs.toArray()[gap - 1].startDateTime;
+                            const prog2 = programs.toArray()[gap].startDateTime;
+                            const diff =
+                              (prog2.getTime() - prog1.getTime()) / 1000;
+                            const aux = programs.clone();
+                            const newList: Program[] = [];
+                            aux.toArray().forEach((p, ind) => {
+                              let newProg: Program = p;
+                              if (ind === gap - 1) {
+                                newProg = { ...p, duration: diff };
+                              }
+                              newList.push(newProg);
+                            });
+                            const newPrograms = new EntityMap<Program>(
+                              newList?.map(p => new Program(p)),
+                            );
+                            setPrograms(newPrograms);
+                            setGapsIndex(() => {
+                              gapsIndex.delete(gap);
+                              return gapsIndex;
+                            });
+                          }}
+                          onKeyDown={() => ''}
+                          tabIndex={0}
+                        >
+                          <RiDeleteRow />
+                          &nbsp; FILL GAP
+                        </div>
+                      </Tooltip>
+                    </div>
+                  );
+                })}
                 <Checkbox
                   readOnly
                   onClick={e => {
@@ -519,15 +543,14 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
       );
     },
     [
-      phantomRows,
+      programs,
       messages,
       t,
       selectedProgramId,
-      phantomId,
       tableHeight,
-      phantomCount,
       setSelectedProgramId,
       firstProg,
+      gapsIndex,
       setPrograms,
     ],
   );
