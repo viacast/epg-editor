@@ -23,13 +23,14 @@ i18next
     fallbackLng: 'pt',
     nonExplicitSupportedLngs: true,
     ns: [
+      'gap-options',
       'general',
       'header',
+      'menu',
+      'messages',
+      'modal',
       'program-table',
       'parental-guidance',
-      'menu',
-      'modal',
-      'messages',
     ],
     defaultNS: 'general',
     interpolation: {
