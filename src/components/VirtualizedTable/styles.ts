@@ -35,6 +35,9 @@ export const RowElement = styled.td`
   }
   .plus {
     position: fixed;
+    height: 100%;
+    display: inline-block;
+    vertical-align: baseline;
     font-weight: bold;
     vertical-align: top;
     cursor: pointer;
@@ -45,8 +48,104 @@ export const RowElement = styled.td`
     height: 25px;
     border-radius: 5px;
     background-color: var(--color-system-2);
-    padding: 5px;
+    padding: 2.5px 5px 5px 5px;
   }
+  /////////////////////Adapted///////////////////////
+  /*
+  * Copyright (c) 2012 Thibaut Courouble
+  * http://www.webinterfacelab.com
+  *
+  * Licensed under the MIT License:
+  * http://www.opensource.org/licenses/mit-license.php
+  */
+  .plus:hover ul {
+    visibility: visible;
+    opacity: 1;
+    padding: 4px 0 6px;
+  }
+  .plus ul {
+    visibility: hidden;
+    position: absolute;
+    margin-top: 6px;
+    width: fit-content;
+    top: 100%;
+    left: -12.5px;
+    right: 0;
+    border-radius: 5px;
+    background-color: var(--color-neutral-2);
+    -webkit-box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+      0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+      0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  .plus ul:before,
+  .plus ul:after,
+  .plus li:first-child:after {
+    display: block;
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    left: 60px;
+    border: 7px outset transparent;
+  }
+  .plus ul:before {
+    border-bottom: 7px solid #555;
+    top: -14px;
+  }
+  .plus li:first-child:after {
+    border-bottom: 7px solid var(--color-neutral-2);
+    top: -13px;
+  }
+  .plus ul:after {
+    border-bottom: 7px solid #eef3fe;
+    top: -12px;
+  }
+  .plus li {
+    padding: 0 12px;
+    font-size: 11px;
+    color: var(--color-neutral-3);
+    list-style-type: none;
+  }
+  .plus li.sep {
+    border-top: 1px solid #b4bbce;
+    padding-top: 4px;
+    margin-top: 4px;
+    -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.6);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.6);
+  }
+  .plus li div {
+    display: block;
+    position: relative;
+    margin: 0 -13px;
+    padding: 0 20px 0 12px;
+    color: var(--color-neutral-1);
+    border: 1px solid transparent;
+  }
+  .plus li div:hover {
+    color: var(--color-neutral-2);
+    text-decoration: none;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+    border-color: var(--color-primary-2) #495d98 #42558a;
+    background-color: var(--color-primary-2);
+  }
+  .plus li div:hover:after {
+    display: block;
+  }
+  .plus li div:after {
+    display: none;
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    margin-top: -4px;
+    border: 4px solid transparent;
+    border-left-color: #9facd1;
+    border-left-color: rgba(255, 255, 255, 0.4);
+  }
+  ///////////////////////////////////////////////////
 `;
 
 export const AddToList = styled.div`

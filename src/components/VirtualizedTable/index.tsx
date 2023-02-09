@@ -32,8 +32,6 @@ import {
 import { useModalProvider } from 'providers/ModalProvider';
 import { ColorPallete } from 'styles/global';
 
-import { Tooltip } from 'components';
-
 import {
   ParentalGuidanceCells,
   IconRating,
@@ -335,42 +333,86 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 {Array.from(gapsIndex).map(gap => {
                   return (
                     <div className="vl" style={{ top: `${45 * gap}px` }}>
-                      <Tooltip title={`There's a gap between programs`}>
-                        <div
-                          className="plus"
-                          role="button"
-                          onClick={e => {
-                            e.stopPropagation();
-                            const prog1 =
-                              programs.toArray()[gap - 1].startDateTime;
-                            const prog2 = programs.toArray()[gap].startDateTime;
-                            const diff =
-                              (prog2.getTime() - prog1.getTime()) / 1000;
-                            const aux = programs.clone();
-                            const newList: Program[] = [];
-                            aux.toArray().forEach((p, ind) => {
-                              let newProg: Program = p;
-                              if (ind === gap - 1) {
-                                newProg = { ...p, duration: diff };
-                              }
-                              newList.push(newProg);
-                            });
-                            const newPrograms = new EntityMap<Program>(
-                              newList?.map(p => new Program(p)),
-                            );
-                            setPrograms(newPrograms);
-                            setGapsIndex(() => {
-                              gapsIndex.delete(gap);
-                              return gapsIndex;
-                            });
-                          }}
-                          onKeyDown={() => ''}
-                          tabIndex={0}
-                        >
+                      <div className="plus">
+                        <div>
                           <RiDeleteRow />
                           &nbsp; FILL GAP
                         </div>
-                      </Tooltip>
+                        <ul>
+                          <li>
+                            <div
+                              role="button"
+                              onClick={e => {
+                                e.stopPropagation();
+                                const prog1 =
+                                  programs.toArray()[gap - 1].startDateTime;
+                                const prog2 =
+                                  programs.toArray()[gap].startDateTime;
+                                const diff =
+                                  (prog2.getTime() - prog1.getTime()) / 1000;
+                                const aux = programs.clone();
+                                const newList: Program[] = [];
+                                aux.toArray().forEach((p, ind) => {
+                                  let newProg: Program = p;
+                                  if (ind === gap - 1) {
+                                    newProg = { ...p, duration: diff };
+                                  }
+                                  newList.push(newProg);
+                                });
+                                const newPrograms = new EntityMap<Program>(
+                                  newList?.map(p => new Program(p)),
+                                );
+                                setPrograms(newPrograms);
+                                setGapsIndex(() => {
+                                  gapsIndex.delete(gap);
+                                  return gapsIndex;
+                                });
+                              }}
+                              onKeyDown={() => ''}
+                              tabIndex={0}
+                            >
+                              Edit Duration
+                            </div>
+                          </li>
+                          <li>
+                            <div
+                              role="button"
+                              onClick={e => {
+                                e.stopPropagation();
+                                let startDateTime = new Date();
+                                const prog = programs.toArray();
+                                startDateTime = prog[gap - 1].startDateTime;
+                                const nextStartDateTime =
+                                  prog[gap].startDateTime;
+                                const diff =
+                                  (nextStartDateTime.getTime() -
+                                    startDateTime.getTime()) /
+                                  1000;
+
+                                const newProgram = new Program({
+                                  duration: diff,
+                                  startDateTime,
+                                });
+
+                                setPrograms(p =>
+                                  p.add(newProgram, prog[gap].id).clone(),
+                                );
+
+                                setSelectedProgramId(s => {
+                                  const newSelectedProgramId = new Set(s);
+                                  newSelectedProgramId.clear();
+                                  newSelectedProgramId.add(newProgram.id);
+                                  return newSelectedProgramId;
+                                });
+                              }}
+                              onKeyDown={() => ''}
+                              tabIndex={0}
+                            >
+                              Add Line
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   );
                 })}
