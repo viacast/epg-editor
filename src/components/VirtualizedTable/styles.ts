@@ -25,7 +25,8 @@ export const Message = styled.div`
   line-height: 24px;
 `;
 
-export const RowElement = styled.td`
+export const RowElement = styled.td<{ width: string }>`
+  --variable-width: ${({ width }) => width || '59px'};
   .vl {
     position: fixed;
     z-index: 2;
@@ -43,7 +44,7 @@ export const RowElement = styled.td`
     cursor: pointer;
     z-index: 3;
     margin-top: -12px;
-    left: calc(50% - 59px);
+    left: calc(50% - var(--variable-width));
     width: fit-content;
     height: 25px;
     border-radius: 5px;

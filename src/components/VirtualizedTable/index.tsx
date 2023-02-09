@@ -319,6 +319,9 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                   snapshot.isDragging,
                   provided.draggableProps.style,
                 )}
+                width={
+                  localStorage.getItem('i18nextLng') === 'pt' ? '74px' : '59px'
+                }
               >
                 <div
                   style={{
@@ -336,7 +339,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                       <div className="plus">
                         <div>
                           <RiDeleteRow />
-                          &nbsp; FILL GAP
+                          &nbsp; {t('gap-options:fillGap')}
                         </div>
                         <ul>
                           <li>
@@ -371,7 +374,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                               onKeyDown={() => ''}
                               tabIndex={0}
                             >
-                              Edit Duration
+                              {t('gap-options:editDuration')}
                             </div>
                           </li>
                           <li>
@@ -408,7 +411,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                               onKeyDown={() => ''}
                               tabIndex={0}
                             >
-                              Add Line
+                              {t('gap-options:addLine')}
                             </div>
                           </li>
                         </ul>
