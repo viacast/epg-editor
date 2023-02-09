@@ -1,7 +1,9 @@
 # Changelog
-* Added Content Field.
-* Added Category (genre of programs) Field.
-* Update "program.ts", "builder.ts", "parser.ts" to fit new fields.
+* Added Timeline to indicate currently playing program.
+* Added Button for scroll to currently playing program.
+* Added Option of delete all played programs from the list.
+* Identify played programs.
+* Fix Upload and Export bugs.
 
 # Getting Started with Create React App
 
