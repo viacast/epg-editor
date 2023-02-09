@@ -1,7 +1,6 @@
 # Changelog
-* Added Content Field.
-* Added Category (genre of programs) Field.
-* Update "program.ts", "builder.ts", "parser.ts" to fit new fields.
+* Added Line to indicate gap between programs.
+* Added Two options of fixing gaps (Create new programs & Edit duration of previous one).
 
 # Getting Started with Create React App
 
