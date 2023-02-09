@@ -66,19 +66,19 @@ export const RowElement = styled.td`
   .plus ul {
     visibility: hidden;
     position: absolute;
-    margin-top: 6px;
+    margin-top: 3px;
     width: fit-content;
     top: 100%;
     left: -12.5px;
     right: 0;
     border-radius: 5px;
-    background-color: var(--color-neutral-2);
+    background-color: var(--color-neutral-3);
     -webkit-box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9),
       0 1px 2px rgba(0, 0, 0, 0.1);
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9),
       0 1px 2px rgba(0, 0, 0, 0.1);
   }
-  .plus ul:before,
+  /* .plus ul:before,
   .plus ul:after,
   .plus li:first-child:after {
     display: block;
@@ -88,13 +88,13 @@ export const RowElement = styled.td`
     position: absolute;
     left: 60px;
     border: 7px outset transparent;
-  }
+  } */
   .plus ul:before {
     border-bottom: 7px solid #555;
     top: -14px;
   }
   .plus li:first-child:after {
-    border-bottom: 7px solid var(--color-neutral-2);
+    border-bottom: 7px solid var(--color-neutral-3);
     top: -13px;
   }
   .plus ul:after {
