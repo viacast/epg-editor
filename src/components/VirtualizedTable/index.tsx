@@ -322,6 +322,11 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 width={
                   localStorage.getItem('i18nextLng') === 'pt' ? '74px' : '59px'
                 }
+                left={
+                  localStorage.getItem('i18nextLng') === 'pt'
+                    ? '10.5px'
+                    : '-12.5px'
+                }
               >
                 <div
                   style={{
