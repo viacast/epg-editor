@@ -42,6 +42,12 @@ import {
   ValidationMessage,
   MessagesContainer,
   LoaderContainer,
+  Timeline,
+  FillGapLine,
+  FillGapLabel,
+  FillGapOptions,
+  FillGapOptionsContainer,
+  FillGapOptionsContent,
 } from './styles';
 
 export interface ProgramTableProps {
@@ -319,36 +325,31 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                   snapshot.isDragging,
                   provided.draggableProps.style,
                 )}
-                width={
-                  localStorage.getItem('i18nextLng') === 'pt' ? '74px' : '59px'
-                }
-                left={
-                  localStorage.getItem('i18nextLng') === 'pt'
-                    ? '10.5px'
-                    : '-12.5px'
-                }
               >
-                <div
-                  style={{
-                    position: 'fixed',
-                    top: `${tableHeight}px`,
-                    zIndex: '2',
-                    width: '100%',
-                    height: '3px',
-                    backgroundColor: 'var(--color-system-1)',
-                  }}
-                />
+                <Timeline top={`${tableHeight}px`} />
                 {Array.from(gapsIndex).map(gap => {
                   return (
-                    <div className="vl" style={{ top: `${45 * gap}px` }}>
-                      <div className="plus">
+                    <FillGapLine top={`${45 * gap}px`}>
+                      <FillGapLabel
+                        width={
+                          localStorage.getItem('i18nextLng') === 'pt'
+                            ? '74px'
+                            : '59px'
+                        }
+                      >
                         <div>
                           <RiDeleteRow />
                           &nbsp; {t('gap-options:fillGap')}
                         </div>
-                        <ul>
-                          <li>
-                            <div
+                        <FillGapOptionsContainer
+                          left={
+                            localStorage.getItem('i18nextLng') === 'pt'
+                              ? '11px'
+                              : '-19px'
+                          }
+                        >
+                          <FillGapOptions>
+                            <FillGapOptionsContent
                               role="button"
                               onClick={e => {
                                 e.stopPropagation();
@@ -380,10 +381,10 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                               tabIndex={0}
                             >
                               {t('gap-options:editDuration')}
-                            </div>
-                          </li>
-                          <li>
-                            <div
+                            </FillGapOptionsContent>
+                          </FillGapOptions>
+                          <FillGapOptions>
+                            <FillGapOptionsContent
                               role="button"
                               onClick={e => {
                                 e.stopPropagation();
@@ -417,11 +418,11 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                               tabIndex={0}
                             >
                               {t('gap-options:addLine')}
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                            </FillGapOptionsContent>
+                          </FillGapOptions>
+                        </FillGapOptionsContainer>
+                      </FillGapLabel>
+                    </FillGapLine>
                   );
                 })}
                 <Checkbox

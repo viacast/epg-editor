@@ -25,115 +25,92 @@ export const Message = styled.div`
   line-height: 24px;
 `;
 
-export const RowElement = styled.td<{ width: string; left: string }>`
+export const RowElement = styled.td<{ width: string; left: string }>``;
+
+export const Timeline = styled.div<{ top: string }>`
+  position: fixed;
+  top: ${({ top }) => top || '0px'};
+  z-index: 2;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-system-1);
+`;
+
+export const FillGapLine = styled.div<{ top: string }>`
+  position: fixed;
+  top: ${({ top }) => top || '0px'};
+  z-index: 2;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-system-2);
+`;
+
+export const FillGapLabel = styled.div<{ width: string }>`
   --variable-width: ${({ width }) => width || '59px'};
-  .vl {
-    position: fixed;
-    z-index: 2;
-    width: 100%;
-    height: 3px;
-    background-color: var(--color-system-2);
-  }
-  .plus {
-    position: fixed;
-    height: 100%;
-    display: inline-block;
-    vertical-align: baseline;
-    font-weight: bold;
-    vertical-align: top;
-    cursor: pointer;
-    z-index: 3;
-    margin-top: -12px;
-    left: calc(50% - var(--variable-width));
-    width: fit-content;
-    height: 25px;
-    border-radius: 5px;
-    background-color: var(--color-system-2);
-    padding: 2.5px 5px 5px 5px;
-  }
-  /////////////////////Adapted///////////////////////
-  /*
-  * Copyright (c) 2012 Thibaut Courouble
-  * http://www.webinterfacelab.com
-  *
-  * Licensed under the MIT License:
-  * http://www.opensource.org/licenses/mit-license.php
-  */
-  .plus:hover ul {
+  position: fixed;
+  height: 100%;
+  display: inline-block;
+  vertical-align: baseline;
+  font-weight: bold;
+  vertical-align: top;
+  cursor: pointer;
+  z-index: 3;
+  margin-top: -12px;
+  left: calc(50% - var(--variable-width));
+  width: fit-content;
+  height: 25px;
+  border-radius: 5px;
+  background-color: var(--color-system-2);
+  padding: 2.5px 5px 5px 5px;
+  :hover ul {
     visibility: visible;
     opacity: 1;
     padding: 4px 0 6px;
   }
-  .plus ul {
-    visibility: hidden;
-    position: absolute;
-    margin-top: 3px;
-    width: fit-content;
-    top: 100%;
-    left: ${({ left }) => left || '-12.5px'};
-    right: 0;
-    border-radius: 5px;
-    background-color: var(--color-neutral-3);
-    -webkit-box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9),
-      0 1px 2px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9),
-      0 1px 2px rgba(0, 0, 0, 0.1);
-  }
-  /* .plus ul:before,
-  .plus ul:after,
-  .plus li:first-child:after {
-    display: block;
-    content: '';
-    width: 0;
-    height: 0;
-    position: absolute;
-    left: 60px;
-    border: 7px outset transparent;
-  } */
-  .plus ul:before {
-    border-bottom: 7px solid #555;
-    top: -14px;
-  }
-  .plus li:first-child:after {
-    border-bottom: 7px solid var(--color-neutral-3);
-    top: -13px;
-  }
-  .plus ul:after {
-    border-bottom: 7px solid #eef3fe;
-    top: -12px;
-  }
-  .plus li {
-    padding: 0 12px;
-    font-size: 11px;
-    color: var(--color-neutral-3);
-    list-style-type: none;
-  }
-  .plus li.sep {
-    border-top: 1px solid #b4bbce;
-    padding-top: 4px;
-    margin-top: 4px;
-    -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.6);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.6);
-  }
-  .plus li div {
-    display: block;
-    position: relative;
-    margin: 0 -13px;
-    padding: 0 20px 0 12px;
-    color: var(--color-neutral-1);
-    border: 1px solid transparent;
-  }
-  .plus li div:hover {
+`;
+
+export const FillGapOptionsContainer = styled.ul<{ left: string }>`
+  visibility: hidden;
+  position: absolute;
+  border-top: 4px solid var(--color-neutral-5);
+  width: fit-content;
+  top: 100%;
+  left: ${({ left }) => left || '-12.5px'};
+  right: 0;
+  border-radius: 5px;
+  background-color: var(--color-neutral-3);
+  -webkit-box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(0, 0, 0, 0.1);
+`;
+
+export const FillGapOptions = styled.li`
+  padding: 0 12px;
+  font-size: 11px;
+  color: var(--color-neutral-3);
+  list-style-type: none;
+`;
+
+export const FillGapOptionsContent = styled.div`
+  display: block;
+  position: relative;
+  margin: 0 -13px;
+  padding: 0 20px 0 12px;
+  color: var(--color-neutral-1);
+  border: 1px solid transparent;
+  :hover {
     color: var(--color-neutral-2);
     text-decoration: none;
     text-shadow: 0 1px rgba(0, 0, 0, 0.3);
     border-color: var(--color-primary-2) #495d98 #42558a;
     background-color: var(--color-primary-2);
   }
-  .plus li div:hover:after {
+  :hover:after {
     display: block;
   }
-  .plus li div:after {
+  // Arrows //
+  :after {
     display: none;
     content: '';
     width: 0;
@@ -146,7 +123,6 @@ export const RowElement = styled.td<{ width: string; left: string }>`
     border-left-color: #9facd1;
     border-left-color: rgba(255, 255, 255, 0.4);
   }
-  ///////////////////////////////////////////////////
 `;
 
 export const AddToList = styled.div`
