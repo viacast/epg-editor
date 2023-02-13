@@ -18,7 +18,7 @@ export const Text = styled.div`
 
 export const ButtonContainer = muistyled(Button)<ButtonProps>`
   display: flex;
-  width: 139px;
+  width: 135px;
   height: 44px;
   border: 2px solid var(--color-neutral-3);
   padding: 0 0;

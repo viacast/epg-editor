@@ -30,6 +30,53 @@ const Home: React.FC = () => {
   const [selectedProgram, setSelectedProgram] = useState<Program>();
   const [tableWidth, setTableWidth] = useState(dimension.width - 60);
 
+  const [now, setNow] = useState(0);
+  const [current, setCurrent] = useState(new Date());
+  const [playedProgramId, setPlayedProgramId] = useState<Set<string>>(
+    new Set(),
+  );
+
+  let aux = -1;
+  const setCursorPosition = () =>
+    programs.toArray().forEach(p => {
+      if (p.startDateTime <= new Date()) {
+        aux += 1;
+      }
+      setNow(aux);
+    });
+
+  setTimeout(() => {
+    setCursorPosition();
+    setCurrent(new Date());
+  }, 1000);
+
+  const playing = programs.toArray()[now]; // currently playing program
+  let tableHeight = 0; // distance between the top of table body and the timeline
+  if (playing) {
+    const end: number = addToDate(
+      playing.startDateTime,
+      playing.duration,
+    ).getTime();
+    let diff = 0; // time left to end program
+    if (end >= current.getTime()) {
+      diff = Math.abs((end - current.getTime()) / 1000);
+    }
+    const length: number = playing.duration;
+    const partRowSize: number = (1 - diff / length) * 45; // size of part of a row
+    const entireRowSize: number = 45 * now; // Size of entire rows
+    tableHeight = entireRowSize + partRowSize;
+  }
+
+  useEffect(() => {
+    let j = 0;
+    while (j < now) {
+      if (programs && programs.toArray()[j]) {
+        setPlayedProgramId(playedProgramId.add(programs.toArray()[j].id));
+      }
+      j += 1;
+    }
+  }, [now, playedProgramId, programs]);
+
   useEffect(() => {
     setSelectedProgram(programs.get(Array.from(selectedProgramId)[0]));
   }, [programs, selectedProgramId]);
@@ -94,8 +141,55 @@ const Home: React.FC = () => {
           }}
           handleAddProgram={handleAddProgram}
           handleClearProgramList={handleClearProgramList}
+          tableHeight={tableHeight}
+          playedProgramId={playedProgramId}
+          setPlayedProgramId={setPlayedProgramId}
+          setPrograms={setPrograms}
+          selectedProgram={selectedProgram}
+          selectedProgramId={selectedProgramId}
+          setSelectedProgramId={setSelectedProgramId}
         />
       </HeaderContainer>
+      {/* <div
+        style={{
+          width: 'calc(100% - 60px)',
+          height: '80px',
+          marginTop: '20px',
+          marginLeft: '30px',
+          paddingLeft: '2.5px',
+          borderRadius: '4px',
+          backgroundColor: 'var(--color-neutral-5)',
+        }}
+      >
+        <div
+          style={{
+            position: 'fixed',
+            left: `${now}px`,
+            zIndex: '2',
+            width: '4px',
+            height: '80px',
+            backgroundColor: 'var(--color-system-1)',
+          }}
+        />
+        {programs.toArray().map(p => {
+          const progSize = p.duration;
+          const dim = progSize / diffSec;
+          const w = `${String(twidth * dim)}px`;
+          return (
+            <div
+              style={{
+                display: 'inline-block',
+                width: w,
+                height: '75px',
+                marginTop: '2.5px',
+                border: '1px solid var(--color-neutral-6)',
+                borderRadius: '2px',
+                backgroundColor: 'var(--color-system-3)',
+              }}
+            />
+          );
+        })}
+      </div> */}
       <TableMenuContainer>
         <TableContainer
           className="epg-table-menu-content"
@@ -103,6 +197,7 @@ const Home: React.FC = () => {
         >
           <VirtualizedTable
             startWidth={tableWidth}
+            tableHeight={tableHeight}
             programs={programs}
             setPrograms={setPrograms}
             selectedProgramId={selectedProgramId}

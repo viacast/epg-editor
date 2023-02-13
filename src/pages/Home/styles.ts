@@ -133,14 +133,19 @@ export const TableContainer = styled.div<{ width?: string }>`
     border-inline: 6px solid var(--color-neutral-5);
     border-top: 2px solid var(--color-neutral-5);
     border-bottom: 2px solid var(--color-neutral-5);
-
     text-align: center;
+    .epg-add-to-list {
+      display: block;
+      pointer-events: none;
+      opacity: 0;
+    }
   }
   .ReactVirtualized__Table__row:hover {
     border: 1px solid var(--color-system-3);
     border-radius: 4px;
     .epg-add-to-list {
-      display: block;
+      opacity: 1;
+      pointer-events: auto;
     }
   }
   .active {

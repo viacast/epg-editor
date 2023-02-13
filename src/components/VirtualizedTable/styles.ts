@@ -27,6 +27,12 @@ export const Message = styled.div`
 
 export const RowElement = styled.td``;
 
+export const TableContainer = styled.div`
+  /* .ReactVirtualized__Table__headerTruncatedText {
+    margin-left: 75px;
+  } */
+`;
+
 export const AddToList = styled.div`
   display: none;
   svg {
@@ -55,7 +61,9 @@ export const MessagesContainer = styled.div`
 `;
 
 export const ValidationMessage = styled.div`
-  margin-inline: 2px;
+  position: absolute;
+  transform: scale(0.75);
+  margin-top: -20px;
 `;
 
 export const LoaderContainer = styled.div`

@@ -7,7 +7,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { format } from 'date-fns';
-import { Box, ClickAwayListener } from '@mui/material';
+import { Box, Checkbox, ClickAwayListener } from '@mui/material';
 import structuredClone from '@ungap/structured-clone';
 import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
 import { RiAlertFill } from 'react-icons/ri';
@@ -38,7 +38,8 @@ import {
   EPGValidationMessageType,
 } from 'services/epg/validator';
 import { ColorPallete } from 'styles/global';
-import { ReactSetState } from 'utils';
+import { boolToPC, getIconCode, optionsArray, ReactSetState } from 'utils';
+import { ProgramCategory } from 'services/epg/program';
 import {
   BottomContainer,
   ButtonContainer,
@@ -111,6 +112,24 @@ const Menu: React.FC<MenuProps> = ({
     setProgramMessages(messages[selectedProgram.id] ?? {});
   }, [programs, selectedProgram.id]);
 
+  const [contents, setContents] = useState([false, false, false]);
+
+  useEffect(() => {
+    let c1 = false;
+    let c2 = false;
+    let c3 = false;
+    if (selectedProgram.content.includes('Drugs')) {
+      c1 = true;
+    }
+    if (selectedProgram.content.includes('Violence')) {
+      c2 = true;
+    }
+    if (selectedProgram.content.includes('Sex')) {
+      c3 = true;
+    }
+    setContents([c1, c2, c3]);
+  }, [selectedProgram]);
+
   return (
     <MenuContainer>
       <Toolbar>
@@ -118,8 +137,8 @@ const Menu: React.FC<MenuProps> = ({
           <p>{t('menu:edit')}:</p>
           <p>{selectedProgram?.title}</p>
         </ToolbarText>
-        {hasChanges && (
-          <ActionButtons>
+        <ActionButtons>
+          {hasChanges && (
             <VscDiscard
               id="menu-button-discard"
               size="20px"
@@ -127,38 +146,38 @@ const Menu: React.FC<MenuProps> = ({
                 if (!selectedProgram) {
                   return;
                 }
-                openModal({
-                  title: t('menu:discardProgramTitle'),
-                  content: t('menu:discardProgramMessage', {
-                    programTitle: selectedProgram.title,
-                  }),
-                  confirm: () => {
-                    setNewProgram(selectedProgram);
-                    setHasChanges(false);
-                  },
-                });
+                // openModal({
+                //   title: t('menu:discardProgramTitle'),
+                //   content: t('menu:discardProgramMessage', {
+                //     programTitle: selectedProgram.title,
+                //   }),
+                //   confirm: () => {
+                setNewProgram(selectedProgram);
+                setHasChanges(false);
+                //   },
+                // });
               }}
             />
-            <CgTrash
-              id="menu-button-remove"
-              size="20px"
-              onClick={() => {
-                if (!selectedProgram) {
-                  return;
-                }
-                openModal({
-                  title: t('menu:deleteProgramTitle'),
-                  content: t('menu:deleteProgramMessage', {
-                    programTitle: selectedProgram.title,
-                  }),
-                  confirm: () => {
-                    handleRemoveProgram(selectedProgram.id);
-                  },
-                });
-              }}
-            />
-          </ActionButtons>
-        )}
+          )}
+          <CgTrash
+            id="menu-button-remove"
+            size="20px"
+            onClick={() => {
+              if (!selectedProgram) {
+                return;
+              }
+              openModal({
+                title: t('menu:deleteProgramTitle'),
+                content: t('menu:deleteProgramMessage', {
+                  programTitle: selectedProgram.title,
+                }),
+                confirm: () => {
+                  handleRemoveProgram(selectedProgram.id);
+                },
+              });
+            }}
+          />
+        </ActionButtons>
       </Toolbar>
       <ContentContainer>
         <BottomContainer>
@@ -246,6 +265,7 @@ const Menu: React.FC<MenuProps> = ({
               </Text>
               <SelectRateContainer>
                 <Select
+                  width="calc(100% - 71px)"
                   value={newProgram?.rating.toString() ?? ProgramRating.RL}
                   setValue={rating => {
                     setNewProgram(p => ({
@@ -259,15 +279,156 @@ const Menu: React.FC<MenuProps> = ({
                     value: r.toString(),
                   }))}
                 />
-                <IconContainer>
-                  <Icon
-                    src={
-                      ratings[newProgram?.rating.toString() ?? ProgramRating.RL]
-                    }
-                    alt="Rate Icon"
-                  />
-                </IconContainer>
+                <Tooltip
+                  arrow
+                  title={
+                    <Message>
+                      {getIconCode(newProgram?.rating.toString())}
+                    </Message>
+                  }
+                >
+                  <IconContainer>
+                    <Icon
+                      src={
+                        ratings[
+                          newProgram?.rating.toString() ?? ProgramRating.RL
+                        ]
+                      }
+                      alt="Rate Icon"
+                    />
+                  </IconContainer>
+                </Tooltip>
               </SelectRateContainer>
+              <FormRow>
+                <FormColumn>
+                  <br />
+                  <Text>Conteúdo</Text>
+                  <div
+                    style={{
+                      backgroundColor: 'var(--color-neutral-6)',
+                      marginTop: '5px',
+                      borderRadius: '4px',
+                      userSelect: 'none',
+                      height: '117px',
+                      width: '135px',
+                    }}
+                  >
+                    <div style={{ display: 'flex' }}>
+                      <Checkbox
+                        onClick={() => {
+                          const newContents = [...contents];
+                          newContents[0] = !contents[0];
+                          setContents(newContents);
+                          setNewProgram(p => ({
+                            ...p,
+                            content: boolToPC(newContents),
+                          }));
+                          setHasChanges(true);
+                        }}
+                        checked={contents[0]}
+                      />
+                      <div
+                        style={{
+                          paddingTop: '12px',
+                          color: 'var(--color-neutral-3)',
+                          fontSize: '16px',
+                        }}
+                      >
+                        {t('menu:tagDrugs')}
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', marginTop: '-10px' }}>
+                      <Checkbox
+                        onClick={() => {
+                          const newContents = [...contents];
+                          newContents[1] = !contents[1];
+                          setContents(newContents);
+                          setNewProgram(p => ({
+                            ...p,
+                            content: boolToPC(newContents),
+                          }));
+                          setHasChanges(true);
+                        }}
+                        checked={contents[1]}
+                      />
+                      <div
+                        style={{
+                          paddingTop: '12px',
+                          color: 'var(--color-neutral-3)',
+                          fontSize: '16px',
+                        }}
+                      >
+                        {t('menu:tagViolence')}
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', marginTop: '-10px' }}>
+                      <Checkbox
+                        onClick={() => {
+                          const newContents = [...contents];
+                          newContents[2] = !contents[2];
+                          setContents(newContents);
+                          setNewProgram(p => ({
+                            ...p,
+                            content: boolToPC(newContents),
+                          }));
+                          setHasChanges(true);
+                        }}
+                        checked={contents[2]}
+                      />
+                      <div
+                        style={{
+                          paddingTop: '12px',
+                          color: 'var(--color-neutral-3)',
+                          fontSize: '16px',
+                        }}
+                      >
+                        {t('menu:tagSex')}
+                      </div>
+                    </div>
+                  </div>
+                </FormColumn>
+                <FormColumn>
+                  <br />
+                  <Text>Categoria (Gênero / Sub-gênero)</Text>
+                  <div style={{ marginTop: '5px' }}>
+                    <Select
+                      width="270px"
+                      value={
+                        newProgram?.category.toString() ??
+                        ProgramCategory['0x0']
+                      }
+                      setValue={category => {
+                        setNewProgram(p => ({
+                          ...p,
+                          category: category as ProgramCategory,
+                        }));
+                        setHasChanges(true);
+                      }}
+                      options={Object.values(ProgramCategory).map(c => ({
+                        label: c,
+                        value: c.toString(),
+                      }))}
+                    />
+                  </div>
+                  <div style={{ marginTop: '5px' }}>
+                    <Select
+                      width="270px"
+                      value={newProgram?.subcategory.toString() ?? 'Outros'}
+                      setValue={subcategory => {
+                        setNewProgram(p => ({
+                          ...p,
+                          subcategory,
+                        }));
+                        setHasChanges(true);
+                      }}
+                      options={optionsArray(
+                        newProgram?.category.toString() ??
+                          ProgramCategory['0x0'],
+                      )}
+                    />
+                  </div>
+                </FormColumn>
+              </FormRow>
               <FormRow>
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">

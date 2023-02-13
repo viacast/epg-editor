@@ -11,14 +11,15 @@ export const HeaderContainer = styled.div`
   }
 
   .epg-input {
-    min-width: 270px;
+    min-width: 235px;
+    max-width: 270px;
     height: 44px;
   }
 `;
 
 export const MenuOptions = styled.div``;
 
-export const ExportOptions = styled.div`
+export const HiddenOptionsMenu = styled.div`
   position: absolute;
   z-index: 3;
   padding-top: 10px;
@@ -215,14 +216,33 @@ export const MessageBadgeContainer = styled.div`
   }
 `;
 
+export const Popover = styled.div<{
+  display: string;
+  top: string;
+  left: string;
+}>`
+  position: absolute;
+  display: ${({ display }) => display || 'none'};
+  z-index: 2;
+  top: ${({ top }) => top || '105px'};
+  left: ${({ left }) => left || '750px'};
+  width: 140px;
+  height: 65px;
+  padding: 5px;
+  border-radius: 4px;
+  color: var(--color-neutral-2);
+  background-color: var(--color-neutral-3);
+  text-align: center;
+`;
+
 interface BadgeProps {
-  backgroundColor: string;
+  background: string;
   show?: boolean;
 }
 
 export const MessageBadge = muistyled(Badge)<BadgeProps>`
   & .MuiBadge-badge {
-    background-color: ${({ backgroundColor }) => backgroundColor || 'default'};
+    background-color: ${({ background }) => background || 'default'};
     display:'inline-block';
     position: relative;
 

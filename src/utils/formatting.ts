@@ -1,4 +1,6 @@
 import { format, parse } from 'date-fns';
+import { ProgramContent } from 'services/epg/program';
+import papaparse from 'papaparse';
 
 interface HMS {
   hours: number;
@@ -69,20 +71,229 @@ export function hmsToDuration(hms: HMS): number {
   return hours * 3600 + minutes * 60 + seconds;
 }
 
+export function yyyyMMddHHmmToDuration(s: string): Date {
+  const aux = String(s);
+  const y = aux.substring(0, 4);
+  const m = aux.substring(4, 6);
+  const d = aux.substring(6, 8);
+  const h = aux.substring(8, 10);
+  const mm = aux.substring(10, 12);
+  return new Date(`${y}-${m}-${d}T${h}:${mm}:00`);
+}
+
+export function getLength(start: string, stop: string): number {
+  const s1 = yyyyMMddHHmmToDuration(start).getTime();
+  const s2 = yyyyMMddHHmmToDuration(stop).getTime();
+  return Math.abs(s2 - s1) / 1000;
+}
+
+// export function getInterval(start: Date, now: Date): number {
+//   const diff = now.getTime() - start.getTime();
+// }
+
+export function getProgramTime(program) {
+  let length = 0;
+  if (program.length === undefined) {
+    length = getLength(program.start, program.stop);
+  } else {
+    length = Number(program.length['#text']) * 60;
+  }
+  return length;
+}
+
+export function getIconCode(s: string): string {
+  let code;
+  if (s === 'RSC') {
+    code = 'csv: 0x00\nxml: 00';
+  } else if (s === 'RL,') {
+    code = 'csv: 0x00\nxml: 00';
+  } else if (s === 'R10') {
+    code = 'csv: 0x00\nxml: 00';
+  } else if (s === 'R12') {
+    code = 'csv: 0x00\nxml: 00';
+  } else if (s === 'R14') {
+    code = 'csv: 0x00\nxml: 00';
+  } else if (s === 'R16') {
+    code = 'csv: 0x00\nxml: 00';
+  } else if (s === 'R18') {
+    code = 'csv: 0x00\nxml: 00';
+  }
+  return code;
+}
+
+export function boolToPC(c: Array<boolean>): ProgramContent {
+  const c1 = c[0];
+  const c2 = c[1];
+  const c3 = c[2];
+
+  let array = '';
+
+  if (c1) {
+    array += 'Drugs';
+  }
+  if (c2) {
+    array += 'Violence';
+  }
+  if (c3) {
+    array += 'Sex';
+  }
+
+  let result;
+
+  if (array === '') {
+    result = ProgramContent.F;
+  }
+  if (array === 'Drugs') {
+    result = ProgramContent.D;
+  }
+  if (array === 'Violence') {
+    result = ProgramContent.V;
+  }
+  if (array === 'Sex') {
+    result = ProgramContent.S;
+  }
+  if (array === 'DrugsViolence') {
+    result = ProgramContent.DV;
+  }
+  if (array === 'DrugsSex') {
+    result = ProgramContent.DS;
+  }
+  if (array === 'ViolenceSex') {
+    result = ProgramContent.VS;
+  }
+  if (array === 'DrugsViolenceSex') {
+    result = ProgramContent.DVS;
+  }
+
+  return result;
+}
+
+interface SelectOption {
+  label: string;
+  value: string;
+}
+
+export function optionsArray(s: string): SelectOption[] {
+  const array: SelectOption[] = [];
+  if (s === 'Jornalismo') {
+    array.push(
+      { label: 'Telejornais', value: 'Telejornais' },
+      { label: 'Reportagem', value: 'Reportagem' },
+      { label: 'Documentário', value: 'Documentário' },
+      { label: 'Biografia', value: 'Biografia' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Esporte') {
+    array.push(
+      { label: 'Esporte', value: 'Esporte' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Educativo') {
+    array.push(
+      { label: 'Educativo', value: 'Educativo' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Novela') {
+    array.push(
+      { label: 'Novela', value: 'Novela' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Minissérie') {
+    array.push(
+      { label: 'Minissérie', value: 'Minissérie' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Série/seriado') {
+    array.push(
+      { label: 'Série', value: 'Série' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Variedade') {
+    array.push(
+      { label: 'Auditório', value: 'Auditório' },
+      { label: 'Show', value: 'Show' },
+      { label: 'Musical', value: 'Musical' },
+      { label: 'Making of', value: 'Making of' },
+      { label: 'Feminino', value: 'Feminino' },
+      { label: 'Game Show', value: 'Game Show' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Reality show') {
+    array.push(
+      { label: 'Reality show', value: 'Reality show' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Informação') {
+    array.push(
+      { label: 'Culinária', value: 'Culinária' },
+      { label: 'Moda', value: 'Moda' },
+      { label: 'Rural', value: 'Rural' },
+      { label: 'Saúde', value: 'Saúde' },
+      { label: 'Turismo', value: 'Turismo' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Humorístico') {
+    array.push(
+      { label: 'Humorístico', value: 'Humorístico' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Infantil') {
+    array.push(
+      { label: 'Infantil', value: 'Infantil' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Erótico') {
+    array.push(
+      { label: 'Erótico', value: 'Erótico' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Filme') {
+    array.push(
+      { label: 'Filme', value: 'Filme' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Sorteio, televendas, premiação') {
+    array.push(
+      { label: 'Sorteio', value: 'Sorteio' },
+      { label: 'Televendas', value: 'Televendas' },
+      { label: 'Premiação', value: 'Premiação' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else if (s === 'Debate/entrevista') {
+    array.push(
+      { label: 'Debate', value: 'Debate' },
+      { label: 'Entrevista', value: 'Entrevista' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  } else {
+    array.push(
+      { label: 'Desenho adulto', value: 'Desenho adulto' },
+      { label: 'Interativo', value: 'Interativo' },
+      { label: 'Político', value: 'Político' },
+      { label: 'Religioso', value: 'Religioso' },
+      { label: 'Outros', value: 'Outros' },
+    );
+  }
+  return array;
+}
+
 // adapted from https://stackoverflow.com/a/8497474/
-export function csvLineToArray(text: string) {
-  const reValid =
-    /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*(?:;\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*)*$/;
-  const reValue =
-    /(?!\s*$)\s*(?:'([^'\\]*(?:\\[\S\s][^'\\]*)*)'|"([^"\\]*(?:\\[\S\s][^"\\]*)*)"|([^;'"\s\\]*(?:\s+[^;'"\s\\]+)*))\s*(?:;|$)/g;
-  if (!reValid.test(text)) return null;
-  const a: string[] = [];
-  text.replace(reValue, (m0, m1, m2, m3) => {
-    if (m1 !== undefined) a.push(m1.replace(/\\'/g, "'"));
-    else if (m2 !== undefined) a.push(m2.replace(/\\"/g, '"'));
-    else if (m3 !== undefined) a.push(m3);
-    return '';
-  });
-  if (/;\s*$/.test(text)) a.push('');
-  return a;
+export function csvLineToArray(rawText: string) {
+  // const text = textT.replace(/","/g, '";"');
+  return papaparse.parse(rawText).data;
+  // console.log(text);
+  // const reValid =
+  //   /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*(?:;\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^;'"\s\\]*(?:\s+[^;'"\s\\]+)*)\s*)*$/;
+  // const reValue =
+  //   /(?!\s*$)\s*(?:'([^'\\]*(?:\\[\S\s][^'\\]*)*)'|"([^"\\]*(?:\\[\S\s][^"\\]*)*)"|([^;'"\s\\]*(?:\s+[^;'"\s\\]+)*))\s*(?:;|$)/g;
+  // if (!reValid.test(text)) return null;
+  // const a: string[] = [];
+  // text.replace(reValue, (m0, m1, m2, m3) => {
+  //   if (m1 !== undefined) a.push(m1.replace(/\\'/g, "'"));
+  //   else if (m2 !== undefined) a.push(m2.replace(/\\"/g, '"'));
+  //   else if (m3 !== undefined) a.push(m3);
+  //   return '';
+  // });
+  // if (/;\s*$/.test(text)) a.push('');
+  // return a;
 }

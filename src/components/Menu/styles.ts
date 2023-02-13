@@ -27,6 +27,7 @@ export const IconContainer = styled.div`
 export const Icon = styled.img`
   width: 100%;
   height: 100%;
+  cursor: pointer;
 `;
 
 export const MenuContainer = styled.div`

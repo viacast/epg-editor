@@ -25,7 +25,10 @@ import {
   secondsToHms,
   ReactSetState,
 } from 'utils';
-import { EPGValidationMessagesByProgram } from 'services/epg/validator';
+import {
+  EPGValidationMessagesByProgram,
+  EPGValidationMessageType,
+} from 'services/epg/validator';
 import { useModalProvider } from 'providers/ModalProvider';
 import { ColorPallete } from 'styles/global';
 
@@ -39,10 +42,12 @@ import {
   ValidationMessage,
   MessagesContainer,
   LoaderContainer,
+  TableContainer,
 } from './styles';
 
 export interface ProgramTableProps {
   startWidth: number;
+  tableHeight: number;
   programs: EntityMap<Program>;
   selectedProgramId: Set<string>;
   setPrograms: ReactSetState<EntityMap<Program>>;
@@ -75,6 +80,7 @@ const rate = {
 
 const VirtualizedTable: React.FC<ProgramTableProps> = ({
   startWidth,
+  tableHeight,
   programs,
   selectedProgramId,
   setPrograms,
@@ -163,9 +169,10 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
     virtualizedRowProps => {
       const program = programs.at(virtualizedRowProps.index);
 
-      if (!program) {
+      if (!program || !messages || !messages[program.id]) {
         return null;
       }
+      const validators = Array.from(messages[program.id].ALL);
 
       rowCache[virtualizedRowProps.index] = virtualizedRowProps;
       // eslint-disable-next-line no-param-reassign
@@ -188,32 +195,23 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
         </ParentalGuidanceCells>
       );
 
-      let showError = false;
-      let showWarn = false;
-      let showInfo = false;
-
-      if (messages[program.id]?.ERROR.size) {
-        showError = true;
-      }
-
-      if (!showError && messages[program.id]?.WARN.size) {
-        showWarn = true;
-      }
-
-      if (!showError && !showWarn && messages[program.id]?.INFO.size) {
-        showInfo = true;
-      }
-
       return (
         <Draggable
           draggableId={program.id}
           index={virtualizedRowProps.index}
-          key={program.id}
+          key={`epg-draggable-element-${program.id}`}
         >
           {(provided, snapshot) => (
             <TableRow
-              key={program.id}
+              key={`epg-table-row-${program.id}`}
               hover
+              style={{
+                opacity: validators.includes(
+                  EPGValidationMessageType.PAST_START_DATE,
+                )
+                  ? 0.5
+                  : 1,
+              }}
               onClick={e => {
                 setSelectedProgramId(s => {
                   const newSelectedProgramId = new Set(s);
@@ -261,7 +259,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 {...provided.draggableProps}
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...provided.dragHandleProps}
-                key={virtualizedRowProps.key}
+                key={`epg-draggable-row-${virtualizedRowProps.key}`}
                 className={`${virtualizedRowProps.className} ${
                   selectedProgramId.has(program.id) ? 'active' : ''
                 }`}
@@ -271,6 +269,16 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                   provided.draggableProps.style,
                 )}
               >
+                <div
+                  style={{
+                    position: 'fixed',
+                    top: `${tableHeight}px`,
+                    zIndex: '2',
+                    width: '100%',
+                    height: '3px',
+                    backgroundColor: 'var(--color-system-1)',
+                  }}
+                />
                 <Checkbox
                   readOnly
                   onClick={e => {
@@ -286,36 +294,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                     });
                   }}
                   checked={selectedProgramId.has(program.id)}
-                />{' '}
-                <MessagesContainer>
-                  {showError && (
-                    <ValidationMessage>
-                      <IconButton>
-                        <IoIosAlert size="20px" color={ColorPallete.SYSTEM_1} />
-                      </IconButton>
-                    </ValidationMessage>
-                  )}
-                  {showWarn && (
-                    <ValidationMessage>
-                      <IconButton>
-                        <RiAlertFill
-                          size="20px"
-                          color={ColorPallete.SYSTEM_2}
-                        />
-                      </IconButton>
-                    </ValidationMessage>
-                  )}
-                  {showInfo && (
-                    <ValidationMessage>
-                      <IconButton>
-                        <IoIosInformationCircle
-                          size="20px"
-                          color={ColorPallete.NEUTRAL_3}
-                        />
-                      </IconButton>
-                    </ValidationMessage>
-                  )}
-                </MessagesContainer>
+                />
                 <AddToList className="epg-add-to-list">
                   <HiPlus
                     onClick={e => {
@@ -340,7 +319,133 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                     }}
                   />
                 </AddToList>
-                {virtualizedRowProps.columns}
+                {virtualizedRowProps.columns.map((cell, index) => {
+                  let rowCell;
+                  if (index === 0) {
+                    rowCell = cell;
+                  } else if (index === 1) {
+                    rowCell = (
+                      <>
+                        <MessagesContainer>
+                          {validators.includes(
+                            EPGValidationMessageType.FAR_START_DATE,
+                          ) && (
+                            <ValidationMessage>
+                              <IconButton>
+                                <IoIosInformationCircle
+                                  size="20px"
+                                  color={ColorPallete.NEUTRAL_3}
+                                />
+                              </IconButton>
+                            </ValidationMessage>
+                          )}
+                        </MessagesContainer>
+                        {cell}
+                      </>
+                    );
+                  } else if (index === 2) {
+                    rowCell = (
+                      <>
+                        <MessagesContainer>
+                          {validators.includes(
+                            EPGValidationMessageType.TIME_GAP,
+                          ) && (
+                            <ValidationMessage>
+                              <IconButton>
+                                <IoIosAlert
+                                  size="20px"
+                                  color={ColorPallete.SYSTEM_1}
+                                />
+                              </IconButton>
+                            </ValidationMessage>
+                          )}
+                        </MessagesContainer>
+                        {cell}
+                      </>
+                    );
+                  } else if (index === 3) {
+                    rowCell = (
+                      <>
+                        <MessagesContainer>
+                          {validators.includes(
+                            EPGValidationMessageType.INVALID_DURATION,
+                          ) && (
+                            <ValidationMessage>
+                              <IconButton>
+                                <IoIosAlert
+                                  size="20px"
+                                  color={ColorPallete.SYSTEM_1}
+                                />
+                              </IconButton>
+                            </ValidationMessage>
+                          )}
+                        </MessagesContainer>
+                        {cell}
+                      </>
+                    );
+                  } else if (index === 4) {
+                    rowCell = (
+                      <>
+                        <MessagesContainer>
+                          {validators.includes(
+                            EPGValidationMessageType.EMPTY_TITLE,
+                          ) && (
+                            <ValidationMessage>
+                              <IconButton>
+                                <IoIosAlert
+                                  size="20px"
+                                  color={ColorPallete.SYSTEM_1}
+                                />
+                              </IconButton>
+                            </ValidationMessage>
+                          )}
+                        </MessagesContainer>
+                        {cell}
+                      </>
+                    );
+                  } else if (index === 5) {
+                    rowCell = (
+                      <>
+                        <MessagesContainer>
+                          {validators.includes(
+                            EPGValidationMessageType.NO_PARENTAL_RATING,
+                          ) && (
+                            <ValidationMessage>
+                              <IconButton>
+                                <RiAlertFill
+                                  size="20px"
+                                  color={ColorPallete.SYSTEM_2}
+                                />
+                              </IconButton>
+                            </ValidationMessage>
+                          )}
+                        </MessagesContainer>
+                        {cell}
+                      </>
+                    );
+                  } else if (index === 6) {
+                    rowCell = (
+                      <>
+                        <MessagesContainer>
+                          {validators.includes(
+                            EPGValidationMessageType.EMPTY_DESCRIPTION,
+                          ) && (
+                            <ValidationMessage>
+                              <IconButton>
+                                <IoIosAlert
+                                  size="20px"
+                                  color={ColorPallete.SYSTEM_1}
+                                />
+                              </IconButton>
+                            </ValidationMessage>
+                          )}
+                        </MessagesContainer>
+                        {cell}
+                      </>
+                    );
+                  }
+                  return rowCell;
+                })}
               </RowElement>
             </TableRow>
           )}
@@ -348,13 +453,14 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
       );
     },
     [
-      messages,
-      firstProg,
       programs,
-      selectedProgramId,
-      setPrograms,
-      setSelectedProgramId,
+      messages,
       t,
+      selectedProgramId,
+      tableHeight,
+      setSelectedProgramId,
+      firstProg,
+      setPrograms,
     ],
   );
 
@@ -411,7 +517,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
               {...provided.draggableProps}
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...provided.dragHandleProps}
-              key={virtualizedRowProps.key}
+              key={`epg-droppable-row-${virtualizedRowProps.key}`}
               className={virtualizedRowProps.className}
               style={getItemStyle(
                 {
@@ -433,130 +539,133 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
         {provided => (
           <AutoSizer>
             {({ width, height }) => (
-              <Table
-                tableId="reactVirtaualizedTable"
-                rowIdKey="position"
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                {...provided.droppableProps}
-                rowCount={programs.count}
-                width={width || startWidth}
-                height={height}
-                header
-                headerHeight={60}
-                rowHeight={45}
-                rowGetter={({ index }) => {
-                  const p = programs.at(index);
-                  if (!p) {
-                    return {};
-                  }
-                  return {
-                    ...p,
-                    position: `${index + 1}`,
-                    startDateTime: formatDateTime(p.startDateTime),
-                    endDateTime: formatDateTime(
-                      addToDate(p.startDateTime, p.duration),
-                    ),
-                    duration: secondsToHms(p.duration),
-                  };
-                }}
-                ref={ref => {
-                  if (ref) {
-                    const triggerRf = document.getElementsByClassName(
-                      'ReactVirtualized__Grid ReactVirtualized__Table__Grid',
-                    )[0];
-                    if (triggerRf instanceof HTMLElement) {
-                      provided.innerRef(triggerRf);
+              <TableContainer>
+                <Table
+                  tableId="reactVirtaualizedTable"
+                  rowIdKey="position"
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...provided.droppableProps}
+                  rowCount={programs.count}
+                  width={width || startWidth}
+                  height={height}
+                  header
+                  headerHeight={60}
+                  rowHeight={45}
+                  rowGetter={({ index }) => {
+                    const p = programs.at(index);
+                    if (!p) {
+                      return {};
                     }
-                  }
-                }}
-                rowRenderer={getRowRender}
-                noRowsRenderer={() => renderLoading()}
-              >
-                <Column
-                  label={
-                    <>
-                      <Checkbox
-                        readOnly
-                        onClick={() => {
-                          setSelectedProgramId(p => {
-                            if (p.size === programs.toArray().length) {
-                              return new Set();
-                            }
-                            return new Set(
-                              programs.toArray().map(program => program.id),
-                            );
-                          });
-                        }}
-                        checked={
-                          programs.toArray().length > 0 &&
-                          programs.toArray().length === selectedProgramId.size
-                        }
-                      />
-                      <span style={{ paddingLeft: '35px' }}>#</span>
-                    </>
-                  }
-                  key="position"
-                  dataKey="position"
-                  flexGrow={1}
-                  minWidth={90}
-                  width={90}
-                  maxWidth={90}
-                />
-                <Column
-                  label={t(`program-table:columnLabel_startDateTime`)}
-                  dataKey="startDateTime"
-                  key="startDateTime"
-                  flexGrow={1}
-                  minWidth={170}
-                  width={190}
-                  maxWidth={190}
-                />
-                <Column
-                  label={t(`program-table:columnLabel_endDateTime`)}
-                  key="endDateTime"
-                  dataKey="endDateTime"
-                  flexGrow={1}
-                  minWidth={170}
-                  width={190}
-                  maxWidth={190}
-                />
-                <Column
-                  label={t(`program-table:columnLabel_duration`)}
-                  dataKey="duration"
-                  key="duration"
-                  flexGrow={1}
-                  minWidth={85}
-                  width={110}
-                  maxWidth={110}
-                />
-                <Column
-                  label={t(`program-table:columnLabel_title`)}
-                  dataKey="title"
-                  key="title"
-                  flexGrow={1}
-                  minWidth={150}
-                  width={300}
-                  maxWidth={300}
-                />
-                <Column
-                  label={t(`program-table:columnLabel_rating`)}
-                  key="rating"
-                  dataKey="rating"
-                  flexGrow={1}
-                  minWidth={230}
-                  width={230}
-                  maxWidth={230}
-                />
-                <Column
-                  className="container"
-                  label={t(`program-table:columnLabel_description`)}
-                  dataKey="description"
-                  key="description"
-                  flexGrow={1}
-                  minWidth={150}
-                  width={705}
-                />
-              </Table>
+                    return {
+                      ...p,
+                      position: `${index + 1}`,
+                      startDateTime: formatDateTime(p.startDateTime),
+                      endDateTime: formatDateTime(
+                        addToDate(p.startDateTime, p.duration),
+                      ),
+                      duration: secondsToHms(p.duration),
+                    };
+                  }}
+                  ref={ref => {
+                    if (ref) {
+                      const triggerRf = document.getElementsByClassName(
+                        'ReactVirtualized__Grid ReactVirtualized__Table__Grid',
+                      )[0];
+                      if (triggerRf instanceof HTMLElement) {
+                        provided.innerRef(triggerRf);
+                      }
+                    }
+                  }}
+                  rowRenderer={getRowRender}
+                  noRowsRenderer={() => renderLoading()}
+                >
+                  <Column
+                    label={
+                      <>
+                        <Checkbox
+                          style={{ marginRight: '50px' }}
+                          readOnly
+                          onClick={() => {
+                            setSelectedProgramId(p => {
+                              if (p.size === programs.toArray().length) {
+                                return new Set();
+                              }
+                              return new Set(
+                                programs.toArray().map(program => program.id),
+                              );
+                            });
+                          }}
+                          checked={
+                            programs.toArray().length > 0 &&
+                            programs.toArray().length === selectedProgramId.size
+                          }
+                        />
+                        <span>#</span>
+                      </>
+                    }
+                    key="position"
+                    dataKey="position"
+                    flexGrow={1}
+                    minWidth={120}
+                    width={120}
+                    maxWidth={120}
+                  />
+                  <Column
+                    label={t(`program-table:columnLabel_startDateTime`)}
+                    dataKey="startDateTime"
+                    key="startDateTime"
+                    flexGrow={1}
+                    minWidth={200}
+                    width={220}
+                    maxWidth={220}
+                  />
+                  <Column
+                    label={t(`program-table:columnLabel_endDateTime`)}
+                    key="endDateTime"
+                    dataKey="endDateTime"
+                    flexGrow={1}
+                    minWidth={180}
+                    width={200}
+                    maxWidth={200}
+                  />
+                  <Column
+                    label={t(`program-table:columnLabel_duration`)}
+                    dataKey="duration"
+                    key="duration"
+                    flexGrow={1}
+                    minWidth={130}
+                    width={130}
+                    maxWidth={130}
+                  />
+                  <Column
+                    label={t(`program-table:columnLabel_title`)}
+                    dataKey="title"
+                    key="title"
+                    flexGrow={1}
+                    minWidth={180}
+                    width={330}
+                    maxWidth={330}
+                  />
+                  <Column
+                    label={t(`program-table:columnLabel_rating`)}
+                    key="rating"
+                    dataKey="rating"
+                    flexGrow={1}
+                    minWidth={260}
+                    width={260}
+                    maxWidth={260}
+                  />
+                  <Column
+                    className="container"
+                    label={t(`program-table:columnLabel_description`)}
+                    dataKey="description"
+                    key="description"
+                    flexGrow={1}
+                    minWidth={150}
+                    width={705}
+                  />
+                </Table>
+              </TableContainer>
             )}
           </AutoSizer>
         )}
