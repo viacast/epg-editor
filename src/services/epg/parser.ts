@@ -347,7 +347,6 @@ export default class EPGParser {
       return this.parseXml(content);
     }
     try {
-      console.log('is csv');
       return this.parseCsv(content.trim());
     } catch (error) {
       if (error instanceof InvalidFile) {
