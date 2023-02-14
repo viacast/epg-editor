@@ -1,3 +1,4 @@
+import { Program } from 'services/epg';
 import { EntityNotFound, InvalidEntity } from './exceptions';
 
 export default class EntityMap<EntityType> {
@@ -69,7 +70,7 @@ export default class EntityMap<EntityType> {
     return this;
   }
 
-  update(entity: EntityType): EntityMap<EntityType> {
+  updateProgram(entity: EntityType): EntityMap<EntityType> {
     const key = entity[this.key];
     if (!key) {
       throw new InvalidEntity(`Entity is missing '${this.key}' key`);
@@ -79,6 +80,30 @@ export default class EntityMap<EntityType> {
     }
     this.entities[key] = entity;
     return this;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  updateMany(
+    entity: Program,
+    programs: EntityMap<Program>,
+    selected: Set<string>,
+  ): EntityMap<Program> {
+    Array.from(selected).forEach(id => {
+      const oldProgram = programs.get(id);
+      const newProgram = new Program({
+        id: oldProgram?.id,
+        startDateTime: oldProgram?.startDateTime,
+        duration: oldProgram?.duration,
+        title: entity.title,
+        description: entity.description,
+        rating: entity.rating,
+        content: entity.content,
+        category: entity.category,
+        subcategory: entity.subcategory,
+      });
+      programs.updateProgram(newProgram);
+    });
+    return programs;
   }
 
   remove(entityKey: string): EntityMap<EntityType> {

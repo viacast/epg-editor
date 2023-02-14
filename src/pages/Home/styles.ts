@@ -27,6 +27,10 @@ export const TableMenuContainer = styled.div`
     white-space: nowrap;
     min-height: 450px;
   }
+  .aux {
+    margin-right: 35px;
+    margin-left: 0px;
+  }
 `;
 
 export const TableContainer = styled.div<{ width?: string }>`

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Menu, VirtualizedTable } from 'components';
+import { Menu, MultiMenu, VirtualizedTable } from 'components';
 import { Program } from 'services/epg';
 import { addToDate, EntityMap } from 'utils';
 
@@ -218,7 +218,7 @@ const Home: React.FC = () => {
             setHasChanges={setHasChanges}
             setSelectedProgramId={setSelectedProgramId}
             onSaveProgram={program => {
-              setPrograms(p => p.update(program).clone());
+              setPrograms(p => p.updateProgram(program).clone());
               setHasChanges(false);
             }}
             selectedProgram={selectedProgram ?? new Program()}
@@ -244,6 +244,33 @@ const Home: React.FC = () => {
                 }
                 return p.remove(programId).clone();
               });
+            }}
+          />
+        </MenuContainer>
+        <MenuContainer
+          className={`${
+            selectedProgramId.size > 1 ? 'aux' : ''
+          } epg-table-menu-content`}
+          width={
+            // eslint-disable-next-line no-nested-ternary
+            selectedProgramId.size > 1
+              ? dimension.width < 1210
+                ? '480px'
+                : '500px'
+              : '0px'
+          }
+        >
+          <MultiMenu
+            programs={programs}
+            hasChanges={hasChanges}
+            setHasChanges={setHasChanges}
+            selectedProgramId={selectedProgramId}
+            setSelectedProgramId={setSelectedProgramId}
+            onSaveProgram={progs => {
+              setPrograms(p =>
+                p.updateMany(progs, programs, selectedProgramId).clone(),
+              );
+              setHasChanges(false);
             }}
           />
         </MenuContainer>
