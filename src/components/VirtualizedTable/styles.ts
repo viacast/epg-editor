@@ -27,6 +27,12 @@ export const Message = styled.div`
 
 export const RowElement = styled.td<{ width: string; left: string }>``;
 
+export const TableContainer = styled.div`
+  /* .ReactVirtualized__Table__headerTruncatedText {
+    margin-left: 75px;
+  } */
+`;
+
 export const Timeline = styled.div<{ top: string }>`
   position: fixed;
   top: ${({ top }) => top || '0px'};

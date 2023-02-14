@@ -48,6 +48,7 @@ import {
   FillGapOptions,
   FillGapOptionsContainer,
   FillGapOptionsContent,
+  TableContainer,
 } from './styles';
 
 export interface ProgramTableProps {
@@ -256,11 +257,11 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
         <Draggable
           draggableId={program.id}
           index={virtualizedRowProps.index}
-          key={program.id}
+          key={`epg-draggable-element-${program.id}`}
         >
           {(provided, snapshot) => (
             <TableRow
-              key={program.id}
+              key={`epg-table-row-${program.id}`}
               hover
               style={{
                 opacity: validators.includes(
@@ -316,7 +317,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 {...provided.draggableProps}
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...provided.dragHandleProps}
-                key={virtualizedRowProps.key}
+                key={`epg-draggable-row-${virtualizedRowProps.key}`}
                 className={`${virtualizedRowProps.className} ${
                   selectedProgramId.has(program.id) ? 'active' : ''
                 }`} // ${phantomId.has(program.id) ? 'phantom' : ''}
@@ -664,7 +665,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
               {...provided.draggableProps}
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...provided.dragHandleProps}
-              key={virtualizedRowProps.key}
+              key={`epg-droppable-row-${virtualizedRowProps.key}`}
               className={virtualizedRowProps.className}
               style={getItemStyle(
                 {
@@ -686,130 +687,133 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
         {provided => (
           <AutoSizer>
             {({ width, height }) => (
-              <Table
-                tableId="reactVirtaualizedTable"
-                rowIdKey="position"
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                {...provided.droppableProps}
-                rowCount={programs.count}
-                width={width || startWidth}
-                height={height}
-                header
-                headerHeight={60}
-                rowHeight={45}
-                rowGetter={({ index }) => {
-                  const p = programs.at(index);
-                  if (!p) {
-                    return {};
-                  }
-                  return {
-                    ...p,
-                    position: `${index + 1}`,
-                    startDateTime: formatDateTime(p.startDateTime),
-                    endDateTime: formatDateTime(
-                      addToDate(p.startDateTime, p.duration),
-                    ),
-                    duration: secondsToHms(p.duration),
-                  };
-                }}
-                ref={ref => {
-                  if (ref) {
-                    const triggerRf = document.getElementsByClassName(
-                      'ReactVirtualized__Grid ReactVirtualized__Table__Grid',
-                    )[0];
-                    if (triggerRf instanceof HTMLElement) {
-                      provided.innerRef(triggerRf);
+              <TableContainer>
+                <Table
+                  tableId="reactVirtaualizedTable"
+                  rowIdKey="position"
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...provided.droppableProps}
+                  rowCount={programs.count}
+                  width={width || startWidth}
+                  height={height}
+                  header
+                  headerHeight={60}
+                  rowHeight={45}
+                  rowGetter={({ index }) => {
+                    const p = programs.at(index);
+                    if (!p) {
+                      return {};
                     }
-                  }
-                }}
-                rowRenderer={getRowRender}
-                noRowsRenderer={() => renderLoading()}
-              >
-                <Column
-                  label={
-                    <>
-                      <Checkbox
-                        readOnly
-                        onClick={() => {
-                          setSelectedProgramId(p => {
-                            if (p.size === programs.toArray().length) {
-                              return new Set();
-                            }
-                            return new Set(
-                              programs.toArray().map(program => program.id),
-                            );
-                          });
-                        }}
-                        checked={
-                          programs.toArray().length > 0 &&
-                          programs.toArray().length === selectedProgramId.size
-                        }
-                      />
-                      <span style={{ paddingLeft: '35px' }}>#</span>
-                    </>
-                  }
-                  key="position"
-                  dataKey="position"
-                  flexGrow={1}
-                  minWidth={90}
-                  width={90}
-                  maxWidth={90}
-                />
-                <Column
-                  label={t(`program-table:columnLabel_startDateTime`)}
-                  dataKey="startDateTime"
-                  key="startDateTime"
-                  flexGrow={1}
-                  minWidth={170}
-                  width={190}
-                  maxWidth={190}
-                />
-                <Column
-                  label={t(`program-table:columnLabel_endDateTime`)}
-                  key="endDateTime"
-                  dataKey="endDateTime"
-                  flexGrow={1}
-                  minWidth={170}
-                  width={190}
-                  maxWidth={190}
-                />
-                <Column
-                  label={t(`program-table:columnLabel_duration`)}
-                  dataKey="duration"
-                  key="duration"
-                  flexGrow={1}
-                  minWidth={85}
-                  width={110}
-                  maxWidth={110}
-                />
-                <Column
-                  label={t(`program-table:columnLabel_title`)}
-                  dataKey="title"
-                  key="title"
-                  flexGrow={1}
-                  minWidth={150}
-                  width={300}
-                  maxWidth={300}
-                />
-                <Column
-                  label={t(`program-table:columnLabel_rating`)}
-                  key="rating"
-                  dataKey="rating"
-                  flexGrow={1}
-                  minWidth={230}
-                  width={230}
-                  maxWidth={230}
-                />
-                <Column
-                  className="container"
-                  label={t(`program-table:columnLabel_description`)}
-                  dataKey="description"
-                  key="description"
-                  flexGrow={1}
-                  minWidth={150}
-                  width={705}
-                />
-              </Table>
+                    return {
+                      ...p,
+                      position: `${index + 1}`,
+                      startDateTime: formatDateTime(p.startDateTime),
+                      endDateTime: formatDateTime(
+                        addToDate(p.startDateTime, p.duration),
+                      ),
+                      duration: secondsToHms(p.duration),
+                    };
+                  }}
+                  ref={ref => {
+                    if (ref) {
+                      const triggerRf = document.getElementsByClassName(
+                        'ReactVirtualized__Grid ReactVirtualized__Table__Grid',
+                      )[0];
+                      if (triggerRf instanceof HTMLElement) {
+                        provided.innerRef(triggerRf);
+                      }
+                    }
+                  }}
+                  rowRenderer={getRowRender}
+                  noRowsRenderer={() => renderLoading()}
+                >
+                  <Column
+                    label={
+                      <>
+                        <Checkbox
+                          style={{ marginRight: '50px' }}
+                          readOnly
+                          onClick={() => {
+                            setSelectedProgramId(p => {
+                              if (p.size === programs.toArray().length) {
+                                return new Set();
+                              }
+                              return new Set(
+                                programs.toArray().map(program => program.id),
+                              );
+                            });
+                          }}
+                          checked={
+                            programs.toArray().length > 0 &&
+                            programs.toArray().length === selectedProgramId.size
+                          }
+                        />
+                        <span>#</span>
+                      </>
+                    }
+                    key="position"
+                    dataKey="position"
+                    flexGrow={1}
+                    minWidth={120}
+                    width={120}
+                    maxWidth={120}
+                  />
+                  <Column
+                    label={t(`program-table:columnLabel_startDateTime`)}
+                    dataKey="startDateTime"
+                    key="startDateTime"
+                    flexGrow={1}
+                    minWidth={200}
+                    width={220}
+                    maxWidth={220}
+                  />
+                  <Column
+                    label={t(`program-table:columnLabel_endDateTime`)}
+                    key="endDateTime"
+                    dataKey="endDateTime"
+                    flexGrow={1}
+                    minWidth={180}
+                    width={200}
+                    maxWidth={200}
+                  />
+                  <Column
+                    label={t(`program-table:columnLabel_duration`)}
+                    dataKey="duration"
+                    key="duration"
+                    flexGrow={1}
+                    minWidth={130}
+                    width={130}
+                    maxWidth={130}
+                  />
+                  <Column
+                    label={t(`program-table:columnLabel_title`)}
+                    dataKey="title"
+                    key="title"
+                    flexGrow={1}
+                    minWidth={180}
+                    width={330}
+                    maxWidth={330}
+                  />
+                  <Column
+                    label={t(`program-table:columnLabel_rating`)}
+                    key="rating"
+                    dataKey="rating"
+                    flexGrow={1}
+                    minWidth={260}
+                    width={260}
+                    maxWidth={260}
+                  />
+                  <Column
+                    className="container"
+                    label={t(`program-table:columnLabel_description`)}
+                    dataKey="description"
+                    key="description"
+                    flexGrow={1}
+                    minWidth={150}
+                    width={705}
+                  />
+                </Table>
+              </TableContainer>
             )}
           </AutoSizer>
         )}
