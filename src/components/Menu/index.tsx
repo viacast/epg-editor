@@ -302,7 +302,7 @@ const Menu: React.FC<MenuProps> = ({
               <FormRow>
                 <FormColumn>
                   <br />
-                  <Text>Conteúdo</Text>
+                  <Text>{t('menu:content')}</Text>
                   <div
                     style={{
                       backgroundColor: 'var(--color-neutral-6)',
@@ -389,7 +389,7 @@ const Menu: React.FC<MenuProps> = ({
                 </FormColumn>
                 <FormColumn>
                   <br />
-                  <Text>Categoria (Gênero / Sub-gênero)</Text>
+                  <Text>{t('menu:category')}</Text>
                   <div style={{ marginTop: '5px' }}>
                     <Select
                       width="270px"
