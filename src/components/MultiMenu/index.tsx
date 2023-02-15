@@ -487,6 +487,7 @@ const MultiMenu: React.FC<MenuProps> = ({
                 onClick={() => {
                   if (newProgram) {
                     onSaveProgram(newProgram, selectedFields);
+                    setSelectedFields([false, false, false, false, false]);
                   }
                 }}
               />
