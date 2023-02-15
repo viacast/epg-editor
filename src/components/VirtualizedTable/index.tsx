@@ -273,7 +273,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
               onClick={e => {
                 setSelectedProgramId(s => {
                   const newSelectedProgramId = new Set(s);
-                  if (!e.ctrlKey) {
+                  if (!e.altKey) {
                     newSelectedProgramId.clear();
                   }
                   if (newSelectedProgramId.has(program.id)) {
