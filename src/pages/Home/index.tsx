@@ -274,6 +274,35 @@ const Home: React.FC = () => {
               );
               setHasChanges(false);
             }}
+            handleRemoveProgram={programIds => {
+              setPrograms(p => {
+                let newPrograms = p;
+                programIds.forEach(programId => {
+                  const size = p.toArray().length;
+                  const index = p.indexOf(programId);
+                  const idList: Set<string> = new Set();
+                  if (size === 1) {
+                    // was the only program on the list
+                    handleClearProgramList(); // just clear table
+                    setTableWidth(
+                      dimension.width - 60 <= 1210
+                        ? 1210
+                        : dimension.width - 60,
+                    ); // force menu container to close
+                  } else if (index === size - 1) {
+                    // was the last program on the list
+                    idList.add(p.at(index - 1)?.id ?? '');
+                    setSelectedProgramId(idList);
+                  } else {
+                    // all other cases
+                    idList.add(p.at(index + 1)?.id ?? '');
+                    setSelectedProgramId(idList);
+                  }
+                  newPrograms = newPrograms.remove(programId).clone();
+                });
+                return newPrograms;
+              });
+            }}
           />
         </MenuContainer>
       </TableMenuContainer>
