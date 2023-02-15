@@ -434,28 +434,6 @@ const Menu: React.FC<MenuProps> = ({
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                     {t('menu:startDate')}
                     {programMessages.ALL?.has(
-                      EPGValidationMessageType.PAST_START_DATE,
-                    ) && (
-                      <MessageIconContainer>
-                        <Tooltip
-                          arrow
-                          title={
-                            <Message>
-                              {t('messages:message_PAST_START_DATE')}
-                            </Message>
-                          }
-                        >
-                          <MessageIconContainer>
-                            &nbsp;
-                            <RiAlertFill
-                              size="16px"
-                              color={ColorPallete.SYSTEM_2}
-                            />
-                          </MessageIconContainer>
-                        </Tooltip>
-                      </MessageIconContainer>
-                    )}
-                    {programMessages.ALL?.has(
                       EPGValidationMessageType.FAR_START_DATE,
                     ) && (
                       <MessageIconContainer>
