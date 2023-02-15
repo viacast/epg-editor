@@ -69,6 +69,7 @@ export interface MenuProps {
   setSelectedProgramId: ReactSetState<Set<string>>;
   setHasChanges: (val: boolean) => void;
   onSaveProgram: (val1: Program, val2: boolean[]) => void;
+  handleRemoveProgram: (val: string[]) => void;
 }
 
 const MultiMenu: React.FC<MenuProps> = ({
@@ -76,6 +77,7 @@ const MultiMenu: React.FC<MenuProps> = ({
   hasChanges,
   selectedProgramId,
   setSelectedProgramId,
+  handleRemoveProgram,
   setHasChanges,
   onSaveProgram,
 }) => {
@@ -103,6 +105,12 @@ const MultiMenu: React.FC<MenuProps> = ({
     false,
     false,
   ]);
+
+  const updateFields = (element: number) => {
+    const newFields = [...selectedFields];
+    newFields[element] = !selectedFields[element];
+    setSelectedFields(newFields);
+  };
 
   useEffect(() => {
     setNewProgram(
@@ -151,16 +159,8 @@ const MultiMenu: React.FC<MenuProps> = ({
                 if (!firstSelectedProgram) {
                   return;
                 }
-                // openModal({
-                //   title: t('menu:discardProgramTitle'),
-                //   content: t('menu:discardProgramMessage', {
-                //     programTitle: selectedProgram.title,
-                //   }),
-                //   confirm: () => {
                 setNewProgram(firstSelectedProgram);
                 setHasChanges(false);
-                //   },
-                // });
               }}
             />
           )}
@@ -176,7 +176,9 @@ const MultiMenu: React.FC<MenuProps> = ({
                 content: t('header:deleteProgramFromList_other', {
                   count: selectedProgramId.size,
                 }),
-                confirm: () => '',
+                confirm: () => {
+                  handleRemoveProgram(Array.from(selectedProgramId));
+                },
               });
             }}
           />
@@ -188,12 +190,9 @@ const MultiMenu: React.FC<MenuProps> = ({
             <Form>
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 <Checkbox
-                  onClick={() => {
-                    const newFields = [...selectedFields];
-                    newFields[0] = !selectedFields[0];
-                    setSelectedFields(newFields);
-                  }}
+                  onClick={() => updateFields(0)}
                   style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                  checked={selectedFields[0]}
                 />
                 {t('menu:title')}
                 {programMessages.ALL?.has(
@@ -217,19 +216,16 @@ const MultiMenu: React.FC<MenuProps> = ({
                 value={newProgram?.title}
                 setValue={title => {
                   setNewProgram(p => ({ ...p, title }));
-
+                  updateFields(0);
                   setHasChanges(true);
                 }}
                 onCtrlEnter={() => onSaveProgram(newProgram, selectedFields)}
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 <Checkbox
-                  onClick={() => {
-                    const newFields = [...selectedFields];
-                    newFields[1] = !selectedFields[0];
-                    setSelectedFields(newFields);
-                  }}
+                  onClick={() => updateFields(1)}
                   style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                  checked={selectedFields[1]}
                 />
                 {t('menu:description')}
                 {programMessages.ALL?.has(
@@ -254,19 +250,16 @@ const MultiMenu: React.FC<MenuProps> = ({
                 value={newProgram?.description}
                 setValue={description => {
                   setNewProgram(p => ({ ...p, description }));
-
+                  updateFields(1);
                   setHasChanges(true);
                 }}
                 onCtrlEnter={() => onSaveProgram(newProgram, selectedFields)}
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
                 <Checkbox
-                  onClick={() => {
-                    const newFields = [...selectedFields];
-                    newFields[2] = !selectedFields[0];
-                    setSelectedFields(newFields);
-                  }}
+                  onClick={() => updateFields(2)}
                   style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                  checked={selectedFields[2]}
                 />
                 {t('menu:parentalRating')}
                 {programMessages.ALL?.has(
@@ -301,7 +294,7 @@ const MultiMenu: React.FC<MenuProps> = ({
                       ...p,
                       rating: rating as ProgramRating,
                     }));
-
+                    updateFields(2);
                     setHasChanges(true);
                   }}
                   options={Object.values(ProgramRating).map(r => ({
@@ -334,12 +327,9 @@ const MultiMenu: React.FC<MenuProps> = ({
                   <br />
                   <Text>
                     <Checkbox
+                      onClick={() => updateFields(3)}
                       style={{ marginTop: '-5px', marginLeft: '-10px' }}
-                      onClick={() => {
-                        const newFields = [...selectedFields];
-                        newFields[3] = !selectedFields[0];
-                        setSelectedFields(newFields);
-                      }}
+                      checked={selectedFields[3]}
                     />
                     {t('menu:content')}
                   </Text>
@@ -363,7 +353,7 @@ const MultiMenu: React.FC<MenuProps> = ({
                             ...p,
                             content: boolToPC(newContents),
                           }));
-
+                          updateFields(3);
                           setHasChanges(true);
                         }}
                         checked={contents[0]}
@@ -388,7 +378,7 @@ const MultiMenu: React.FC<MenuProps> = ({
                             ...p,
                             content: boolToPC(newContents),
                           }));
-
+                          updateFields(3);
                           setHasChanges(true);
                         }}
                         checked={contents[1]}
@@ -413,7 +403,7 @@ const MultiMenu: React.FC<MenuProps> = ({
                             ...p,
                             content: boolToPC(newContents),
                           }));
-
+                          updateFields(3);
                           setHasChanges(true);
                         }}
                         checked={contents[2]}
@@ -434,12 +424,9 @@ const MultiMenu: React.FC<MenuProps> = ({
                   <br />
                   <Text>
                     <Checkbox
+                      onClick={() => updateFields(4)}
                       style={{ marginTop: '-5px', marginLeft: '-10px' }}
-                      onClick={() => {
-                        const newFields = [...selectedFields];
-                        newFields[4] = !selectedFields[0];
-                        setSelectedFields(newFields);
-                      }}
+                      checked={selectedFields[4]}
                     />
                     {t('menu:category')}
                   </Text>
@@ -455,7 +442,7 @@ const MultiMenu: React.FC<MenuProps> = ({
                           ...p,
                           category: category as ProgramCategory,
                         }));
-
+                        updateFields(4);
                         setHasChanges(true);
                       }}
                       options={Object.values(ProgramCategory).map(c => ({
@@ -473,7 +460,7 @@ const MultiMenu: React.FC<MenuProps> = ({
                           ...p,
                           subcategory,
                         }));
-
+                        updateFields(4);
                         setHasChanges(true);
                       }}
                       options={optionsArray(
