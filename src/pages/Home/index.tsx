@@ -266,9 +266,11 @@ const Home: React.FC = () => {
             setHasChanges={setHasChanges}
             selectedProgramId={selectedProgramId}
             setSelectedProgramId={setSelectedProgramId}
-            onSaveProgram={progs => {
+            onSaveProgram={(progs, fields) => {
               setPrograms(p =>
-                p.updateMany(progs, programs, selectedProgramId).clone(),
+                p
+                  .updateMany(progs, programs, selectedProgramId, fields)
+                  .clone(),
               );
               setHasChanges(false);
             }}

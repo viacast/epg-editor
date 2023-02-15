@@ -87,6 +87,7 @@ export default class EntityMap<EntityType> {
     entity: Program,
     programs: EntityMap<Program>,
     selected: Set<string>,
+    fields: boolean[],
   ): EntityMap<Program> {
     Array.from(selected).forEach(id => {
       const oldProgram = programs.get(id);
@@ -94,12 +95,12 @@ export default class EntityMap<EntityType> {
         id: oldProgram?.id,
         startDateTime: oldProgram?.startDateTime,
         duration: oldProgram?.duration,
-        title: entity.title,
-        description: entity.description,
-        rating: entity.rating,
-        content: entity.content,
-        category: entity.category,
-        subcategory: entity.subcategory,
+        title: fields[0] ? entity.title : oldProgram?.title,
+        description: fields[1] ? entity.description : oldProgram?.description,
+        rating: fields[2] ? entity.rating : oldProgram?.rating,
+        content: fields[3] ? entity.content : oldProgram?.content,
+        category: fields[4] ? entity.category : oldProgram?.category,
+        subcategory: fields[4] ? entity.subcategory : oldProgram?.subcategory,
       });
       programs.updateProgram(newProgram);
     });

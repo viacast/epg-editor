@@ -68,7 +68,7 @@ export interface MenuProps {
   selectedProgramId: Set<string>;
   setSelectedProgramId: ReactSetState<Set<string>>;
   setHasChanges: (val: boolean) => void;
-  onSaveProgram: (val: Program) => void;
+  onSaveProgram: (val1: Program, val2: boolean[]) => void;
 }
 
 const MultiMenu: React.FC<MenuProps> = ({
@@ -95,6 +95,14 @@ const MultiMenu: React.FC<MenuProps> = ({
   const [programMessages, setProgramMessages] = useState(
     {} as EPGValidationMessages,
   );
+
+  const [selectedFields, setSelectedFields] = useState<boolean[]>([
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   useEffect(() => {
     setNewProgram(
@@ -179,7 +187,14 @@ const MultiMenu: React.FC<MenuProps> = ({
           <FormContainer>
             <Form>
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
-                <Checkbox style={{ marginTop: '-5px', marginLeft: '-10px' }} />
+                <Checkbox
+                  onClick={() => {
+                    const newFields = [...selectedFields];
+                    newFields[0] = !selectedFields[0];
+                    setSelectedFields(newFields);
+                  }}
+                  style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                />
                 {t('menu:title')}
                 {programMessages.ALL?.has(
                   EPGValidationMessageType.EMPTY_TITLE,
@@ -205,10 +220,17 @@ const MultiMenu: React.FC<MenuProps> = ({
 
                   setHasChanges(true);
                 }}
-                onCtrlEnter={() => onSaveProgram(newProgram)}
+                onCtrlEnter={() => onSaveProgram(newProgram, selectedFields)}
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
-                <Checkbox style={{ marginTop: '-5px', marginLeft: '-10px' }} />
+                <Checkbox
+                  onClick={() => {
+                    const newFields = [...selectedFields];
+                    newFields[1] = !selectedFields[0];
+                    setSelectedFields(newFields);
+                  }}
+                  style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                />
                 {t('menu:description')}
                 {programMessages.ALL?.has(
                   EPGValidationMessageType.EMPTY_DESCRIPTION,
@@ -235,10 +257,17 @@ const MultiMenu: React.FC<MenuProps> = ({
 
                   setHasChanges(true);
                 }}
-                onCtrlEnter={() => onSaveProgram(newProgram)}
+                onCtrlEnter={() => onSaveProgram(newProgram, selectedFields)}
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
-                <Checkbox style={{ marginTop: '-5px', marginLeft: '-10px' }} />
+                <Checkbox
+                  onClick={() => {
+                    const newFields = [...selectedFields];
+                    newFields[2] = !selectedFields[0];
+                    setSelectedFields(newFields);
+                  }}
+                  style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                />
                 {t('menu:parentalRating')}
                 {programMessages.ALL?.has(
                   EPGValidationMessageType.NO_PARENTAL_RATING,
@@ -306,6 +335,11 @@ const MultiMenu: React.FC<MenuProps> = ({
                   <Text>
                     <Checkbox
                       style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                      onClick={() => {
+                        const newFields = [...selectedFields];
+                        newFields[3] = !selectedFields[0];
+                        setSelectedFields(newFields);
+                      }}
                     />
                     {t('menu:content')}
                   </Text>
@@ -401,6 +435,11 @@ const MultiMenu: React.FC<MenuProps> = ({
                   <Text>
                     <Checkbox
                       style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                      onClick={() => {
+                        const newFields = [...selectedFields];
+                        newFields[4] = !selectedFields[0];
+                        setSelectedFields(newFields);
+                      }}
                     />
                     {t('menu:category')}
                   </Text>
@@ -460,7 +499,7 @@ const MultiMenu: React.FC<MenuProps> = ({
                 icon={<AiOutlineSave />}
                 onClick={() => {
                   if (newProgram) {
-                    onSaveProgram(newProgram);
+                    onSaveProgram(newProgram, selectedFields);
                   }
                 }}
               />
