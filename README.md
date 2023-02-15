@@ -1,6 +1,6 @@
 # Changelog
-* Added Line to indicate gap between programs.
-* Added Two options of fixing gaps (Create new programs & Edit duration of previous one).
+* Create menu for multi selected programs.
+* Replace Ctrl selector with Alt.
 
 # Getting Started with Create React App
 
