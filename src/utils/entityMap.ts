@@ -94,7 +94,7 @@ export default class EntityMap<EntityType> {
       const newProgram = new Program({
         id: oldProgram?.id,
         startDateTime: oldProgram?.startDateTime,
-        duration: oldProgram?.duration,
+        duration: fields[5] ? entity.duration : oldProgram?.duration,
         title: fields[0] ? entity.title : oldProgram?.title,
         description: fields[1] ? entity.description : oldProgram?.description,
         rating: fields[2] ? entity.rating : oldProgram?.rating,

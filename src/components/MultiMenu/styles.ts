@@ -116,6 +116,7 @@ export const ContentContainer = styled.div`
   overflow-y: auto;
   .epg-duration-box {
     position: absolute;
+    width: 100%;
   }
 `;
 

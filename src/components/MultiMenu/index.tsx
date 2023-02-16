@@ -15,6 +15,7 @@ import {
   ResizableInput,
   Select,
   Tooltip,
+  DurationPicker,
 } from 'components';
 import { Program, ProgramRating, EPGValidator } from 'services/epg';
 import SC from 'assets/icons/ratings/SC.svg';
@@ -99,6 +100,7 @@ const MultiMenu: React.FC<MenuProps> = ({
   );
 
   const [selectedFields, setSelectedFields] = useState<boolean[]>([
+    false,
     false,
     false,
     false,
@@ -471,6 +473,48 @@ const MultiMenu: React.FC<MenuProps> = ({
                   </div>
                 </FormColumn>
               </FormRow>
+              <FormRow>
+                <FormColumn>
+                  <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
+                    <Checkbox
+                      onClick={() => updateFields(5)}
+                      style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                      checked={selectedFields[5]}
+                    />
+                    {t('menu:duration')}
+                    {programMessages.ALL?.has(
+                      EPGValidationMessageType.INVALID_DURATION,
+                    ) && (
+                      <MessageIconContainer>
+                        <Tooltip
+                          arrow
+                          title={
+                            <Message>
+                              {t('messages:message_INVALID_DURATION')}
+                            </Message>
+                          }
+                        >
+                          <MessageIconContainer>
+                            &nbsp;
+                            <IoIosAlert
+                              size="16px"
+                              color={ColorPallete.SYSTEM_1}
+                            />
+                          </MessageIconContainer>
+                        </Tooltip>
+                      </MessageIconContainer>
+                    )}
+                  </Text>
+                  <DurationPicker
+                    duration={newProgram?.duration ?? 0}
+                    onSubmit={duration => {
+                      setNewProgram(p => ({ ...p, duration }));
+                      updateFields(5);
+                      setHasChanges(true);
+                    }}
+                  />
+                </FormColumn>
+              </FormRow>
             </Form>
             <ButtonContainer>
               <Button
@@ -487,7 +531,14 @@ const MultiMenu: React.FC<MenuProps> = ({
                 onClick={() => {
                   if (newProgram) {
                     onSaveProgram(newProgram, selectedFields);
-                    setSelectedFields([false, false, false, false, false]);
+                    setSelectedFields([
+                      false,
+                      false,
+                      false,
+                      false,
+                      false,
+                      false,
+                    ]);
                   }
                 }}
               />
