@@ -10,28 +10,21 @@ export interface TimePickerProps {
 
 const TimePicker: React.FC<TimePickerProps> = ({ time, onTimeChange }) => {
   const [value, setValue] = useState<Date>(time);
-  const [pageHeight, setPageHeight] = useState(window.innerHeight);
-  useEffect(() => {
-    const handleResize = () => {
-      setPageHeight(window.innerHeight);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  });
+  const digitalClock =
+    document.getElementsByClassName('MuiClockPicker-root')[0] === undefined;
 
   useEffect(() => {
     setValue(time);
   }, [time]);
 
   return (
-    <HelpContainer marginTop={pageHeight <= 970 ? '-368px' : '-40px'}>
+    <HelpContainer state={digitalClock}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <StaticTimePicker
           ampm={false}
           displayStaticWrapperAs="mobile"
           orientation="landscape"
+          toolbarTitle=""
           openTo="hours"
           views={['hours', 'minutes', 'seconds']}
           inputFormat="HH:mm:ss"

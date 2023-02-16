@@ -1,6 +1,6 @@
 import { TextField, styled as muistyled } from '@mui/material';
 import { StaticTimePicker } from '@mui/x-date-pickers';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StyledStaticTimePicker = muistyled(StaticTimePicker)`
   .MuiPickerStaticWrapper-content {
@@ -30,15 +30,20 @@ export const StyledInput = muistyled(TextField)`
   }
 `;
 
-export const HelpContainer = styled.div<{ marginTop: string }>`
+export const HelpContainer = styled.div<{ state: boolean }>`
   position: absolute;
   background: var(--color-neutral-6);
   border: 4px solid var(--color-neutral-6);
   border-radius: 4px;
   z-index: 3;
-  margin-top: ${({ marginTop }) => marginTop || '-40px'};
+  margin-top: -368px;
+  ${({ state }) =>
+    state &&
+    css`
+      margin-top: -228px !important;
+    `}
   margin-left: -80px;
-  transform: scale(0.75);
+  transform: scale(0.75) translate(52px, 0);
   .epg-time {
     color: var(--color-neutral-3);
     font-family: Roboto, Helvetica, Arial, sans-serif;
@@ -65,11 +70,19 @@ export const HelpContainer = styled.div<{ marginTop: string }>`
     }
     .MuiGrid-root {
       width: fit-content;
-      margin-left: 40px;
+      margin-left: 20px;
     }
     .MuiTypography-overline,
     svg {
-      display: none;
+      position: fixed;
+      margin-top: -40px;
+      margin-left: 40px;
+      color: var(--color-neutral-3) !important;
+    }
+    .MuiOutlinedInput-root {
+      border: 2px solid var(--color-neutral-3);
+      font-size: 36px;
+      color: var(--color-neutral-2);
     }
     .MuiTypography-root {
       color: var(--color-neutral-3);
