@@ -39,7 +39,6 @@ import {
   EPGValidationMessageType,
 } from 'services/epg/validator';
 import { ColorPallete } from 'styles/global';
-import Manual from 'assets/documnets/ManualEPGEditor.pdf';
 import {
   HeaderContainer,
   MenuOptions,
@@ -598,7 +597,7 @@ const Header: React.FC<HeaderProps> = ({
           onClick={() => {
             const link = document.createElement('a');
             link.download = 'Manual_EPG_Editor.pdf';
-            link.href = Manual;
+            link.href = './ManualEPGEditor.pdf';
             link.click();
           }}
         >
