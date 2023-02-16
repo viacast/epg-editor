@@ -592,7 +592,7 @@ const Header: React.FC<HeaderProps> = ({
           </Translation>
         )}
       </Configurations>
-      <Tooltip title="Help">
+      <Tooltip title={t('header:help')}>
         <IconButton
           onClick={() => {
             const link = document.createElement('a');
