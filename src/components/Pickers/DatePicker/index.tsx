@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import {
   DatePicker as MUIDatePicker,
@@ -9,6 +9,7 @@ import { ptBR, es, enUS } from 'date-fns/locale';
 
 import i18n from 'services/i18n';
 import { ColorPallete } from 'styles/global';
+import useClickOutside from 'hooks/useClickOutside';
 import { StyledInput } from './styles';
 
 export interface DatePickerProps {
@@ -19,6 +20,7 @@ export interface DatePickerProps {
 const DatePicker: React.FC<DatePickerProps> = ({ date, onDateChange }) => {
   const [value, setValue] = useState(date);
   const [open, setOpen] = useState(false);
+  const ConfigurationsRef = useRef<HTMLDivElement>(null);
   const aux = i18n.resolvedLanguage;
   let lang;
 
@@ -68,9 +70,15 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, onDateChange }) => {
     },
   };
 
+  useClickOutside(ConfigurationsRef, () => setOpen(p => !p));
+
   return (
     <LocalizationProvider adapterLocale={lang} dateAdapter={AdapterDateFns}>
-      <Stack spacing={3} onClick={() => setOpen(p => !p)}>
+      <Stack
+        spacing={3}
+        ref={ConfigurationsRef}
+        onClick={() => setOpen(p => !p)}
+      >
         <MUIDatePicker
           open={open}
           PopperProps={dialogStyleProps}
