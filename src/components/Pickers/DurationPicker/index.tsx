@@ -37,7 +37,7 @@ const DurationPicker: React.FC<DurationPickerProps> = ({
 }) => {
   const { t } = useTranslation();
   const dimension = useWindowSize();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const [, setSkipResetActiveField] = useState(false);
   const [activeField, setActiveField] = useState(
@@ -79,8 +79,11 @@ const DurationPicker: React.FC<DurationPickerProps> = ({
       touchEvent="onTouchStart"
       onClickAway={() => setOpen(false)}
     >
-      <StyledContainer onClick={() => setOpen(p => !p)}>
-        <StyledInputStack id="epg-duration-input-ref">
+      <StyledContainer>
+        <StyledInputStack
+          id="epg-duration-input-ref"
+          onClick={() => setOpen(p => !p)}
+        >
           <StyledInput value={secondsToHms(duration)} />
           <StyledIconContainer>
             <IoIosTimer aria-label="toggle password visibility" />
