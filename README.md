@@ -1,6 +1,8 @@
 # Changelog
 * Create menu for multi selected programs.
 * Replace Ctrl selector with Alt.
+* Add Link to download user's manual in help section.
+* Add option to input info by keyboard at TimePicker component.
 
 # Getting Started with Create React App
 
