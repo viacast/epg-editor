@@ -229,7 +229,6 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
       if (!program || !messages || !messages[program.id]) {
         return null;
       }
-
       const validators = Array.from(messages[program.id].ALL);
 
       rowCache[virtualizedRowProps.index] = virtualizedRowProps;

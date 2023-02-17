@@ -312,7 +312,6 @@ export default class EPGParser {
             firstLine.indexOf('content_nibble_level_1 + content_nibble_level_2')
           ]
         ] ?? 'Outros';
-
       const ratingStr = prog[firstLine.indexOf('rating')];
 
       const hex2bin = data =>

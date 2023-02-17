@@ -131,6 +131,12 @@ export const FillGapOptionsContent = styled.div`
   }
 `;
 
+export const TableContainer = styled.div`
+  /* .ReactVirtualized__Table__headerTruncatedText {
+    margin-left: 75px;
+  } */
+`;
+
 export const AddToList = styled.div`
   display: none;
   svg {

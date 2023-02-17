@@ -1,9 +1,25 @@
 # Changelog
-* Create menu for multi selected programs.
-* Replace Ctrl selector with Alt.
-* Add Link to download user's manual in help section.
-* Add option to input info by keyboard at TimePicker component.
-* Update pickers to open on click on input.
+Added delete button on top bar
+Added tooltip to describe adjust button and clear button.
+Preventing list from tilt to the side when the '+' sign appears.
+Added Content Field.
+Added Category (genre of programs) Field.
+Update "program.ts", "builder.ts", "parser.ts" to fit new fields.
+Added Timeline to indicate currently playing program.
+Added Button for scroll to currently playing program.
+Added Option of delete all played programs from the list.
+Identify played programs.
+Fix Upload and Export bugs.
+Added Content Field.
+Added Category (genre of programs) Field.
+Update "program.ts", "builder.ts", "parser.ts" to fit new fields.
+Added Line to indicate gap between programs.
+Added Two options of fixing gaps (Create new programs & Edit duration of previous one).
+Create menu for multi selected programs.
+Replace Ctrl selector with Alt.
+Add Link to download user's manual in help section.
+Add option to input info by keyboard at TimePicker component.
+Update pickers to open on click on input.
 
 # Getting Started with Create React App
 
