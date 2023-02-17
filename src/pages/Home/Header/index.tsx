@@ -19,6 +19,7 @@ import {
   MdNotifications,
   MdOutlineWarningAmber,
 } from 'react-icons/md';
+import { BiHelpCircle } from 'react-icons/bi';
 import { IoIosInformationCircleOutline } from 'react-icons/io';
 import { HiOutlineChevronDoubleDown } from 'react-icons/hi';
 import { AiOutlineClear, AiOutlineInsertRowBelow } from 'react-icons/ai';
@@ -581,6 +582,18 @@ const Header: React.FC<HeaderProps> = ({
           </Translation>
         )}
       </Configurations>
+      <Tooltip title={t('header:help')}>
+        <IconButton
+          onClick={() => {
+            const link = document.createElement('a');
+            link.download = 'Manual_EPG_Editor.pdf';
+            link.href = './ManualEPGEditor.pdf';
+            link.click();
+          }}
+        >
+          <BiHelpCircle size="32px" color={ColorPallete.NEUTRAL_3} />
+        </IconButton>
+      </Tooltip>
     </HeaderContainer>
   );
 };

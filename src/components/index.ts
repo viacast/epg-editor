@@ -5,6 +5,7 @@ import ModalDialog from './ModalDialog';
 import ResizableInput, { ResizableInputProps } from './ResizableInput';
 import VirtualizedTable from './VirtualizedTable';
 import Menu from './Menu';
+import MultiMenu from './MultiMenu';
 import ToastContainer from './ToastContainer';
 import Text from './Text';
 import Select from './Select';
@@ -20,6 +21,7 @@ export {
   ResizableInput,
   FileInput,
   Menu,
+  MultiMenu,
   ToastContainer,
   Text,
   Select,

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Menu, VirtualizedTable } from 'components';
+import { Menu, MultiMenu, VirtualizedTable } from 'components';
 import { Program } from 'services/epg';
 import { addToDate, EntityMap } from 'utils';
 
@@ -50,18 +50,15 @@ const Home: React.FC = () => {
     setCurrent(new Date());
   }, 1000);
 
-  const playing = programs.toArray()[now]; // currently playing program
+  const plyaing = programs.toArray()[now]; // currently playing program
   let tableHeight = 0; // distance between the top of table body and the timeline
-  if (playing) {
+  if (plyaing) {
     const end: number = addToDate(
-      playing.startDateTime,
-      playing.duration,
+      plyaing.startDateTime,
+      plyaing.duration,
     ).getTime();
-    let diff = 0; // time left to end program
-    if (end >= current.getTime()) {
-      diff = Math.abs((end - current.getTime()) / 1000);
-    }
-    const length: number = playing.duration;
+    const diff: number = Math.abs((end - current.getTime()) / 1000); // time left to end program
+    const length: number = plyaing.duration;
     const partRowSize: number = (1 - diff / length) * 45; // size of part of a row
     const entireRowSize: number = 45 * now; // Size of entire rows
     tableHeight = entireRowSize + partRowSize;
@@ -70,7 +67,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     let j = 0;
     while (j < now) {
-      if (programs && programs.toArray()[j]) {
+      if (programs) {
         setPlayedProgramId(playedProgramId.add(programs.toArray()[j].id));
       }
       j += 1;
@@ -221,7 +218,7 @@ const Home: React.FC = () => {
             setHasChanges={setHasChanges}
             setSelectedProgramId={setSelectedProgramId}
             onSaveProgram={program => {
-              setPrograms(p => p.update(program).clone());
+              setPrograms(p => p.updateProgram(program).clone());
               setHasChanges(false);
             }}
             selectedProgram={selectedProgram ?? new Program()}
@@ -246,6 +243,64 @@ const Home: React.FC = () => {
                   setSelectedProgramId(idList);
                 }
                 return p.remove(programId).clone();
+              });
+            }}
+          />
+        </MenuContainer>
+        <MenuContainer
+          className={`${
+            selectedProgramId.size > 1 ? 'aux' : ''
+          } epg-table-menu-content`}
+          width={
+            // eslint-disable-next-line no-nested-ternary
+            selectedProgramId.size > 1
+              ? dimension.width < 1210
+                ? '480px'
+                : '500px'
+              : '0px'
+          }
+        >
+          <MultiMenu
+            programs={programs}
+            hasChanges={hasChanges}
+            setHasChanges={setHasChanges}
+            selectedProgramId={selectedProgramId}
+            setSelectedProgramId={setSelectedProgramId}
+            onSaveProgram={(progs, fields) => {
+              setPrograms(p =>
+                p
+                  .updateMany(progs, programs, selectedProgramId, fields)
+                  .clone(),
+              );
+              setHasChanges(false);
+            }}
+            handleRemoveProgram={programIds => {
+              setPrograms(p => {
+                let newPrograms = p;
+                programIds.forEach(programId => {
+                  const size = p.toArray().length;
+                  const index = p.indexOf(programId);
+                  const idList: Set<string> = new Set();
+                  if (size === 1) {
+                    // was the only program on the list
+                    handleClearProgramList(); // just clear table
+                    setTableWidth(
+                      dimension.width - 60 <= 1210
+                        ? 1210
+                        : dimension.width - 60,
+                    ); // force menu container to close
+                  } else if (index === size - 1) {
+                    // was the last program on the list
+                    idList.add(p.at(index - 1)?.id ?? '');
+                    setSelectedProgramId(idList);
+                  } else {
+                    // all other cases
+                    idList.add(p.at(index + 1)?.id ?? '');
+                    setSelectedProgramId(idList);
+                  }
+                  newPrograms = newPrograms.remove(programId).clone();
+                });
+                return newPrograms;
               });
             }}
           />

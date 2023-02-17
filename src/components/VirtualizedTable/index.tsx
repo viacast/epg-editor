@@ -7,7 +7,7 @@ import { IconButton, TableRow } from '@mui/material';
 import { HiPlus } from 'react-icons/hi';
 import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
 import { BeatLoader } from 'react-spinners';
-import { RiAlertFill } from 'react-icons/ri';
+import { RiAlertFill, RiDeleteRow } from 'react-icons/ri';
 
 import IconSC from 'assets/icons/ratings/SC.svg';
 import IconRL from 'assets/icons/ratings/RL.svg';
@@ -42,6 +42,12 @@ import {
   ValidationMessage,
   MessagesContainer,
   LoaderContainer,
+  Timeline,
+  FillGapLine,
+  FillGapLabel,
+  FillGapOptions,
+  FillGapOptionsContainer,
+  FillGapOptionsContent,
   TableContainer,
 } from './styles';
 
@@ -92,6 +98,57 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
   );
   const { openModal } = useModalProvider();
   const [firstProg, setFirstProg] = useState(Array.from(selectedProgramId)[0]);
+
+  // const [phantomRows, setPhantomRows] = useState(
+  //   new EntityMap<Program>(programs.toArray().map(p => new Program(p))),
+  // );
+
+  // const [phantomId, setPahtomId] = useState<Set<string>>(new Set());
+
+  const [gapsIndex, setGapsIndex] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    programs.toArray().forEach((p, i) => {
+      const term = formatDateTime(addToDate(p.startDateTime, p.duration));
+      const next = programs.toArray()[i + 1];
+
+      if (next) {
+        const init = formatDateTime(next.startDateTime);
+
+        if (term !== init) {
+          // eslint-disable-next-line no-console
+          // console.log(`Between ${i + 1} and ${i + 2}`);
+          // const startDateTime = addToDate(p.startDateTime, p.duration);
+          // const duration =
+          //   (next.startDateTime.getTime() - startDateTime.getTime()) / 1000;
+          // const newProgram = new Program({
+          //   duration,
+          //   startDateTime,
+          // });
+          // setPhantomRows(() => {
+          //   const auxpr: EntityMap<Program> = phantomRows;
+          //   auxpr.add(newProgram, next.id).clone();
+          //   return auxpr;
+          // });
+          // setPahtomId(() => {
+          //   const newProgramId = phantomId;
+          //   newProgramId.add(newProgram.id);
+          //   return newProgramId;
+          // });
+          setGapsIndex(() => {
+            gapsIndex.add(i + 1);
+            return gapsIndex;
+          });
+        } else if (term === init && gapsIndex.has(i + 1)) {
+          setGapsIndex(() => {
+            gapsIndex.delete(i + 1);
+            return gapsIndex;
+          });
+        }
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [programs]);
 
   useEffect(() => {
     if (selectedProgramId.size === 1) {
@@ -215,7 +272,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
               onClick={e => {
                 setSelectedProgramId(s => {
                   const newSelectedProgramId = new Set(s);
-                  if (!e.ctrlKey) {
+                  if (!e.altKey) {
                     newSelectedProgramId.clear();
                   }
                   if (newSelectedProgramId.has(program.id)) {
@@ -262,23 +319,112 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
                 key={`epg-draggable-row-${virtualizedRowProps.key}`}
                 className={`${virtualizedRowProps.className} ${
                   selectedProgramId.has(program.id) ? 'active' : ''
-                }`}
+                }`} // ${phantomId.has(program.id) ? 'phantom' : ''}
                 style={getItemStyle(
                   virtualizedRowProps.style,
                   snapshot.isDragging,
                   provided.draggableProps.style,
                 )}
               >
-                <div
-                  style={{
-                    position: 'fixed',
-                    top: `${tableHeight}px`,
-                    zIndex: '2',
-                    width: '100%',
-                    height: '3px',
-                    backgroundColor: 'var(--color-system-1)',
-                  }}
-                />
+                <Timeline top={`${tableHeight}px`} />
+                {Array.from(gapsIndex).map(gap => {
+                  return (
+                    <FillGapLine top={`${45 * gap}px`}>
+                      <FillGapLabel
+                        width={
+                          localStorage.getItem('i18nextLng') === 'pt'
+                            ? '74px'
+                            : '59px'
+                        }
+                      >
+                        <div>
+                          <RiDeleteRow />
+                          &nbsp; {t('gap-options:fillGap')}
+                        </div>
+                        <FillGapOptionsContainer
+                          left={
+                            localStorage.getItem('i18nextLng') === 'pt'
+                              ? '11px'
+                              : '-19px'
+                          }
+                        >
+                          <FillGapOptions>
+                            <FillGapOptionsContent
+                              role="button"
+                              onClick={e => {
+                                e.stopPropagation();
+                                const prog1 =
+                                  programs.toArray()[gap - 1].startDateTime;
+                                const prog2 =
+                                  programs.toArray()[gap].startDateTime;
+                                const diff =
+                                  (prog2.getTime() - prog1.getTime()) / 1000;
+                                const aux = programs.clone();
+                                const newList: Program[] = [];
+                                aux.toArray().forEach((p, ind) => {
+                                  let newProg: Program = p;
+                                  if (ind === gap - 1) {
+                                    newProg = { ...p, duration: diff };
+                                  }
+                                  newList.push(newProg);
+                                });
+                                const newPrograms = new EntityMap<Program>(
+                                  newList?.map(p => new Program(p)),
+                                );
+                                setPrograms(newPrograms);
+                                setGapsIndex(() => {
+                                  gapsIndex.delete(gap);
+                                  return gapsIndex;
+                                });
+                              }}
+                              onKeyDown={() => ''}
+                              tabIndex={0}
+                            >
+                              {t('gap-options:editDuration')}
+                            </FillGapOptionsContent>
+                          </FillGapOptions>
+                          <FillGapOptions>
+                            <FillGapOptionsContent
+                              role="button"
+                              onClick={e => {
+                                e.stopPropagation();
+                                let startDateTime = new Date();
+                                const prog = programs.toArray();
+                                startDateTime = prog[gap - 1].startDateTime;
+                                const nextStartDateTime =
+                                  prog[gap].startDateTime;
+                                const diff =
+                                  (nextStartDateTime.getTime() -
+                                    startDateTime.getTime()) /
+                                  1000;
+
+                                const newProgram = new Program({
+                                  duration: diff,
+                                  startDateTime,
+                                });
+
+                                setPrograms(p =>
+                                  p.add(newProgram, prog[gap].id).clone(),
+                                );
+
+                                setSelectedProgramId(s => {
+                                  const newSelectedProgramId = new Set(s);
+                                  newSelectedProgramId.clear();
+                                  newSelectedProgramId.add(newProgram.id);
+                                  return newSelectedProgramId;
+                                });
+                              }}
+                              onKeyDown={() => ''}
+                              tabIndex={0}
+                            >
+                              {t('gap-options:addLine')}
+                            </FillGapOptionsContent>
+                          </FillGapOptions>
+                        </FillGapOptionsContainer>
+                      </FillGapLabel>
+                    </FillGapLine>
+                  );
+                })}
                 <Checkbox
                   readOnly
                   onClick={e => {
@@ -460,6 +606,7 @@ const VirtualizedTable: React.FC<ProgramTableProps> = ({
       tableHeight,
       setSelectedProgramId,
       firstProg,
+      gapsIndex,
       setPrograms,
     ],
   );

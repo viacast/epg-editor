@@ -26,5 +26,6 @@
   "programCount" : "Programas: {{count}}",
   "settingsLanguage": "Idioma", 
   "settingsLanguage_pt": "Português",
-  "settingsLanguage_en": "Inglês"
+  "settingsLanguage_en": "Inglês",
+  "help": "Se precisar de ajuda baixe o manual do usuário"
 }

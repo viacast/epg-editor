@@ -79,10 +79,10 @@ const DurationPicker: React.FC<DurationPickerProps> = ({
       touchEvent="onTouchStart"
       onClickAway={() => setOpen(false)}
     >
-      <StyledContainer>
+      <StyledContainer onClick={() => setOpen(p => !p)}>
         <StyledInputStack id="epg-duration-input-ref">
           <StyledInput value={secondsToHms(duration)} />
-          <StyledIconContainer onClick={() => setOpen(p => !p)}>
+          <StyledIconContainer>
             <IoIosTimer aria-label="toggle password visibility" />
           </StyledIconContainer>
         </StyledInputStack>

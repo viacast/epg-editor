@@ -27,6 +27,10 @@ export const TableMenuContainer = styled.div`
     white-space: nowrap;
     min-height: 450px;
   }
+  .aux {
+    margin-right: 35px;
+    margin-left: 0px;
+  }
 `;
 
 export const TableContainer = styled.div<{ width?: string }>`
@@ -151,6 +155,14 @@ export const TableContainer = styled.div<{ width?: string }>`
   .active {
     box-shadow: inset 50px 50px 50px var(--color-primary-2),
       inset -50px -50px 50px var(--color-primary-2);
+  }
+  .phantom {
+    box-shadow: inset 50px 50px 50px var(--color-neutral-3),
+      inset -50px -50px 50px var(--color-neutral-3);
+    div,
+    input {
+      visibility: hidden;
+    }
   }
   .ReactVirtualized__Table__rowColumn {
     border-radius: 4px;

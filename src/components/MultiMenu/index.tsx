@@ -2,14 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CgClose, CgTrash } from 'react-icons/cg';
 import { VscDiscard } from 'react-icons/vsc';
-import { AiOutlineSave, AiOutlineClockCircle } from 'react-icons/ai';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import { format } from 'date-fns';
-import { Box, Checkbox, ClickAwayListener } from '@mui/material';
+import { AiOutlineSave } from 'react-icons/ai';
+import { Checkbox } from '@mui/material';
 import structuredClone from '@ungap/structured-clone';
-import { IoIosAlert, IoIosInformationCircle } from 'react-icons/io';
+import { IoIosAlert } from 'react-icons/io';
 import { RiAlertFill } from 'react-icons/ri';
 
 import {
@@ -18,10 +14,8 @@ import {
   Input,
   ResizableInput,
   Select,
-  DatePicker,
-  TimePicker,
-  DurationPicker,
   Tooltip,
+  DurationPicker,
 } from 'components';
 import { Program, ProgramRating, EPGValidator } from 'services/epg';
 import SC from 'assets/icons/ratings/SC.svg';
@@ -53,8 +47,6 @@ import {
   MenuContainer,
   SelectRateContainer,
   Toolbar,
-  StyledInput,
-  HelpContainer,
   ToolbarText,
   ActionButtons,
   MessageIconContainer,
@@ -74,43 +66,66 @@ const ratings = {
 export interface MenuProps {
   programs: EntityMap<Program>;
   hasChanges: boolean;
-  selectedProgram: Program;
+  selectedProgramId: Set<string>;
   setSelectedProgramId: ReactSetState<Set<string>>;
   setHasChanges: (val: boolean) => void;
-  onSaveProgram: (val: Program) => void;
-  handleRemoveProgram: (val: string) => void;
+  onSaveProgram: (val1: Program, val2: boolean[]) => void;
+  handleRemoveProgram: (val: string[]) => void;
 }
 
-const Menu: React.FC<MenuProps> = ({
+const MultiMenu: React.FC<MenuProps> = ({
   programs,
   hasChanges,
-  selectedProgram,
+  selectedProgramId,
   setSelectedProgramId,
+  handleRemoveProgram,
   setHasChanges,
   onSaveProgram,
-  handleRemoveProgram,
 }) => {
   const { t } = useTranslation();
 
   const { openModal } = useModalProvider();
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const firstSelectedProgram =
+    programs.get(Array.from(selectedProgramId)[0]) ?? new Program();
+
   const [newProgram, setNewProgram] = useState<Program>(
-    selectedProgram ? structuredClone(selectedProgram) : new Program(),
+    firstSelectedProgram
+      ? structuredClone(firstSelectedProgram)
+      : new Program(),
   );
-  const [openTime, setOpenTime] = useState(false);
   const [programMessages, setProgramMessages] = useState(
     {} as EPGValidationMessages,
   );
 
+  const [selectedFields, setSelectedFields] = useState<boolean[]>([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
+
+  const updateFields = (element: number) => {
+    const newFields = [...selectedFields];
+    newFields[element] = !selectedFields[element];
+    setSelectedFields(newFields);
+  };
+
   useEffect(() => {
     setNewProgram(
-      selectedProgram ? structuredClone(selectedProgram) : new Program(),
+      firstSelectedProgram
+        ? structuredClone(firstSelectedProgram)
+        : new Program(),
     );
-  }, [selectedProgram]);
+  }, [firstSelectedProgram]);
 
   useEffect(() => {
     const messages = EPGValidator.validate(programs.toArray());
-    setProgramMessages(messages[selectedProgram.id] ?? {});
-  }, [programs, selectedProgram.id]);
+    setProgramMessages(messages[firstSelectedProgram.id] ?? {});
+  }, [firstSelectedProgram, programs]);
 
   const [contents, setContents] = useState([false, false, false]);
 
@@ -118,24 +133,24 @@ const Menu: React.FC<MenuProps> = ({
     let c1 = false;
     let c2 = false;
     let c3 = false;
-    if (selectedProgram.content.includes('Drugs')) {
+    if (firstSelectedProgram.content.includes('Drugs')) {
       c1 = true;
     }
-    if (selectedProgram.content.includes('Violence')) {
+    if (firstSelectedProgram.content.includes('Violence')) {
       c2 = true;
     }
-    if (selectedProgram.content.includes('Sex')) {
+    if (firstSelectedProgram.content.includes('Sex')) {
       c3 = true;
     }
     setContents([c1, c2, c3]);
-  }, [selectedProgram]);
+  }, [firstSelectedProgram, programs, selectedProgramId]);
 
   return (
     <MenuContainer>
       <Toolbar>
         <ToolbarText>
           <p>{t('menu:edit')}:</p>
-          <p>{selectedProgram?.title}</p>
+          <p>{firstSelectedProgram?.title}</p>
         </ToolbarText>
         <ActionButtons>
           {hasChanges && (
@@ -143,19 +158,11 @@ const Menu: React.FC<MenuProps> = ({
               id="menu-button-discard"
               size="20px"
               onClick={() => {
-                if (!selectedProgram) {
+                if (!firstSelectedProgram) {
                   return;
                 }
-                // openModal({
-                //   title: t('menu:discardProgramTitle'),
-                //   content: t('menu:discardProgramMessage', {
-                //     programTitle: selectedProgram.title,
-                //   }),
-                //   confirm: () => {
-                setNewProgram(selectedProgram);
+                setNewProgram(firstSelectedProgram);
                 setHasChanges(false);
-                //   },
-                // });
               }}
             />
           )}
@@ -163,16 +170,16 @@ const Menu: React.FC<MenuProps> = ({
             id="menu-button-remove"
             size="20px"
             onClick={() => {
-              if (!selectedProgram) {
+              if (!firstSelectedProgram) {
                 return;
               }
               openModal({
                 title: t('menu:deleteProgramTitle'),
-                content: t('menu:deleteProgramMessage', {
-                  programTitle: selectedProgram.title,
+                content: t('header:deleteProgramFromList_other', {
+                  count: selectedProgramId.size,
                 }),
                 confirm: () => {
-                  handleRemoveProgram(selectedProgram.id);
+                  handleRemoveProgram(Array.from(selectedProgramId));
                 },
               });
             }}
@@ -184,6 +191,11 @@ const Menu: React.FC<MenuProps> = ({
           <FormContainer>
             <Form>
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
+                <Checkbox
+                  onClick={() => updateFields(0)}
+                  style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                  checked={selectedFields[0]}
+                />
                 {t('menu:title')}
                 {programMessages.ALL?.has(
                   EPGValidationMessageType.EMPTY_TITLE,
@@ -206,11 +218,17 @@ const Menu: React.FC<MenuProps> = ({
                 value={newProgram?.title}
                 setValue={title => {
                   setNewProgram(p => ({ ...p, title }));
+                  updateFields(0);
                   setHasChanges(true);
                 }}
-                onCtrlEnter={() => onSaveProgram(newProgram)}
+                onCtrlEnter={() => onSaveProgram(newProgram, selectedFields)}
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
+                <Checkbox
+                  onClick={() => updateFields(1)}
+                  style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                  checked={selectedFields[1]}
+                />
                 {t('menu:description')}
                 {programMessages.ALL?.has(
                   EPGValidationMessageType.EMPTY_DESCRIPTION,
@@ -234,11 +252,17 @@ const Menu: React.FC<MenuProps> = ({
                 value={newProgram?.description}
                 setValue={description => {
                   setNewProgram(p => ({ ...p, description }));
+                  updateFields(1);
                   setHasChanges(true);
                 }}
-                onCtrlEnter={() => onSaveProgram(newProgram)}
+                onCtrlEnter={() => onSaveProgram(newProgram, selectedFields)}
               />
               <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
+                <Checkbox
+                  onClick={() => updateFields(2)}
+                  style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                  checked={selectedFields[2]}
+                />
                 {t('menu:parentalRating')}
                 {programMessages.ALL?.has(
                   EPGValidationMessageType.NO_PARENTAL_RATING,
@@ -272,6 +296,7 @@ const Menu: React.FC<MenuProps> = ({
                       ...p,
                       rating: rating as ProgramRating,
                     }));
+                    updateFields(2);
                     setHasChanges(true);
                   }}
                   options={Object.values(ProgramRating).map(r => ({
@@ -302,7 +327,14 @@ const Menu: React.FC<MenuProps> = ({
               <FormRow>
                 <FormColumn>
                   <br />
-                  <Text>{t('menu:content')}</Text>
+                  <Text>
+                    <Checkbox
+                      onClick={() => updateFields(3)}
+                      style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                      checked={selectedFields[3]}
+                    />
+                    {t('menu:content')}
+                  </Text>
                   <div
                     style={{
                       backgroundColor: 'var(--color-neutral-6)',
@@ -323,6 +355,7 @@ const Menu: React.FC<MenuProps> = ({
                             ...p,
                             content: boolToPC(newContents),
                           }));
+                          updateFields(3);
                           setHasChanges(true);
                         }}
                         checked={contents[0]}
@@ -347,6 +380,7 @@ const Menu: React.FC<MenuProps> = ({
                             ...p,
                             content: boolToPC(newContents),
                           }));
+                          updateFields(3);
                           setHasChanges(true);
                         }}
                         checked={contents[1]}
@@ -371,6 +405,7 @@ const Menu: React.FC<MenuProps> = ({
                             ...p,
                             content: boolToPC(newContents),
                           }));
+                          updateFields(3);
                           setHasChanges(true);
                         }}
                         checked={contents[2]}
@@ -389,7 +424,14 @@ const Menu: React.FC<MenuProps> = ({
                 </FormColumn>
                 <FormColumn>
                   <br />
-                  <Text>{t('menu:category')}</Text>
+                  <Text>
+                    <Checkbox
+                      onClick={() => updateFields(4)}
+                      style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                      checked={selectedFields[4]}
+                    />
+                    {t('menu:category')}
+                  </Text>
                   <div style={{ marginTop: '5px' }}>
                     <Select
                       width="270px"
@@ -402,6 +444,7 @@ const Menu: React.FC<MenuProps> = ({
                           ...p,
                           category: category as ProgramCategory,
                         }));
+                        updateFields(4);
                         setHasChanges(true);
                       }}
                       options={Object.values(ProgramCategory).map(c => ({
@@ -419,6 +462,7 @@ const Menu: React.FC<MenuProps> = ({
                           ...p,
                           subcategory,
                         }));
+                        updateFields(4);
                         setHasChanges(true);
                       }}
                       options={optionsArray(
@@ -432,120 +476,11 @@ const Menu: React.FC<MenuProps> = ({
               <FormRow>
                 <FormColumn>
                   <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
-                    {t('menu:startDate')}
-                    {programMessages.ALL?.has(
-                      EPGValidationMessageType.FAR_START_DATE,
-                    ) && (
-                      <MessageIconContainer>
-                        <Tooltip
-                          arrow
-                          title={
-                            <Message color={ColorPallete.NEUTRAL_3}>
-                              {t('messages:message_FAR_START_DATE')}
-                            </Message>
-                          }
-                        >
-                          <MessageIconContainer>
-                            &nbsp;
-                            <IoIosInformationCircle
-                              size="16px"
-                              color={ColorPallete.NEUTRAL_3}
-                            />
-                          </MessageIconContainer>
-                        </Tooltip>
-                      </MessageIconContainer>
-                    )}
-                  </Text>
-                  <DatePicker
-                    date={newProgram?.startDateTime ?? new Date()}
-                    onDateChange={startDate => {
-                      setNewProgram(p => {
-                        const { startDateTime } = p;
-                        startDateTime.setDate(startDate.getDate());
-                        startDateTime.setMonth(startDate.getMonth());
-                        startDateTime.setFullYear(startDate.getFullYear());
-                        return { ...p, startDateTime };
-                      });
-                      setHasChanges(true);
-                    }}
-                  />
-                </FormColumn>
-                <FormColumn>
-                  <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
-                    {t('menu:startTime')}
-                    {programMessages.ALL?.has(
-                      EPGValidationMessageType.TIME_GAP,
-                    ) && (
-                      <MessageIconContainer>
-                        <Tooltip
-                          arrow
-                          title={
-                            <Message>{t('messages:message_TIME_GAP')}</Message>
-                          }
-                        >
-                          <MessageIconContainer>
-                            &nbsp;
-                            <IoIosAlert
-                              size="16px"
-                              color={ColorPallete.SYSTEM_1}
-                            />
-                          </MessageIconContainer>
-                        </Tooltip>
-                      </MessageIconContainer>
-                    )}
-                  </Text>
-                  <ClickAwayListener
-                    mouseEvent="onMouseDown"
-                    touchEvent="onTouchStart"
-                    onClickAway={() => setOpenTime(false)}
-                  >
-                    <Box>
-                      <HelpContainer>
-                        <StyledInput
-                          variant="outlined"
-                          onClick={() => setOpenTime(prev => !prev)}
-                        >
-                          <OutlinedInput
-                            className="epg-time"
-                            value={format(
-                              newProgram?.startDateTime,
-                              'HH:mm:ss',
-                            )}
-                            endAdornment={
-                              <InputAdornment position="end">
-                                <IconButton
-                                  aria-label="toggle password visibility"
-                                  edge="end"
-                                >
-                                  <AiOutlineClockCircle />
-                                </IconButton>
-                              </InputAdornment>
-                            }
-                          />
-                        </StyledInput>
-                      </HelpContainer>
-                      {openTime ? (
-                        <TimePicker
-                          time={newProgram?.startDateTime ?? new Date()}
-                          onTimeChange={startTime => {
-                            setNewProgram(p => {
-                              const { startDateTime } = p;
-                              startDateTime.setHours(startTime.getHours());
-                              startDateTime.setMinutes(startTime.getMinutes());
-                              startDateTime.setSeconds(startTime.getSeconds());
-                              return { ...p, startDateTime };
-                            });
-                            setHasChanges(true);
-                          }}
-                        />
-                      ) : null}
-                    </Box>
-                  </ClickAwayListener>
-                </FormColumn>
-              </FormRow>
-              <FormRow>
-                <FormColumn>
-                  <Text noSelect fontFamily="Nunito Bold" fontSize="32px">
+                    <Checkbox
+                      onClick={() => updateFields(5)}
+                      style={{ marginTop: '-5px', marginLeft: '-10px' }}
+                      checked={selectedFields[5]}
+                    />
                     {t('menu:duration')}
                     {programMessages.ALL?.has(
                       EPGValidationMessageType.INVALID_DURATION,
@@ -574,11 +509,11 @@ const Menu: React.FC<MenuProps> = ({
                     duration={newProgram?.duration ?? 0}
                     onSubmit={duration => {
                       setNewProgram(p => ({ ...p, duration }));
+                      updateFields(5);
                       setHasChanges(true);
                     }}
                   />
                 </FormColumn>
-                <FormColumn />
               </FormRow>
             </Form>
             <ButtonContainer>
@@ -595,7 +530,15 @@ const Menu: React.FC<MenuProps> = ({
                 icon={<AiOutlineSave />}
                 onClick={() => {
                   if (newProgram) {
-                    onSaveProgram(newProgram);
+                    onSaveProgram(newProgram, selectedFields);
+                    setSelectedFields([
+                      false,
+                      false,
+                      false,
+                      false,
+                      false,
+                      false,
+                    ]);
                   }
                 }}
               />
@@ -606,4 +549,4 @@ const Menu: React.FC<MenuProps> = ({
     </MenuContainer>
   );
 };
-export default Menu;
+export default MultiMenu;
