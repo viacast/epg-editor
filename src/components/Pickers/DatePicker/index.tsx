@@ -70,7 +70,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, onDateChange }) => {
     },
   };
 
-  useClickOutside(ConfigurationsRef, () => setOpen(p => !p));
+  useClickOutside(ConfigurationsRef, () => setOpen(false));
 
   return (
     <LocalizationProvider adapterLocale={lang} dateAdapter={AdapterDateFns}>
