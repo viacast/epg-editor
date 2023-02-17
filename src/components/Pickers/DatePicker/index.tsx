@@ -18,6 +18,7 @@ export interface DatePickerProps {
 
 const DatePicker: React.FC<DatePickerProps> = ({ date, onDateChange }) => {
   const [value, setValue] = useState(date);
+  const [open, setOpen] = useState(false);
   const aux = i18n.resolvedLanguage;
   let lang;
 
@@ -69,8 +70,9 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, onDateChange }) => {
 
   return (
     <LocalizationProvider adapterLocale={lang} dateAdapter={AdapterDateFns}>
-      <Stack spacing={3}>
+      <Stack spacing={3} onClick={() => setOpen(p => !p)}>
         <MUIDatePicker
+          open={open}
           PopperProps={dialogStyleProps}
           onChange={newValue => {
             if (newValue) {

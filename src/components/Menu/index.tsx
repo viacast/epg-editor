@@ -501,7 +501,10 @@ const Menu: React.FC<MenuProps> = ({
                   >
                     <Box>
                       <HelpContainer>
-                        <StyledInput variant="outlined">
+                        <StyledInput
+                          variant="outlined"
+                          onClick={() => setOpenTime(prev => !prev)}
+                        >
                           <OutlinedInput
                             className="epg-time"
                             value={format(
@@ -511,7 +514,6 @@ const Menu: React.FC<MenuProps> = ({
                             endAdornment={
                               <InputAdornment position="end">
                                 <IconButton
-                                  onClick={() => setOpenTime(prev => !prev)}
                                   aria-label="toggle password visibility"
                                   edge="end"
                                 >
