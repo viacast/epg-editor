@@ -10,6 +10,7 @@ import { ptBR, es, enUS } from 'date-fns/locale';
 import i18n from 'services/i18n';
 import { ColorPallete } from 'styles/global';
 import useClickOutside from 'hooks/useClickOutside';
+import { useDebounce } from 'hooks/index';
 import { StyledInput } from './styles';
 
 export interface DatePickerProps {
@@ -70,7 +71,10 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, onDateChange }) => {
     },
   };
 
-  useClickOutside(ConfigurationsRef, () => setOpen(false));
+  useDebounce(
+    useClickOutside(ConfigurationsRef, () => setOpen(false)),
+    1000,
+  );
 
   return (
     <LocalizationProvider adapterLocale={lang} dateAdapter={AdapterDateFns}>
