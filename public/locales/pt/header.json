@@ -18,6 +18,7 @@
   "deleteProgramFromList_other": "Tem certeza que deseja deletar estes {{count}} programas da lista?",
   "overwriteProgramList": "Tem certeza que deseja sobrescrever a lista de programas?",
   "alertInvalidFile": "Esse formato de arquivo não é válido. Em vez disso tente um arquivo '.csv' ou '.xml'.",
+  "alertInvalidContent": "O conteúdo desse arquivo não é um EPG válido.",
   "alertAdjustStartDateTime": "Tem certeza que deseja recalcular as datas de início dos programas?",
   "adjustStartDateTimePopover": "Recalcular as datas de início dos programas",
   "titleDeleteProgram_one": "Deletar {{count}} programa",

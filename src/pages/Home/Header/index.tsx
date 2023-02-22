@@ -115,6 +115,13 @@ const Header: React.FC<HeaderProps> = ({
     fileInputRef.current.clearFiles?.();
   }, [t]);
 
+  const notifyInvalidContent = useCallback(() => {
+    toast(t('header:alertInvalidContent'), {
+      type: 'warning',
+    });
+    fileInputRef.current.clearFiles?.();
+  }, [t]);
+
   useEffect(() => {
     setProgramCount(programs.count);
   }, [programs.count]);
@@ -133,7 +140,7 @@ const Header: React.FC<HeaderProps> = ({
       try {
         newPrograms = await EPGParser.parseFile(file);
       } catch (e) {
-        notifyInvalidFile();
+        notifyInvalidContent();
         return;
       }
       if (!programCount) {
