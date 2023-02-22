@@ -212,72 +212,19 @@ const Home: React.FC = () => {
               : '0px'
           }
         >
-          <Menu
-            programs={programs}
-            hasChanges={hasChanges}
-            setHasChanges={setHasChanges}
-            setSelectedProgramId={setSelectedProgramId}
-            onSaveProgram={program => {
-              setPrograms(p => p.updateProgram(program).clone());
-              setHasChanges(false);
-            }}
-            selectedProgram={selectedProgram ?? new Program()}
-            handleRemoveProgram={programId => {
-              setPrograms(p => {
-                const size = p.toArray().length;
-                const index = p.indexOf(programId);
-                const idList: Set<string> = new Set();
-                if (size === 1) {
-                  // was the only program on the list
-                  handleClearProgramList(); // just clear table
-                  setTableWidth(
-                    dimension.width - 60 <= 1210 ? 1210 : dimension.width - 60,
-                  ); // force menu container to close
-                } else if (index === size - 1) {
-                  // was the last program on the list
-                  idList.add(p.at(index - 1)?.id ?? '');
-                  setSelectedProgramId(idList);
-                } else {
-                  // all other cases
-                  idList.add(p.at(index + 1)?.id ?? '');
-                  setSelectedProgramId(idList);
-                }
-                return p.remove(programId).clone();
-              });
-            }}
-          />
-        </MenuContainer>
-        <MenuContainer
-          className={`${
-            selectedProgramId.size > 1 ? 'aux' : ''
-          } epg-table-menu-content`}
-          width={
-            // eslint-disable-next-line no-nested-ternary
-            selectedProgramId.size > 1
-              ? dimension.width < 1210
-                ? '480px'
-                : '500px'
-              : '0px'
-          }
-        >
-          <MultiMenu
-            programs={programs}
-            hasChanges={hasChanges}
-            setHasChanges={setHasChanges}
-            selectedProgramId={selectedProgramId}
-            setSelectedProgramId={setSelectedProgramId}
-            onSaveProgram={(progs, fields) => {
-              setPrograms(p =>
-                p
-                  .updateMany(progs, programs, selectedProgramId, fields)
-                  .clone(),
-              );
-              setHasChanges(false);
-            }}
-            handleRemoveProgram={programIds => {
-              setPrograms(p => {
-                let newPrograms = p;
-                programIds.forEach(programId => {
+          {selectedProgramId.size === 1 && (
+            <Menu
+              programs={programs}
+              hasChanges={hasChanges}
+              setHasChanges={setHasChanges}
+              setSelectedProgramId={setSelectedProgramId}
+              onSaveProgram={program => {
+                setPrograms(p => p.updateProgram(program).clone());
+                setHasChanges(false);
+              }}
+              selectedProgram={selectedProgram ?? new Program()}
+              handleRemoveProgram={programId => {
+                setPrograms(p => {
                   const size = p.toArray().length;
                   const index = p.indexOf(programId);
                   const idList: Set<string> = new Set();
@@ -298,12 +245,71 @@ const Home: React.FC = () => {
                     idList.add(p.at(index + 1)?.id ?? '');
                     setSelectedProgramId(idList);
                   }
-                  newPrograms = newPrograms.remove(programId).clone();
+                  return p.remove(programId).clone();
                 });
-                return newPrograms;
-              });
-            }}
-          />
+              }}
+            />
+          )}
+        </MenuContainer>
+        <MenuContainer
+          className={`${
+            selectedProgramId.size > 1 ? 'aux' : ''
+          } epg-table-menu-content`}
+          width={
+            // eslint-disable-next-line no-nested-ternary
+            selectedProgramId.size > 1
+              ? dimension.width < 1210
+                ? '480px'
+                : '500px'
+              : '0px'
+          }
+        >
+          {selectedProgramId.size > 1 && (
+            <MultiMenu
+              programs={programs}
+              hasChanges={hasChanges}
+              setHasChanges={setHasChanges}
+              selectedProgramId={selectedProgramId}
+              setSelectedProgramId={setSelectedProgramId}
+              onSaveProgram={(progs, fields) => {
+                setPrograms(p =>
+                  p
+                    .updateMany(progs, programs, selectedProgramId, fields)
+                    .clone(),
+                );
+                setHasChanges(false);
+              }}
+              handleRemoveProgram={programIds => {
+                setPrograms(p => {
+                  let newPrograms = p;
+                  programIds.forEach(programId => {
+                    const size = p.toArray().length;
+                    const index = p.indexOf(programId);
+                    const idList: Set<string> = new Set();
+                    if (size === 1) {
+                      // was the only program on the list
+                      handleClearProgramList(); // just clear table
+                      setTableWidth(
+                        dimension.width - 60 <= 1210
+                          ? 1210
+                          : dimension.width - 60,
+                      ); // force menu container to close
+                    } else if (index === size - 1) {
+                      // was the last program on the list
+                      idList.add(p.at(index - 1)?.id ?? '');
+                      setSelectedProgramId(idList);
+                    } else {
+                      // all other cases
+                      idList.add(p.at(index + 1)?.id ?? '');
+                      setSelectedProgramId(idList);
+                    }
+                    newPrograms = newPrograms.remove(programId).clone();
+                  });
+                  return newPrograms;
+                });
+              }}
+            />
+          )}
         </MenuContainer>
       </TableMenuContainer>
     </Container>
