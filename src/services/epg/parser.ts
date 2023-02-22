@@ -212,7 +212,13 @@ export default class EPGParser {
         throw new InvalidFile('Invalid CSV');
       }
 
-      const [dateStr, timeStr, durationStr] = prog.slice(4);
+      const dateStr = prog[firstLine.indexOf('Broadcast starting date')];
+      let timeStr = prog[firstLine.indexOf('Broadcast starting time')];
+      const durationStr = prog[firstLine.indexOf('Duration')];
+
+      if (timeStr.length < 6) {
+        timeStr += '00';
+      }
 
       const startDateTime = parseDate(dateStr + timeStr, 'yyyyMMddHHmmss');
 
@@ -221,8 +227,14 @@ export default class EPGParser {
       const sec = Number(durationStr.substring(4, 6));
       const duration = h * 3600 + min * 60 + sec;
 
-      const title = prog[7].replace(/['"]+/g, '');
-      const description = prog[8].replace(/['"]+/g, '');
+      const title = prog[firstLine.indexOf('Program title')].replace(
+        /['"]+/g,
+        '',
+      );
+      const description = prog[firstLine.indexOf('Program content')].replace(
+        /['"]+/g,
+        '',
+      );
 
       const rate = {
         0b0001: ProgramRating.RL,
