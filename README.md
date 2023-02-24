@@ -20,6 +20,8 @@
 * Add Link to download user's manual in help section.
 * Add option to input info by keyboard at TimePicker component.
 * Update pickers to open on click on input.
+* Add formatting function to avoid duplicate programs.
+* Implement an error boundary to avoid "white screen".
 
 # Getting Started with Create React App
 

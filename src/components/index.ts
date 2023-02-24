@@ -1,4 +1,5 @@
 import Button, { ButtonProps } from './Button';
+import ErrorBoundary from './ErrorBoundary';
 import FileInput, { FileInputProps, FileInputRefProps } from './FileInput';
 import Input, { InputProps } from './Input';
 import ModalDialog from './ModalDialog';
@@ -19,6 +20,7 @@ export {
   Input,
   ModalDialog,
   ResizableInput,
+  ErrorBoundary,
   FileInput,
   Menu,
   MultiMenu,

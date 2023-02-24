@@ -112,30 +112,10 @@ const Home: React.FC = () => {
   // }, []);
 
   useEffect(() => {
-    const uniqueDataArray: Program[] = [];
-    const datesSeen = new Set();
-
-    const programsArray: Program[] = Object.values(programs);
-    const arrayofPrograms: Program[] = Object.values(programsArray[2]);
-
-    arrayofPrograms.forEach(a => {
-      if (!datesSeen.has(a.startDateTime.getTime())) {
-        uniqueDataArray.push(a);
-        datesSeen.add(a.startDateTime.getTime());
-      }
-    });
-
-    const uniqueEntityMapPrograms = new EntityMap<Program>(
-      uniqueDataArray?.map(p => new Program(p)),
-    );
-    setPrograms(uniqueEntityMapPrograms);
-  }, []);
-
-  useEffect(() => {
     let j = 0;
     while (j < now) {
       if (programs && programs.toArray().length > 0) {
-        setPlayedProgramId(playedProgramId.add(programs.toArray()[j].id));
+        setPlayedProgramId(playedProgramId.add(programs.toArray()[j]?.id));
       }
       j += 1;
     }
