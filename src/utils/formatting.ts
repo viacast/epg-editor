@@ -1,6 +1,7 @@
 import { format, parse } from 'date-fns';
-import { ProgramContent } from 'services/epg/program';
+import Program, { ProgramContent } from 'services/epg/program';
 import papaparse from 'papaparse';
+import EntityMap from './entityMap';
 
 interface HMS {
   hours: number;
@@ -275,6 +276,27 @@ export function optionsArray(s: string): SelectOption[] {
     );
   }
   return array;
+}
+
+export function unique(program: EntityMap<Program>): EntityMap<Program> {
+  const uniqueDataArray: Program[] = [];
+  const datesSeen = new Set();
+
+  const programsArray: Program[] = Object.values(program);
+  const arrayofPrograms: Program[] = Object.values(programsArray[2]);
+
+  arrayofPrograms.forEach(a => {
+    if (!datesSeen.has(a.startDateTime.getTime())) {
+      uniqueDataArray.push(a);
+      datesSeen.add(a.startDateTime.getTime());
+    }
+  });
+
+  const uniqueEntityMapPrograms = new EntityMap<Program>(
+    uniqueDataArray?.map(p => new Program(p)),
+  );
+
+  return uniqueEntityMapPrograms;
 }
 
 // adapted from https://stackoverflow.com/a/8497474/
