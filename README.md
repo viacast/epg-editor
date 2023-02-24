@@ -22,6 +22,7 @@
 * Update pickers to open on click on input.
 * Add formatting function to avoid duplicate programs.
 * Implement an error boundary to avoid "white screen".
+* Add function to sort all unique programs of the list.
 
 # Getting Started with Create React App
 
