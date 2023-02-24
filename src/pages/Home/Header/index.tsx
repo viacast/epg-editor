@@ -32,7 +32,7 @@ import { EPGParser, Program, EPGBuilder, EPGValidator } from 'services/epg';
 import { AVAILABLE_LANGUAGES } from 'services/i18n';
 import { Button, FileInput, FileInputRefProps, Tooltip } from 'components';
 import { LocalStorageKeys, useClickOutside, useLocalStorage } from 'hooks';
-import { EntityMap, ReactSetState } from 'utils';
+import { EntityMap, ReactSetState, unique } from 'utils';
 import { useModalProvider } from 'providers/ModalProvider';
 import {
   EPGValidationMessageLevel,
@@ -144,7 +144,7 @@ const Header: React.FC<HeaderProps> = ({
         return;
       }
       if (!programCount) {
-        setNewPrograms(new EntityMap(newPrograms));
+        setNewPrograms(unique(new EntityMap(newPrograms)));
         setEpgFilename(file.name);
         setSavedFilename(file.name);
         return;
@@ -153,7 +153,7 @@ const Header: React.FC<HeaderProps> = ({
         title: t('header:titleOverwrite'),
         content: t('header:overwriteProgramList'),
         confirm: () => {
-          setNewPrograms(new EntityMap(newPrograms));
+          setNewPrograms(unique(new EntityMap(newPrograms)));
           setEpgFilename(file.name);
           setSavedFilename(file.name);
         },
@@ -164,6 +164,7 @@ const Header: React.FC<HeaderProps> = ({
       openModal,
       t,
       notifyInvalidFile,
+      notifyInvalidContent,
       setNewPrograms,
       setSavedFilename,
     ],

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { Menu, MultiMenu, VirtualizedTable } from 'components';
 import { Program } from 'services/epg';
-import { addToDate, EntityMap, unique } from 'utils';
+import { addToDate, EntityMap } from 'utils';
 
 import { LocalStorageKeys, useLocalStorage, useWindowSize } from 'hooks';
 import {
@@ -110,10 +110,6 @@ const Home: React.FC = () => {
   //   setPrograms(sortedEntityMapPrograms);
   //   console.log(sortedEntityMapPrograms);
   // }, []);
-
-  useEffect(() => {
-    setPrograms(unique(programs));
-  }, [programs]);
 
   useEffect(() => {
     let j = 0;
