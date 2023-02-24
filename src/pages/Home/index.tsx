@@ -64,6 +64,73 @@ const Home: React.FC = () => {
     tableHeight = entireRowSize + partRowSize;
   }
 
+  // useEffect(() => {
+  //   const programsArray: Program[] = Object.values(programs);
+
+  //   function compareDates(a: Date, b: Date): number {
+  //     if (a?.getTime() < b?.getTime()) {
+  //       return -1;
+  //     }
+  //     if (a?.getTime() > b?.getTime()) {
+  //       return 1;
+  //     }
+  //     return 0;
+  //   }
+
+  //   function sortArrayByDate(arr: Program[]): Program[] {
+  //     const sortedArray: Program[] = [...arr];
+
+  //     // eslint-disable-next-line no-plusplus
+  //     for (let i = 0; i < sortedArray.length - 1; i++) {
+  //       // eslint-disable-next-line no-plusplus
+  //       for (let j = i + 1; j < sortedArray.length; j++) {
+  //         if (
+  //           compareDates(
+  //             sortedArray[j].startDateTime,
+  //             sortedArray[i].startDateTime,
+  //           ) < 0
+  //         ) {
+  //           // Swap elements
+  //           const temp = sortedArray[i];
+  //           sortedArray[i] = sortedArray[j];
+  //           sortedArray[j] = temp;
+  //         }
+  //       }
+  //     }
+
+  //     return sortedArray;
+  //   }
+
+  //   const sortedArray = sortArrayByDate(programsArray);
+
+  //   const sortedPrograms: Program[] = Object.values(sortedArray[2]);
+  //   const sortedEntityMapPrograms = new EntityMap<Program>(
+  //     sortedPrograms?.map(p => new Program(p)),
+  //   );
+  //   setPrograms(sortedEntityMapPrograms);
+  //   console.log(sortedEntityMapPrograms);
+  // }, []);
+
+  useEffect(() => {
+    const uniqueDataArray: Program[] = [];
+    const datesSeen = new Set();
+
+    const programsArray: Program[] = Object.values(programs);
+    const arrayofPrograms: Program[] = Object.values(programsArray[2]);
+
+    arrayofPrograms.forEach(a => {
+      if (!datesSeen.has(a.startDateTime.getTime())) {
+        uniqueDataArray.push(a);
+        datesSeen.add(a.startDateTime.getTime());
+      }
+    });
+
+    const uniqueEntityMapPrograms = new EntityMap<Program>(
+      uniqueDataArray?.map(p => new Program(p)),
+    );
+    setPrograms(uniqueEntityMapPrograms);
+  }, []);
+
   useEffect(() => {
     let j = 0;
     while (j < now) {
