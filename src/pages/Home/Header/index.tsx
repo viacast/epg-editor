@@ -39,6 +39,7 @@ import {
   EPGValidationMessageType,
 } from 'services/epg/validator';
 import { ColorPallete } from 'styles/global';
+import { VERSION } from '../../../constants';
 import {
   HeaderContainer,
   MenuOptions,
@@ -605,7 +606,7 @@ const Header: React.FC<HeaderProps> = ({
           )}
         </Configurations>
       </>
-      <TextVersion>Version 0.1.8</TextVersion>
+      <TextVersion>Version {VERSION}</TextVersion>
       <Tooltip title={<TextHelp>{t('header:help')}</TextHelp>}>
         <IconButton
           onClick={() => {
