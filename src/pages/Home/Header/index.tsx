@@ -58,6 +58,8 @@ import {
   MessageText,
   Line,
   Popover,
+  TextVersion,
+  TextHelp,
 } from './styles';
 
 export interface HeaderProps {
@@ -247,350 +249,364 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <HeaderContainer className="no-user-select">
-      <FileInput
-        className="epg-input"
-        forwardRef={fileInputRef}
-        disabled
-        placeholder={
-          epgFilename !== '' ? epgFilename : t('header:placeholderInput')
-        }
-        onFileUpload={async files => {
-          await handleFileUpload(files);
-          fileInputRef.current.clearFiles?.();
-        }}
-      />
-      <Button
-        text={t('header:buttonImportProgram')}
-        icon={<FaDownload />}
-        onClick={() => {
-          fileInputRef?.current.click?.();
-        }}
-      />
-      <MenuOptions>
-        <Button
-          text={t('header:buttonExportProgram')}
-          icon={<FaFileExport />}
-          onClick={() => setOpen1(!open1)}
+      <>
+        <FileInput
+          className="epg-input"
+          forwardRef={fileInputRef}
+          disabled
+          placeholder={
+            epgFilename !== '' ? epgFilename : t('header:placeholderInput')
+          }
+          onFileUpload={async files => {
+            await handleFileUpload(files);
+            fileInputRef.current.clearFiles?.();
+          }}
         />
-        {open1 && (
-          <HiddenOptionsMenu ref={exportOptionsRef1}>
-            <Button
-              text="XML"
-              icon={<FaFileCode />}
-              onClick={() => {
-                const blob = new Blob(
-                  [EPGBuilder.buildXml(programs.toArray())],
-                  {
-                    type: 'application/xml',
-                  },
-                );
-                FileSaver.saveAs(
-                  blob,
-                  `EPG_${format(new Date(), 'yyyyMMdd_HHmmss')}.xml`,
-                );
-              }}
-            />
-            <Button
-              text="CSV"
-              icon={<FaFileCsv />}
-              onClick={() => {
-                const blob = new Blob(
-                  [EPGBuilder.buildCsv(programs.toArray())],
-                  {
-                    type: 'text/csv',
-                  },
-                );
-                FileSaver.saveAs(
-                  blob,
-                  `EPG_${format(new Date(), 'yyyyMMdd_HHmmss')}.csv`,
-                );
-              }}
-            />
-          </HiddenOptionsMenu>
-        )}
-      </MenuOptions>
-      <Button
-        text={t('header:buttonAddProgram')}
-        icon={<CgPlayListAdd />}
-        onClick={handleAddProgram}
-      />
-      <MenuOptions>
-        <div onMouseEnter={handlePopover1} onMouseLeave={handlePopover1}>
+        <Button
+          text={t('header:buttonImportProgram')}
+          icon={<FaDownload />}
+          onClick={() => {
+            fileInputRef?.current.click?.();
+          }}
+        />
+        <MenuOptions>
           <Button
-            text={t('header:buttonClear')}
-            icon={<AiOutlineClear />}
-            onClick={() => setOpen2(!open2)}
+            text={t('header:buttonExportProgram')}
+            icon={<FaFileExport />}
+            onClick={() => setOpen1(!open1)}
           />
-        </div>
-        <Popover
-          top="110px"
-          left="735px"
-          display={anchorEl[0] && !open2 ? 'block' : 'none'}
-        >
-          {t('header:clearPopover')}
-        </Popover>
-        {open2 && (
-          <HiddenOptionsMenu ref={exportOptionsRef2}>
-            <div onMouseEnter={handlePopover2} onMouseLeave={handlePopover2}>
+          {open1 && (
+            <HiddenOptionsMenu ref={exportOptionsRef1}>
               <Button
-                text={t('header:buttonClearProgramList')}
-                icon={<CgPlayListRemove />}
-                onClick={handleClear}
-              />
-            </div>
-            <Popover
-              top="110px"
-              left="15px"
-              display={anchorEl[1] ? 'block' : 'none'}
-            >
-              {t('header:clearProgramListPopover')}
-            </Popover>
-            <div onMouseEnter={handlePopover5} onMouseLeave={handlePopover5}>
-              <Button
-                text={t('header:buttonWipe')}
-                icon={<AiOutlineInsertRowBelow />}
+                text="XML"
+                icon={<FaFileCode />}
                 onClick={() => {
-                  if (!playedProgramId) {
-                    return;
-                  }
-                  openModal({
-                    title: t('menu:deleteProgramTitle'),
-                    content: t('header:deleteProgramFromList', {
-                      count: playedProgramId.size,
-                    }),
-                    confirm: () => {
-                      Array.from(playedProgramId).forEach(pid => {
-                        const index = programs.indexOf(pid);
-                        const idList: Set<string> = new Set();
-                        idList.add(programs.at(index + 1)?.id ?? '');
-                        setPlayedProgramId(idList);
-                        setPrograms(p => p.remove(pid).clone());
-                      });
+                  const blob = new Blob(
+                    [EPGBuilder.buildXml(programs.toArray())],
+                    {
+                      type: 'application/xml',
                     },
-                  });
+                  );
+                  FileSaver.saveAs(
+                    blob,
+                    `EPG_${format(new Date(), 'yyyyMMdd_HHmmss')}.xml`,
+                  );
                 }}
               />
-            </div>
-            <Popover
-              top="110px"
-              className="epg-button-menu"
-              left="15px"
-              display={anchorEl[4] ? 'block' : 'none'}
-            >
-              {t('header:wipePopover')}
-            </Popover>
-          </HiddenOptionsMenu>
-        )}
-      </MenuOptions>
-      <Button
-        text={t('header:buttonDeleteSelectedProgram')}
-        icon={<CgTrash />}
-        onClick={() => {
-          if (!selectedProgram) {
-            return;
-          }
-          openModal({
-            title: t('menu:deleteProgramTitle'),
-            content: t('header:deleteProgramFromList', {
-              count: selectedProgramId.size,
-            }),
-            confirm: () => {
-              Array.from(selectedProgramId).forEach(pid => {
-                const size = programs.toArray().length;
-                const index = programs.indexOf(pid);
-                const idList: Set<string> = new Set();
-                if (size === 1) {
-                  // was the only program on the list
-                  selectedProgramId.delete(pid);
-                } else if (index === size - 1) {
-                  // was the last program on the list
-                  idList.add(programs.at(index - 1)?.id ?? '');
-                  setSelectedProgramId(idList);
-                } else {
-                  // all other cases
-                  idList.add(programs.at(index + 1)?.id ?? '');
-                  setSelectedProgramId(idList);
-                }
-                setPrograms(p => p.remove(pid).clone());
-              });
-            },
-          });
-        }}
-      />
-      <div onMouseEnter={handlePopover3} onMouseLeave={handlePopover3}>
+              <Button
+                text="CSV"
+                icon={<FaFileCsv />}
+                onClick={() => {
+                  const blob = new Blob(
+                    [EPGBuilder.buildCsv(programs.toArray())],
+                    {
+                      type: 'text/csv',
+                    },
+                  );
+                  FileSaver.saveAs(
+                    blob,
+                    `EPG_${format(new Date(), 'yyyyMMdd_HHmmss')}.csv`,
+                  );
+                }}
+              />
+            </HiddenOptionsMenu>
+          )}
+        </MenuOptions>
         <Button
-          text={t('header:buttonAdjustStartDateTime')}
-          icon={<BsClockHistory />}
+          text={t('header:buttonAddProgram')}
+          icon={<CgPlayListAdd />}
+          onClick={handleAddProgram}
+        />
+        <MenuOptions>
+          <div onMouseEnter={handlePopover1} onMouseLeave={handlePopover1}>
+            <Button
+              text={t('header:buttonClear')}
+              icon={<AiOutlineClear />}
+              onClick={() => setOpen2(!open2)}
+            />
+          </div>
+          <Popover
+            top="110px"
+            left="762.5px"
+            display={anchorEl[0] && !open2 ? 'block' : 'none'}
+          >
+            {t('header:clearPopover')}
+          </Popover>
+          {open2 && (
+            <HiddenOptionsMenu ref={exportOptionsRef2}>
+              <div onMouseEnter={handlePopover2} onMouseLeave={handlePopover2}>
+                <Button
+                  text={t('header:buttonClearProgramList')}
+                  icon={<CgPlayListRemove />}
+                  onClick={handleClear}
+                />
+              </div>
+              <Popover
+                top="110px"
+                left="14px"
+                display={anchorEl[1] ? 'block' : 'none'}
+              >
+                {t('header:clearProgramListPopover')}
+              </Popover>
+              <div onMouseEnter={handlePopover5} onMouseLeave={handlePopover5}>
+                <Button
+                  text={t('header:buttonWipe')}
+                  icon={<AiOutlineInsertRowBelow />}
+                  onClick={() => {
+                    if (!playedProgramId) {
+                      return;
+                    }
+                    openModal({
+                      title: t('menu:deleteProgramTitle'),
+                      content: t('header:deleteProgramFromList', {
+                        count: playedProgramId.size,
+                      }),
+                      confirm: () => {
+                        Array.from(playedProgramId).forEach(pid => {
+                          const index = programs.indexOf(pid);
+                          const idList: Set<string> = new Set();
+                          idList.add(programs.at(index + 1)?.id ?? '');
+                          setPlayedProgramId(idList);
+                          setPrograms(p => p.remove(pid).clone());
+                        });
+                      },
+                    });
+                  }}
+                />
+              </div>
+              <Popover
+                top="110px"
+                className="epg-button-menu"
+                left="14px"
+                display={anchorEl[4] ? 'block' : 'none'}
+              >
+                {t('header:wipePopover')}
+              </Popover>
+            </HiddenOptionsMenu>
+          )}
+        </MenuOptions>
+        <Button
+          text={t('header:buttonDeleteSelectedProgram')}
+          icon={<CgTrash />}
           onClick={() => {
+            if (!selectedProgram) {
+              return;
+            }
             openModal({
-              title: t('header:buttonAdjustStartDateTime'),
-              content: t('header:alertAdjustStartDateTime'),
+              title: t('menu:deleteProgramTitle'),
+              content: t('header:deleteProgramFromList', {
+                count: selectedProgramId.size,
+              }),
               confirm: () => {
-                const adjustedPrograms = EPGValidator.adjustDateTimes(
-                  programs.toArray(),
-                );
-                setNewPrograms(new EntityMap(adjustedPrograms));
+                Array.from(selectedProgramId).forEach(pid => {
+                  const size = programs.toArray().length;
+                  const index = programs.indexOf(pid);
+                  const idList: Set<string> = new Set();
+                  if (size === 1) {
+                    // was the only program on the list
+                    selectedProgramId.delete(pid);
+                  } else if (index === size - 1) {
+                    // was the last program on the list
+                    idList.add(programs.at(index - 1)?.id ?? '');
+                    setSelectedProgramId(idList);
+                  } else {
+                    // all other cases
+                    idList.add(programs.at(index + 1)?.id ?? '');
+                    setSelectedProgramId(idList);
+                  }
+                  setPrograms(p => p.remove(pid).clone());
+                });
               },
             });
           }}
         />
-      </div>
-      <Popover
-        top="105px"
-        left="1035px"
-        display={anchorEl[2] ? 'block' : 'none'}
-      >
-        {t('header:adjustStartDateTimePopover')}
-      </Popover>
-      <div onMouseEnter={handlePopover4} onMouseLeave={handlePopover4}>
-        <Button
-          text={t('header:buttonScrollDown')}
-          icon={<HiOutlineChevronDoubleDown />}
-          onClick={() => {
-            const objDiv = document.getElementsByClassName(
-              'ReactVirtualized__Grid',
-            )[0];
-            if (objDiv) {
-              objDiv.scrollTo({
-                top: tableHeight,
-                left: 0,
-                behavior: 'smooth',
-              });
-            }
-          }}
-        />
-      </div>
-      <Popover
-        top="105px"
-        left="1185px"
-        display={anchorEl[3] ? 'block' : 'none'}
-      >
-        {t('header:scrollDownPopover')}
-      </Popover>
-      <Tooltip
-        arrow
-        title={
-          <>
-            <Text>
-              {t('header:programCount', {
-                count: programCount,
-              })}
-            </Text>
-            {messageCountByLevel.ALL > 0 && <Line />}
-            {messageCountByLevel.ERROR > 0 && (
-              <>
-                <MessageType>
-                  {t('messages:error', {
-                    count: messageCountByLevel.ERROR,
-                  })}
-                  <MdErrorOutline color={ColorPallete.NEUTRAL_2} />
-                </MessageType>
-                {Object.entries(messageCountByType).map(([type, count]) =>
-                  EPGValidator.getMessageLevel(
-                    type as EPGValidationMessageType,
-                  ) === EPGValidationMessageLevel.ERROR && count > 0 ? (
-                    <MessageText key={`message-${type}`}>
-                      {t(`messages:message_${type}`)} ({count})
-                    </MessageText>
-                  ) : null,
-                )}
-              </>
-            )}
-            {messageCountByLevel.WARN > 0 && (
-              <>
-                <MessageType>
-                  {t('messages:warn', {
-                    count: messageCountByLevel.WARN,
-                  })}
-                  <MdOutlineWarningAmber color={ColorPallete.NEUTRAL_2} />
-                </MessageType>
-                {Object.entries(messageCountByType).map(([type, count]) =>
-                  EPGValidator.getMessageLevel(
-                    type as EPGValidationMessageType,
-                  ) === EPGValidationMessageLevel.WARN && count > 0 ? (
-                    <MessageText key={`message-${type}`}>
-                      {t(`messages:message_${type}`)} ({count})
-                    </MessageText>
-                  ) : null,
-                )}
-              </>
-            )}
-            {messageCountByLevel.INFO > 0 && (
-              <>
-                <MessageType>
-                  {t('messages:info', {
-                    count: messageCountByLevel.INFO,
-                  })}
-                  <IoIosInformationCircleOutline
-                    color={ColorPallete.NEUTRAL_2}
-                  />
-                </MessageType>
-                {Object.entries(messageCountByType).map(([type, count]) =>
-                  EPGValidator.getMessageLevel(
-                    type as EPGValidationMessageType,
-                  ) === EPGValidationMessageLevel.INFO && count > 0 ? (
-                    <MessageText key={`message-${type}`}>
-                      {t(`messages:message_${type}`)} ({count})
-                    </MessageText>
-                  ) : null,
-                )}
-              </>
-            )}
-          </>
-        }
-      >
-        <MessagesContainer>
-          <MessageBadgeContainer>
-            {messageCountByLevel.INFO > 0 && (
-              <MessageBadge variant="dot" background={ColorPallete.NEUTRAL_3} />
-            )}
-            {messageCountByLevel.WARN > 0 && (
-              <MessageBadge variant="dot" background={ColorPallete.SYSTEM_2} />
-            )}
-            {messageCountByLevel.ERROR > 0 && (
-              <MessageBadge variant="dot" background={ColorPallete.SYSTEM_1} />
-            )}
-          </MessageBadgeContainer>
-          <MdNotifications size="28px" color="action" />
-        </MessagesContainer>
-      </Tooltip>
-      <Configurations ref={ConfigurationsRef}>
-        <ContainerSettings animation={settingsAnimation}>
-          <IconButton
-            className="epg-settings-gear"
+        <div onMouseEnter={handlePopover3} onMouseLeave={handlePopover3}>
+          <Button
+            text={t('header:buttonAdjustStartDateTime')}
+            icon={<BsClockHistory />}
             onClick={() => {
-              setSettingsAnimation('rotate');
-              setShowSettings(s => !s);
-              setShowTranslation(false);
+              openModal({
+                title: t('header:buttonAdjustStartDateTime'),
+                content: t('header:alertAdjustStartDateTime'),
+                confirm: () => {
+                  const adjustedPrograms = EPGValidator.adjustDateTimes(
+                    programs.toArray(),
+                  );
+                  setNewPrograms(new EntityMap(adjustedPrograms));
+                },
+              });
             }}
-          >
-            <BsGearFill size="28px" color={ColorPallete.NEUTRAL_3} />
-          </IconButton>
-          {showSettings && (
-            <Settings onClick={() => setShowTranslation(s => !s)}>
-              <SettingsOption>
-                {t('header:settingsLanguage')} &nbsp; <BsTranslate /> &nbsp;{' '}
-                <MdKeyboardArrowLeft
-                  className="epg-language-arrow"
-                  size="16px"
+          />
+        </div>
+        <Popover
+          top="105px"
+          left="1063px"
+          display={anchorEl[2] ? 'block' : 'none'}
+        >
+          {t('header:adjustStartDateTimePopover')}
+        </Popover>
+        <div onMouseEnter={handlePopover4} onMouseLeave={handlePopover4}>
+          <Button
+            text={t('header:buttonScrollDown')}
+            icon={<HiOutlineChevronDoubleDown />}
+            onClick={() => {
+              const objDiv = document.getElementsByClassName(
+                'ReactVirtualized__Grid',
+              )[0];
+              if (objDiv) {
+                objDiv.scrollTo({
+                  top: tableHeight,
+                  left: 0,
+                  behavior: 'smooth',
+                });
+              }
+            }}
+          />
+        </div>
+        <Popover
+          top="105px"
+          left="1213px"
+          display={anchorEl[3] ? 'block' : 'none'}
+        >
+          {t('header:scrollDownPopover')}
+        </Popover>
+        <Tooltip
+          arrow
+          title={
+            <>
+              <Text>
+                {t('header:programCount', {
+                  count: programCount,
+                })}
+              </Text>
+              {messageCountByLevel.ALL > 0 && <Line />}
+              {messageCountByLevel.ERROR > 0 && (
+                <>
+                  <MessageType>
+                    {t('messages:error', {
+                      count: messageCountByLevel.ERROR,
+                    })}
+                    <MdErrorOutline color={ColorPallete.NEUTRAL_2} />
+                  </MessageType>
+                  {Object.entries(messageCountByType).map(([type, count]) =>
+                    EPGValidator.getMessageLevel(
+                      type as EPGValidationMessageType,
+                    ) === EPGValidationMessageLevel.ERROR && count > 0 ? (
+                      <MessageText key={`message-${type}`}>
+                        {t(`messages:message_${type}`)} ({count})
+                      </MessageText>
+                    ) : null,
+                  )}
+                </>
+              )}
+              {messageCountByLevel.WARN > 0 && (
+                <>
+                  <MessageType>
+                    {t('messages:warn', {
+                      count: messageCountByLevel.WARN,
+                    })}
+                    <MdOutlineWarningAmber color={ColorPallete.NEUTRAL_2} />
+                  </MessageType>
+                  {Object.entries(messageCountByType).map(([type, count]) =>
+                    EPGValidator.getMessageLevel(
+                      type as EPGValidationMessageType,
+                    ) === EPGValidationMessageLevel.WARN && count > 0 ? (
+                      <MessageText key={`message-${type}`}>
+                        {t(`messages:message_${type}`)} ({count})
+                      </MessageText>
+                    ) : null,
+                  )}
+                </>
+              )}
+              {messageCountByLevel.INFO > 0 && (
+                <>
+                  <MessageType>
+                    {t('messages:info', {
+                      count: messageCountByLevel.INFO,
+                    })}
+                    <IoIosInformationCircleOutline
+                      color={ColorPallete.NEUTRAL_2}
+                    />
+                  </MessageType>
+                  {Object.entries(messageCountByType).map(([type, count]) =>
+                    EPGValidator.getMessageLevel(
+                      type as EPGValidationMessageType,
+                    ) === EPGValidationMessageLevel.INFO && count > 0 ? (
+                      <MessageText key={`message-${type}`}>
+                        {t(`messages:message_${type}`)} ({count})
+                      </MessageText>
+                    ) : null,
+                  )}
+                </>
+              )}
+            </>
+          }
+        >
+          <MessagesContainer>
+            <MessageBadgeContainer>
+              {messageCountByLevel.INFO > 0 && (
+                <MessageBadge
+                  variant="dot"
+                  background={ColorPallete.NEUTRAL_3}
                 />
-              </SettingsOption>
-            </Settings>
+              )}
+              {messageCountByLevel.WARN > 0 && (
+                <MessageBadge
+                  variant="dot"
+                  background={ColorPallete.SYSTEM_2}
+                />
+              )}
+              {messageCountByLevel.ERROR > 0 && (
+                <MessageBadge
+                  variant="dot"
+                  background={ColorPallete.SYSTEM_1}
+                />
+              )}
+            </MessageBadgeContainer>
+            <MdNotifications size="28px" color="action" />
+          </MessagesContainer>
+        </Tooltip>
+        <Configurations ref={ConfigurationsRef}>
+          <ContainerSettings animation={settingsAnimation}>
+            <IconButton
+              className="epg-settings-gear"
+              onClick={() => {
+                setSettingsAnimation('rotate');
+                setShowSettings(s => !s);
+                setShowTranslation(false);
+              }}
+            >
+              <BsGearFill size="28px" color={ColorPallete.NEUTRAL_3} />
+            </IconButton>
+            {showSettings && (
+              <Settings onClick={() => setShowTranslation(s => !s)}>
+                <SettingsOption>
+                  {t('header:settingsLanguage')} &nbsp; <BsTranslate /> &nbsp;{' '}
+                  <MdKeyboardArrowLeft
+                    className="epg-language-arrow"
+                    size="16px"
+                  />
+                </SettingsOption>
+              </Settings>
+            )}
+          </ContainerSettings>
+          {showTranslation && (
+            <Translation>
+              {AVAILABLE_LANGUAGES.map(({ code, flag }) => (
+                <LanguageContainer onClick={() => i18n.changeLanguage(code)}>
+                  {t(`header:settingsLanguage_${code}`)}
+                  <BsCheck
+                    opacity={i18n.resolvedLanguage === code ? '1' : '0'}
+                  />
+                  <Flag>{flag}</Flag>
+                </LanguageContainer>
+              ))}
+            </Translation>
           )}
-        </ContainerSettings>
-        {showTranslation && (
-          <Translation>
-            {AVAILABLE_LANGUAGES.map(({ code, flag }) => (
-              <LanguageContainer onClick={() => i18n.changeLanguage(code)}>
-                {t(`header:settingsLanguage_${code}`)}
-                <BsCheck opacity={i18n.resolvedLanguage === code ? '1' : '0'} />
-                <Flag>{flag}</Flag>
-              </LanguageContainer>
-            ))}
-          </Translation>
-        )}
-      </Configurations>
-      <Tooltip title={t('header:help')}>
+        </Configurations>
+      </>
+      <TextVersion>Version 0.1.8</TextVersion>
+      <Tooltip title={<TextHelp>{t('header:help')}</TextHelp>}>
         <IconButton
           onClick={() => {
             const link = document.createElement('a');
