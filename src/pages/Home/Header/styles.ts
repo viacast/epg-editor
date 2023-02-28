@@ -3,8 +3,9 @@ import { styled as muistyled, Badge } from '@mui/material';
 
 export const HeaderContainer = styled.div`
   display: flex;
-  width: fit-content;
+  width: calc(100% - 30px);
   color: var(--color-neutral-3);
+  justify-content: space-between;
 
   .epg-button {
     margin-left: 15px;
@@ -178,6 +179,19 @@ export const Text = styled.div`
   min-width: fit-content;
   padding-block: 10px;
   font-size: 20px;
+  text-align: center;
+`;
+
+export const TextVersion = styled.div`
+  min-width: fit-content;
+  padding-block: 10px;
+  font-size: 24px;
+  text-align: center;
+`;
+
+export const TextHelp = styled.div`
+  min-width: fit-content;
+  font-size: 16px;
   text-align: center;
 `;
 

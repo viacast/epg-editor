@@ -299,6 +299,40 @@ export function unique(program: EntityMap<Program>): EntityMap<Program> {
   return uniqueEntityMapPrograms;
 }
 
+export function compareDates(a: Date, b: Date): number {
+  if (a.getTime() < b.getTime()) {
+    return -1;
+  }
+  if (a.getTime() > b.getTime()) {
+    return 1;
+  }
+  return 0;
+}
+
+export function sortArrayByDate(arr: Program[]): Program[] {
+  const sortedArray: Program[] = [...arr];
+
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < sortedArray.length - 1; i++) {
+    // eslint-disable-next-line no-plusplus
+    for (let j = i + 1; j < sortedArray.length; j++) {
+      if (
+        compareDates(
+          sortedArray[j].startDateTime,
+          sortedArray[i].startDateTime,
+        ) < 0
+      ) {
+        // Swap elements
+        const temp = sortedArray[i];
+        sortedArray[i] = sortedArray[j];
+        sortedArray[j] = temp;
+      }
+    }
+  }
+
+  return sortedArray;
+}
+
 // adapted from https://stackoverflow.com/a/8497474/
 export function csvLineToArray(rawText: string) {
   // const text = textT.replace(/","/g, '";"');
