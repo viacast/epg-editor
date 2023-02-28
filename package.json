@@ -1,11 +1,11 @@
 {
   "name": "epg-editor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "yarn version --patch && react-scripts build",
     "deploy": "./utils/deploy.sh",
     "build-deploy": "yarn build && yarn run deploy",
     "test": "jest",
