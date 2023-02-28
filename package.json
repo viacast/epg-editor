@@ -13,7 +13,7 @@
     "major": "yarn version --major",
     "build-major": "yarn version --major && react-scripts build",
     "deploy": "./utils/deploy.sh",
-    "build-deploy": "yarn build && yarn run deploy",
+    "build-deploy": "REACT_APP_VERSION=$npm_package_version yarn build && yarn run deploy",
     "test": "jest",
     "eject": "react-scripts eject"
   },
